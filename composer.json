@@ -1,17 +1,16 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
+    "name": "sententiaregum/sententiaregum",
+    "license": "GPL-2.0",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "A social network based on Symfony2 and ReactJS",
     "autoload": {
-        "psr-4": { "": "src/", "SymfonyStandard\\": "app/SymfonyStandard/" }
+        "psr-4": { "": "src/" }
     },
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.6",
         "symfony/symfony": "2.7.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
-        "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~4.0",
@@ -22,9 +21,6 @@
         "sensio/generator-bundle": "~2.3"
     },
     "scripts": {
-        "post-root-package-install": [
-            "SymfonyStandard\\Composer::hookRootPackageInstall"
-        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
