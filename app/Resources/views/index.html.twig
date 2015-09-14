@@ -1,0 +1,29 @@
+{%- spaceless -%}
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js">
+    <head>
+        <title>Sententiaregum</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="user-scable=no, initial-scale=1.0, width=device-width" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge, chrome=1" />
+        <meta name="fragement" content="!" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="{{ app.request.locale }}" />
+        <meta property="og:site_name" content="Sententiaregum" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="favicon.ico" />
+        <meta property="og:locale" content="{{ app.request.locale }}" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Sententiaregum" />
+        <meta name="twitter:image" content="favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+        <link rel="stylesheet" type="text/css" media="all" href="build/all.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div id="content"></div>
+        </div>
+        <script type="text/javascript" src="build/bundle.js"></script>
+    </body>
+</html>
+{%- endspaceless -%}
