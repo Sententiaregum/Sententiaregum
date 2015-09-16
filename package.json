@@ -1,0 +1,44 @@
+{
+  "name": "Sententiaregum",
+  "version": "0.0.0",
+  "description": "A social network based on Symfony2 and ReactJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "postinstall": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sententiaregum/Sententiaregum.git"
+  },
+  "keywords": [
+    "Social Network",
+    "ReactJs"
+  ],
+  "dependencies": {
+    "uglify-js": "~2.4",
+    "reactify": "1.1.1",
+    "react": "0.13.2",
+    "reflux": "0.2.12 ",
+    "babelify": "6.3.0",
+    "browserify": "11.1.0",
+    "grunt-contrib-uglify": "0.9.2",
+    "grunt-browserify": "4.0.1",
+    "grunt-contrib-watch": "0.6.1",
+    "zurb-foundation-5": "5.4.7",
+    "perfect-scrollbar": "0.6.5-1",
+    "jquery.cookie": "1.4.1",
+    "react-spinkit": "1.1.4",
+    "grunt-contrib-sass": "0.9.2",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-cssmin": "0.13"
+  },
+  "author": "ma27, benbieler",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Sententiaregum/Sententiaregum/issues"
+  },
+  "devDependencies": {
+    "jest-cli": "~0.5.5"
+  }
+}
