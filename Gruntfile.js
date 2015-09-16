@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         },
         browserify: {
             client: {
-                src: ['src/Frontend/**/*.js'],
+                src: ['src/Frontend/**/*.js', '!src/Frontend/__tests__/*.js'],
                 dest: 'web/build/bundle.js',
                 options: {
                     require: ['react', 'reflux']

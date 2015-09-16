@@ -4,7 +4,8 @@
   "description": "A social network based on Symfony2 and ReactJS",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "grunt"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
     "grunt-contrib-cssmin": "0.13"
   },
   "author": "ma27, benbieler",
-  "license": "GPL",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/Sententiaregum/Sententiaregum/issues"
   },
