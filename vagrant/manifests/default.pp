@@ -9,21 +9,21 @@ $requiredPackages = [
   'bash-completion',
   'ruby-dev',
   'software-properties-common',
-  'python-software-properties'
+  'python-software-properties',
 ]
 
 package { $requiredPackages:
-  ensure => installed
+  ensure => installed,
 }
 
 $ppaKey = '4F4EA0AAE5267A6C'
 apt::key { $ppaKey: }
 apt::ppa { 'ppa:ondrej/php5-5.6':
-  require => Apt::Key[$ppaKey]
+  require => Apt::Key[$ppaKey],
 }
 
 exec { 'apt-get upgrade':
-  command => '/usr/bin/apt-get -y upgrade'
+  command => '/usr/bin/apt-get -y upgrade',
 }
 
 # vhost
@@ -34,40 +34,46 @@ $host_name = 'sententiaregum.dev'
 apache::vhost { $host_name:
   server_name => $host_name,
   port => 80,
-  docroot => '/var/www/sententiaregum/web'
+  docroot => '/var/www/sententiaregum/web',
 }
 
 # frontend
 class { 'nodejs':
   version => 'stable',
-  make_install => false
+  make_install => false,
 }
 
-package { 'grunt-cli':
-  provider => npm,
-  require => Class['nodejs']
-}
-
-$rubyRequirements = [
-  Package['ruby-dev'],
-  Package['build-essential']
+$npmPackages = [
+  'grunt-cli',
+  'karma-cli',
+  'karma-phantomjs-launcher',
+  'karma-jasmine',
+  'karma-browserify',
 ]
 
-package { 'compass':
-  provider => gem,
-  require => $rubyRequirements
+package { $npmPackages:
+  provider => npm,
+  require => Class['nodejs'],
 }
 
-package { 'sass':
+$rubyFrontendPackages = [
+  'compass',
+  'sass',
+]
+
+package { $rubyFrontendPackages:
   provider => gem,
-  require => $rubyRequirements
+  require => [
+    Package['ruby-dev'],
+    Package['build-essential'],
+  ]
 }
 
 # backend
 # clear module prefix in order to prevent conflicts with the php-apc package
 class { 'php':
   service => 'apache',
-  module_prefix => ''
+  module_prefix => '',
 }
 
 class { 'php::devel':
@@ -81,7 +87,7 @@ php::ini { 'php.ini customizations':
     'error_reporting = -1',
   ],
   notify => Service['apache'],
-  require => Class['php']
+  require => Class['php'],
 }
 
 php::module { 'php5-gd': }
@@ -97,7 +103,7 @@ class { 'composer':
   command_name => 'composer',
   auto_update => true,
   require => Package['php5', 'curl'],
-  target_dir => '/usr/local/bin'
+  target_dir => '/usr/local/bin',
 }
 
 # infrastructure/database
@@ -107,7 +113,7 @@ redis::instance { 'redis-doctrine-cache':
 }
 
 redis::instance { 'redis-queue-mechanism':
-  redis_port => 6901
+  redis_port => 6901,
 }
 
 # use an empty root password, since travis does that, too (we don't have password conflicts in functional tests)
@@ -121,12 +127,12 @@ mysql::db { $dbname:
   user => 'dev',
   password => 'dev',
   host => 'localhost',
-  grant => ['ALL']
+  grant => ['ALL'],
 }
 
 mysql::db { $dbname_test:
   user => 'test',
   password => 'test',
   host => 'localhost',
-  grant => ['ALL']
+  grant => ['ALL'],
 }
