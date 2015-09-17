@@ -4,7 +4,8 @@
   "description": "A social network based on Symfony2 and ReactJS",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test-single-run": "karma start --single-run",
+    "test": "karma start",
     "postinstall": "grunt"
   },
   "repository": {
@@ -39,6 +40,6 @@
     "url": "https://github.com/Sententiaregum/Sententiaregum/issues"
   },
   "devDependencies": {
-    "jest-cli": "~0.5.5"
+    "phantomjs-polyfill": "~0.0.1"
   }
 }

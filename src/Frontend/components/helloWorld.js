@@ -15,4 +15,4 @@ class HelloWorld extends React.Component {
     }
 }
 
-React.render(<HelloWorld />, document.getElementById('content'));
+export default HelloWorld;
