@@ -27,7 +27,7 @@ class ScriptHandler
      */
     public static function installNpmDependencies(CommandEvent $event)
     {
-        (new Process(sprintf('%s install --no-bin-links', (new ExecutableFinder())->find('npm'))))->run(
+        (new Process(sprintf('%s install --no-bin-links', (new ExecutableFinder())->find('npm')), null, null, null, 1000))->run(
             function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); }
         );
     }

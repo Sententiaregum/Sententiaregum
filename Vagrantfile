@@ -22,8 +22,10 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell, path: "vagrant/puppet.sh"
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "vagrant/manifests"
-    puppet.options = ["--verbose"]
+    puppet.module_path    = ['vagrant/puppet']
+    puppet.manifest_file  = 'site.pp'
+    puppet.options        = ["--verbose"]
   end
 
-  config.vm.provision :shell, path: "vagrant/composer.sh"
+  config.vm.provision :shell, path: "vagrant/post-scripts.sh"
 end
