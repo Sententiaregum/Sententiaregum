@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\HttpFoundation\Request;
 
 if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
@@ -14,10 +14,10 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
 
-$loader = require_once __DIR__ . '/../app/bootstrap.php.cache';
+$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 Debug::enable();
 
-require_once __DIR__ . '/../app/AppKernel.php';
+require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
