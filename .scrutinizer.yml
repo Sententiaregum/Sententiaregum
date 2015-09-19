@@ -1,0 +1,30 @@
+before_commands:
+    - 'composer install'
+
+filter:
+    excluded_paths:
+        - src/AppBundle/Tests/
+        - src/AppBundle/Resources/
+        - app/
+
+checks:
+    php:
+        custom_coding_standard:
+            git_repository: 'https://github.com/xalopp/symfony-coding-standard.git'
+            ruleset_path: 'ruleset.xml'
+
+tools:
+    php_code_sniffer:
+        config:
+            standard: PSR2
+        filter:
+            paths: ['.']
+    php_mess_detector: true
+    php_analyzer: true
+    php_pdepend: true
+    php_loc:
+        enabled: true
+        excluded_dirs: [src/AppBundle/Tests]
+    php_cpd:
+        enabled: true
+        excluded_dirs: [src/AppBundle/Tests]
