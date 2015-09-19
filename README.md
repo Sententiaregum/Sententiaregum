@@ -28,7 +28,7 @@ There's a shell provisioner that runs the composer and npm and runs the grunt ta
 
 It is not recommended to use windows. When installing the npm dependencies on shared folders, you'll run into big trouble with the path limit.
 
-If you either use a windows, [this blog post helps you to fix that issue](https://harvsworld.com/2015/how-to-fix-npm-install-errors-on-vagrant-on-windows-because-the-paths-are-too-long/).
+If you use windows, [this blog post helps you to fix that issue](https://harvsworld.com/2015/how-to-fix-npm-install-errors-on-vagrant-on-windows-because-the-paths-are-too-long/).
 
 ## Deploy
 
@@ -44,4 +44,4 @@ If you'd like to override configuration values, you can create for every environ
 
 ## License
 
-This project is under GPL license. The whole license file can be seen [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/LCIENSE)
+This project is under the GPL license. The whole license file can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/LCIENSE)
