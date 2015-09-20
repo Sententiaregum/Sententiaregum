@@ -7,3 +7,7 @@ initial:
     defaults:
         _controller: FrameworkBundle:Template:template
         template: index.html.twig
+
+ma27_api_key_authentication:
+    resource: "@Ma27ApiKeyAuthenticationBundle/Resources/config/routing/routing.yml"
+    prefix:   /api

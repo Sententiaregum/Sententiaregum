@@ -1,0 +1,68 @@
+<?php
+
+/*
+ * This file is part of the sententiaregum application.
+ *
+ * Sententiaregum is a social network based on Symfony2 and BackboneJS/ReactJS
+ *
+ * @copyright (c) 2015 Sententiaregum
+ * Please check out the license file in the document root of this application
+ */
+
+namespace AppBundle\Model\User;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Role\RoleInterface;
+
+/**
+ * Custom role model
+ *
+ * @ORM\Entity()
+ * @ORM\Table(name="Role")
+ */
+class Role implements RoleInterface
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="role")
+     */
+    private $role;
+
+    /**
+     * Constructor.
+     *
+     * @param $role
+     */
+    public function __construct($role)
+    {
+        $this->role = (string) $role;
+    }
+
+    /**
+     * Get role id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+}

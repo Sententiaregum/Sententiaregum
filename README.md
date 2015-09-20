@@ -2,9 +2,10 @@
 A social network based on Symfony2 and ReactJS
 
 [![Build Status](https://travis-ci.org/Sententiaregum/Sententiaregum.svg?branch=master)](https://travis-ci.org/Sententiaregum/Sententiaregum)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf/mini.png)](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Sententiaregum/Sententiaregum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Sententiaregum/Sententiaregum/?branch=master)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/Sententiaregum/Sententiaregum/badge.svg)](https://travis-ci.org/Sententiaregum/Sententiaregum)
 [![Stories in Ready](https://badge.waffle.io/Sententiaregum/Sententiaregum.svg?label=ready&title=Ready)](http://waffle.io/Sententiaregum/Sententiaregum)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf/mini.png)](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf)
 
 ## What is it?
 
@@ -34,7 +35,7 @@ If you use windows, [this blog post helps you to fix that issue](https://harvswo
 
 A deploy is really simple.
 
-You just have to call __composer install__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
+You just have to call __composer install --no-dev__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
 
 ## Custom configuration
 
