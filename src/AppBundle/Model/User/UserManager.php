@@ -16,7 +16,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Manager which is responsible for the business logic of the user
+ * Manager which is responsible for the business logic of the user.
  *
  * @DI\Service(id="app.user.user_manager")
  */
@@ -24,9 +24,9 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
 {
     /**
      * Constructor.
-     * This constructor is responsible for
+     * This constructor is responsible for.
      *
-     * @param string $class
+     * @param string          $class
      * @param ManagerRegistry $registry
      *
      * @DI\InjectParams({

@@ -38,7 +38,7 @@ class ScriptHandler extends AbstractScriptHandler
     }
 
     /**
-     * Loads the doctrine data fixtures (disabled when using the "--no-dev" flag)
+     * Loads the doctrine data fixtures (disabled when using the "--no-dev" flag).
      *
      * @param CommandEvent $event
      */
@@ -54,7 +54,7 @@ class ScriptHandler extends AbstractScriptHandler
     }
 
     /**
-     * Creates the doctrine schema
+     * Creates the doctrine schema.
      *
      * @param CommandEvent $event
      */
@@ -68,7 +68,7 @@ class ScriptHandler extends AbstractScriptHandler
     }
 
     /**
-     * Updates the doctrine schema
+     * Updates the doctrine schema.
      *
      * @param CommandEvent $event
      */

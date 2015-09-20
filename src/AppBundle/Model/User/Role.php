@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
- * Custom role model
+ * Custom role model.
  *
  * @ORM\Entity()
  * @ORM\Table(name="Role")
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 class Role implements RoleInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -49,9 +49,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get role id
+     * Get role id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

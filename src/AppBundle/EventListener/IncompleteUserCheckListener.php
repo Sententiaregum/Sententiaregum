@@ -17,14 +17,14 @@ use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException;
 
 /**
- * Hook which observes the authentication and stops the authentication process if the user is not approved or locked
+ * Hook which observes the authentication and stops the authentication process if the user is not approved or locked.
  *
  * @DI\Service()
  */
 class IncompleteUserCheckListener
 {
     /**
-     * Validates the user during the authentication process
+     * Validates the user during the authentication process.
      *
      * @param OnAuthenticationEvent $event
      *

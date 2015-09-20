@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Hook that updates the latest activation of a user
+ * Hook that updates the latest activation of a user.
  *
  * @DI\Service()
  */
@@ -42,9 +42,9 @@ class UpdateLatestActivationListener
     /**
      * Constructor.
      *
-     * @param UserManagerInterface $userManager
+     * @param UserManagerInterface  $userManager
      * @param TokenStorageInterface $tokenStorage
-     * @param RequestStack $requestStack
+     * @param RequestStack          $requestStack
      *
      * @DI\InjectParams({
      *     "userManager"=@DI\Inject("app.user.user_manager"),
@@ -60,7 +60,7 @@ class UpdateLatestActivationListener
     }
 
     /**
-     * Hook that updates the last action after the authentication
+     * Hook that updates the last action after the authentication.
      *
      * @param OnAuthenticationEvent $event
      *
@@ -77,7 +77,7 @@ class UpdateLatestActivationListener
     }
 
     /**
-     * Hook to be triggered after sending the response on protected routes
+     * Hook to be triggered after sending the response on protected routes.
      *
      * @DI\Observe("kernel.terminate", priority=-255)
      */
@@ -92,7 +92,7 @@ class UpdateLatestActivationListener
     }
 
     /**
-     * Gets the last action time
+     * Gets the last action time.
      *
      * @return \DateTime
      */

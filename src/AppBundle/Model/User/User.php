@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ma27\ApiKeyAuthenticationBundle\Model\User\UserInterface;
 
 /**
- * User
+ * User.
  *
  * @ORM\Entity()
  * @ORM\Table(name="User")
@@ -18,7 +18,7 @@ class User implements UserInterface
     const STATE_APPROVED = 'approved';
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -69,14 +69,14 @@ class User implements UserInterface
     private $registrationDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="state", type="string")
      */
     private $state = self::STATE_NEW;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="locked", type="boolean")
      */
@@ -121,7 +121,7 @@ class User implements UserInterface
     private $following;
 
     /**
-     * Factory that fills the required fields of the user
+     * Factory that fills the required fields of the user.
      *
      * @param string $username
      * @param string $password
@@ -150,9 +150,9 @@ class User implements UserInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -160,7 +160,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
      *
@@ -174,7 +174,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get username
+     * Get username.
      *
      * @return string
      */
@@ -184,7 +184,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
      *
@@ -198,7 +198,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get password
+     * Get password.
      *
      * @return string
      */
@@ -208,7 +208,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -222,7 +222,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -232,7 +232,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set apiKey
+     * Set apiKey.
      *
      * @param string $apiKey
      *
@@ -246,7 +246,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get apiKey
+     * Get apiKey.
      *
      * @return string
      */
@@ -266,7 +266,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set lastAction
+     * Set lastAction.
      *
      * @param \DateTime $lastAction
      *
@@ -280,7 +280,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get lastAction
+     * Get lastAction.
      *
      * @return \DateTime
      */
@@ -290,7 +290,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get registrationDate
+     * Get registrationDate.
      *
      * @return \DateTime
      */
@@ -300,9 +300,9 @@ class User implements UserInterface
     }
 
     /**
-     * Set state
+     * Set state.
      *
-     * @param integer $state
+     * @param int $state
      *
      * @return User
      */
@@ -322,9 +322,9 @@ class User implements UserInterface
     }
 
     /**
-     * Get state
+     * Get state.
      *
-     * @return integer
+     * @return int
      */
     public function getState()
     {
@@ -332,7 +332,7 @@ class User implements UserInterface
     }
 
     /**
-     * Locks the user
+     * Locks the user.
      *
      * @return $this
      */
@@ -344,7 +344,7 @@ class User implements UserInterface
     }
 
     /**
-     * Unlocks the user
+     * Unlocks the user.
      *
      * @return $this
      */
@@ -356,9 +356,9 @@ class User implements UserInterface
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return boolean
+     * @return bool
      */
     public function isLocked()
     {
@@ -366,7 +366,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set aboutText
+     * Set aboutText.
      *
      * @param string $aboutText
      *
@@ -380,7 +380,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get aboutText
+     * Get aboutText.
      *
      * @return string
      */
@@ -398,7 +398,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set activationKey
+     * Set activationKey.
      *
      * @param string $activationKey
      *
@@ -422,7 +422,7 @@ class User implements UserInterface
     }
 
     /**
-     * Removes the activation key
+     * Removes the activation key.
      *
      * @return $this
      */
@@ -438,7 +438,7 @@ class User implements UserInterface
     }
 
     /**
-     * Adds a role
+     * Adds a role.
      *
      * @param Role $role
      *
@@ -458,7 +458,7 @@ class User implements UserInterface
     }
 
     /**
-     * Removes a  role
+     * Removes a  role.
      *
      * @param Role $role
      *
@@ -476,7 +476,7 @@ class User implements UserInterface
     }
 
     /**
-     * Checks whether the user has a role
+     * Checks whether the user has a role.
      *
      * @param Role $role
      *
@@ -494,7 +494,7 @@ class User implements UserInterface
     }
 
     /**
-     * Gets the roles
+     * Gets the roles.
      *
      * @return Role[]
      */
@@ -504,7 +504,7 @@ class User implements UserInterface
     }
 
     /**
-     * Add follower
+     * Add follower.
      *
      * @param User $user
      *
@@ -518,7 +518,7 @@ class User implements UserInterface
     }
 
     /**
-     * Removes a follower
+     * Removes a follower.
      *
      * @param User $user
      *
@@ -536,7 +536,7 @@ class User implements UserInterface
     }
 
     /**
-     * Checks whether the current user follows a specific user
+     * Checks whether the current user follows a specific user.
      *
      * @param User $user
      *
@@ -554,7 +554,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get followers
+     * Get followers.
      *
      * @return Role[]
      */

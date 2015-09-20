@@ -14,7 +14,7 @@ namespace AppBundle\Model\User;
 use Sonata\CoreBundle\Model\ManagerInterface;
 
 /**
- * Interface that provides methods for the core model operations of the user
+ * Interface that provides methods for the core model operations of the user.
  */
 interface UserManagerInterface extends ManagerInterface
 {

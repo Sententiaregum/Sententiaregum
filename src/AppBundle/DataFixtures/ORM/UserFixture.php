@@ -18,7 +18,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
- * Fixture which is responsible for the user entity
+ * Fixture which is responsible for the user entity.
  */
 class UserFixture implements FixtureInterface, OrderedFixtureInterface
 {

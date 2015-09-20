@@ -17,7 +17,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Fixture class that creates the basic role entities
+ * Fixture class that creates the basic role entities.
  */
 class RoleFixture implements FixtureInterface, OrderedFixtureInterface
 {
