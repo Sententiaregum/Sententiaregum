@@ -6,8 +6,9 @@ class sententiaregum::server($host_name, $doc_root) {
 
   apache::module { 'rewrite': }
   apache::vhost { $host_name:
-    server_name => $host_name,
-    port        => 80,
-    docroot     => $doc_root,
+    server_name              => $host_name,
+    port                     => 80,
+    docroot                  => $doc_root,
+    directory_allow_override => 'All',
   }
 }
