@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Validator which validates a unique constraints
+ * Validator which validates a unique constraints.
  *
  * @DI\Validator("app.validator.unique_property")
  */
@@ -49,9 +49,9 @@ class UniquePropertyValidator extends ConstraintValidator
      * @param string     $value
      * @param Constraint $constraint
      *
-     * @throws UnexpectedTypeException If the constraint is no UniqueProperty constraint.
-     * @throws UnexpectedTypeException If the ExecutionContext is invalid (to be removed when upgrading to 3.0, just used in order to verify the correct context).
-     * @throws UnexpectedTypeException If the value is not a scalar value or has a __toString() interceptor.
+     * @throws UnexpectedTypeException       If the constraint is no UniqueProperty constraint.
+     * @throws UnexpectedTypeException       If the ExecutionContext is invalid (to be removed when upgrading to 3.0, just used in order to verify the correct context).
+     * @throws UnexpectedTypeException       If the value is not a scalar value or has a __toString() interceptor.
      * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class
      */
     public function validate($value, Constraint $constraint)

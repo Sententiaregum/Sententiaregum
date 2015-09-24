@@ -14,7 +14,7 @@ namespace AppBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Validation constraint for unique properties
+ * Validation constraint for unique properties.
  *
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
