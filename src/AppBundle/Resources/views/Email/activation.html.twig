@@ -1,0 +1,11 @@
+{% extends 'AppBundle:Email:email_layout.html.twig' %}
+
+{% block username %}{{ username }}{% endblock %}
+
+{% block content %}
+    <p>{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}</p>
+    <p>{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}</p>
+
+    {% set url = app.request.scheme ~ '://' ~ app.request.host ~ '/#!/activate/' ~ username ~ '/' ~ activation_key %}
+    <p id="n-ac-l-p"><a href="{{ url }}">{{ 'NOTIFICATIONS_ACTIVATION_HTML_LINK'|trans({}, 'notifications') }}</a></p>
+{% endblock %}

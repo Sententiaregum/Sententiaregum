@@ -18,6 +18,8 @@ use Symfony\Component\Process\Process;
 
 /**
  * Handler that runs the npm installation after the composer install.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class ScriptHandler extends AbstractScriptHandler
 {
@@ -65,13 +67,16 @@ class ScriptHandler extends AbstractScriptHandler
     public static function createDoctrineSchema(CommandEvent $event)
     {
         if (PreInstallHandler::$firstInstall) {
-            self::dropDoctrineSchema($event);
+            $envs = $event->isDevMode() ? ['dev', 'test'] : ['prod'];
+            self::dropDoctrineSchema($event, $envs);
 
-            static::executeCommand(
-                $event,
-                static::getConsoleDir($event, 'create doctrine schema'),
-                'doctrine:schema:create'
-            );
+            foreach ($envs as $env) {
+                static::executeCommand(
+                    $event,
+                    static::getConsoleDir($event, 'create doctrine schema'),
+                    sprintf('doctrine:schema:create --env=%s', $env)
+                );
+            }
         }
     }
 
@@ -93,13 +98,16 @@ class ScriptHandler extends AbstractScriptHandler
      * Drops the doctrine schema.
      *
      * @param CommandEvent $event
+     * @param string[]     $envs
      */
-    private static function dropDoctrineSchema(CommandEvent $event)
+    private static function dropDoctrineSchema(CommandEvent $event, array $envs = [])
     {
-        static::executeCommand(
-            $event,
-            static::getConsoleDir($event, 'drop doctrine schema'),
-            'doctrine:schema:drop --force'
-        );
+        foreach ($envs as $env) {
+            static::executeCommand(
+                $event,
+                static::getConsoleDir($event, 'drop doctrine schema'),
+                sprintf('doctrine:schema:drop --force --env=%s', $env)
+            );
+        }
     }
 }

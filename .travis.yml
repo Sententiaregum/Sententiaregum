@@ -4,6 +4,9 @@ php:
   - 7
   - hhvm
 
+services:
+  - redis-server
+
 matrix:
   allow_failures:
     - php: hhvm
@@ -11,13 +14,14 @@ matrix:
 
 install:
   - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
-  - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum_dev;"
+  - mysql -e "CREATE DATABASE IF NOT EXISTS behat;"
   - echo "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';" | mysql -u root
   - echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
   - echo "FLUSH PRIVILEGES;" | mysql -u root
   - gem install sass
   - gem install scss_lint
   - npm install -g karma-cli webpack node-sass eslint eslint-plugin-react
+  - cp travis-ci/travis_parameters.yml app/config/parameters.yml
   - composer install
   - php app/check.php
   - php app/console security:check
@@ -27,5 +31,6 @@ before_script:
   - eslint ./src/Frontend/App.js
 
 script:
+  - bin/behat --strict -f progress --no-snippets
   - bin/phpunit -c app
   - karma start --single-run

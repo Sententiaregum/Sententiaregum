@@ -1,0 +1,4 @@
+parameters:
+  app.locales:
+    - de
+    - en

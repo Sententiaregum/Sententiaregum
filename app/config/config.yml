@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: models.yml }
+    - { resource: locales.yml }
 
 parameters:
     locale: en
@@ -83,6 +84,39 @@ jms_di_extra:
         all_bundles: false
         bundles:     [AppBundle]
         directories: "%kernel.root_dir%/../src"
+    cache_warmer:            # Needs to be disabled since the SonataNotificationBundle uses the CRUDController
+        enabled:     false   # of the SonataAdminBundle. Though we don't use it, this stupid bundle wants to include it.
+
+# FOSRest Configuration
+fos_rest:
+    body_listener:          true
+    format_listener:        true
+    param_fetcher_listener: true
+    view:
+        view_response_listener: force
+        failed_validation:      HTTP_BAD_REQUEST
+        default_engine:         twig
+        formats:
+            json:  true
+            jsonp: true
+            xml:   true
+    format_listener:
+        rules:
+            - { path: ^/api, priorities: [html, json], fallback_format: ~, prefer_extension: false }
+    exception:
+        messages:
+            'Symfony\Component\HttpKernel\Exception\HttpException': true
+
+# NelmioApiDoc Configuration
+nelmio_api_doc:
+    name:        "Sententiaregum REST API Docs"
+    sandbox:
+        enabled: true
+
+# SonataNotification Configuration
+sonata_notification:
+    admin:
+        enabled: false
 
 # LuneticsLocale Configuration
 lunetics_locale:
@@ -91,3 +125,11 @@ lunetics_locale:
     allowed_locales:
         - de
         - en
+
+# SncRedis Configuration
+snc_redis:
+    clients:
+        pending_activations:
+            type: predis
+            alias: pending_activations
+            dsn: redis://localhost:%pending_activations_redis_port%

@@ -22,5 +22,6 @@ class sententiaregum::backend::server(
     port          => $port,
     docroot       => $doc_root,
     serveraliases => $server_aliases,
+    template      => 'sententiaregum/vhost.erb',
   }
 }

@@ -19,6 +19,8 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
  * Fixture which is responsible for the user entity.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class UserFixture implements FixtureInterface, OrderedFixtureInterface
 {
@@ -49,6 +51,7 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
         $user1->addRole($userRole);
         $user1->setLastAction(new \DateTime());
         $user1->setState(User::STATE_APPROVED);
+        $user1->setLocale('de');
 
         $user2 = new User();
         $user2->setUsername('benbieler');

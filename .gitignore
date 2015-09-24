@@ -37,9 +37,10 @@
 # Build data
 /build/
 
-# Composer PHAR
+# PHAR
 /composer.phar
-
+/behat.phar
+/phpunit.phar
 
 # Vagrant
 /.vagrant/

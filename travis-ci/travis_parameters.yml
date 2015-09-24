@@ -1,0 +1,15 @@
+# File with customized parameters for the continuous integration
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: sententiaregum
+    database_user: dev
+    database_password: dev
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: sententiaregum
+    mailer_password: null
+    mailer_port: 1025
+    secret: ThisTokenIsNotSoSecretChangeIt
+    mailer_from_address: info@sententiaregum.dev
+    pending_activations_redis_port: 6379
