@@ -36,7 +36,7 @@ class UniquePropertyValidator extends ConstraintValidator
      *
      * @param ManagerRegistry $managerRegistry
      *
-     * @DI\InjectParams({"userManager" = @DI\Inject("doctrine")})
+     * @DI\InjectParams({"managerRegistry" = @DI\Inject("doctrine")})
      */
     public function __construct(ManagerRegistry $managerRegistry)
     {
