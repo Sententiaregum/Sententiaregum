@@ -11,6 +11,13 @@
 'use strict';
 
 import React from 'react';
-import HelloWorld from './components/helloWorld';
+import Router from 'react-router';
+import routes from './config/routes';
 
-React.render(<HelloWorld />, document.getElementById('content'));
+Router.run(routes, function (Root) {
+    let page = (
+        <Root />
+    );
+
+    React.render(page, document.getElementById('content'));
+});
