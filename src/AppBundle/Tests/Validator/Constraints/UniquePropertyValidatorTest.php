@@ -15,6 +15,7 @@ use AppBundle\Model\User\User;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Constraints\UniquePropertyValidator;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\Validator\Constraint;
@@ -34,11 +35,21 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->with(['username' => 'Ma27'])
             ->will($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev')));
 
+        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(true));
+
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($repository));
+        $manager
+            ->expects($this->any())
+            ->method('getClassMetadata')
+            ->will($this->returnValue($classMetadata));
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
@@ -115,6 +126,121 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
         $propertyMock->validate(
             'test',
             new UniqueProperty(['entity' => 'AnotherMapping:InvalidModel', 'field' => 'username'])
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     * @expectedExceptionMessage Entity "AnotherMapping:User" has no field "invalid"!
+     */
+    public function testInvalidProperty()
+    {
+        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(false));
+
+        $manager = $this->getMock(ObjectManager::class);
+        $manager
+            ->expects($this->any())
+            ->method('getClassMetadata')
+            ->will($this->returnValue($classMetadata));
+
+        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry
+            ->expects($this->any())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($manager));
+
+        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+
+        $propertyMock->validate(
+            'test',
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'invalid'])
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     * @expectedExceptionMessage Entity "AnotherMapping:User" has no embeddable "foo"!
+     */
+    public function testInvalidEmbeddable()
+    {
+        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(false));
+
+        $manager = $this->getMock(ObjectManager::class);
+        $manager
+            ->expects($this->any())
+            ->method('getClassMetadata')
+            ->with('AnotherMapping:User')
+            ->will($this->returnValue($classMetadata));
+
+        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry
+            ->expects($this->any())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($manager));
+
+        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+
+        $propertyMock->validate(
+            'test',
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo.bar'])
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     * @expectedExceptionMessage Embeddable "foo" on entity "AnotherMapping:User" has no field "bar"!
+     */
+    public function testInvalidValueObjectProperty()
+    {
+        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(false));
+
+        $classMetadata->embeddedClasses = ['foo' => ['class' => 'EmbeddedClass']]; // adding mocked field
+
+        $manager = $this->getMock(ObjectManager::class);
+        $manager
+            ->expects($this->at(0))
+            ->method('getClassMetadata')
+            ->with('AnotherMapping:User')
+            ->will($this->returnValue($classMetadata));
+
+        $embeddedMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $embeddedMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(false));
+
+        $manager
+            ->expects($this->at(1))
+            ->method('getClassMetadata')
+            ->with('EmbeddedClass')
+            ->will($this->returnValue($embeddedMetadata));
+
+        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry
+            ->expects($this->any())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($manager));
+
+        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+
+        $propertyMock->validate(
+            'test',
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo.bar'])
         );
     }
 
