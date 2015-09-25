@@ -15,9 +15,8 @@ class application {
       packages => $defaultPackages,
     } ->
     class { '::sententiaregum::infrastructure':
-      database_name    => 'sententiaregum',
-      use_mail_catcher => true,
-      build_redis      => true,
+      database_name => 'sententiaregum',
+      build_redis   => true,
     } ->
     class { '::sententiaregum::server':
       host_name => 'sententiaregum.dev',

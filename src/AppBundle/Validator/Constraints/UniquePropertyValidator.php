@@ -52,8 +52,8 @@ class UniquePropertyValidator extends ConstraintValidator
      * @throws UnexpectedTypeException       If the constraint is no UniqueProperty constraint.
      * @throws UnexpectedTypeException       If the ExecutionContext is invalid (to be removed when upgrading to 3.0, just used in order to verify the correct context).
      * @throws UnexpectedTypeException       If the value is not a scalar value or has a __toString() interceptor.
-     * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class
-     * @throws ConstraintDefinitionException If the entity field cannot be found
+     * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class.
+     * @throws ConstraintDefinitionException If the entity field cannot be found.
      */
     public function validate($value, Constraint $constraint)
     {

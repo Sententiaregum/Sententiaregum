@@ -1,6 +1,5 @@
-class sententiaregum::infrastructure($database_name, $use_mail_catcher, $build_redis) {
+class sententiaregum::infrastructure($database_name, $build_redis) {
   validate_string($database_name)
-  validate_bool($use_mail_catcher)
   validate_bool($build_redis)
 
   if $database_name != undef {
@@ -22,16 +21,6 @@ class sententiaregum::infrastructure($database_name, $use_mail_catcher, $build_r
       password => 'test',
       host     => 'localhost',
       grant    => ['ALL'],
-    }
-  }
-
-  if $use_mail_catcher {
-    package { 'mailcatcher':
-      provider => gem,
-      require  => [
-        Package['ruby-dev'],
-        Package['build-essential'],
-      ],
     }
   }
 
