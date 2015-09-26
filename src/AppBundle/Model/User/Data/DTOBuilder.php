@@ -23,7 +23,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 class DTOBuilder
 {
     /**
-     * Aggregates request parameters into the
+     * Aggregates request parameters into the data transfer object.
      *
      * @param ParamFetcher $requestParameters
      *

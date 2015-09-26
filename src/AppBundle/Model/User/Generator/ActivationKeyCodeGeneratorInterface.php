@@ -12,7 +12,7 @@
 namespace AppBundle\Model\User\Generator;
 
 /**
- * Interface of a keycode generator
+ * Interface of a keycode generator.
  */
 interface ActivationKeyCodeGeneratorInterface
 {

@@ -244,6 +244,55 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
         );
     }
 
+    public function testReInitializeRelatedObject()
+    {
+        $stdClass = new \stdClass();
+
+        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasField')
+            ->will($this->returnValue(false));
+
+        $classMetadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->with('foo')
+            ->will($this->returnValue(true));
+
+        $manager = $this->getMock(ObjectManager::class);
+        $manager
+            ->expects($this->at(0))
+            ->method('getClassMetadata')
+            ->with('AnotherMapping:User')
+            ->will($this->returnValue($classMetadata));
+
+        $manager
+            ->expects($this->once())
+            ->method('initializeObject')
+            ->with($stdClass);
+
+        $repository = $this->getMock(ObjectRepository::class);
+        $manager
+            ->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
+
+        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry
+            ->expects($this->any())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($manager));
+
+        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+
+        $propertyMock->validate(
+            $stdClass,
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo'])
+        );
+    }
+
     public function testUniqueField()
     {
         $this->validator->validate(

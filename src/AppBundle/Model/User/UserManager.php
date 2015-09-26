@@ -62,7 +62,7 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     }
 
     /**
-     * Processes the first step of the registration
+     * Processes the first step of the registration.
      *
      * @param CreateUserDTO $userParameters
      *

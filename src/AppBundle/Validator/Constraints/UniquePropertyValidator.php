@@ -46,8 +46,8 @@ class UniquePropertyValidator extends ConstraintValidator
     /**
      * Validates whether the given value is unique when using it as a specific field on a specific model.
      *
-     * @param string     $value
-     * @param Constraint $constraint
+     * @param string|object $value
+     * @param Constraint    $constraint
      *
      * @throws UnexpectedTypeException       If the constraint is no UniqueProperty constraint.
      * @throws UnexpectedTypeException       If the ExecutionContext is invalid (to be removed when upgrading to 3.0, just used in order to verify the correct context).
@@ -70,11 +70,11 @@ class UniquePropertyValidator extends ConstraintValidator
 
         if (!is_scalar($value)
             && (!is_object($value) && !method_exists($value, '__toString'))
+            && !is_object($value) // allowing objects as one-to-one values should be validated, too
         ) {
-            throw new UnexpectedTypeException($value, 'scalar');
+            throw new UnexpectedTypeException($value, 'scalar or object');
         }
 
-        $value       = (string) $value;
         $entityAlias = $constraint->entity;
 
         if (null !== $managerAlias = $constraint->manager) {
@@ -114,6 +114,10 @@ class UniquePropertyValidator extends ConstraintValidator
             } else {
                 throw new ConstraintDefinitionException(sprintf('Entity "%s" has no field "%s"!', $entityAlias, $field));
             }
+        }
+
+        if ($metadata->hasAssociation($field)) {
+            $manager->initializeObject($value);
         }
 
         /** @var \Doctrine\Common\Persistence\ObjectRepository $repository */
