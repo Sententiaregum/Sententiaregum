@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
             new AppBundle\AppBundle(),
         ];
 

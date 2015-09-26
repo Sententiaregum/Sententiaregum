@@ -103,3 +103,14 @@ fos_rest:
     exception:
         messages:
             'Symfony\Component\HttpKernel\Exception\HttpException': true
+
+# NelmioApiDoc Configuration
+nelmio_api_doc:
+    name:        "Sententiaregum REST API Docs"
+    sandbox:
+        enabled: true
+
+# SonataNotification Configuration
+sonata_notification:
+    admin:
+        enabled: false

@@ -11,3 +11,7 @@ initial:
 ma27_api_key_authentication:
     resource: "@Ma27ApiKeyAuthenticationBundle/Resources/config/routing/routing.yml"
     prefix:   /api
+
+nelmio_api_doc:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api-doc
