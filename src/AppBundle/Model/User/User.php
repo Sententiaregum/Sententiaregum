@@ -127,7 +127,7 @@ class User implements UserInterface, Serializable
      *
      * @ORM\Column(name="locale", length=2)
      */
-    private $locale;
+    private $locale = 'en';
 
     /**
      * Factory that fills the required fields of the user.

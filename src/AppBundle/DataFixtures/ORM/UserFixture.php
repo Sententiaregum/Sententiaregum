@@ -49,6 +49,7 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
         $user1->addRole($userRole);
         $user1->setLastAction(new \DateTime());
         $user1->setState(User::STATE_APPROVED);
+        $user1->setLocale('de');
 
         $user2 = new User();
         $user2->setUsername('benbieler');
