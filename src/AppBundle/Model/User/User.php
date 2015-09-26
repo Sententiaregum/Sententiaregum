@@ -106,7 +106,7 @@ class User implements UserInterface, Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="activation_key", type="string", nullable=true)
+     * @ORM\Column(name="activation_key", type="string", nullable=true, unique=true, length=255)
      */
     private $activationKey;
 
@@ -121,6 +121,13 @@ class User implements UserInterface, Serializable
      * )
      */
     private $following;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="locale", length=2)
+     */
+    private $locale;
 
     /**
      * Factory that fills the required fields of the user.
@@ -564,6 +571,30 @@ class User implements UserInterface, Serializable
     public function getFollowing()
     {
         return $this->following->toArray();
+    }
+
+    /**
+     * Get locale.
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set locale.
+     *
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = (string) $locale;
+
+        return $this;
     }
 
     /**

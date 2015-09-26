@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * Hook that updates the latest activation of a user.
  *
- * @DI\Service()
+ * @DI\Service
  */
 class UpdateLatestActivationListener
 {

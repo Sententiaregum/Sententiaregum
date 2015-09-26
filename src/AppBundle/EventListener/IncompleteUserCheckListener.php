@@ -19,7 +19,7 @@ use Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException;
 /**
  * Hook which observes the authentication and stops the authentication process if the user is not approved or locked.
  *
- * @DI\Service()
+ * @DI\Service
  */
 class IncompleteUserCheckListener
 {

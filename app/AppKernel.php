@@ -19,8 +19,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Ma27\ApiKeyAuthenticationBundle\Ma27ApiKeyAuthenticationBundle(),
             new Sonata\CoreBundle\SonataCoreBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new AppBundle\AppBundle(),
         ];
 

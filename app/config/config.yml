@@ -83,3 +83,23 @@ jms_di_extra:
         all_bundles: false
         bundles:     [AppBundle]
         directories: "%kernel.root_dir%/../src"
+
+# FOSRest Configuration
+fos_rest:
+    body_listener:          true
+    format_listener:        true
+    param_fetcher_listener: true
+    view:
+        view_response_listener: force
+        failed_validation:      HTTP_BAD_REQUEST
+        default_engine:         twig
+        formats:
+            json:  true
+            jsonp: true
+            xml:   true
+    format_listener:
+        rules:
+            - { path: ^/api, priorities: [html, json], fallback_format: ~, prefer_extension: false }
+    exception:
+        messages:
+            'Symfony\Component\HttpKernel\Exception\HttpException': true

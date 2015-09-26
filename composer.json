@@ -21,7 +21,9 @@
         "ma27/api-key-authentication-bundle": "~0.1",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "twig/extensions": "~1.3",
-        "jms/di-extra-bundle": "~1.6"
+        "jms/di-extra-bundle": "~1.6",
+        "friendsofsymfony/rest-bundle": "~1.7",
+        "jms/serializer-bundle": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
