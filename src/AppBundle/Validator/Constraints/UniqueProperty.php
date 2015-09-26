@@ -63,4 +63,12 @@ class UniqueProperty extends Constraint
     {
         return ['entity', 'field'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatedBy()
+    {
+        return 'app.validator.unique_property';
+    }
 }

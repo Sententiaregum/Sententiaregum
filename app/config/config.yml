@@ -83,6 +83,8 @@ jms_di_extra:
         all_bundles: false
         bundles:     [AppBundle]
         directories: "%kernel.root_dir%/../src"
+    cache_warmer:            # Needs to be disabled since the SonataNotificationBundle uses the CRUDController
+        enabled:     false   # of the SonataAdminBundle. Though we don't use it, this stupid bundle wants to include it.
 
 # FOSRest Configuration
 fos_rest:
