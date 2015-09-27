@@ -28,13 +28,13 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
         $expected->setBody([
             'to'      => [
                 'Ma27@sententiaregum.dev'      => 'Ma27',
-                'benbieler@sententiaregum.dev' => 'benbieler'
+                'benbieler@sententiaregum.dev' => 'benbieler',
             ],
             'subject' => 'Sententiaregum Notifications',
             'message' => [
                 'text' => 'Notifications',
-                'html' => '<b>Notifications</b>'
-            ]
+                'html' => '<b>Notifications</b>',
+            ],
         ]);
         $expected->setType('mailer');
         $expected->setState(MessageInterface::STATE_OPEN);
