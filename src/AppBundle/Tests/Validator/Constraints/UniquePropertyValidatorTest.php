@@ -89,7 +89,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /^Expected argument of type "scalar", "array" given$/
+     * @expectedExceptionMessageRegExp /^Expected argument of type "scalar or object", "array" given$/
      */
     public function testValueMustBeString()
     {
