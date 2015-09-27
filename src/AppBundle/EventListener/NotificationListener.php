@@ -79,12 +79,25 @@ class NotificationListener
             'to'      => $targets,
             'subject' => $this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications'),
             'message' => [
-                'text' => $this->engine->render(sprintf('%s.txt.twig', $event->getTemplateSource()), $event->getParameters()),
-                'html' => $this->engine->render(sprintf('%s.html.twig', $event->getTemplateSource()), $event->getParameters())
+                'text' => $this->renderMailPart($event, 'txt.twig'),
+                'html' => $this->renderMailPart($event, 'html.twig'),
             ]
         ]);
 
         $body->setState(Message::STATE_OPEN);
         $this->backend->publish($body);
+    }
+
+    /**
+     * Renders a mailing part
+     *
+     * @param MailerEvent $event
+     * @param string      $extension
+     *
+     * @return string
+     */
+    private function renderMailPart(MailerEvent $event, $extension)
+    {
+        return $this->engine->render(sprintf('%s.%s', $event->getTemplateSource(), (string) $extension), $event->getParameters());
     }
 }
