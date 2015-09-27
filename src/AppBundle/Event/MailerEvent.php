@@ -15,7 +15,7 @@ use AppBundle\Model\User\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event base class of the notification system
+ * Event base class of the notification system.
  */
 class MailerEvent extends Event
 {
@@ -37,7 +37,7 @@ class MailerEvent extends Event
     private $parameters = [];
 
     /**
-     * Adds a user
+     * Adds a user.
      *
      * @param User $user
      *
@@ -51,7 +51,7 @@ class MailerEvent extends Event
     }
 
     /**
-     * Sets the template source
+     * Sets the template source.
      *
      * @param $templateSource
      *
@@ -65,7 +65,7 @@ class MailerEvent extends Event
     }
 
     /**
-     * Adds a templating parameter
+     * Adds a templating parameter.
      *
      * @param string $name
      * @param string $value
@@ -80,7 +80,7 @@ class MailerEvent extends Event
     }
 
     /**
-     * Gets all users
+     * Gets all users.
      *
      * @return User[]
      */
@@ -90,7 +90,7 @@ class MailerEvent extends Event
     }
 
     /**
-     * Gets the template source
+     * Gets the template source.
      *
      * @return string
      */
@@ -100,7 +100,7 @@ class MailerEvent extends Event
     }
 
     /**
-     * Gets all parameters
+     * Gets all parameters.
      *
      * @return mixed[]
      */

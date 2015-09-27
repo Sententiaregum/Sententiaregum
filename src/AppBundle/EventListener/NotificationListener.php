@@ -19,7 +19,7 @@ use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Hook which is responsible for sending emails
+ * Hook which is responsible for sending emails.
  *
  * @DI\Service
  */
@@ -60,7 +60,7 @@ class NotificationListener
     }
 
     /**
-     * Hook that sends notifications
+     * Hook that sends notifications.
      *
      * @param MailerEvent $event
      *
@@ -81,7 +81,7 @@ class NotificationListener
             'message' => [
                 'text' => $this->renderMailPart($event, 'txt.twig'),
                 'html' => $this->renderMailPart($event, 'html.twig'),
-            ]
+            ],
         ]);
 
         $body->setState(Message::STATE_OPEN);
@@ -89,7 +89,7 @@ class NotificationListener
     }
 
     /**
-     * Renders a mailing part
+     * Renders a mailing part.
      *
      * @param MailerEvent $event
      * @param string      $extension
