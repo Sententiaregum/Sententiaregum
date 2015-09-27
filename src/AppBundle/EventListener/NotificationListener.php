@@ -84,7 +84,6 @@ class NotificationListener
             ],
         ]);
 
-        $body->setState(Message::STATE_OPEN);
         $this->backend->publish($body);
     }
 

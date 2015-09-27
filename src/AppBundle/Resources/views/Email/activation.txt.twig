@@ -1,0 +1,5 @@
+{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications') }} {{ username }}!
+
+{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}
+{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}:
+{{ app.request.scheme }}://{{ app.request.host }}/#!/activate/{{ activation_key }}

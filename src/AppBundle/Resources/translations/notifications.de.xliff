@@ -6,6 +6,21 @@
                 <source>NOTIFICATIONS_SUBJECT</source>
                 <target>Benachrichtigungen von Sententiaregum</target>
             </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_HELLO_PHRASE">
+                <source>NOTIFICATIONS_HELLO_PHRASE</source>
+                <target>Lieber</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_THANKS">
+                <source>NOTIFICATIONS_ACTIVATION_THANKS</source>
+                <target>Es freut uns, dass du eine Account auf Sententiaregum erstellt hast!</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_ACTIVATE">
+                <source>NOTIFICATIONS_ACTIOVATION_ACTIVATE</source>
+                <target>Du kannste deinen Account hier aktivieren:</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -11,6 +11,7 @@
 
 namespace AppBundle\Tests\Model\User;
 
+use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\Data\DTO\CreateUserDTO;
 use AppBundle\Model\User\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\User;
@@ -18,6 +19,7 @@ use AppBundle\Model\User\UserManager;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -95,11 +97,18 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->with(255)
             ->will($this->returnValue(str_repeat('X', 255)));
 
+        $dispatcher = $this->getMock(EventDispatcherInterface::class);
+        $dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(MailerEvent::EVENT_NAME);
+
         $userManager = new UserManager(
             User::class,
             $managerRegistry,
             $generator,
-            $this->getMock(ValidatorInterface::class)
+            $this->getMock(ValidatorInterface::class),
+            $dispatcher
         );
 
         $result = $userManager->registration($dto);

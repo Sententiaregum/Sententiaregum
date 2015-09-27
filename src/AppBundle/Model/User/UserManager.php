@@ -11,11 +11,13 @@
 
 namespace AppBundle\Model\User;
 
+use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\Data\DTO\CreateUserDTO;
 use AppBundle\Model\User\Generator\ActivationKeyCodeGeneratorInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use JMS\DiExtraBundle\Annotation as DI;
 use Sonata\CoreBundle\Model\BaseEntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -36,12 +38,18 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     private $validator;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * Constructor.
      *
      * @param string                              $class
      * @param ManagerRegistry                     $registry
      * @param ActivationKeyCodeGeneratorInterface $generator
      * @param ValidatorInterface                  $validator
+     * @param EventDispatcherInterface            $eventDispatcher
      *
      * @DI\InjectParams({
      *     "class" = @DI\Inject("%app.model.user%"),
@@ -53,12 +61,14 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
         $class,
         ManagerRegistry $registry,
         ActivationKeyCodeGeneratorInterface $generator,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        EventDispatcherInterface $eventDispatcher
     ) {
         parent::__construct($class, $registry);
 
         $this->activationKeyGenerator = $generator;
         $this->validator              = $validator;
+        $this->eventDispatcher        = $eventDispatcher;
     }
 
     /**
@@ -75,16 +85,50 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
             return $violations;
         }
 
+        $this->save($this->buildUserEntity($userParameters));
+
+        /** @var User $persistentUser */
+        $persistentUser = $this->getRepository()->findOneBy(['username' => $userParameters->getUsername()]);
+        $this->eventDispatcher->dispatch(MailerEvent::EVENT_NAME, $this->prepareMailObject($persistentUser));
+
+        return $persistentUser;
+    }
+
+    /**
+     * Creates a fresh user model.
+     *
+     * @param CreateUserDTO $DTO
+     *
+     * @return User
+     */
+    private function buildUserEntity(CreateUserDTO $DTO)
+    {
         /** @var User $newUser */
         $newUser = $this->create();
-        $newUser->setUsername($userParameters->getUsername());
-        $newUser->setPassword($userParameters->getPassword());
-        $newUser->setEmail($userParameters->getEmail());
-        $newUser->setLocale($userParameters->getLocale());
+        $newUser->setUsername($DTO->getUsername());
+        $newUser->setPassword($DTO->getPassword());
+        $newUser->setEmail($DTO->getEmail());
+        $newUser->setLocale($DTO->getLocale());
         $newUser->setActivationKey($this->activationKeyGenerator->generate(255));
+        
+        return $newUser;
+    }
 
-        $this->save($newUser);
+    /**
+     * Prepares the mailer event object.
+     *
+     * @param User $persistentUser
+     *
+     * @return MailerEvent
+     */
+    private function prepareMailObject(User $persistentUser)
+    {
+        $mailerEvent = new MailerEvent();
+        $mailerEvent->setTemplateSource('@AppBundle/Email/activation');
+        $mailerEvent->addUser($persistentUser);
+        $mailerEvent->addParameter('activation_key', $persistentUser->getActivationKey());
+        $mailerEvent->addParameter('username', $persistentUser->getUsername());
 
-        return $this->getRepository()->findOneBy(['username' => $userParameters->getUsername()]);
+        return $mailerEvent;
     }
 }
