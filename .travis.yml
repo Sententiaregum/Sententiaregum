@@ -10,6 +10,8 @@ matrix:
     - php: 7
 
 install:
+  - chmod a+x travis-ci/prepare.sh
+  - chmod a+x travis-ci/run-tests.sh
   - travis-ci/prepare.sh
 
 script:

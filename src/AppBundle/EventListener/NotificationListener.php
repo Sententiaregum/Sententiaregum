@@ -92,7 +92,7 @@ class NotificationListener
             ],
             'from'    => [
                 'name'  => 'Sententiaregum',
-                'email' => $this->emailAddress
+                'email' => $this->emailAddress,
             ]
         ]);
 
