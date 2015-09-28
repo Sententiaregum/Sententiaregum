@@ -110,7 +110,7 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
         $newUser->setEmail($DTO->getEmail());
         $newUser->setLocale($DTO->getLocale());
         $newUser->setActivationKey($this->activationKeyGenerator->generate(255));
-        
+
         return $newUser;
     }
 
@@ -124,7 +124,7 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     private function prepareMailObject(User $persistentUser)
     {
         $mailerEvent = new MailerEvent();
-        $mailerEvent->setTemplateSource('@AppBundle/Email/activation');
+        $mailerEvent->setTemplateSource('AppBundle:Email:activation');
         $mailerEvent->addUser($persistentUser);
         $mailerEvent->addParameter('activation_key', $persistentUser->getActivationKey());
         $mailerEvent->addParameter('username', $persistentUser->getUsername());

@@ -41,22 +41,30 @@ class NotificationListener
     private $engine;
 
     /**
+     * @var string
+     */
+    private $emailAddress;
+
+    /**
      * Constructor.
      *
      * @param BackendInterface    $backend
      * @param TranslatorInterface $translator
      * @param TwigEngine          $engine
+     * @param string              $defaultEmailAddress
      *
      * @DI\InjectParams({
      *     "backend" = @DI\Inject("sonata.notification.backend"),
-     *     "engine" = @DI\Inject("templating.engine.twig")
+     *     "engine" = @DI\Inject("templating.engine.twig"),
+     *     "defaultEmailAddress" = @DI\Inject("%mailer_from_address%")
      * })
      */
-    public function __construct(BackendInterface $backend, TranslatorInterface $translator, TwigEngine $engine)
+    public function __construct(BackendInterface $backend, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
     {
-        $this->backend    = $backend;
-        $this->translator = $translator;
-        $this->engine     = $engine;
+        $this->backend      = $backend;
+        $this->translator   = $translator;
+        $this->engine       = $engine;
+        $this->emailAddress = $defaultEmailAddress;
     }
 
     /**
@@ -82,6 +90,10 @@ class NotificationListener
                 'text' => $this->renderMailPart($event, 'txt.twig'),
                 'html' => $this->renderMailPart($event, 'html.twig'),
             ],
+            'from'    => [
+                'name'  => 'Sententiaregum',
+                'email' => $this->emailAddress
+            ]
         ]);
 
         $this->backend->publish($body);

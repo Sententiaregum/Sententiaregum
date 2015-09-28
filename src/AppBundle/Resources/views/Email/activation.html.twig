@@ -1,7 +1,11 @@
-<b>{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications') }} {{ username }}!</b>
+{% extends 'AppBundle:Email:email_layout.html.twig' %}
 
-{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}
-{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}:
+{% block username %}{{ username }}{% endblock %}
 
-{% set url = app.request.scheme ~ '://' ~ app.request.host ~ '/#!/activate/' ~ activation_key %}
-<a href="{{ url }}">{{ url }}</a>
+{% block content %}
+    <p>{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}</p>
+    <p>{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}</p>
+
+    {% set url = app.request.scheme ~ '://' ~ app.request.host ~ '/#!/activate/' ~ activation_key %}
+    <p id="n-ac-l-p"><a href="{{ url }}">{{ 'NOTIFICATIONS_ACTIVATION_HTML_LINK'|trans({}, 'notifications') }}</a></p>
+{% endblock %}

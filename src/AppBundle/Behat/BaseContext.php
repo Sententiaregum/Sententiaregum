@@ -1,0 +1,177 @@
+<?php
+
+/*
+ * This file is part of the sententiaregum application.
+ *
+ * Sententiaregum is a social network based on Symfony2 and BackboneJS/ReactJS
+ *
+ * @copyright (c) 2015 Sententiaregum
+ * Please check out the license file in the document root of this application
+ */
+
+namespace AppBundle\Behat;
+
+use AppBundle\DataFixtures\ORM\RoleFixture;
+use AppBundle\DataFixtures\ORM\UserFixture;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Ma27\ApiKeyAuthenticationBundle\Security\ApiKeyAuthenticator;
+
+/**
+ * Base context that contains basic features of every behat context
+ */
+abstract class BaseContext implements KernelAwareContext
+{
+    use KernelDictionary;
+
+    /**
+     * @var string
+     */
+    protected static $managerName = 'default';
+
+    /**
+     * @var \Doctrine\Common\DataFixtures\FixtureInterface
+     */
+    protected static $fixtures = [];
+
+    /**
+     * @var string
+     */
+    protected $apiKey;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Client
+     */
+    protected $recentClient;
+
+    /** @BeforeScenario */
+    public function loadDataFixtures()
+    {
+        $registry = $this->getContainer()->get('doctrine');
+        /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
+        $entityManager = $registry->getManager(self::$managerName);
+
+        $purger   = new ORMPurger($entityManager);
+        $executor = new ORMExecutor($entityManager, $purger);
+
+        $executor->execute(array_merge([new RoleFixture(), new UserFixture()], self::$fixtures));
+    }
+
+    /** @AfterScenario */
+    public function tearDown()
+    {
+        $this->apiKey       = null;
+        $this->recentClient = null;
+    }
+
+    /**
+     * Performs a request to the symfony application and returns the response.
+     *
+     * @param string   $method
+     * @param string   $uri
+     * @param mixed[]  $parameters
+     * @param bool     $expectSuccess
+     * @param string[] $headers
+     * @param mixed[]  $files
+     * @param bool     $toJson
+     * @param string   $apiKey
+     *
+     * @return string|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception If the json decode did not work
+     */
+    protected function performRequest($method, $uri, array $parameters = [], $expectSuccess = true, array $headers = [], array $files = [], $toJson = true, $apiKey = null)
+    {
+        if (null !== $apiKey || null !== $this->apiKey) {
+            $headers[ApiKeyAuthenticator::API_KEY_HEADER] = $apiKey ?: $this->apiKey;
+        }
+
+        $headers = array_combine(
+            array_map(function ($headerName) {
+                return sprintf('HTTP_%s', $headerName);
+            }, array_keys($headers)),
+            array_values($headers)
+        );
+
+        /** @var \Symfony\Bundle\FrameworkBundle\Client $client */
+        $client = $this->getContainer()->get('test.client');
+        $client->enableProfiler();
+
+        $client->request($method, $uri, $parameters, $files, $headers);
+        $response = $client->getResponse();
+
+        $status = $response->getStatusCode();
+        if ($expectSuccess) {
+            if ($status < 200 || $status > 399) {
+                throw new \Exception(sprintf('Expected success, but got error code "%d"', $status));
+            }
+        } else {
+            if ($status < 400 || $status > 599) {
+                throw new \Exception(sprintf('Expected failures, but got success code "%d"', $status));
+            }
+        }
+
+        $this->recentClient = $client;
+
+        if ($toJson) {
+            $content = $response->getContent();
+            if (empty($content)) {
+                $raw = null;
+            } else {
+                $raw = json_decode($content, true);
+                if (JSON_ERROR_NONE !== json_last_error()) {
+                    throw new \Exception(sprintf('Malformatted json (%s) responded from uri "%s" with method "%s"!', $content, $uri, $method));
+                }
+            }
+
+            return $raw;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Authenticates a user and returns the api key.
+     *
+     * @param string $username
+     * @param string $password
+     *
+     * @return string
+     *
+     * @throws \Exception If the authentication failed
+     */
+    protected function authenticate($username, $password)
+    {
+        $response = $this->performRequest('POST', '/api/api-key.json', ['username' => $username, 'password' => $password]);
+
+        if (isset($response['message'])) {
+            throw new \Exception(sprintf('Authentication failed due to the following reason: %s', $response['message']));
+        }
+
+        return $this->apiKey = $response['apiKey'];
+    }
+
+    /**
+     * Gets an entity manager
+     *
+     * @return \Doctrine\ORM\EntityManagerInterface
+     */
+    protected function getEntityManager()
+    {
+        return $this->getContainer()->get('doctrine')->getManager(self::$managerName);
+    }
+
+    /**
+     * Gets a repository by its name
+     *
+     * @param string $entity
+     *
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    protected function getRepository($entity)
+    {
+        return $this->getEntityManager()->getRepository($entity);
+    }
+}

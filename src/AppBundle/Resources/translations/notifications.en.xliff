@@ -9,17 +9,22 @@
 
             <trans-unit id="NOTIFICATIONS_HELLO_PHRASE">
                 <source>NOTIFICATIONS_HELLO_PHRASE</source>
-                <target>Dear</target>
+                <target>Hello</target>
             </trans-unit>
 
             <trans-unit id="NOTIFICATIONS_ACTIVATION_THANKS">
                 <source>NOTIFICATIONS_ACTIVATION_THANKS</source>
-                <target>Thanks for creating an account on sententiaregum!</target>
+                <target>It's great to have you on board!</target>
             </trans-unit>
 
             <trans-unit id="NOTIFICATIONS_ACTIVATION_ACTIVATE">
-                <source>NOTIFICATIONS_ACTIOVATION_ACTIVATE</source>
+                <source>NOTIFICATIONS_ACTIVATION_ACTIVATE</source>
                 <target>You can activate here:</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_HTML_LINK">
+                <source>NOTIFICATIONS_ACTIVATION_HTML_LINK</source>
+                <target>Link to the activation</target>
             </trans-unit>
         </body>
     </file>

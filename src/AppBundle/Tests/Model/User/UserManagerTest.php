@@ -47,7 +47,8 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             User::class,
             $this->getMock(ManagerRegistry::class),
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
-            $validatorMock
+            $validatorMock,
+            $this->getMock(EventDispatcherInterface::class)
         );
 
         $result = $userManager->registration($dto);

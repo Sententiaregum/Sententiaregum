@@ -28,4 +28,4 @@ monolog:
 
 nelmio_api_doc:
     sandbox:
-        emabled: false
+        enabled: false

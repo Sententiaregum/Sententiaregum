@@ -1,0 +1,16 @@
+default:
+  suites:
+    user:
+      contexts:
+        - AppBundle\Behat\RegistrationContext
+      filters:
+        tags: "@registration"
+      type:   symfony_bundle
+      bundle: AppBundle
+  formatters:
+    pretty:
+      paths:    false
+      snippets: false
+      verbose:  true
+  extensions:
+    Behat\Symfony2Extension: ~

@@ -24,6 +24,8 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testPublishNotifications()
     {
+        $defaultEmail = 'info@sententiaregum.dev';
+
         $expected = new Message();
         $expected->setBody([
             'to'      => [
@@ -35,6 +37,10 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
                 'text' => 'Notifications',
                 'html' => '<b>Notifications</b>',
             ],
+            'from'    => [
+                'name'  => 'Sententiaregum',
+                'email' => $defaultEmail,
+            ]
         ]);
         $expected->setType('mailer');
         $expected->setState(MessageInterface::STATE_OPEN);
@@ -77,7 +83,7 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
             ->with('NOTIFICATIONS_SUBJECT', [], 'notifications')
             ->will($this->returnValue('Sententiaregum Notifications'));
 
-        $listener = new NotificationListener($backend, $translator, $templatingEngine);
+        $listener = new NotificationListener($backend, $translator, $templatingEngine, $defaultEmail);
         $listener->onMailEvent($event);
     }
 }
