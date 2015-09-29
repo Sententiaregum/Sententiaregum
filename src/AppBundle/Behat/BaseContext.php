@@ -20,7 +20,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Ma27\ApiKeyAuthenticationBundle\Security\ApiKeyAuthenticator;
 
 /**
- * Base context that contains basic features of every behat context
+ * Base context that contains basic features of every behat context.
  */
 abstract class BaseContext implements KernelAwareContext
 {
@@ -75,15 +75,25 @@ abstract class BaseContext implements KernelAwareContext
      * @param bool     $expectSuccess
      * @param string[] $headers
      * @param mixed[]  $files
+     * @param int      $expectedStatus
      * @param bool     $toJson
      * @param string   $apiKey
      *
-     * @return string|\Symfony\Component\HttpFoundation\Response
-     *
      * @throws \Exception If the json decode did not work
+     *
+     * @return string|\Symfony\Component\HttpFoundation\Response
      */
-    protected function performRequest($method, $uri, array $parameters = [], $expectSuccess = true, array $headers = [], array $files = [], $toJson = true, $apiKey = null)
-    {
+    protected function performRequest(
+        $method,
+        $uri,
+        array $parameters = [],
+        $expectSuccess = true,
+        array $headers = [],
+        array $files = [],
+        $expectedStatus = 200,
+        $toJson = true,
+        $apiKey = null
+    ) {
         if (null !== $apiKey || null !== $this->apiKey) {
             $headers[ApiKeyAuthenticator::API_KEY_HEADER] = $apiKey ?: $this->apiKey;
         }
@@ -113,6 +123,10 @@ abstract class BaseContext implements KernelAwareContext
             }
         }
 
+        if ($expectedStatus !== $status) {
+            throw new \Exception(sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));
+        }
+
         $this->recentClient = $client;
 
         if ($toJson) {
@@ -138,23 +152,18 @@ abstract class BaseContext implements KernelAwareContext
      * @param string $username
      * @param string $password
      *
-     * @return string
-     *
      * @throws \Exception If the authentication failed
+     *
+     * @return string
      */
     protected function authenticate($username, $password)
     {
         $response = $this->performRequest('POST', '/api/api-key.json', ['username' => $username, 'password' => $password]);
-
-        if (isset($response['message'])) {
-            throw new \Exception(sprintf('Authentication failed due to the following reason: %s', $response['message']));
-        }
-
         return $this->apiKey = $response['apiKey'];
     }
 
     /**
-     * Gets an entity manager
+     * Gets an entity manager.
      *
      * @return \Doctrine\ORM\EntityManagerInterface
      */
@@ -164,7 +173,7 @@ abstract class BaseContext implements KernelAwareContext
     }
 
     /**
-     * Gets a repository by its name
+     * Gets a repository by its name.
      *
      * @param string $entity
      *

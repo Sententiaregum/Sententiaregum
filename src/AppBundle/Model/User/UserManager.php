@@ -52,8 +52,8 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
      * @param EventDispatcherInterface            $eventDispatcher
      *
      * @DI\InjectParams({
-     *     "class" = @DI\Inject("%app.model.user%"),
-     *     "registry" = @DI\Inject("doctrine"),
+     *     "class"     = @DI\Inject("%app.model.user%"),
+     *     "registry"  = @DI\Inject("doctrine"),
      *     "generator" = @DI\Inject("app.user.activation_key_generator")
      * })
      */

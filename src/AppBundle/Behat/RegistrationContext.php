@@ -42,7 +42,11 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $this->response = $this->performRequest(
             'POST',
             '/api/users.json',
-            ['username' => $row[0], 'password' => $row[1], 'email' => $row[2], 'locale' => $row[3]]
+            ['username' => $row[0], 'password' => $row[1], 'email' => $row[2], 'locale' => $row[3]],
+            true,
+            [],
+            [],
+            201
         );
     }
 
@@ -96,8 +100,17 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $crawler = new Crawler();
         $crawler->addContent($message->getChildren()[1]->getBody());
 
+        if (2 !== count($message->getChildren())) {
+            throw new \Exception('Every message requires a text and a html children!');
+        }
+
         if (1 !== $crawler->filter('#n-ac-l-p')->count()) {
             throw new \Exception('Invalid amount of confirmation link nodes!');
+        }
+
+        $textContent = $message->getChildren()[0]->getBody();
+        if (0 === preg_match('/!\/activate\/(.*)/', $textContent)) {
+            throw new \Exception('Missing activation link in text email!');
         }
     }
 

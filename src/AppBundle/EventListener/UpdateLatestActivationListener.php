@@ -47,7 +47,7 @@ class UpdateLatestActivationListener
      * @param RequestStack          $requestStack
      *
      * @DI\InjectParams({
-     *     "userManager" = @DI\Inject("app.user.user_manager"),
+     *     "userManager"  = @DI\Inject("app.user.user_manager"),
      *     "tokenStorage" = @DI\Inject("security.token_storage"),
      *     "requestStack" = @DI\Inject("request_stack")
      * })

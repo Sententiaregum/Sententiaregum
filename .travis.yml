@@ -9,9 +9,11 @@ matrix:
     - php: hhvm
     - php: 7
 
-install:
+before_install:
   - chmod a+x travis-ci/prepare.sh
   - chmod a+x travis-ci/run-tests.sh
+
+install:
   - travis-ci/prepare.sh
 
 script:

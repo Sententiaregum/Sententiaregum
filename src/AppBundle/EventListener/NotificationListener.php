@@ -54,8 +54,8 @@ class NotificationListener
      * @param string              $defaultEmailAddress
      *
      * @DI\InjectParams({
-     *     "backend" = @DI\Inject("sonata.notification.backend"),
-     *     "engine" = @DI\Inject("templating.engine.twig"),
+     *     "backend"             = @DI\Inject("sonata.notification.backend"),
+     *     "engine"              = @DI\Inject("templating.engine.twig"),
      *     "defaultEmailAddress" = @DI\Inject("%mailer_from_address%")
      * })
      */
@@ -93,7 +93,7 @@ class NotificationListener
             'from'    => [
                 'name'  => 'Sententiaregum',
                 'email' => $this->emailAddress,
-            ]
+            ],
         ]);
 
         $this->backend->publish($body);

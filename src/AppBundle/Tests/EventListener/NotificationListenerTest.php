@@ -40,7 +40,7 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
             'from'    => [
                 'name'  => 'Sententiaregum',
                 'email' => $defaultEmail,
-            ]
+            ],
         ]);
         $expected->setType('mailer');
         $expected->setState(MessageInterface::STATE_OPEN);
