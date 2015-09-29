@@ -1,5 +1,5 @@
 @registration
-Feature: create account
+Feature: registration
   As a poster I'd like to create an account in order to share content with other users
 
   Scenario: create new user account

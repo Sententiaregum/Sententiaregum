@@ -159,6 +159,7 @@ abstract class BaseContext implements KernelAwareContext
     protected function authenticate($username, $password)
     {
         $response = $this->performRequest('POST', '/api/api-key.json', ['username' => $username, 'password' => $password]);
+
         return $this->apiKey = $response['apiKey'];
     }
 
