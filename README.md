@@ -32,11 +32,15 @@ It is not recommended to use windows. When installing the npm dependencies on sh
 
 If you use windows, [this blog post helps you to fix that issue](https://harvsworld.com/2015/how-to-fix-npm-install-errors-on-vagrant-on-windows-because-the-paths-are-too-long/).
 
-## Deploy
+## Install
 
-A deploy is really simple.
+The installation is really simple.
 
 You just have to call __composer install --no-dev__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
+
+#### Deployment
+
+The deployment with capistrano is in progress in Sententiaregum/Sententiaregum#49
 
 ## Custom configuration
 

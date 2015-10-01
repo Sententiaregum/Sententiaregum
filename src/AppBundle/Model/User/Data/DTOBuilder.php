@@ -11,7 +11,7 @@
 
 namespace AppBundle\Model\User\Data;
 
-use AppBundle\Model\User\Data\DTO\CreateUserDTO;
+use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -27,7 +27,7 @@ class DTOBuilder
      *
      * @param ParamFetcher $requestParameters
      *
-     * @return CreateUserDTO
+     * @return \AppBundle\Model\User\Registration\DTO\CreateUserDTO
      */
     public function buildRegistrationDTO(ParamFetcher $requestParameters)
     {

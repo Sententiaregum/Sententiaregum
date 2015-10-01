@@ -9,14 +9,14 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Model\User\Generator;
+namespace AppBundle\Model\User\Registration\Generator;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * Generator the builds the activation key.
  *
- * @DI\Service(id="app.user.activation_key_generator")
+ * @DI\Service(id="app.user.registration.activation_key_generator")
  */
 class ActivationKeyCodeGenerator implements ActivationKeyCodeGeneratorInterface
 {

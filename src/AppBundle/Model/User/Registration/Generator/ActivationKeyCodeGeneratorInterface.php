@@ -9,7 +9,7 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Model\User\Generator;
+namespace AppBundle\Model\User\Registration\Generator;
 
 /**
  * Interface of a keycode generator.

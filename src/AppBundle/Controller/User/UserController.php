@@ -46,8 +46,8 @@ class UserController extends BaseController
     {
         /** @var \AppBundle\Model\User\Data\DTOBuilder $dtoBuilder */
         $dtoBuilder = $this->get('app.user.dto_builder');
-        /** @var \AppBundle\Model\User\UserManager $userManager */
-        $userManager = $this->get('app.user.user_manager');
+        /** @var \AppBundle\Model\User\Registration\TwoStepRegistrationProcess $userManager */
+        $userManager = $this->get('app.user.registration');
 
         $result = $userManager->registration($dtoBuilder->buildRegistrationDTO($paramFetcher));
         if ($result instanceof ConstraintViolationListInterface) {

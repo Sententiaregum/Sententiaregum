@@ -78,10 +78,11 @@ abstract class BaseContext implements KernelAwareContext
      * @param int      $expectedStatus
      * @param bool     $toJson
      * @param string   $apiKey
+     * @param bool     $disableAssertions
      *
      * @throws \Exception If the json decode did not work
      *
-     * @return string|\Symfony\Component\HttpFoundation\Response
+     * @return string[]
      */
     protected function performRequest(
         $method,
@@ -92,7 +93,8 @@ abstract class BaseContext implements KernelAwareContext
         array $files = [],
         $expectedStatus = 200,
         $toJson = true,
-        $apiKey = null
+        $apiKey = null,
+        $disableAssertions = false
     ) {
         if (null !== $apiKey || null !== $this->apiKey) {
             $headers[ApiKeyAuthenticator::API_KEY_HEADER] = $apiKey ?: $this->apiKey;
@@ -112,19 +114,21 @@ abstract class BaseContext implements KernelAwareContext
         $client->request($method, $uri, $parameters, $files, $headers);
         $response = $client->getResponse();
 
-        $status = $response->getStatusCode();
-        if ($expectSuccess) {
-            if ($status < 200 || $status > 399) {
-                throw new \Exception(sprintf('Expected success, but got error code "%d"', $status));
+        if (!$disableAssertions) {
+            $status = $response->getStatusCode();
+            if ($expectSuccess) {
+                if ($status < 200 || $status > 399) {
+                    throw new \Exception(sprintf('Expected success, but got error code "%d"', $status));
+                }
+            } else {
+                if ($status < 400 || $status > 599) {
+                    throw new \Exception(sprintf('Expected failures, but got success code "%d"', $status));
+                }
             }
-        } else {
-            if ($status < 400 || $status > 599) {
-                throw new \Exception(sprintf('Expected failures, but got success code "%d"', $status));
-            }
-        }
 
-        if ($expectedStatus !== $status) {
-            throw new \Exception(sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));
+            if ($expectedStatus !== $status) {
+                throw new \Exception(sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));
+            }
         }
 
         $this->recentClient = $client;

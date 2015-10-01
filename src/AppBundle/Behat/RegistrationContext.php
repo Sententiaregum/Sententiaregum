@@ -30,11 +30,11 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
     private $username;
 
     /**
-     * @When I send an registration request with the following credentials:
+     * @When I send a registration request with the following credentials:
      *
      * @param TableNode $table
      */
-    public function iSendAnRegistrationRequestWithTheFollowingCredentials(TableNode $table)
+    public function iSendARegistrationRequestWithTheFollowingCredentials(TableNode $table)
     {
         $row            = $table->getRow(1);
         $this->username = $row[0];
@@ -46,7 +46,10 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
             true,
             [],
             [],
-            201
+            200,
+            true,
+            null,
+            true
         );
     }
 
@@ -128,5 +131,19 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
     public function iShouldBeAbleToLogin()
     {
         throw new PendingException();
+    }
+
+    /**
+     * @Then I should see :arg1 for property :arg2
+     */
+    public function iShouldSee($arg1, $arg2)
+    {
+        if (!isset($this->response[$arg2])) {
+            throw new \Exception('Missing errors for '.$arg2.' in response!');
+        }
+
+        if (!in_array($arg1, $this->response[$arg2])) {
+            throw new \Exception(sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
+        }
     }
 }

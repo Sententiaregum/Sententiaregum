@@ -130,7 +130,8 @@ class UniquePropertyValidator extends ConstraintValidator
                 ->buildViolation($constraint->message)
                 ->setParameter('%property%', $field)
                 ->setParameter('%entity%', $entityAlias)
-                ->setParameter('%value%', $value);
+                ->setParameter('%value%', $value)
+                ->setInvalidValue($value);
 
             if (null !== $path = $constraint->propertyPath) {
                 $violationBuilder->atPath($path);

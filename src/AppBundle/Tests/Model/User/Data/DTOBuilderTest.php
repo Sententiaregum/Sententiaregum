@@ -11,7 +11,7 @@
 
 namespace AppBundle\Tests\Model\User\Data;
 
-use AppBundle\Model\User\Data\DTO\CreateUserDTO;
+use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Data\DTOBuilder;
 use FOS\RestBundle\Request\ParamFetcher;
 

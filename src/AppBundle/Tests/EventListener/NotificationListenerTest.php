@@ -42,6 +42,7 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
                 'email' => $defaultEmail,
             ],
         ]);
+
         $expected->setType('mailer');
         $expected->setState(MessageInterface::STATE_OPEN);
 

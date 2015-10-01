@@ -9,9 +9,9 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Tests\Model\User\Generator;
+namespace AppBundle\Tests\Model\User\Registration\Generator;
 
-use AppBundle\Model\User\Generator\ActivationKeyCodeGenerator;
+use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGenerator;
 
 class ActivationKeyCodeGeneratorTest extends \PHPUnit_Framework_TestCase
 {

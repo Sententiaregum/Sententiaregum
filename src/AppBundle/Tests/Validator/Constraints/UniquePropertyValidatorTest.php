@@ -305,6 +305,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->setParameter('%entity%', 'TestMapping:User')
             ->setParameter('%value%', 'Ma27')
             ->atPath('property.path.custom')
+            ->setInvalidValue('Ma27')
             ->assertRaised();
     }
 }

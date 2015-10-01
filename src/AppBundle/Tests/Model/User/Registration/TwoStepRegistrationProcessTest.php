@@ -9,22 +9,22 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Tests\Model\User;
+namespace AppBundle\Tests\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
-use AppBundle\Model\User\Data\DTO\CreateUserDTO;
-use AppBundle\Model\User\Generator\ActivationKeyCodeGeneratorInterface;
+use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
+use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
+use AppBundle\Model\User\Registration\TwoStepRegistrationProcess;
+use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\UserManager;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserManagerTest extends \PHPUnit_Framework_TestCase
+class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateInvalidUser()
     {
@@ -43,9 +43,8 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
                 )
             ));
 
-        $userManager = new UserManager(
-            User::class,
-            $this->getMock(ManagerRegistry::class),
+        $userManager = new TwoStepRegistrationProcess(
+            $this->getMock(EntityManagerInterface::class),
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $validatorMock,
             $this->getMock(EventDispatcherInterface::class)
@@ -64,7 +63,7 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $dto->setPassword('123456');
         $dto->setEmail('Ma27@sententiaregum.dev');
 
-        $entityManager = $this->getMock(ObjectManager::class);
+        $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->once())
             ->method('persist');
@@ -73,23 +72,23 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $repository = $this->getMock(ObjectRepository::class);
+        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $repository
-            ->expects($this->any())
+            ->expects($this->at(1))
             ->method('findOneBy')
             ->with(['username' => 'Ma27'])
             ->will($this->returnValue(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev')));
+
+        $repository
+            ->expects($this->at(0))
+            ->method('findOneBy')
+            ->with(['role' => 'ROLE_USER'])
+            ->will($this->returnValue(new Role('ROLE_USER')));
 
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($repository));
-
-        $managerRegistry = $this->getMock(ManagerRegistry::class);
-        $managerRegistry
-            ->expects($this->exactly(3))
-            ->method('getManagerForClass')
-            ->will($this->returnValue($entityManager));
 
         $generator = $this->getMock(ActivationKeyCodeGeneratorInterface::class);
         $generator
@@ -104,9 +103,8 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with(MailerEvent::EVENT_NAME);
 
-        $userManager = new UserManager(
-            User::class,
-            $managerRegistry,
+        $userManager = new TwoStepRegistrationProcess(
+            $entityManager,
             $generator,
             $this->getMock(ValidatorInterface::class),
             $dispatcher
