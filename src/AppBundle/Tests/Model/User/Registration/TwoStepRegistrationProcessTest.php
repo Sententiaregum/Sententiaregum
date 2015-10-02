@@ -43,14 +43,14 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
                 )
             ));
 
-        $userManager = new TwoStepRegistrationProcess(
+        $registration = new TwoStepRegistrationProcess(
             $this->getMock(EntityManagerInterface::class),
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $validatorMock,
             $this->getMock(EventDispatcherInterface::class)
         );
 
-        $result = $userManager->registration($dto);
+        $result = $registration->registration($dto);
         $this->assertInstanceOf(ConstraintViolationList::class, $result);
 
         $this->assertCount(1, $result);
@@ -103,14 +103,84 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with(MailerEvent::EVENT_NAME);
 
-        $userManager = new TwoStepRegistrationProcess(
+        $registration = new TwoStepRegistrationProcess(
             $entityManager,
             $generator,
             $this->getMock(ValidatorInterface::class),
             $dispatcher
         );
 
-        $result = $userManager->registration($dto);
+        $result = $registration->registration($dto);
         $this->assertInstanceOf(User::class, $result);
+    }
+
+    /**
+     * @expectedException \AppBundle\Exception\UserActivationException
+     */
+    public function testInvalidActivationKey()
+    {
+        $key = md5(uniqid());
+
+        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['activationKey' => $key])
+            ->will($this->returnValue(null));
+
+        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager
+            ->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
+
+        $registration = new TwoStepRegistrationProcess(
+            $entityManager,
+            $this->getMock(ActivationKeyCodeGeneratorInterface::class),
+            $this->getMock(ValidatorInterface::class),
+            $this->getMock(EventDispatcherInterface::class)
+        );
+
+        $registration->approveByActivationKey($key);
+    }
+
+    public function testApproveUser()
+    {
+        $key  = md5(uniqid());
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+
+        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['activationKey' => $key])
+            ->will($this->returnValue($user));
+
+        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager
+            ->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
+
+        $readyUser = $user->setState(User::STATE_APPROVED);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('persist')
+            ->with($readyUser);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('flush')
+            ->with($readyUser);
+
+        $registration = new TwoStepRegistrationProcess(
+            $entityManager,
+            $this->getMock(ActivationKeyCodeGeneratorInterface::class),
+            $this->getMock(ValidatorInterface::class),
+            $this->getMock(EventDispatcherInterface::class)
+        );
+
+        $registration->approveByActivationKey($key);
     }
 }

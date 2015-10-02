@@ -12,6 +12,7 @@
 namespace AppBundle\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
+use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\User;
@@ -79,9 +80,19 @@ class TwoStepRegistrationProcess implements AccountCreationInterface, AccountApp
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UserActivationException If the activation fails
      */
     public function approveByActivationKey($activationKey)
     {
+        $repository = $this->entityManager->getRepository('User:User');
+        if (!$user = $repository->findOneBy(['activationKey' => $activationKey])) {
+            throw new UserActivationException;
+        }
+
+        $user->setState(User::STATE_APPROVED);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush($user);
     }
 
     /**
