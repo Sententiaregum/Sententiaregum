@@ -98,7 +98,7 @@ abstract class BehatAssert
      * Asserts length of an array.
      *
      * @param int    $count
-     * @param array  $array
+     * @param \Swift_Mime_MimeEntity[]  $array
      * @param string $message
      */
     protected function assertCount($count, array $array, $message = null)
