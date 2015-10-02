@@ -49,6 +49,11 @@ If there's a label added to your PR, the commit message should be renamed to the
 The pull request should have some content, too.
 You just need to tell what has changed.
 
+Please add: 
+    ```Resolves #{issue}``` in every pull request.
+    
+This is needed, so that waffle.io can attach the PR to the issue card.
+    
 __Note__: if you have fixed a bug that is not reported in the issue tracker, please add a detailed description how this bug was caused.
 
 #### Reviews
