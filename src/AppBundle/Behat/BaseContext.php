@@ -22,7 +22,7 @@ use Ma27\ApiKeyAuthenticationBundle\Security\ApiKeyAuthenticator;
 /**
  * Base context that contains basic features of every behat context.
  */
-abstract class BaseContext implements KernelAwareContext
+abstract class BaseContext extends BehatAssert implements KernelAwareContext
 {
     use KernelDictionary;
 
@@ -117,18 +117,12 @@ abstract class BaseContext implements KernelAwareContext
         if (!$disableAssertions) {
             $status = $response->getStatusCode();
             if ($expectSuccess) {
-                if ($status < 200 || $status > 399) {
-                    throw new \Exception(sprintf('Expected success, but got error code "%d"', $status));
-                }
+                $this->assertTrue($status < 200 || $status > 399, sprintf('Expected success, but got error code "%d"', $status));
             } else {
-                if ($status < 400 || $status > 599) {
-                    throw new \Exception(sprintf('Expected failures, but got success code "%d"', $status));
-                }
+                $this->assertTrue($status < 400 || $status > 599, sprintf('Expected failures, but got success code "%d"', $status));
             }
 
-            if ($expectedStatus !== $status) {
-                throw new \Exception(sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));
-            }
+            $this->assertEquals($expectedStatus, $status, sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));
         }
 
         $this->recentClient = $client;
@@ -139,9 +133,11 @@ abstract class BaseContext implements KernelAwareContext
                 $raw = null;
             } else {
                 $raw = json_decode($content, true);
-                if (JSON_ERROR_NONE !== json_last_error()) {
-                    throw new \Exception(sprintf('Malformatted json (%s) responded from uri "%s" with method "%s"!', $content, $uri, $method));
-                }
+                $this->assertEquals(
+                    JSON_ERROR_NONE,
+                    json_last_error(),
+                    sprintf('Malformatted json (%s) responded from uri "%s" with method "%s"!', $content, $uri, $method)
+                );
             }
 
             return $raw;

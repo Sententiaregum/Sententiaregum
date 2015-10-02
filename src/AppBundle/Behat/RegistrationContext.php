@@ -58,9 +58,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldHaveAnAccount()
     {
-        if (!isset($this->response['id'])) {
-            throw new \Exception('Unsuccessful registration!');
-        }
+        $this->assertTrue(isset($this->response['id']), 'Unsuccessful registration!');
     }
 
     /**
@@ -71,9 +69,8 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $repository = $this->getRepository('User:User');
         $user       = $repository->findOneBy(['username' => $this->username]);
 
-        if (!$user->getActivationKey() || User::STATE_APPROVED === $user->getState()) {
-            throw new \Exception('Newly registered user must not be approved and must have an activation key!');
-        }
+        $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key!');
+        $this->assertNotEquals(User::STATE_APPROVED, $user->getState(), 'User not approved!');
     }
 
     /**
@@ -85,36 +82,19 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         /** @var \Symfony\Bundle\SwiftMailerBundle\DataCollector\MessageDataCollector $mailCollector */
         $mailCollector = $client->getProfile()->getCollector('swiftmailer');
 
-        if (1 !== $mailCollector->getMessageCount()) {
-            throw new \Exception('Expected one email to be sent!');
-        }
+        $this->assertEquals(1, $mailCollector->getMessageCount(), 'Expected one email to be sent!');
 
         /** @var \Swift_Message $message */
         $message = $mailCollector->getMessages()[0];
-
-        if ($message->getSubject() !== 'Sententiaregum Notifications') {
-            throw new \Exception('Invalid subject on activation email!');
-        }
-
-        if (key($message->getTo()) !== 'sententiaregum@sententiaregum.dev') {
-            throw new \Exception('Invalid mailer target!');
-        }
+        $this->assertEquals($message->getSubject(), 'Sententiaregum Notifications', 'Invalid subject on activation mail');
+        $this->assertEquals(key($message->getTo()), 'sententiaregum@sententiaregum.dev', 'Invalid mailer target!');
 
         $crawler = new Crawler();
         $crawler->addContent($message->getChildren()[1]->getBody());
 
-        if (2 !== count($message->getChildren())) {
-            throw new \Exception('Every message requires a text and a html children!');
-        }
-
-        if (1 !== $crawler->filter('#n-ac-l-p')->count()) {
-            throw new \Exception('Invalid amount of confirmation link nodes!');
-        }
-
-        $textContent = $message->getChildren()[0]->getBody();
-        if (0 === preg_match('/!\/activate\/(.*)/', $textContent)) {
-            throw new \Exception('Missing activation link in text email!');
-        }
+        $this->assertCount(2, $message->getChildren(), 'Every message requires a text and a html child!');
+        $this->assertEquals(1, $crawler->filter('#n-ac-l-p')->count(), 'Invalid amount of confirmation link nodes!');
+        $this->assertNotEquals(0, preg_match('/!\/activate\/(.*)/', $message->getChildren()[0]->getBody()), 'No text link found!');
     }
 
     /**
