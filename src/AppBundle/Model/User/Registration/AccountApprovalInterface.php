@@ -17,7 +17,7 @@ namespace AppBundle\Model\User\Registration;
 interface AccountApprovalInterface
 {
     /**
-     * Approves the new user
+     * Approves the new user.
      *
      * @param string $activationKey
      */

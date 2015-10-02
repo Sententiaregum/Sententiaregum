@@ -57,9 +57,9 @@ class UpdateLatestActivationListener
         TokenStorageInterface $tokenStorage,
         RequestStack $requestStack
     ) {
-        $this->entityManager  = $userManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->requestStack = $requestStack;
+        $this->entityManager = $userManager;
+        $this->tokenStorage  = $tokenStorage;
+        $this->requestStack  = $requestStack;
     }
 
     /**

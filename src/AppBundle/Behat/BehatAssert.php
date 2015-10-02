@@ -12,8 +12,8 @@
 namespace AppBundle\Behat;
 
 use AppBundle\Behat\Comparator\BooleanComparator;
-use SebastianBergmann\Comparator\Factory;
 use SebastianBergmann\Comparator\ComparisonFailure;
+use SebastianBergmann\Comparator\Factory;
 use SebastianBergmann\Exporter\Exporter;
 
 /**
@@ -98,7 +98,7 @@ abstract class BehatAssert
      * Asserts length of an array.
      *
      * @param int    $count
-     * @param \Swift_Mime_MimeEntity[]  $array
+     * @param array  $array
      * @param string $message
      */
     protected function assertCount($count, array $array, $message = null)

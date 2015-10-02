@@ -11,9 +11,9 @@
 
 namespace AppBundle\Model\User\Registration\DTO;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\UniqueProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Data transfer object that contains all mandatory parameters for the first step of the registration process.

@@ -43,10 +43,7 @@ class LocaleValidator extends ConstraintValidator
     }
 
     /**
-     * Validates the value
-     *
-     * @param string $value
-     * @param Constraint $constraint
+     * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint)
     {
@@ -69,7 +66,7 @@ class LocaleValidator extends ConstraintValidator
     }
 
     /**
-     * Converts the allowed locales to string
+     * Converts the allowed locales to string.
      *
      * @param string[] $allowedLocales
      *

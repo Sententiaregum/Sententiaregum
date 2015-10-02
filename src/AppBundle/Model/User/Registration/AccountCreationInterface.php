@@ -19,7 +19,7 @@ use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 interface AccountCreationInterface
 {
     /**
-     * Creates a new user
+     * Creates a new user.
      *
      * @param CreateUserDTO $userParameters
      *
