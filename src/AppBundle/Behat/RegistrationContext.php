@@ -102,7 +102,20 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iEnterThisApiKeyInOrderToApproveTheRecentlyCreatedAccount()
     {
-        throw new PendingException();
+        $repository = $this->getRepository('User:User');
+        $user       = $repository->findOneBy(['username' => $this->username]);
+
+        $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getActivationKey()]);
+        $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key on current user!');
+        $this->response = $this->performRequest(
+            'PATCH',
+            sprintf('/api/users/activate.json?%s', $query),
+            [],
+            true,
+            [],
+            [],
+            204
+        );
     }
 
     /**
@@ -110,7 +123,10 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldBeAbleToLogin()
     {
-        throw new PendingException();
+        $repository = $this->getRepository('User:User');
+        $user       = $repository->findOneBy(['username' => $this->username]);
+
+        $this->authenticate('sententiaregum', '123456');
     }
 
     /**
@@ -118,12 +134,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldSee($arg1, $arg2)
     {
-        if (!isset($this->response[$arg2])) {
-            throw new \Exception('Missing errors for '.$arg2.' in response!');
-        }
-
-        if (!in_array($arg1, $this->response[$arg2])) {
-            throw new \Exception(sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
-        }
+        $this->assertTrue(isset($this->response[$arg2]), sprintf('Missing errors for %s in response!', $arg2));
+        $this->assertTrue(in_array($arg1, $this->response[$arg2]), sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
     }
 }

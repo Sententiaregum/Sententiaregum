@@ -11,8 +11,8 @@
 
 namespace AppBundle\Tests\Model\User\Data;
 
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Data\DTOBuilder;
+use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use FOS\RestBundle\Request\ParamFetcher;
 
 class DTOBuilderTest extends \PHPUnit_Framework_TestCase

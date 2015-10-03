@@ -17,7 +17,7 @@ use SebastianBergmann\Comparator\Factory;
 use SebastianBergmann\Exporter\Exporter;
 
 /**
- * Assert class for behat contexts
+ * Assert class for behat contexts.
  */
 abstract class BehatAssert
 {

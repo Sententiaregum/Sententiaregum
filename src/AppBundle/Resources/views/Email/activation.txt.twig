@@ -3,4 +3,4 @@
 {{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}
 {{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}
 
-{{ app.request.scheme }}://{{ app.request.host }}/#!/activate/{{ activation_key }}
+{{ app.request.scheme }}://{{ app.request.host }}/#!/activate/{{ username }}/{{ activation_key }}

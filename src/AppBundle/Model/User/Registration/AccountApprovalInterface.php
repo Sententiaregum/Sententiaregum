@@ -20,6 +20,7 @@ interface AccountApprovalInterface
      * Approves the new user.
      *
      * @param string $activationKey
+     * @param string $username
      */
-    public function approveByActivationKey($activationKey);
+    public function approveByActivationKey($activationKey, $username);
 }

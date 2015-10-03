@@ -94,8 +94,8 @@ class UpdateLatestActivationListener
         $user = $token->getUser();
         $user->setLastAction($this->getLastActionDateTimeInstance());
 
-        $this->entityManager->merge($user);
-        $this->entityManager->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush($user);
     }
 
     /**

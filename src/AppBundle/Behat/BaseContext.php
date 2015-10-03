@@ -117,9 +117,9 @@ abstract class BaseContext extends BehatAssert implements KernelAwareContext
         if (!$disableAssertions) {
             $status = $response->getStatusCode();
             if ($expectSuccess) {
-                $this->assertTrue($status < 200 || $status > 399, sprintf('Expected success, but got error code "%d"', $status));
+                $this->assertTrue($status >= 200 || $status <= 399, sprintf('Expected success, but got error code "%d"', $status));
             } else {
-                $this->assertTrue($status < 400 || $status > 599, sprintf('Expected failures, but got success code "%d"', $status));
+                $this->assertTrue($status >= 400 || $status <= 599, sprintf('Expected failures, but got success code "%d"', $status));
             }
 
             $this->assertEquals($expectedStatus, $status, sprintf('Expected code "%d", but got "%d"!', $expectedStatus, $status));

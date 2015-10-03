@@ -18,6 +18,7 @@ use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterf
 use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\DiExtraBundle\Annotation as DI;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -53,29 +54,38 @@ class TwoStepRegistrationProcess implements AccountCreationInterface, AccountApp
     private $validator;
 
     /**
+     * @var PasswordHasherInterface
+     */
+    private $hasher;
+
+    /**
      * Constructor.
      *
      * @param EntityManagerInterface              $entityManager
      * @param ActivationKeyCodeGeneratorInterface $activationKeyCodeGenerator
      * @param ValidatorInterface                  $validator
      * @param EventDispatcherInterface            $eventDispatcher
+     * @param PasswordHasherInterface             $passwordHasher
      *
      * @DI\InjectParams({
      *     "entityManager"              = @DI\Inject("doctrine.orm.default_entity_manager"),
      *     "activationKeyCodeGenerator" = @DI\Inject("app.user.registration.activation_key_generator"),
-     *     "validator"                  = @DI\Inject("validator")
+     *     "validator"                  = @DI\Inject("validator"),
+     *     "passwordHasher"             = @DI\Inject("ma27_api_key_authentication.password.strategy")
      * })
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         ActivationKeyCodeGeneratorInterface $activationKeyCodeGenerator,
         ValidatorInterface $validator,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        PasswordHasherInterface $passwordHasher
     ) {
         $this->entityManager              = $entityManager;
         $this->activationKeyCodeGenerator = $activationKeyCodeGenerator;
         $this->validator                  = $validator;
         $this->eventDispatcher            = $eventDispatcher;
+        $this->hasher                     = $passwordHasher;
     }
 
     /**
@@ -83,11 +93,11 @@ class TwoStepRegistrationProcess implements AccountCreationInterface, AccountApp
      *
      * @throws UserActivationException If the activation fails
      */
-    public function approveByActivationKey($activationKey)
+    public function approveByActivationKey($activationKey, $username)
     {
         $repository = $this->entityManager->getRepository('User:User');
-        if (!$user = $repository->findOneBy(['activationKey' => $activationKey])) {
-            throw new UserActivationException;
+        if (!$user = $repository->findOneBy(['activationKey' => $activationKey, 'username' => $username])) {
+            throw new UserActivationException();
         }
 
         $user->setState(User::STATE_APPROVED);
@@ -105,13 +115,18 @@ class TwoStepRegistrationProcess implements AccountCreationInterface, AccountApp
             return $violations;
         }
 
-        $newUser = User::create($userParameters->getUsername(), $userParameters->getPassword(), $userParameters->getEmail());
+        $newUser = User::create(
+            $userParameters->getUsername(),
+            $this->hasher->generateHash($userParameters->getPassword()),
+            $userParameters->getEmail()
+        );
+
         $newUser->setLocale($userParameters->getLocale());
         $newUser->addRole($this->entityManager->getRepository('User:Role')->findOneBy(['role' => self::DEFAULT_USER_ROLE]));
         $newUser->setActivationKey($this->activationKeyCodeGenerator->generate(255));
 
         $this->entityManager->persist($newUser);
-        $this->entityManager->flush();
+        $this->entityManager->flush($newUser);
 
         /** @var User $persistentUser */
         $persistentUser = $this

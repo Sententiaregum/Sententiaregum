@@ -42,8 +42,6 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
     public function testUpdateUserOnKernelTermination()
     {
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $entityManager->expects($this->once())->method('merge');
-        $entityManager->expects($this->once())->method('flush');
 
         $user     = User::create('Ma27', 'foo', 'foo@bar.de');
         $dateTime = new \DateTime('-5 minutes');
@@ -55,6 +53,9 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getToken')
             ->will($this->returnValue(new UsernamePasswordToken($user, 'Ma27@foo', 'unit-test')));
+
+        $entityManager->expects($this->once())->method('persist')->with($user);
+        $entityManager->expects($this->once())->method('flush')->with($user);
 
         $listener = new UpdateLatestActivationListener($entityManager, $storage, $this->getRequestStack());
         $listener->updateAfterRequest();

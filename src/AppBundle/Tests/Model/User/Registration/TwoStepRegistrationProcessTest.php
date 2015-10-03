@@ -19,6 +19,7 @@ use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -47,7 +48,8 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EntityManagerInterface::class),
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $validatorMock,
-            $this->getMock(EventDispatcherInterface::class)
+            $this->getMock(EventDispatcherInterface::class),
+            $this->getMock(PasswordHasherInterface::class)
         );
 
         $result = $registration->registration($dto);
@@ -103,11 +105,18 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with(MailerEvent::EVENT_NAME);
 
+        $hasher = $this->getPasswordHasher();
+        $hasher
+            ->expects($this->once())
+            ->method('generateHash')
+            ->will($this->returnArgument(0));
+
         $registration = new TwoStepRegistrationProcess(
             $entityManager,
             $generator,
             $this->getMock(ValidatorInterface::class),
-            $dispatcher
+            $dispatcher,
+            $hasher
         );
 
         $result = $registration->registration($dto);
@@ -125,7 +134,7 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(['activationKey' => $key])
+            ->with(['activationKey' => $key, 'username' => 'Ma27'])
             ->will($this->returnValue(null));
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
@@ -138,10 +147,11 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $entityManager,
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $this->getMock(ValidatorInterface::class),
-            $this->getMock(EventDispatcherInterface::class)
+            $this->getMock(EventDispatcherInterface::class),
+            $this->getPasswordHasher()
         );
 
-        $registration->approveByActivationKey($key);
+        $registration->approveByActivationKey($key, 'Ma27');
     }
 
     public function testApproveUser()
@@ -153,7 +163,7 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(['activationKey' => $key])
+            ->with(['activationKey' => $key, 'username' => 'Ma27'])
             ->will($this->returnValue($user));
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
@@ -178,9 +188,20 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $entityManager,
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $this->getMock(ValidatorInterface::class),
-            $this->getMock(EventDispatcherInterface::class)
+            $this->getMock(EventDispatcherInterface::class),
+            $this->getPasswordHasher()
         );
 
-        $registration->approveByActivationKey($key);
+        $registration->approveByActivationKey($key, 'Ma27');
+    }
+
+    /**
+     * Creates the password hasher mock
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getPasswordHasher()
+    {
+        return $this->getMock(PasswordHasherInterface::class);
     }
 }
