@@ -122,6 +122,6 @@ abstract class BehatAssert
         }
 
         $exporter = new Exporter();
-        throw new ComparisonFailure($expected, $actual, $exporter->export($expected), $exporter->export($actual), $message);
+        throw new ComparisonFailure($expected, $actual, $exporter->export($expected), $exporter->export($actual), false, $message);
     }
 }

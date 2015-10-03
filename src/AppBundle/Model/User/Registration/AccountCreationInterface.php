@@ -23,7 +23,7 @@ interface AccountCreationInterface
      *
      * @param CreateUserDTO $userParameters
      *
-     * @return \AppBundle\Model\User\User
+     * @return \AppBundle\Model\User\User|\Symfony\Component\Validator\ConstraintViolationListInterface
      */
     public function registration(CreateUserDTO $userParameters);
 }

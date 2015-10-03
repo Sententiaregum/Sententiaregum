@@ -26,7 +26,7 @@ abstract class BaseController extends Controller
      *
      * @return string[]
      */
-    protected function transformValidationErrorsToArray(ConstraintViolationListInterface $constraintViolations)
+    protected function sortViolationMessagesByPropertyPath(ConstraintViolationListInterface $constraintViolations)
     {
         $result = [];
 

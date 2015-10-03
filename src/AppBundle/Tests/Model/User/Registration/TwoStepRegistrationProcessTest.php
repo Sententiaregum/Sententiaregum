@@ -196,7 +196,7 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Creates the password hasher mock
+     * Creates the password hasher mock.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */

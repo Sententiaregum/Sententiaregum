@@ -13,7 +13,6 @@ namespace AppBundle\Behat;
 
 use AppBundle\Model\User\User;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -123,9 +122,6 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldBeAbleToLogin()
     {
-        $repository = $this->getRepository('User:User');
-        $user       = $repository->findOneBy(['username' => $this->username]);
-
         $this->authenticate('sententiaregum', '123456');
     }
 

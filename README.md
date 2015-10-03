@@ -40,7 +40,7 @@ You just have to call __composer install --no-dev__ and all dependencies will be
 
 #### Deployment
 
-The deployment with capistrano is in progress in Sententiaregum/Sententiaregum#49
+The deployment with capistrano is in progress in [Sententiaregum/Sententiaregum#49](https://github.com/Sententiaregum/Sententiaregum/issues/49)
 
 ## Custom configuration
 
