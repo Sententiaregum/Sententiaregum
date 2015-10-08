@@ -9,12 +9,19 @@ matrix:
     - php: hhvm
     - php: 7
 
-before_install:
-  - chmod a+x travis-ci/prepare.sh
-  - chmod a+x travis-ci/run-tests.sh
-
 install:
-  - travis-ci/prepare.sh
+  - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
+  - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum_dev;"
+  - echo "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';" | mysql -u root
+  - echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
+  - echo "FLUSH PRIVILEGES;" | mysql -u root
+  - gem install sass
+  - npm install -g karma-cli karma-jasmine karma-phantomjs-launcher karma-browserify
+  - composer install
+  - php app/check.php
+  - php app/console security:check
 
 script:
-  - travis-ci/run-tests.sh
+  - bin/behat --strict -f progress --no-snippets
+  - bin/phpunit -c app
+  - karma start --single-run

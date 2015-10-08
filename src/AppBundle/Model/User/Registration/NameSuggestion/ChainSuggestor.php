@@ -63,13 +63,7 @@ class ChainSuggestor implements ChainSuggestorInterface
             $suggestions = array_merge($suggestions, $suggestor->getPossibleSuggestions($name));
         }
 
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('user.username')
-            ->from('User:User', 'user')
-            ->where($qb->expr()->in('user.username', ':nameList'))
-            ->setParameter(':nameList', $suggestions);
-
-        $result = $qb->getQuery()->getResult();
+        $result = $this->queryExistingUsersBySuggestedNames($suggestions);
 
         return array_filter(
             $suggestions,
@@ -87,5 +81,27 @@ class ChainSuggestor implements ChainSuggestorInterface
         $this->suggestors[] = $suggestor;
 
         return $this;
+    }
+
+    /**
+     * Queries for existing users.
+     *
+     * @param string[] $suggestions
+     *
+     * @return string[]
+     */
+    private function queryExistingUsersBySuggestedNames(array $suggestions)
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('user.username')
+            ->from('User:User', 'user')
+            ->where($qb->expr()->in('user.username', ':nameList'))
+            ->setParameter(':nameList', $suggestions);
+
+        $result = $qb->getQuery()->getResult();
+
+        return array_map(function ($row) {
+            return $row['username'];
+        }, $result);
     }
 }
