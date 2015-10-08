@@ -11,6 +11,7 @@
 
 namespace AppBundle\Validator\Constraints;
 
+use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Validator\Constraint;
@@ -22,6 +23,8 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 /**
  * Validator which validates a unique constraints.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @DI\Validator("app.validator.unique_property")
  */
 class UniquePropertyValidator extends ConstraintValidator
@@ -32,15 +35,25 @@ class UniquePropertyValidator extends ConstraintValidator
     private $managerRegistry;
 
     /**
+     * @var SuggestorInterface
+     */
+    private $suggestor;
+
+    /**
      * Constructor.
      *
-     * @param ManagerRegistry $managerRegistry
+     * @param ManagerRegistry    $managerRegistry
+     * @param SuggestorInterface $suggestor
      *
-     * @DI\InjectParams({"managerRegistry" = @DI\Inject("doctrine")})
+     * @DI\InjectParams({
+     *     "managerRegistry" = @DI\Inject("doctrine"),
+     *     "suggestor"       = @DI\Inject("app.user.registration.name_suggestor")
+     * })
      */
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry, SuggestorInterface $suggestor)
     {
         $this->managerRegistry = $managerRegistry;
+        $this->suggestor       = $suggestor;
     }
 
     /**
@@ -126,18 +139,63 @@ class UniquePropertyValidator extends ConstraintValidator
         $search     = $repository->findOneBy($query);
 
         if (!empty($search)) {
-            $violationBuilder = $context
-                ->buildViolation($constraint->message)
-                ->setParameter('%property%', $field)
-                ->setParameter('%entity%', $entityAlias)
-                ->setParameter('%value%', $value)
-                ->setInvalidValue($value);
+            $notUniqueBuilder = $this->buildBasicViolationByMessage(
+                $constraint->message,
+                $field,
+                $entityAlias,
+                $value,
+                $constraint->propertyPath
+            );
 
-            if (null !== $path = $constraint->propertyPath) {
-                $violationBuilder->atPath($path);
+            $notUniqueBuilder
+                ->setInvalidValue($value)
+                ->setCode(UniqueProperty::NON_UNIQUE_PROPERTY)
+                ->addViolation();
+
+            if ($constraint->generateSuggestions
+                && !empty($suggestions = $this->suggestor->getPossibleSuggestions($value))
+            ) {
+                $suggestionBuilder = $this->buildBasicViolationByMessage(
+                    $constraint->suggestionMessage,
+                    $field,
+                    $entityAlias,
+                    $value,
+                    $constraint->propertyPath
+                );
+
+                $suggestionBuilder
+                    ->setParameter('%suggestions%', implode(', ', $suggestions))
+                    ->addViolation();
             }
-
-            $violationBuilder->addViolation();
         }
+    }
+
+    /**
+     * Creates the basic constraint violation builder
+     *
+     * @param string $message
+     * @param string $property
+     * @param string $entity
+     * @param mixed  $value
+     * @param string $propertyPath
+     *
+     * @return \Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface
+     */
+    private function buildBasicViolationByMessage($message, $property, $entity, $value, $propertyPath = null)
+    {
+        /** @var ExecutionContextInterface $context */
+        $context = $this->context;
+
+        $violationBuilder = $context
+            ->buildViolation($message)
+            ->setParameter('%property%', $property)
+            ->setParameter('%entity%', $entity)
+            ->setParameter('%value%', $value);
+
+        if (null !== $path = $propertyPath) {
+            $violationBuilder->atPath($path);
+        }
+
+        return $violationBuilder;
     }
 }

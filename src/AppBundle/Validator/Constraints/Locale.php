@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Constraint which is responsible for the validation of the locales.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
  */

@@ -16,11 +16,15 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Validation constraint for unique properties.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
  */
 class UniqueProperty extends Constraint
 {
+    const NON_UNIQUE_PROPERTY = 'df6f84fdc2bb6710fbc6ac8d0b068407';
+
     /**
      * Entity manager alias. This value can be left empty.
      *
@@ -55,6 +59,20 @@ class UniqueProperty extends Constraint
      * @var string
      */
     public $propertyPath;
+
+    /**
+     * Flag whether to suggest other values.
+     *
+     * @var bool
+     */
+    public $generateSuggestions = false;
+
+    /**
+     * Translation key of the suggestion message.
+     *
+     * @var string
+     */
+    public $suggestionMessage = 'There are the following suggested values for %field%: %suggestions%';
 
     /**
      * {@inheritdoc}

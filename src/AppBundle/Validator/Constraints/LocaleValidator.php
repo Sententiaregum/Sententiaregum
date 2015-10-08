@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * Validator which can be used in order to verify the user locale.
  * It is actually a choice validator that contains the locale config internally.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @DI\Validator("app.validator.locale")
  */
 class LocaleValidator extends ConstraintValidator

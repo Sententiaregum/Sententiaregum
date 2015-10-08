@@ -15,12 +15,12 @@ use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\DataFixtures\ORM\UserFixture;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Ma27\ApiKeyAuthenticationBundle\Security\ApiKeyAuthenticator;
 
 /**
  * Base context that contains basic features of every behat context.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 abstract class BaseContext extends BehatAssert implements KernelAwareContext
 {
@@ -49,14 +49,9 @@ abstract class BaseContext extends BehatAssert implements KernelAwareContext
     /** @BeforeScenario */
     public function loadDataFixtures()
     {
-        $registry = $this->getContainer()->get('doctrine');
-        /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
-        $entityManager = $registry->getManager(self::$managerName);
-
-        $purger   = new ORMPurger($entityManager);
-        $executor = new ORMExecutor($entityManager, $purger);
-
-        $executor->execute(array_merge([new RoleFixture(), new UserFixture()], self::$fixtures));
+        /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
+        $service = $this->getContainer()->get('app.doctrine.fixtures_loader');
+        $service->loadFixtures(array_merge([new RoleFixture(), new UserFixture()], self::$fixtures));
     }
 
     /** @AfterScenario */

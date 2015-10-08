@@ -130,7 +130,15 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldSee($arg1, $arg2)
     {
-        $this->assertTrue(isset($this->response[$arg2]), sprintf('Missing errors for %s in response!', $arg2));
-        $this->assertTrue(in_array($arg1, $this->response[$arg2]), sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
+        $this->assertTrue(isset($this->response['errors'][$arg2]), sprintf('Missing errors for %s in response!', $arg2));
+        $this->assertTrue(in_array($arg1, $this->response['errors'][$arg2]), sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
+    }
+
+    /**
+     * @Then I should see suggestions for my username
+     */
+    public function iShouldSeeSuggestionsForMyUsername()
+    {
+        $this->assertTrue(array_key_exists('name_suggestions', $this->response));
     }
 }

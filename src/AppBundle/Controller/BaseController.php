@@ -16,6 +16,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Abstract controller that contains some basic utilities.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 abstract class BaseController extends Controller
 {

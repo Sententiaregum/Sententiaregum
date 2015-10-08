@@ -9,20 +9,21 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Model\User\Registration;
+namespace AppBundle\Model\User\Registration\NameSuggestion\Suggestor;
 
 /**
- * Account which represents the approval step of the registration.
+ * Interface that provides a method for suggestion usernames in case of invalid ones.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-interface AccountApprovalInterface
+interface SuggestorInterface
 {
     /**
-     * Approves the new user.
+     * Returns possible suggestions.
      *
-     * @param string $activationKey
      * @param string $username
+     *
+     * @return string[]
      */
-    public function approveByActivationKey($activationKey, $username);
+    public function getPossibleSuggestions($username);
 }

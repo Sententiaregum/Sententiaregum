@@ -9,39 +9,27 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\DataFixtures\ORM;
+namespace AppBundle\Tests\Fixtures\Doctrine;
 
-use AppBundle\Model\User\Role;
+use AppBundle\Model\User\User;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Fixture class that creates the basic role entities.
+ * Test fixture for the name suggestor.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RoleFixture implements FixtureInterface, OrderedFixtureInterface
+class NameSuggestionUserFixture implements FixtureInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        $userRole  = new Role('ROLE_USER');
-        $adminRole = new Role('ROLE_ADMIN');
-
-        $manager->persist($userRole);
-        $manager->persist($adminRole);
+        $manager->persist(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev'));
+        $manager->persist(User::create('Ma27'.(string) date('Y'), '123456', 'foo@example.org'));
 
         $manager->flush();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrder()
-    {
-        return 1;
     }
 }

@@ -18,6 +18,8 @@ use SebastianBergmann\Exporter\Exporter;
 
 /**
  * Assert class for behat contexts.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 abstract class BehatAssert
 {

@@ -13,6 +13,8 @@ namespace AppBundle\Model\User\Registration\Generator;
 
 /**
  * Interface of a keycode generator.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 interface ActivationKeyCodeGeneratorInterface
 {

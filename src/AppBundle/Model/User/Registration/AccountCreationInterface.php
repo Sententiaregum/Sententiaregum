@@ -15,6 +15,8 @@ use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 
 /**
  * Interface which represents the account creation step.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 interface AccountCreationInterface
 {
@@ -23,7 +25,7 @@ interface AccountCreationInterface
      *
      * @param CreateUserDTO $userParameters
      *
-     * @return \AppBundle\Model\User\User|\Symfony\Component\Validator\ConstraintViolationListInterface
+     * @return Value\Result
      */
     public function registration(CreateUserDTO $userParameters);
 }

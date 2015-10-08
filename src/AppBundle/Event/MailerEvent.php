@@ -16,6 +16,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event base class of the notification system.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class MailerEvent extends Event
 {

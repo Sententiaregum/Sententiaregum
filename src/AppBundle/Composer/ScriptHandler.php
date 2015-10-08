@@ -18,6 +18,8 @@ use Symfony\Component\Process\Process;
 
 /**
  * Handler that runs the npm installation after the composer install.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class ScriptHandler extends AbstractScriptHandler
 {

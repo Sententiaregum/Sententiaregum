@@ -21,6 +21,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * Hook which is responsible for sending emails.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @DI\Service
  */
 class NotificationListener

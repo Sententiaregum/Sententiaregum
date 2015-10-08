@@ -14,9 +14,12 @@ namespace AppBundle\Tests\Model\User\Registration;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
+use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;
 use AppBundle\Model\User\Registration\TwoStepRegistrationProcess;
+use AppBundle\Model\User\Registration\Value\Result;
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
+use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
@@ -40,22 +43,36 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->will($this->returnValue(
                 new ConstraintViolationList(
-                    [new ConstraintViolation('Invalid username!', 'Invalid username!', [], null, 'username', 'Ma27')]
+                    [
+                        new ConstraintViolation('Invalid username!', 'Invalid username!', [], 'username', 'username', 'Ma27'),
+                        new ConstraintViolation('Invalid username!', 'Invalid username!', [], 'username', 'username', 'Ma27', null, UniqueProperty::NON_UNIQUE_PROPERTY)
+                    ]
                 )
             ));
 
+        $em = $this->getMock(EntityManagerInterface::class);
+
+        $suggestor = $this->getMockBuilder(ChainSuggestor::class)->disableOriginalConstructor()->getMock();
+        $suggestor
+            ->expects($this->once())
+            ->method('getPossibleSuggestions')
+            ->will($this->returnValue(['Ma_27']));
+
         $registration = new TwoStepRegistrationProcess(
-            $this->getMock(EntityManagerInterface::class),
+            $em,
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $validatorMock,
             $this->getMock(EventDispatcherInterface::class),
-            $this->getMock(PasswordHasherInterface::class)
+            $this->getMock(PasswordHasherInterface::class),
+            $suggestor
         );
 
         $result = $registration->registration($dto);
-        $this->assertInstanceOf(ConstraintViolationList::class, $result);
+        $this->assertInstanceOf(Result::class, $result);
 
-        $this->assertCount(1, $result);
+        $this->assertFalse($result->isValid());
+        $this->assertCount(2, $result->getViolations());
+        $this->assertCount(1, $result->getSuggestions());
     }
 
     public function testCreateUser()
@@ -116,11 +133,16 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $generator,
             $this->getMock(ValidatorInterface::class),
             $dispatcher,
-            $hasher
+            $hasher,
+            new ChainSuggestor($entityManager)
         );
 
         $result = $registration->registration($dto);
-        $this->assertInstanceOf(User::class, $result);
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertInstanceOf(User::class, $result->getUser());
+        $this->assertTrue($result->isValid());
+        $this->assertNull($result->getViolations());
+        $this->assertNull($result->getSuggestions());
     }
 
     /**
@@ -148,7 +170,8 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
-            $this->getPasswordHasher()
+            $this->getPasswordHasher(),
+            new ChainSuggestor($entityManager)
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -189,10 +212,51 @@ class TwoStepRegistrationProcessTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
-            $this->getPasswordHasher()
+            $this->getPasswordHasher(),
+            new ChainSuggestor($entityManager)
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
+    }
+
+    /**
+     * @expectedException \OverflowException
+     * @expectedExceptionMessage Cannot generate activation key!
+     */
+    public function testActivationKeyGenerationFailure()
+    {
+        $dto = new CreateUserDTO();
+        $dto->setUsername('Ma27');
+        $dto->setPassword('123456');
+        $dto->setEmail('Ma27@sententiaregum.dev');
+
+        $validatorMock = $this->getMock(ValidatorInterface::class);
+        $validatorMock
+            ->expects($this->at(0))
+            ->method('validate')
+            ->will($this->returnValue(new ConstraintViolationList()));
+
+        $validatorMock
+            ->expects($this->exactly(200))
+            ->method('validate')
+            ->will($this->returnValue(
+                new ConstraintViolationList(
+                    [new ConstraintViolation('Invalid api key!', 'Invalid api key!', [], null, 'apiKey', '123456')]
+                )
+            ));
+
+        $em = $this->getMock(EntityManagerInterface::class);
+
+        $registration = new TwoStepRegistrationProcess(
+            $em,
+            $this->getMock(ActivationKeyCodeGeneratorInterface::class),
+            $validatorMock,
+            $this->getMock(EventDispatcherInterface::class),
+            $this->getMock(PasswordHasherInterface::class),
+            new ChainSuggestor($em)
+        );
+
+        $registration->registration($dto);
     }
 
     /**

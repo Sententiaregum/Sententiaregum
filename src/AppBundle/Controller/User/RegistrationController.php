@@ -22,8 +22,12 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 
+/**
+ * API for the registration implementation.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ */
 class RegistrationController extends BaseController
 {
     /**
@@ -55,11 +59,16 @@ class RegistrationController extends BaseController
         $registrator = $this->get('app.user.registration');
 
         $result = $registrator->registration($dtoBuilder->buildRegistrationDTO($paramFetcher));
-        if ($result instanceof ConstraintViolationListInterface) {
-            return View::create($this->sortViolationMessagesByPropertyPath($result), Codes::HTTP_BAD_REQUEST);
+        if (!$result->isValid()) {
+            $response = ['errors' => $this->sortViolationMessagesByPropertyPath($result->getViolations())];
+            if (!empty($result->getSuggestions())) {
+                $response['name_suggestions'] = $result->getSuggestions();
+            }
+
+            return View::create($response, Codes::HTTP_BAD_REQUEST);
         }
 
-        return ['id' => $result->getId()];
+        return ['id' => $result->getUser()->getId()];
     }
 
     /**

@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 /**
  * Custom role model.
  *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @ORM\Entity()
  * @ORM\Table(name="Role")
  */

@@ -17,6 +17,8 @@ use SebastianBergmann\Comparator\ComparisonFailure;
 /**
  * Boolean comparator that can be used with the comparator lib of Sebastian Bergmann.
  * This lib is in use with Behat, but a boolean comparator is still missing.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class BooleanComparator extends Comparator
 {

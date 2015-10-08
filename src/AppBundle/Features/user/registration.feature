@@ -17,6 +17,7 @@ Feature: registration
       | username | password | email    | locale |
       | Ma27     | 72aM     | m@27.org | en     |
     Then I should see 'The username "Ma27" is already taken!' for property "username"
+     And I should see suggestions for my username
 
   Scenario: taking an email with an invalid email
     When I send a registration request with the following credentials:

@@ -11,6 +11,7 @@
 
 namespace AppBundle\Tests\Validator\Constraints;
 
+use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\User;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Constraints\UniquePropertyValidator;
@@ -57,7 +58,13 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->will($this->returnValue($manager));
 
-        return new UniquePropertyValidator($mockRegistry);
+        $suggestor = $this->getMock(SuggestorInterface::class);
+        $suggestor
+            ->expects($this->any())
+            ->method('getPossibleSuggestions')
+            ->will($this->returnValue(['Ma.27']));
+
+        return new UniquePropertyValidator($mockRegistry, $suggestor);
     }
 
     protected function getApiVersion()
@@ -71,7 +78,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidConstraint()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->validate('value', $this->getMock(Constraint::class));
     }
 
@@ -81,7 +88,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testLegacyExecutionContext()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(LegacyExecutionContextInterface::class));
 
         $propertyMock->validate('value', new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username']));
@@ -93,7 +100,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValueMustBeString()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate([], new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username']));
@@ -105,7 +112,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidManagerAlias()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -120,7 +127,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testNoManagerForModel()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -153,7 +160,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->will($this->returnValue($manager));
 
-        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -187,7 +194,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->will($this->returnValue($manager));
 
-        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -235,7 +242,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->will($this->returnValue($manager));
 
-        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -284,7 +291,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->will($this->returnValue($manager));
 
-        $propertyMock = new UniquePropertyValidator($mockRegistry);
+        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -297,15 +304,31 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
     {
         $this->validator->validate(
             'Ma27',
-            new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username', 'propertyPath' => 'custom'])
+            new UniqueProperty(
+                [
+                    'entity'              => 'TestMapping:User',
+                    'field'               => 'username',
+                    'propertyPath'        => 'custom',
+                    'generateSuggestions' => true,
+                    'suggestionMessage'   => '%suggestions%',
+                ]
+            )
         );
 
-        $this->buildViolation('The property %property% of entity %entity% with value %value% is not unique!')
+        $this
+            ->buildViolation('The property %property% of entity %entity% with value %value% is not unique!')
             ->setParameter('%property%', 'username')
             ->setParameter('%entity%', 'TestMapping:User')
             ->setParameter('%value%', 'Ma27')
             ->atPath('property.path.custom')
             ->setInvalidValue('Ma27')
+            ->setCode(UniqueProperty::NON_UNIQUE_PROPERTY)
+            ->buildNextViolation('%suggestions%')
+            ->setParameter('%property%', 'username')
+            ->setParameter('%entity%', 'TestMapping:User')
+            ->setParameter('%value%', 'Ma27')
+            ->setParameter('%suggestions%', 'Ma.27')
+            ->atPath('property.path.custom')
             ->assertRaised();
     }
 }

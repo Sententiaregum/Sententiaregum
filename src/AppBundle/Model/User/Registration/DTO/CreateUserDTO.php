@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Data transfer object that contains all mandatory parameters for the first step of the registration process.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
 class CreateUserDTO
 {
