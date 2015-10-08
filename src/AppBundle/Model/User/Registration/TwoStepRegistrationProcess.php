@@ -209,7 +209,7 @@ final class TwoStepRegistrationProcess implements AccountCreationInterface, Acco
     /**
      * Generates an unique activation key.
      *
-     * @return string
+     * @return integer
      */
     private function getUniqueActivationKey()
     {
@@ -232,7 +232,7 @@ final class TwoStepRegistrationProcess implements AccountCreationInterface, Acco
     /**
      * Checks whether the activation key is unique.
      *
-     * @param $activationKey
+     * @param integer $activationKey
      *
      * @return bool
      */
