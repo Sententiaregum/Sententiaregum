@@ -1,0 +1,23 @@
+# EditorConfig
+# This is a tool that helps to provide different IDEs and editors a common styleguide
+# http://editorconfig.org/
+
+root = true
+
+# Every file MUST contain unix style newline endings
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# All files should contain a space indention
+[{*.{js,php,pp},Vagrantfile, *.json}]
+charset=utf-8
+indent_style=space
+
+# PHP, composer.json and JavaScript should be indented using 4 spaces
+[{*.{js,php},composer.json}]
+indent_size=4
+
+# Puppet, Vagrant config and json files should be indented with two spaces
+[{*.pp,Vagrantfile,package.json,.travis.yml}]
+indent_size=2
