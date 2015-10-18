@@ -4,25 +4,30 @@
 module.exports = function(config) {
   config.set({
     basePath: '',
-    frameworks: ['browserify', 'jasmine'],
+    frameworks: ['jasmine'],
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
       'src/Frontend/__tests__/*/*Spec.js'
     ],
     preprocessors: {
-      'src/Frontend/__tests__/**/*Spec.js': ['browserify']
+      'src/Frontend/__tests__/**/*Spec.js': ['webpack', 'sourcemap']
     },
     reporters: ['dots'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: false,
+    autoWatch: true,
     browsers: ['PhantomJS'],
-    singleRun: true,
-    browserify: {
-      debug: true,
-      transform: ['babelify', 'reactify'],
-      webstorm: true
-    }
+    singleRun: false,
+    webpackMiddleware: {
+      noInfo: true
+    },
+    webpack: require('./webpack.config'),
+    plugins: [
+      'karma-webpack',
+      'karma-jasmine',
+      'karma-sourcemap-loader',
+      'karma-phantomjs-launcher'
+    ]
   });
 };

@@ -52,8 +52,6 @@
 
 # Frontend build data
 /web/build/
-/src/Frontend/styles/custom.css
-/src/Frontend/styles/custom.css.map
 /.sass-cache/
 
 # Custom configuration

@@ -32,6 +32,24 @@ It is not recommended to use windows. When installing the npm dependencies on sh
 
 If you use windows, [this blog post helps you to fix that issue](https://harvsworld.com/2015/how-to-fix-npm-install-errors-on-vagrant-on-windows-because-the-paths-are-too-long/).
 
+#### Local nodejs environment
+
+As a developer you may want to have a local nodejs environment. That can be helpful for local debugging as webstorm doesn't support remote node interpreters.
+
+You need a nodejs installation and you need to install some global packages. You just need to run the following command:
+
+    npm install -g karma-cli webpack node-sass
+
+The dev server is currently not supported, if you'd like to auto-compile your bundle, you need to run the following command:
+
+    npm run watch
+
+If you'd like to make the assets production-ready, run the following:
+
+    npm run build
+
+All local node packages and build production files will be synced.
+
 ## Deploy
 
 A deploy is really simple.

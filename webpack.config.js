@@ -1,14 +1,10 @@
 /*
  * This file is part of the sententiaregum application.
  *
- * Sententiaregum is a social network based on Symfony2 and ReactJS
+ * Sententiaregum is a social network based on Symfony2 and BackboneJS/ReactJS
  *
  * @copyright (c) 2015 Sententiaregum
  * Please check out the license file in the document root of this application
  */
 
-@import "../../../node_modules/zurb-foundation-5/scss/foundation";
-
-:focus {
-  outline: none;
-}
+module.exports = require('./webpack.factory')('dev');

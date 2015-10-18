@@ -19,5 +19,5 @@ indent_style=space
 indent_size=4
 
 # Puppet, Vagrant config and json files should be indented with two spaces
-[{*.pp,Vagrantfile,package.json,.travis.yml}]
+[{*.pp,Vagrantfile,package.json,.travis.yml,karma.conf.js}]
 indent_size=2

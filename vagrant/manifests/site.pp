@@ -24,7 +24,7 @@ class application {
       doc_root  => '/var/www/sententiaregum/web',
     } ->
     class { '::sententiaregum::frontend':
-      npm_packages  => ['grunt-cli', 'karma-cli', 'karma-jasmine', 'karma-browserify'],
+      npm_packages  => ['karma-cli', 'karma-jasmine', 'webpack', 'node-sass'],
       ruby_packages => ['compass', 'sass'],
     } ->
     class { '::sententiaregum::backend':
