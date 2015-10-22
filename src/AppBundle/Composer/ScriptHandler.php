@@ -33,8 +33,12 @@ class ScriptHandler extends AbstractScriptHandler
             $event->getIO()->write($buffer, false);
         };
 
-        $process = new Process(sprintf('%s install --no-bin-links', $npm, null, null, null, 1000));
+        $process = new Process(sprintf('%s install --no-bin-links', $npm), null, null, null, 1000);
         $process->run($handler);
+
+        $npmScriptName = $event->isDevMode() ? 'build-dev' : 'build';
+        $frontendBuild = new Process(sprintf('%s run-script %s', $npm, $npmScriptName), null, null, null, 500);
+        $frontendBuild->run($handler);
     }
 
     /**
