@@ -28,6 +28,9 @@
         "phpunit/phpunit": "~4.8"
     },
     "scripts": {
+        "pre-install-cmd": [
+            "AppBundle\\Composer\\PreInstallHandler::determineFirstInstall"
+        ],
         "post-install-cmd": [
             "WillemJan\\CheckBundles\\Composer\\CheckBundles::postPackageUpdate",
             "AppBundle\\Composer\\ScriptHandler::installNpmDependencies",
