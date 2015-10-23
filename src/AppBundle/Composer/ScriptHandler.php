@@ -48,7 +48,7 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function loadDoctrineDataFixtures(CommandEvent $event)
     {
-        if ($event->isDevMode()) {
+        if (PreInstallHandler::$firstInstall && $event->isDevMode()) {
             static::executeCommand(
                 $event,
                 static::getConsoleDir($event, 'load data fixtures'),
@@ -64,11 +64,15 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function createDoctrineSchema(CommandEvent $event)
     {
-        static::executeCommand(
-            $event,
-            static::getConsoleDir($event, 'create doctrine schema'),
-            'doctrine:schema:create'
-        );
+        if (PreInstallHandler::$firstInstall) {
+            self::dropDoctrineSchema($event);
+
+            static::executeCommand(
+                $event,
+                static::getConsoleDir($event, 'create doctrine schema'),
+                'doctrine:schema:create'
+            );
+        }
     }
 
     /**
@@ -82,6 +86,20 @@ class ScriptHandler extends AbstractScriptHandler
             $event,
             static::getConsoleDir($event, 'update doctrine schema'),
             'doctrine:schema:update --force'
+        );
+    }
+
+    /**
+     * Drops the doctrine schema.
+     *
+     * @param CommandEvent $event
+     */
+    private static function dropDoctrineSchema(CommandEvent $event)
+    {
+        static::executeCommand(
+            $event,
+            static::getConsoleDir($event, 'drop doctrine schema'),
+            'doctrine:schema:drop --force'
         );
     }
 }
