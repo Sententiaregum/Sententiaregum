@@ -16,10 +16,15 @@ install:
   - echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
   - echo "FLUSH PRIVILEGES;" | mysql -u root
   - gem install sass
-  - npm install -g karma-cli webpack node-sass
+  - gem install scss_lint
+  - npm install -g karma-cli webpack node-sass eslint eslint-plugin-react
   - composer install
   - php app/check.php
   - php app/console security:check
+
+before_script:
+  - scss-lint
+  - eslint ./src/Frontend/App.js
 
 script:
   - bin/phpunit -c app

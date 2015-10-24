@@ -50,7 +50,10 @@ sententiaregum::frontend::npm::packages:
   - karma-jasmine
   - webpack
   - node-sass
+  - eslint
+  - eslint-plugin-react
 
 sententiaregum::frontend::ruby::packages:
   - compass
   - sass
+  - scss_lint

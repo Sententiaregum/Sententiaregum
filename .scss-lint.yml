@@ -1,0 +1,11 @@
+scss_files: 'src/Frontend/styles/*.scss'
+
+exclude:
+  - 'vendor/**/*.scss'
+  - 'vendor/**/*.css'
+  - 'node_modules/**/*.scss'
+  - 'node_modules/**/*.css'
+
+linters:
+  Comment:
+    allowed: '^[/* ]* @copyright'
