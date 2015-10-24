@@ -11,6 +11,12 @@ Your patch __must__ follow the [symfony coding standards](http://symfony.com/doc
 For the javascript frontend we use the tools scss-lint and eslint that will be installed automatically on the VM.
 If your code violates one of their convetions, the travis build will break and github blocks any attempt to merge your PR.
 
+__Note:__ before sending a PR that changes PHP code, please run the following command:
+
+    bin/phpcs fix
+
+So you don't need to worry about code style.
+
 2) Branch name and commit message
 ---------------------------------
 
