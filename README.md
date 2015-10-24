@@ -7,6 +7,7 @@ A social network based on Symfony2 and ReactJS
 [![Stories in Ready](https://badge.waffle.io/Sententiaregum/Sententiaregum.svg?label=ready&title=Ready)](http://waffle.io/Sententiaregum/Sententiaregum)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf/mini.png)](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf)
 [![Join the chat at https://gitter.im/Sententiaregum](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Sententiaregum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![HHVM Status](http://hhvm.h4cc.de/badge/sententiaregum/sententiaregum.png)](http://hhvm.h4cc.de/package/sententiaregum/sententiaregum)
 
 ## What is it?
 
