@@ -58,3 +58,6 @@
 /app/config/local_config_dev.yml
 /app/config/local_config_prod.yml
 /app/config/local_config_test.yml
+
+# PHPCS
+/.php_cs.cache
