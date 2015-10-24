@@ -1,38 +1,12 @@
 class application {
-  $defaultPackages = [
-    'vim',
-    'git',
-    'wget',
-    'bash-completion',
-    'ruby-dev',
-    'software-properties-common',
-    'python-software-properties',
-    'libsqlite3-dev',
-  ]
-
-  anchor { 'sententiaregum::initial::before': } ->
-    class { '::sententiaregum':
-      packages => $defaultPackages,
-    } ->
-    class { '::sententiaregum::infrastructure':
-      database_name    => 'sententiaregum',
-      use_mail_catcher => true,
-      build_redis      => true,
-    } ->
-    class { '::sententiaregum::server':
-      host_name => 'sententiaregum.dev',
-      doc_root  => '/var/www/sententiaregum/web',
-    } ->
-    class { '::sententiaregum::frontend':
-      npm_packages  => ['karma-cli', 'karma-jasmine', 'webpack', 'node-sass'],
-      ruby_packages => ['compass', 'sass'],
-    } ->
-    class { '::sententiaregum::backend':
-      use_composer   => true,
-      ondrej_ppa_key => '4F4EA0AAE5267A6C',
-      php56          => true,
-    } ->
-  anchor { 'sententiaregum::initial::after': }
+  contain sententiaregum::installs
+  contain sententiaregum::backend::php
+  contain sententiaregum::backend::server
+  contain sententiaregum::infrastructure::mailcatcher
+  contain sententiaregum::infrastructure::mysql
+  contain sententiaregum::infrastructure::redis
+  contain sententiaregum::frontend::npm
+  contain sententiaregum::frontend::ruby
 }
 
 class { 'application': }

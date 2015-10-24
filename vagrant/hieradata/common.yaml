@@ -1,0 +1,56 @@
+## Configuration parameters
+sententiaregum::installs::packages:
+  - vim
+  - git
+  - bash-completion
+  - ruby-dev
+  - software-properties-common
+  - python-software-properties
+  - libsqlite3-dev
+  - curl
+
+sententiaregum::backend::php::version: '5.6'
+sententiaregum::backend::php::extensions:
+  php5-gd:     {}
+  php5-cli:    {}
+  php5-mysql:  {}
+  php5-curl:   {}
+  php5-intl:   {}
+  php5-mcrypt: {}
+  php5-xdebug: {}
+  php-apc:     {}
+
+sententiaregum::backend::php::composer: true
+sententiaregum::backend::php::timezone: UTC
+
+sententiaregum::backend::server::host_name: sententiaregum.dev
+sententiaregum::backend::server::doc_root: /var/www/sententiaregum
+
+sententiaregum::infrastructure::mysql::databases:
+  sententiaregum:
+    user: dev
+    password: dev
+    host: localhost
+    grant: ['ALL']
+
+sententiaregum::infrastructure::redis::instances:
+  doctrine-cache:
+    redis_port: 6900
+  social-post-queue:
+    redis_port: 6901
+  dashboard-cache:
+    redis_port: 6902
+  pending-activations:
+    redis_port: 6903
+  online-users:
+    redis_port: 6904
+
+sententiaregum::frontend::npm::packages:
+  - karma-cli
+  - karma-jasmine
+  - webpack
+  - node-sass
+
+sententiaregum::frontend::ruby::packages:
+  - compass
+  - sass
