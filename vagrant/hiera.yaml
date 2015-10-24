@@ -1,0 +1,9 @@
+---
+:backends:
+  - yaml
+
+:yaml:
+    :datadir: /var/www/sententiaregum/vagrant/hieradata
+
+:hierarchy:
+  - common

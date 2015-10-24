@@ -1,4 +1,4 @@
-class sententiaregum($packages) {
+class sententiaregum::installs($packages) {
   validate_array($packages)
 
   class { '::apt': }

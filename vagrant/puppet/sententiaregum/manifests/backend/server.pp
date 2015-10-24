@@ -1,4 +1,4 @@
-class sententiaregum::server($host_name, $doc_root) {
+class sententiaregum::backend::server($host_name, $doc_root) {
   validate_string($host_name)
   validate_string($doc_root)
 
