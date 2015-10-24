@@ -67,5 +67,19 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    }
+    },
+    "authors": [
+        {
+            "name": "Maximilian Bosch",
+            "email": "maximilian.bosch.27@gmail.com",
+            "homepage": "https://github.com/Ma27",
+            "role": "Project Lead"
+        },
+        {
+            "name": "Ben Bieler",
+            "email": "benjaminbieler2014@gmail.com",
+            "homepage": "https://github.com/benbieler",
+            "role": "Core Developer"
+        }
+    ]
 }
