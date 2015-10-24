@@ -38,7 +38,13 @@ As a developer you may want to have a local nodejs environment. That can be help
 
 You need a nodejs installation and you need to install some global packages. You just need to run the following command:
 
-    npm install -g karma-cli webpack node-sass
+    npm install -g karma-cli webpack node-sass eslint eslint-plugin-react
+
+There are few ruby tools that are mandatory, too:
+
+    gem install compass
+    gem install sass
+    gem install scss_lint
 
 The dev server is currently not supported, if you'd like to auto-compile your bundle, you need to run the following command:
 
@@ -49,6 +55,11 @@ If you'd like to make the assets production-ready, run the following:
     npm run build
 
 All local node packages and build production files will be synced.
+
+For SCSS lint and ESLint are some PHPStorm/WebStorm plugins available:
+
+- [SCSS Lint Integration for WebStorm](https://plugins.jetbrains.com/plugin/7530?pr=)
+- [ESLint Integration for PhpStorm](https://plugins.jetbrains.com/plugin/7494)
 
 ## Deploy
 

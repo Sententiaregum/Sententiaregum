@@ -8,6 +8,9 @@ This guideline shows some conventions when contributing to Sententiaregum, so yo
 
 Your patch __must__ follow the [symfony coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
 
+For the javascript frontend we use the tools scss-lint and eslint that will be installed automatically on the VM.
+If your code violates one of their convetions, the travis build will break and github blocks any attempt to merge your PR.
+
 2) Branch name and commit message
 ---------------------------------
 
