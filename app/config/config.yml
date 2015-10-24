@@ -83,3 +83,11 @@ jms_di_extra:
         all_bundles: false
         bundles:     [AppBundle]
         directories: "%kernel.root_dir%/../src"
+
+# LuneticsLocale Configuration
+lunetics_locale:
+    guessing_order:
+        - cookie
+    allowed_locales:
+        - de
+        - en

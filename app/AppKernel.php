@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Sonata\CoreBundle\SonataCoreBundle(),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),
             new AppBundle\AppBundle(),
         ];
 

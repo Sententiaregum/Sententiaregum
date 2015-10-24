@@ -11,8 +11,6 @@
 
 namespace AppBundle\Composer;
 
-use Composer\Script\CommandEvent;
-
 /**
  * Handler that determines whether that's the initial installation.
  *
@@ -28,10 +26,8 @@ class PreInstallHandler
     /**
      * Composer magic:
      *   Checks whether this is the first install in order to create the schema only the first time.
-     *
-     * @param CommandEvent $event
      */
-    public static function determineFirstInstall(CommandEvent $event)
+    public static function determineFirstInstall()
     {
         if (!is_dir(__DIR__.'/../../../vendor')) {
             self::$firstInstall = true;
