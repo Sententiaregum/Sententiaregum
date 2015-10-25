@@ -1,4 +1,6 @@
 ## Configuration parameters
+
+# basic apt packages for the machine
 sententiaregum::installs::packages:
   - vim
   - git
@@ -9,23 +11,33 @@ sententiaregum::installs::packages:
   - libsqlite3-dev
   - curl
 
+# php/composer configurations
 sententiaregum::backend::php::version: '5.6'
 sententiaregum::backend::php::extensions:
-  php5-gd:     {}
-  php5-cli:    {}
-  php5-mysql:  {}
-  php5-curl:   {}
-  php5-intl:   {}
-  php5-mcrypt: {}
-  php5-xdebug: {}
-  php-apc:     {}
+  gd:     {}
+  cli:    {}
+  mysql:  {}
+  curl:   {}
+  intl:   {}
+  mcrypt: {}
+  xdebug: {}
+  apc:
+    module_prefix: 'php-'
 
 sententiaregum::backend::php::composer: true
 sententiaregum::backend::php::timezone: UTC
 
+# server configurations
 sententiaregum::backend::server::host_name: sententiaregum.dev
-sententiaregum::backend::server::doc_root: /var/www/sententiaregum
+sententiaregum::backend::server::doc_root: /var/www/sententiaregum/web
+sententiaregum::backend::server::front_controller: app_dev.php
+sententiaregum::backend::server::port: 80
+sententiaregum::backend::server::apache_modules:
+  rewrite: {}
 
+sententiaregum::backend::server::server_aliases: '192.168.66.211'
+
+# mysql configurations
 sententiaregum::infrastructure::mysql::databases:
   sententiaregum:
     user: dev
@@ -33,6 +45,7 @@ sententiaregum::infrastructure::mysql::databases:
     host: localhost
     grant: ['ALL']
 
+# redis configurations
 sententiaregum::infrastructure::redis::instances:
   doctrine-cache:
     redis_port: 6900
@@ -45,6 +58,7 @@ sententiaregum::infrastructure::redis::instances:
   online-users:
     redis_port: 6904
 
+# global npm packages
 sententiaregum::frontend::npm::packages:
   - karma-cli
   - karma-jasmine
@@ -53,6 +67,7 @@ sententiaregum::frontend::npm::packages:
   - eslint
   - eslint-plugin-react
 
+# global ruby packages
 sententiaregum::frontend::ruby::packages:
   - compass
   - sass
