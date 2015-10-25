@@ -27,8 +27,7 @@ class sententiaregum::backend::php(
   }
 
   class { '::php':
-    service       => 'apache',
-    module_prefix => ''
+    service => 'apache',
   }
 
   create_resources('::php::module', $extensions)

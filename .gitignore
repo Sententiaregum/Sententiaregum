@@ -44,6 +44,9 @@
 # Vagrant
 /.vagrant/
 
+# Puppet
+/vagrant/hieradata/local.yaml
+
 # Frontend files and tools
 /node_modules/
 
