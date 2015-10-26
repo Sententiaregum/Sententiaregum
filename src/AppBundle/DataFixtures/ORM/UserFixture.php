@@ -31,7 +31,7 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
     {
         $passwordHasher = new PhpPasswordHasher();
 
-        $roleRepository = $manager->getRepository('User:Role');
+        $roleRepository = $manager->getRepository('Account:Role');
         $userRole       = $roleRepository->findOneBy(['role' => 'ROLE_USER']);
         $adminRole      = $roleRepository->findOneBy(['role' => 'ROLE_ADMIN']);
 
