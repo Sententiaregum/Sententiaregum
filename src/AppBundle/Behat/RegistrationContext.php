@@ -65,7 +65,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldHaveGottenAnActivationKeyInOrderToApproveMyAccount()
     {
-        $repository = $this->getRepository('User:User');
+        $repository = $this->getRepository('Account:User');
         $user       = $repository->findOneBy(['username' => $this->username]);
 
         $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key!');
@@ -182,7 +182,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
 
     private function getRegisteredUser()
     {
-        $repository = $this->getRepository('User:User');
+        $repository = $this->getRepository('Account:User');
         $user       = $repository->findOneBy(['username' => $this->username]);
 
         return $user;

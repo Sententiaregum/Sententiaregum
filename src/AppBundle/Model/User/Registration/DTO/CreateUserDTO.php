@@ -40,7 +40,7 @@ class CreateUserDTO
      * @UniqueProperty(
      *     message="VALIDATORS_REGISTRATION_USERNAME_TAKEN",
      *     field="username",
-     *     entity="User:User"
+     *     entity="Account:User"
      * )
      */
     private $username;
@@ -64,7 +64,7 @@ class CreateUserDTO
      * @Assert\NotBlank(message="VALIDATORS_REGISTRATION_EMAIL_EMPTY")
      * @Assert\Email(message="VALIDATORS_REGISTRATION_INVALID_EMAIL", checkHost=true)
      *
-     * @UniqueProperty(entity="User:User", field="email", message="VALIDATORS_REGISTRATION_EMAIL_TAKEN")
+     * @UniqueProperty(entity="Account:User", field="email", message="VALIDATORS_REGISTRATION_EMAIL_TAKEN")
      */
     private $email;
 

@@ -51,7 +51,7 @@ doctrine:
                         type:      annotation
                         is_bundle: false
                         dir:       %kernel.root_dir%/../src/AppBundle/Model/User
-                        alias:     User
+                        alias:     Account
                         prefix:    AppBundle\Model\User
 
 # Swiftmailer Configuration
@@ -67,7 +67,7 @@ swiftmailer:
 ma27_api_key_authentication:
     user:
         object_manager: doctrine.orm.default_entity_manager
-        model_name:     User:User
+        model_name:     Account:User
         properties:
             username: username
             password:

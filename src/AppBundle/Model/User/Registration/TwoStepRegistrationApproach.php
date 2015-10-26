@@ -246,7 +246,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private function isActivationKeyUnique($activationKey)
     {
         $options = [
-            'entity' => 'User:User',
+            'entity' => 'Account:User',
             'field'  => 'activationKey',
         ];
 
@@ -289,7 +289,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function getDefaultRole()
     {
-        return $this->entityManager->getRepository('User:Role')->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
+        return $this->entityManager->getRepository('Account:Role')->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
     }
 
     /**
@@ -302,7 +302,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function findUserByActivationKeyAndUsername($activationKey, $username)
     {
-        $repository = $this->entityManager->getRepository('User:User');
+        $repository = $this->entityManager->getRepository('Account:User');
         $query      = ['activationKey' => $activationKey, 'username' => $username];
 
         if ((!$user = $repository->findOneBy($query)) || $this->isActivationExpired($activationKey)) {
@@ -352,7 +352,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         return $this
             ->entityManager
-            ->getRepository('User:User')
+            ->getRepository('Account:User')
             ->findOneBy(['username' => $userParameters->getUsername()]);
     }
 }

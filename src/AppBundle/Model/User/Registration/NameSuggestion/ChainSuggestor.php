@@ -94,7 +94,7 @@ class ChainSuggestor implements ChainSuggestorInterface
     {
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('user.username')
-            ->from('User:User', 'user')
+            ->from('Account:User', 'user')
             ->where($qb->expr()->in('user.username', ':nameList'))
             ->setParameter(':nameList', $suggestions);
 

@@ -25,6 +25,6 @@ class ConfigurableFixturesLoaderTest extends KernelTestCase
 
         /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
         $entityManager = $this->getService('doctrine.orm.default_entity_manager');
-        $this->assertNotNull($entityManager->getRepository('User:Role')->findOneBy(['role' => 'ROLE_USER']));
+        $this->assertNotNull($entityManager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']));
     }
 }
