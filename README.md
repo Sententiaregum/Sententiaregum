@@ -70,11 +70,15 @@ For SCSS lint and ESLint are some PHPStorm/WebStorm plugins available:
 - [SCSS Lint Integration for WebStorm](https://plugins.jetbrains.com/plugin/7530?pr=)
 - [ESLint Integration for PhpStorm](https://plugins.jetbrains.com/plugin/7494)
 
-## Deploy
+## Install
 
-A deploy is really simple.
+The installation is really simple.
 
 You just have to call __composer install --no-dev__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
+
+#### Deployment
+
+The deployment with capistrano is in progress in [Sententiaregum/Sententiaregum#49](https://github.com/Sententiaregum/Sententiaregum/issues/49)
 
 ## Custom configuration
 

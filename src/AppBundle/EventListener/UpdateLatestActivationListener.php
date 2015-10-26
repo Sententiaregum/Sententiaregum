@@ -11,7 +11,7 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Model\User\UserManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,14 +20,16 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * Hook that updates the latest activation of a user.
  *
- * @DI\Service()
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
+ * @DI\Service
  */
 class UpdateLatestActivationListener
 {
     /**
-     * @var UserManagerInterface
+     * @var EntityManagerInterface
      */
-    private $userManager;
+    private $entityManager;
 
     /**
      * @var TokenStorageInterface
@@ -42,24 +44,24 @@ class UpdateLatestActivationListener
     /**
      * Constructor.
      *
-     * @param UserManagerInterface  $userManager
-     * @param TokenStorageInterface $tokenStorage
-     * @param RequestStack          $requestStack
+     * @param EntityManagerInterface $userManager
+     * @param TokenStorageInterface  $tokenStorage
+     * @param RequestStack           $requestStack
      *
      * @DI\InjectParams({
-     *     "userManager" = @DI\Inject("app.user.user_manager"),
+     *     "userManager"  = @DI\Inject("doctrine.orm.default_entity_manager"),
      *     "tokenStorage" = @DI\Inject("security.token_storage"),
      *     "requestStack" = @DI\Inject("request_stack")
      * })
      */
     public function __construct(
-        UserManagerInterface $userManager,
+        EntityManagerInterface $userManager,
         TokenStorageInterface $tokenStorage,
         RequestStack $requestStack
     ) {
-        $this->userManager  = $userManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->requestStack = $requestStack;
+        $this->entityManager = $userManager;
+        $this->tokenStorage  = $tokenStorage;
+        $this->requestStack  = $requestStack;
     }
 
     /**
@@ -94,7 +96,8 @@ class UpdateLatestActivationListener
         $user = $token->getUser();
         $user->setLastAction($this->getLastActionDateTimeInstance());
 
-        $this->userManager->save($user);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush($user);
     }
 
     /**

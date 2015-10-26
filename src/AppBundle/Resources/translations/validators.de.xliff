@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_TAKEN">
+                <source>VALIDATORS_REGISTRATION_USERNAME_TAKEN</source>
+                <target>Der Benutzername "%value%" wird bereits genutzt!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_BLANK">
+                <source>Der Benutzername darf nicht leer sein!</source>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_TOO_SHORT">
+                <source>VALIDATORS_REGISTRATION_USERNAME_TOO_SHORT</source>
+                <target>Der Benutzername muss mindestens 3 Zeichen haben!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_TOO_LONG">
+                <source>VALIDATORS_REGISTRATION_USERNAME_TOO_LONG</source>
+                <target>Der Benutzername darf maximal 50 Zeichen haben!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_PATTERN">
+                <source>VALIDATORS_REGISTRATION_USERNAME_PATTERN</source>
+                <target>Der Benutzername darf nur aus Alphanumerischen Zeichen (außgenommen Umlaute und das scharfe S), sowie Unterstrichen, Bindestrichen und Punkten bestehen!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_LOCALE">
+                <source>VALIDATORS_REGISTRATION_LOCALE</source>
+                <target>Die Sprache ist ungültig!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_EMAIL_TAKEN">
+                <source>VALIDATORS_REGISTRATION_EMAIL_TAKEN</source>
+                <target>Die Email Adresse "%value%" wird bereits genutzt!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_PASSWORD_EMPTY">
+                <source>VALIDATORS_REGISTRATION_PASSWORD_EMPTY</source>
+                <target>Das Passwort darf nicht leer sein!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_PASSWORD_MIN">
+                <source>VALIDATORS_REGISTRATION_PASSWORD_MIN</source>
+                <target>Das Passwort sollte mindestens 4 Zeichen haben!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_PASSWORD_MAX">
+                <source>VALIDATORS_REGISTRATION_PASSWORD_MAX</source>
+                <target>Die maximale Passwortlänge beträgt 4096 Zeichen!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_INVALID_EMAIL">
+                <source>VALIDATORS_REGISTRATION_INVALID_EMAIL</source>
+                <target>Die Email Adresse ist ungültig!</target>
+            </trans-unit>
+
+            <trans-unit id="VALIDATORS_REGISTRATION_EMAIL_EMPTY">
+                <source>VALIDATORS_REGISTRATION_EMAIL_EMPTY</source>
+                <target>Die Email darf nicht leer sein!</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

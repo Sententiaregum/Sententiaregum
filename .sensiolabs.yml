@@ -6,4 +6,4 @@ global_exclude_dirs:
 
 rules:
   symfony.configuration.error_pages_should_be_customised: # we use FOSRest, so a custom "error" template is not necessary
-    enabled: true
+    enabled: false

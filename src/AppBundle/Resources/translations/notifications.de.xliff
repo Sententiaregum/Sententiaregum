@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="NOTIFICATIONS_SUBJECT">
+                <source>NOTIFICATIONS_SUBJECT</source>
+                <target>Benachrichtigungen von Sententiaregum</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_HELLO_PHRASE">
+                <source>NOTIFICATIONS_HELLO_PHRASE</source>
+                <target>Hi</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_THANKS">
+                <source>NOTIFICATIONS_ACTIVATION_THANKS</source>
+                <target>Schön dich dabei zu haben!</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_ACTIVATE">
+                <source>NOTIFICATIONS_ACTIVATION_ACTIVATE</source>
+                <target>Du kannste deinen Account hier aktivieren:</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_ACTIVATION_HTML_LINK">
+                <source>NOTIFICATIONS_ACTIVATION_HTML_LINK</source>
+                <target>Link zur Aktivierung</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

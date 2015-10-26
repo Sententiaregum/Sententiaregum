@@ -12,6 +12,8 @@ checks:
         custom_coding_standard:
             git_repository: 'https://github.com/xalopp/symfony-coding-standard.git'
             ruleset_path: 'ruleset.xml'
+        duplication: true
+        code_rating: true
 
 tools:
     php_code_sniffer:

@@ -44,6 +44,11 @@ sententiaregum::infrastructure::mysql::databases:
     password: dev
     host: localhost
     grant: ['ALL']
+  behat:
+    user: dev
+    password: dev
+    host: localhost
+    grant: ['ALL']
 
 # redis configurations
 sententiaregum::infrastructure::redis::instances:

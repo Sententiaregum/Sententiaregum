@@ -9,13 +9,8 @@
  * Please check out the license file in the document root of this application
  */
 
-namespace AppBundle\Model\User;
+namespace AppBundle\Exception;
 
-use Sonata\CoreBundle\Model\ManagerInterface;
-
-/**
- * Interface that provides methods for the core model operations of the user.
- */
-interface UserManagerInterface extends ManagerInterface
+class UserActivationException extends \InvalidArgumentException
 {
 }

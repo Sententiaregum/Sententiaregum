@@ -13,7 +13,7 @@ namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\UpdateLatestActivationListener;
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\UserManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,7 +25,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
     public function testUpdateLastActionAfterLogin()
     {
         $listener = new UpdateLatestActivationListener(
-            $this->getMock(UserManagerInterface::class),
+            $this->getMock(EntityManagerInterface::class),
             $this->getMock(TokenStorageInterface::class),
             $this->getRequestStack()
         );
@@ -41,8 +41,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateUserOnKernelTermination()
     {
-        $userManager = $this->getMock(UserManagerInterface::class);
-        $userManager->expects($this->once())->method('save');
+        $entityManager = $this->getMock(EntityManagerInterface::class);
 
         $user     = User::create('Ma27', 'foo', 'foo@bar.de');
         $dateTime = new \DateTime('-5 minutes');
@@ -55,7 +54,10 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->will($this->returnValue(new UsernamePasswordToken($user, 'Ma27@foo', 'unit-test')));
 
-        $listener = new UpdateLatestActivationListener($userManager, $storage, $this->getRequestStack());
+        $entityManager->expects($this->once())->method('persist')->with($user);
+        $entityManager->expects($this->once())->method('flush')->with($user);
+
+        $listener = new UpdateLatestActivationListener($entityManager, $storage, $this->getRequestStack());
         $listener->updateAfterRequest();
 
         $this->assertGreaterThan($dateTime->getTimestamp(), $user->getLastAction()->getTimestamp());
@@ -63,8 +65,8 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateOnNonProtectedRoute()
     {
-        $userManager = $this->getMock(UserManagerInterface::class);
-        $userManager->expects($this->never())->method('save');
+        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager->expects($this->never())->method('merge');
 
         $storage = $this->getMock(TokenStorageInterface::class);
         $storage
@@ -72,7 +74,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->will($this->returnValue(null));
 
-        $listener = new UpdateLatestActivationListener($userManager, $storage, $this->getRequestStack());
+        $listener = new UpdateLatestActivationListener($entityManager, $storage, $this->getRequestStack());
         $listener->updateAfterRequest();
     }
 
