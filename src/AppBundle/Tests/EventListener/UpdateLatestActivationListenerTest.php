@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -63,7 +64,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan($dateTime->getTimestamp(), $user->getLastAction()->getTimestamp());
     }
 
-    public function testUpdateOnNonProtectedRoute()
+    public function testUpdateOnAnonymousRoute()
     {
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager->expects($this->never())->method('merge');
@@ -72,7 +73,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
         $storage
             ->expects($this->any())
             ->method('getToken')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue(new AnonymousToken('anonymous', 'anon.')));
 
         $listener = new UpdateLatestActivationListener($entityManager, $storage, $this->getRequestStack());
         $listener->updateAfterRequest();
