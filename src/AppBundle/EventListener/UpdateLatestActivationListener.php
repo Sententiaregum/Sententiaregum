@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -88,7 +89,7 @@ class UpdateLatestActivationListener
      */
     public function updateAfterRequest()
     {
-        if (!$token = $this->tokenStorage->getToken()) {
+        if (($token = $this->tokenStorage->getToken()) instanceof AnonymousToken) {
             return;
         }
 

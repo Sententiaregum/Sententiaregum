@@ -12,3 +12,7 @@ security:
             stateless: true
             simple_preauth:
                 authenticator: ma27_api_key_authentication.security.authenticator
+
+        default:
+            anonymous: ~
+
