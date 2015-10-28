@@ -291,6 +291,16 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($repository));
 
+        $entityManager
+            ->expects($this->once())
+            ->method('remove')
+            ->with($user);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('flush')
+            ->with($user);
+
         $provider = $this->getMock(ExpiredActivationProviderInterface::class);
         $provider
             ->expects($this->any())
@@ -330,7 +340,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $provider = $this->getMock(ExpiredActivationProviderInterface::class);
         $provider
             ->expects($this->any())
-            ->method('checkApprovalByActivationKey')
+            ->method('checkApprovalByUser')
             ->will($this->returnValue(true));
 
         return $provider;
