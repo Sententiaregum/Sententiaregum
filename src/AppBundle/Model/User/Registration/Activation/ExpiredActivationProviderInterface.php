@@ -11,6 +11,8 @@
 
 namespace AppBundle\Model\User\Registration\Activation;
 
+use AppBundle\Model\User\User;
+
 /**
  * Provider that checks whether the activation attempt is expired.
  *
@@ -21,11 +23,11 @@ interface ExpiredActivationProviderInterface
     /**
      * Checks if the activation is expired.
      *
-     * @param string $activationKey
+     * @param User $user
      *
      * @return bool
      */
-    public function checkApprovalByActivationKey($activationKey);
+    public function checkApprovalByUser(User $user);
 
     /**
      * Attaches a new approval at the provider.

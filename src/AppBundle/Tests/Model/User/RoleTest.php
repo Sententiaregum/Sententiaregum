@@ -13,7 +13,7 @@ namespace AppBundle\Tests\Model\User;
 
 use AppBundle\Model\User\Role;
 
-class RoleTestTest extends \PHPUnit_Framework_TestCase
+class RoleTest extends \PHPUnit_Framework_TestCase
 {
     public function testSerialization()
     {

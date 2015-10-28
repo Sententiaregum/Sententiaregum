@@ -150,6 +150,13 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
 
         $redis = $this->getContainer()->get('snc_redis.pending_activations');
         $redis->del(sprintf('activation_%s', $user->getActivationKey()));
+
+        $pending       = $user->getPendingActivation();
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+
+        $pending->setActivationDate(new \DateTime('-3 hours'));
+        $entityManager->persist($pending);
+        $entityManager->flush();
     }
 
     /**

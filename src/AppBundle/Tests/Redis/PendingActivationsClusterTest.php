@@ -11,6 +11,8 @@
 
 namespace AppBundle\Tests\Redis;
 
+use AppBundle\Model\User\PendingActivation;
+use AppBundle\Model\User\User;
 use AppBundle\Test\KernelTestCase;
 
 class PendingActivationsClusterTest extends KernelTestCase
@@ -27,8 +29,7 @@ class PendingActivationsClusterTest extends KernelTestCase
         $key = $this->getActivationKey();
         $cluster->attachNewApproval($key);
 
-        $this->assertTrue($cluster->checkApprovalByActivationKey($key));
-        $this->assertFalse($cluster->checkApprovalByActivationKey($key)); // activations should be checked once, after that they must be removed
+        $this->assertTrue($cluster->checkApprovalByUser($this->createUserForKey($key)));
     }
 
     public function testExpiredActivationKey()
@@ -41,7 +42,25 @@ class PendingActivationsClusterTest extends KernelTestCase
         $redis = self::$kernel->getContainer()->get('snc_redis.pending_activations');
         $redis->del('activation_'.$key); // simulate expiration
 
-        $this->assertFalse($cluster->checkApprovalByActivationKey($key));
+        $user       = $this->createUserForKey($key);
+        $activation = new PendingActivation();
+        $activation->setActivationDate(new \DateTime('-6 hours'));
+        $user->setPendingActivation($activation);
+
+        $this->assertFalse($cluster->checkApprovalByUser($user));
+    }
+
+    public function testExpiredKeyButValidDatabaseBackup()
+    {
+        $cluster = $this->getCluster();
+
+        $key = $this->getActivationKey();
+        $cluster->attachNewApproval($key);
+
+        $redis = self::$kernel->getContainer()->get('snc_redis.pending_activations');
+        $redis->del('activation_'.$key); // simulate expiration
+
+        $this->assertTrue($cluster->checkApprovalByUser($this->createUserForKey($key)));
     }
 
     /**
@@ -60,5 +79,18 @@ class PendingActivationsClusterTest extends KernelTestCase
     private function getCluster()
     {
         return self::$kernel->getContainer()->get('app.redis.cluster.approval');
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return User
+     */
+    private function createUserForKey($key)
+    {
+        $user = new User();
+        $user->setActivationKey($key);
+
+        return $user;
     }
 }

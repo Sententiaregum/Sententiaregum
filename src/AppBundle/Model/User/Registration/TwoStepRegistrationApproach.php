@@ -130,8 +130,11 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
 
+        $activationModel = $user->getPendingActivation();
         $user->setState(User::STATE_APPROVED);
+
         $this->entityManager->persist($user);
+        $this->entityManager->remove($activationModel);
         $this->entityManager->flush($user);
     }
 
@@ -305,8 +308,13 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $repository = $this->entityManager->getRepository('Account:User');
         $query      = ['activationKey' => $activationKey, 'username' => $username];
 
-        if ((!$user = $repository->findOneBy($query)) || $this->isActivationExpired($activationKey)) {
-            throw new UserActivationException();
+        if (!$user = $repository->findOneBy($query)) {
+            throw $this->createActivationException();
+        } elseif ($this->isActivationExpired($user)) {
+            $this->entityManager->remove($user);
+            $this->entityManager->flush($user);
+
+            throw $this->createActivationException();
         }
 
         return $user;
@@ -315,13 +323,13 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Checks if the current approval attempt is expired.
      *
-     * @param string $key
+     * @param User $user
      *
      * @return bool
      */
-    private function isActivationExpired($key)
+    private function isActivationExpired(User $user)
     {
-        return !$this->expiredActivationProvider->checkApprovalByActivationKey($key);
+        return !$this->expiredActivationProvider->checkApprovalByUser($user);
     }
 
     /**
@@ -354,5 +362,15 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
             ->entityManager
             ->getRepository('Account:User')
             ->findOneBy(['username' => $userParameters->getUsername()]);
+    }
+
+    /**
+     * Creates an instance of the activation exception.
+     *
+     * @return UserActivationException
+     */
+    private function createActivationException()
+    {
+        return new UserActivationException();
     }
 }

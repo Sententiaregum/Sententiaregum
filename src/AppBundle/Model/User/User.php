@@ -86,7 +86,7 @@ class User implements UserInterface, Serializable
      *
      * @ORM\Column(name="state", type="string")
      */
-    private $state = self::STATE_NEW;
+    private $state;
 
     /**
      * @var bool
@@ -141,6 +141,18 @@ class User implements UserInterface, Serializable
     private $locale = 'en';
 
     /**
+     * @var PendingActivation
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="AppBundle\Model\User\PendingActivation",
+     *     fetch="EXTRA_LAZY",
+     *     cascade={"persist", "remove"}
+     * )
+     * @ORM\JoinColumn(name="pending_activation", nullable=true)
+     */
+    private $pendingActivation;
+
+    /**
      * Factory that fills the required fields of the user.
      *
      * @param string $username
@@ -168,6 +180,8 @@ class User implements UserInterface, Serializable
         $this->following        = new ArrayCollection();
         $this->registrationDate = new DateTime();
         $this->lastAction       = new DateTime();
+
+        $this->setState(self::STATE_NEW);
     }
 
     /**
@@ -337,6 +351,9 @@ class User implements UserInterface, Serializable
 
         if (self::STATE_APPROVED === $this->state) {
             $this->removeActivationKey();
+        } else {
+            $this->pendingActivation = new PendingActivation();
+            $this->pendingActivation->setActivationDate($this->getRegistrationDate());
         }
 
         return $this;
@@ -453,7 +470,8 @@ class User implements UserInterface, Serializable
             throw new \LogicException('Only approved users can remove activation keys!');
         }
 
-        $this->activationKey = null;
+        $this->activationKey     = null;
+        $this->pendingActivation = null;
 
         return $this;
     }
@@ -604,6 +622,30 @@ class User implements UserInterface, Serializable
     public function setLocale($locale)
     {
         $this->locale = (string) $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get pendingActivation.
+     *
+     * @return PendingActivation
+     */
+    public function getPendingActivation()
+    {
+        return $this->pendingActivation;
+    }
+
+    /**
+     * Set pendingActivation.
+     *
+     * @param PendingActivation $pendingActivation
+     *
+     * @return $this
+     */
+    public function setPendingActivation(PendingActivation $pendingActivation)
+    {
+        $this->pendingActivation = $pendingActivation;
 
         return $this;
     }
