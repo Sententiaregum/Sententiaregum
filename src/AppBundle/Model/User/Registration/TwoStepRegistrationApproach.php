@@ -308,6 +308,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $repository = $this->entityManager->getRepository('Account:User');
         $query      = ['activationKey' => $activationKey, 'username' => $username];
 
+        /** @var User $user */
         if (!$user = $repository->findOneBy($query)) {
             throw $this->createActivationException();
         } elseif ($this->isActivationExpired($user)) {

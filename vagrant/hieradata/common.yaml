@@ -63,6 +63,17 @@ sententiaregum::infrastructure::redis::instances:
   online-users:
     redis_port: 6904
 
+# cronjob configurations
+sententiaregum::infrastructure::jobs::schedules:
+  cleanup_sessions:
+    command: "php /var/www/sententiaregum/app/console ma27:auth:session-cleanup"
+    user: vagrant
+    hour: 5
+  cleanup_registrations:
+    command: "php /var/www/sententiaregum/app/console sententiaregum:purge:pending-activations"
+    user: vagrant
+    hour: 5
+
 # global npm packages
 sententiaregum::frontend::npm::packages:
   - karma-cli
