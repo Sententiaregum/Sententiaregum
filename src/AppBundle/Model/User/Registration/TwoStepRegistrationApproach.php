@@ -129,12 +129,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     public function approveByActivationKey($activationKey, $username)
     {
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
-
-        $activationModel = $user->getPendingActivation();
         $user->setState(User::STATE_APPROVED);
 
         $this->entityManager->persist($user);
-        $this->entityManager->remove($activationModel);
         $this->entityManager->flush($user);
     }
 

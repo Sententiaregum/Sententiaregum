@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="Role")
  */
 class Role implements RoleInterface, Serializable
@@ -28,7 +28,7 @@ class Role implements RoleInterface, Serializable
     /**
      * @var int
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(name="id", type="integer")
      */
@@ -37,7 +37,7 @@ class Role implements RoleInterface, Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="role")
+     * @ORM\Column(name="role", length=255, unique=true)
      */
     private $role;
 
