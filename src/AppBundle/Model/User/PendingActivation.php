@@ -20,14 +20,19 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
  * @ORM\Entity
- * @ORM\Table(name="pending_activation")
+ * @ORM\Table(
+ *     name="pending_activation",
+ *     indexes={
+ *         @ORM\Index(name="pendingActivation_activationDate", columns={"activation_date"})
+ *     }
+ * )
  */
 class PendingActivation
 {
     /**
      * @var int
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(name="id", type="integer")
      */

@@ -23,7 +23,10 @@ use Serializable;
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
  * @ORM\Entity(repositoryClass="AppBundle\Model\User\UserRepository")
- * @ORM\Table(name="User")
+ * @ORM\Table(name="User", indexes={
+ *     @ORM\Index(name="user_lastAction", columns={"last_action"}),
+ *     @ORM\Index(name="user_locale", columns={"locale"})
+ * })
  */
 class User implements UserInterface, Serializable
 {
@@ -33,7 +36,7 @@ class User implements UserInterface, Serializable
     /**
      * @var int
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(name="id", type="integer")
      */
@@ -105,7 +108,7 @@ class User implements UserInterface, Serializable
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\Role")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\Role", indexBy="role")
      * @ORM\JoinTable(
      *     name="User2Role",
      *     joinColumns={@ORM\JoinColumn(name="userId")},
@@ -124,7 +127,7 @@ class User implements UserInterface, Serializable
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\User")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\User", indexBy="username")
      * @ORM\JoinTable(
      *     name="Follower",
      *     joinColumns={@ORM\JoinColumn(name="userId")},
@@ -146,7 +149,8 @@ class User implements UserInterface, Serializable
      * @ORM\OneToOne(
      *     targetEntity="AppBundle\Model\User\PendingActivation",
      *     fetch="EXTRA_LAZY",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="pending_activation", nullable=true)
      */

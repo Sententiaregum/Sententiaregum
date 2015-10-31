@@ -85,9 +85,7 @@ class UserRepository extends EntityRepository
             ->from('Account:User', 'user')
             ->join('user.pendingActivation', 'pending_activation')
             ->where($qb->expr()->lt('pending_activation.activationDate', ':date_time'))
-            ->andWhere($qb->expr()->eq('user.state', ':state'))
-            ->setParameter(':date_time', $dateTime)
-            ->setParameter(':state', User::STATE_NEW);
+            ->setParameter(':date_time', $dateTime);
 
         return $qb->getQuery();
     }
