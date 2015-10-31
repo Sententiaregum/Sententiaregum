@@ -7,11 +7,13 @@ php:
 services:
   - redis-server
 
+# execution matrix
 matrix:
   allow_failures:
     - php: hhvm
     - php: 7
 
+# prepare travis ci for the build process
 install:
   - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
   - mysql -e "CREATE DATABASE IF NOT EXISTS behat;"
@@ -24,12 +26,23 @@ install:
   - cp travis-ci/travis_parameters.yml app/config/parameters.yml
   - composer install
   - php app/check.php
-  - php app/console security:check
 
+# linters
 before_script:
   - scss-lint
   - eslint ./src/Frontend/App.js
+  - php app/console security:check
+  - php app/console lint:yaml app/config
+  - php app/console lint:yaml .scrutinizer.yml
+  - php app/console lint:yaml .travis.yml
+  - php app/console lint:yaml .scss-lint.yml
+  - php app/console lint:yaml .sensiolabs.yml
+  - php app/console lint:yaml behat.yml.dist
+  - php app/console lint:twig src
+  - php app/console lint:twig app
+  - php app/console doctrine:schema:validate
 
+# execute tests
 script:
   - bin/behat --strict -f progress --no-snippets
   - bin/phpunit -c app
