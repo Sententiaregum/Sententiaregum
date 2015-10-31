@@ -22,7 +22,7 @@ use Serializable;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Model\User\UserRepository")
  * @ORM\Table(name="User")
  */
 class User implements UserInterface, Serializable

@@ -5,6 +5,7 @@ class application {
   contain sententiaregum::infrastructure::mailcatcher
   contain sententiaregum::infrastructure::mysql
   contain sententiaregum::infrastructure::redis
+  contain sententiaregum::infrastructure::jobs
   contain sententiaregum::frontend::npm
   contain sententiaregum::frontend::ruby
 }
