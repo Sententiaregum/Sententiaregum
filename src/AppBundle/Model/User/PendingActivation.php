@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity
+ * @ORM\Entity(readOnly=true)
  * @ORM\Table(
  *     name="pending_activation",
  *     indexes={

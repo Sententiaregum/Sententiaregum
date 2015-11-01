@@ -17,6 +17,6 @@
 
         RewriteEngine on
         RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteRule ^(.*)$ <%= scope.lookupvar('cmf::application::symfony::front') %> [QSA,L]
+        RewriteRule ^(.*)$ <%= scope.lookupvar('sententiaregum::backend::server::front_controller') %> [QSA,L]
     </Directory>
 </VirtualHost>

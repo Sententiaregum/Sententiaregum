@@ -30,19 +30,7 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $passwordHasher = new PhpPasswordHasher();
-
-        $roleRepository = $manager->getRepository('Account:Role');
-        $userRole       = $roleRepository->findOneBy(['role' => 'ROLE_USER']);
-        $adminRole      = $roleRepository->findOneBy(['role' => 'ROLE_ADMIN']);
-
-        $admin = new User();
-        $admin->setUsername('admin');
-        $admin->setPassword($passwordHasher->generateHash('123456'));
-        $admin->setEmail('admin@sententiaregum.dev');
-        $admin->addRole($adminRole);
-        $admin->addRole($userRole);
-        $admin->setLastAction(new \DateTime());
-        $admin->setState(User::STATE_APPROVED);
+        $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
         $user1 = new User();
         $user1->setUsername('Ma27');
@@ -72,9 +60,9 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
 
         $user2->addFollowing($user1);
         $user1->addFollowing($user2);
-        $user1->addFollowing($admin);
+        $user1->addFollowing($manager->getRepository('Account:User')->findOneBy(['username' => 'admin']));
 
-        foreach ([$admin, $user1, $user2, $locked] as $userModel) {
+        foreach ([$user1, $user2, $locked] as $userModel) {
             $manager->persist($userModel);
         }
 
@@ -86,6 +74,6 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 2;
+        return 3;
     }
 }

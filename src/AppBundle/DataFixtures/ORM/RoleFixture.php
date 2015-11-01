@@ -11,8 +11,8 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
 use AppBundle\Model\User\Role;
-use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -21,7 +21,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RoleFixture implements FixtureInterface, OrderedFixtureInterface
+class RoleFixture implements ProductionFixtureInterface, OrderedFixtureInterface
 {
     /**
      * {@inheritdoc}

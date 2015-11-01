@@ -11,6 +11,7 @@
 
 namespace AppBundle\Behat;
 
+use AppBundle\DataFixtures\ORM\AdminFixture;
 use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\DataFixtures\ORM\UserFixture;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
@@ -51,7 +52,9 @@ abstract class BaseContext extends BehatAssert implements KernelAwareContext
     {
         /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
         $service = $this->getContainer()->get('app.doctrine.fixtures_loader');
-        $service->loadFixtures(array_merge([RoleFixture::class, UserFixture::class], self::$fixtures));
+        $service->applyFixtures(
+            array_merge([RoleFixture::class, AdminFixture::class, UserFixture::class], self::$fixtures)
+        );
     }
 
     /** @AfterScenario */

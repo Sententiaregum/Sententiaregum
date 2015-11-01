@@ -46,13 +46,33 @@ class ConfigurableFixturesLoader
     }
 
     /**
+     * Loads fixtures that are marked as production fixtures.
+     *
+     * @param string $directory
+     *
+     * @return ProductionFixtureInterface[]
+     */
+    public function loadProductionFixturesFromDirectory($directory)
+    {
+        $loader = new Loader();
+
+        return array_filter(
+            $loader->loadFromDirectory($directory),
+            function ($fixture) {
+                return $fixture instanceof ProductionFixtureInterface;
+            }
+        );
+    }
+
+    /**
      * Loads the data fixtures passed as array.
      *
-     * @param array $fixtureClasses
+     * @param array    $fixtureClasses
+     * @param callable $executorLogFunction
      *
      * @throws \InvalidArgumentException If the fixture class does not exist.
      */
-    public function loadFixtures(array $fixtureClasses)
+    public function applyFixtures(array $fixtureClasses, callable $executorLogFunction = null)
     {
         $loader = new Loader();
         foreach ($fixtureClasses as $fixtureClass) {
@@ -65,6 +85,10 @@ class ConfigurableFixturesLoader
 
         $purger   = new ORMPurger($this->entityManager);
         $executor = new ORMExecutor($this->entityManager, $purger);
+
+        if (null !== $executorLogFunction) {
+            $executor->setLogger($executorLogFunction);
+        }
 
         $executor->execute($loader->getFixtures());
     }
