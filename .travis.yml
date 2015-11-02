@@ -29,8 +29,7 @@ install:
 
 # linters
 before_script:
-  - scss-lint
-  - eslint ./src/Frontend/App.js
+  - npm run lint
   - php app/console security:check
   - php app/console lint:yaml app/config
   - php app/console lint:yaml .scrutinizer.yml
