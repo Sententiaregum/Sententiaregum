@@ -63,6 +63,12 @@ If you'd like to make the assets production-ready, run the following:
 
     npm run build
 
+A lint script has been implemented in order to execute scss-lint and eslint:
+
+    npm run lint
+
+The rest of the linters used during the build process can be found at the __before_script__ section of the [.travis.yml](https://github.com/Sententiaregum/Sententiaregum/blob/master/.travis.yml)
+
 All local node packages and build production files will be synced.
 
 For SCSS lint and ESLint are some PHPStorm/WebStorm plugins available:
