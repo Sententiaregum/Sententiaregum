@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "14b88dcdecc9c9feefd46c10b9b4fb2d",
-    "content-hash": "313b3468928162add795526fdb45518a",
+    "hash": "11e852cea638ace42e94d14e534be425",
+    "content-hash": "8f9c8f19fd726a941b024e365a0d097f",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -140,16 +140,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.0",
+            "version": "v1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f"
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/eb8a73619af4f1c8711e2ce482f5de3643258a1f",
-                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-10-28 11:27:45"
+            "time": "2015-11-02 18:35:48"
         },
         {
             "name": "doctrine/collections",
