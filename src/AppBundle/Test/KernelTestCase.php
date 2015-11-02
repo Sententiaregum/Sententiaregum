@@ -30,7 +30,7 @@ abstract class KernelTestCase extends BaseKernelTestCase
         /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
         $service = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
-        $service->loadFixtures($fixtures);
+        $service->applyFixtures($fixtures);
     }
 
     /**

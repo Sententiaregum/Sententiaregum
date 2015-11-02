@@ -50,12 +50,20 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function loadDoctrineDataFixtures(CommandEvent $event)
     {
-        if (PreInstallHandler::$firstInstall && $event->isDevMode()) {
-            static::executeCommand(
-                $event,
-                static::getConsoleDir($event, 'load data fixtures'),
-                'doctrine:fixtures:load --no-interaction'
-            );
+        if (PreInstallHandler::$firstInstall) {
+            if ($event->isDevMode()) {
+                static::executeCommand(
+                    $event,
+                    static::getConsoleDir($event, 'load data fixtures'),
+                    'doctrine:fixtures:load --no-interaction'
+                );
+            } else {
+                static::executeCommand(
+                    $event,
+                    static::getConsoleDir($event, 'load production data fixtures'),
+                    'sententiaregum:fixtures:production --no-interaction --env=prod'
+                );
+            }
         }
     }
 
