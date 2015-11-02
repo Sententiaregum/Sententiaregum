@@ -1,0 +1,10 @@
+finder:
+  exclude:
+    - "app"
+    - "web"
+
+disabled:
+  - unalign_equals
+
+enabled:
+  - align_equals
