@@ -73,6 +73,16 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
+        },
+        "checkbundles-ignore": [
+            "Sonata\\EasyExtendsBundle\\SonataEasyExtendsBundle",
+            "Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle",
+            "Sensio\\Bundle\\GeneratorBundle\\SensioGeneratorBundle",
+            "Symfony\\Bundle\\DebugBundle\\DebugBundle",
+            "Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle"
+        ],
+        "checkbundles-kernels": {
+            "AppKernel": "prod"
         }
     },
     "authors": [

@@ -13,20 +13,29 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
             new Ma27\ApiKeyAuthenticationBundle\Ma27ApiKeyAuthenticationBundle(),
+
             new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
+
             new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-            new Sonata\NotificationBundle\SonataNotificationBundle(),
+
             new Lunetics\LocaleBundle\LuneticsLocaleBundle(),
+
             new Snc\RedisBundle\SncRedisBundle(),
+
             new AppBundle\AppBundle(),
         ];
 
