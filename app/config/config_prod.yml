@@ -7,11 +7,17 @@ framework:
     serializer:
         cache: serializer.mapping.cache.apc
 
-doctrine:
-    orm:
-        metadata_cache_driver: apc
-        result_cache_driver: apc
-        query_cache_driver: apc
+snc_redis:
+    doctrine:
+        metadata_cache:
+            client: doctrine_cache
+            entity_manager: default
+        result_cache:
+            client: doctrine_cache
+            entity_manager: default
+        query_cache:
+            client: doctrine_cache
+            entity_manager: default
 
 monolog:
     handlers:

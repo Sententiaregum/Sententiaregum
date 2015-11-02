@@ -133,3 +133,7 @@ snc_redis:
             type: predis
             alias: pending_activations
             dsn: redis://localhost:%pending_activations_redis_port%
+        doctrine_cache:
+            type: predis
+            alias: doctrine_cache
+            dsn: redis://localhost:%doctrine_redis_port%
