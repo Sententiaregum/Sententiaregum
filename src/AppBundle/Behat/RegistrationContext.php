@@ -12,6 +12,7 @@
 namespace AppBundle\Behat;
 
 use AppBundle\Model\User\User;
+use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\DomCrawler\Crawler;
@@ -57,7 +58,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldHaveAnAccount()
     {
-        $this->assertTrue(isset($this->response['id']), 'Unsuccessful registration!');
+        Assertion::keyIsset($this->response, 'id');
     }
 
     /**
@@ -68,8 +69,8 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $repository = $this->getRepository('Account:User');
         $user       = $repository->findOneBy(['username' => $this->username]);
 
-        $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key!');
-        $this->assertNotEquals(User::STATE_APPROVED, $user->getState(), 'User not approved!');
+        Assertion::notEmpty($user->getActivationKey());
+        Assertion::notEq(User::STATE_APPROVED, $user->getState());
     }
 
     /**
@@ -81,19 +82,19 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         /** @var \Symfony\Bundle\SwiftMailerBundle\DataCollector\MessageDataCollector $mailCollector */
         $mailCollector = $client->getProfile()->getCollector('swiftmailer');
 
-        $this->assertEquals(1, $mailCollector->getMessageCount(), 'Expected one email to be sent!');
+        Assertion::eq(1, $mailCollector->getMessageCount());
 
         /** @var \Swift_Message $message */
         $message = $mailCollector->getMessages()[0];
-        $this->assertEquals($message->getSubject(), 'Sententiaregum Notifications', 'Invalid subject on activation mail');
-        $this->assertEquals(key($message->getTo()), 'sententiaregum@sententiaregum.dev', 'Invalid mailer target!');
+        Assertion::eq($message->getSubject(), 'Sententiaregum Notifications');
+        Assertion::eq(key($message->getTo()), 'sententiaregum@sententiaregum.dev');
 
         $crawler = new Crawler();
         $crawler->addContent($message->getChildren()[1]->getBody());
 
-        $this->assertCount(2, $message->getChildren(), 'Every message requires a text and a html child!');
-        $this->assertEquals(1, $crawler->filter('#n-ac-l-p')->count(), 'Invalid amount of confirmation link nodes!');
-        $this->assertNotEquals(0, preg_match('/!\/activate\/(.*)/', $message->getChildren()[0]->getBody()), 'No text link found!');
+        Assertion::count($message->getChildren(), 2);
+        Assertion::eq(1, $crawler->filter('#n-ac-l-p')->count());
+        Assertion::notEq(0, preg_match('/!\/activate\/(.*)/', $message->getChildren()[0]->getBody()));
     }
 
     /**
@@ -104,7 +105,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $user = $this->getRegisteredUser();
 
         $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getActivationKey()]);
-        $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key on current user!');
+        Assertion::false(empty($user->getActivationKey()));
         $this->response = $this->performRequest(
             'PATCH',
             sprintf('/api/users/activate.json?%s', $query),
@@ -129,8 +130,8 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldSee($arg1, $arg2)
     {
-        $this->assertTrue(isset($this->response['errors'][$arg2]), sprintf('Missing errors for %s in response!', $arg2));
-        $this->assertTrue(in_array($arg1, $this->response['errors'][$arg2]), sprintf('Missing message "%s" on property "%s"!', $arg1, $arg2));
+        Assertion::keyIsset($this->response['errors'], $arg2);
+        Assertion::inArray($arg1, $this->response['errors'][$arg2]);
     }
 
     /**
@@ -138,7 +139,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldSeeSuggestionsForMyUsername()
     {
-        $this->assertTrue(array_key_exists('name_suggestions', $this->response));
+        Assertion::keyExists($this->response, 'name_suggestions');
     }
 
     /**
@@ -152,7 +153,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $redis->del(sprintf('activation_%s', $user->getActivationKey()));
 
         $pending       = $user->getPendingActivation();
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->getEntityManager();
 
         $pending->setActivationDate(new \DateTime('-3 hours'));
         $entityManager->persist($pending);
@@ -167,7 +168,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $user = $this->getRegisteredUser();
 
         $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getActivationKey()]);
-        $this->assertFalse(empty($user->getActivationKey()), 'Missing activation key on current user!');
+        Assertion::notEmpty($user->getActivationKey());
         $this->response = $this->performRequest(
             'PATCH',
             sprintf('/api/users/activate.json?%s', $query),

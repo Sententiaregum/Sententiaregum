@@ -34,7 +34,8 @@
         "fabpot/php-cs-fixer": "~1.10",
         "behat/behat": "~3.0",
         "behat/symfony2-extension": "~2.0",
-        "symfony/phpunit-bridge": "~2.7"
+        "symfony/phpunit-bridge": "~2.7",
+        "beberlei/assert": "~2.4"
     },
     "scripts": {
         "pre-install-cmd": [
