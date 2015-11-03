@@ -35,11 +35,11 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testImmutableProperty()
     {
-        $accessor = $this->getMockBuilder(PropertyAccessor::class)->disableOriginalConstructor()->getMock();
+        $accessor = $this->getMockWithoutInvokingTheOriginalConstructor(PropertyAccessor::class);
         $accessor
             ->expects($this->any())
             ->method('isWritable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $converter = new DTOConverter($accessor);
         $request   = Request::create('/');
@@ -79,7 +79,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');
 
-        $request->files->set('file', $this->getMockBuilder(UploadedFile::class)->disableOriginalConstructor()->getMock());
+        $request->files->set('file', $this->getMockWithoutInvokingTheOriginalConstructor(UploadedFile::class));
         $this->assertTrue($converter->apply($request, new ParamConverter(['class' => FileUploadDTO::class, 'name' => 'dto'])));
 
         $this->assertInstanceOf(UploadedFile::class, $request->attributes->get('dto')->getFile());

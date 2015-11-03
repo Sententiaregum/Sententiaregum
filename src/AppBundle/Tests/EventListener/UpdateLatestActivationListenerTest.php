@@ -53,7 +53,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
         $storage
             ->expects($this->any())
             ->method('getToken')
-            ->will($this->returnValue(new UsernamePasswordToken($user, 'Ma27@foo', 'unit-test')));
+            ->willReturn(new UsernamePasswordToken($user, 'Ma27@foo', 'unit-test'));
 
         $entityManager->expects($this->once())->method('persist')->with($user);
         $entityManager->expects($this->once())->method('flush')->with($user);
@@ -73,7 +73,7 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
         $storage
             ->expects($this->any())
             ->method('getToken')
-            ->will($this->returnValue(new AnonymousToken('anonymous', 'anon.')));
+            ->willReturn(new AnonymousToken('anonymous', 'anon.'));
 
         $listener = new UpdateLatestActivationListener($entityManager, $storage, $this->getRequestStack());
         $listener->updateAfterRequest();

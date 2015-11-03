@@ -50,7 +50,7 @@ class PurgeOutdatedPendingActivationsCommandTest extends \PHPUnit_Framework_Test
         $kernel
             ->expects($this->any())
             ->method('getContainer')
-            ->will($this->returnValue($this->getContainer()));
+            ->willReturn($this->getContainer());
 
         return $kernel;
     }
@@ -64,9 +64,9 @@ class PurgeOutdatedPendingActivationsCommandTest extends \PHPUnit_Framework_Test
         $container
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['doctrine', 1, $this->getDoctrine()],
-            ]));
+            ]);
 
         return $container;
     }
@@ -76,18 +76,18 @@ class PurgeOutdatedPendingActivationsCommandTest extends \PHPUnit_Framework_Test
      */
     private function getDoctrine()
     {
-        $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
         $repository
             ->expects($this->any())
             ->method('deletePendingActivationsByDate')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
 
         $registry = $this->getMock(ManagerRegistry::class);
         $registry
             ->expects($this->any())
             ->method('getRepository')
             ->with('Account:User')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         return $registry;
     }

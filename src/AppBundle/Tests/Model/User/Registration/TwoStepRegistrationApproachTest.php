@@ -42,22 +42,22 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $validatorMock
             ->expects($this->any())
             ->method('validate')
-            ->will($this->returnValue(
+            ->willReturn(
                 new ConstraintViolationList(
                     [
                         new ConstraintViolation('Invalid username!', 'Invalid username!', [], 'username', 'username', 'Ma27'),
                         new ConstraintViolation('Invalid username!', 'Invalid username!', [], 'username', 'username', 'Ma27', null, UniqueProperty::NON_UNIQUE_PROPERTY),
                     ]
                 )
-            ));
+            );
 
         $em = $this->getMock(EntityManagerInterface::class);
 
-        $suggestor = $this->getMockBuilder(ChainSuggestor::class)->disableOriginalConstructor()->getMock();
+        $suggestor = $this->getMockWithoutInvokingTheOriginalConstructor(ChainSuggestor::class);
         $suggestor
             ->expects($this->once())
             ->method('getPossibleSuggestions')
-            ->will($this->returnValue(['Ma_27']));
+            ->willReturn(['Ma_27']);
 
         $registration = new TwoStepRegistrationApproach(
             $em,
@@ -93,30 +93,30 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
         $repository
             ->expects($this->at(1))
             ->method('findOneBy')
             ->with(['username' => 'Ma27'])
-            ->will($this->returnValue(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev')));
+            ->willReturn(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev'));
 
         $repository
             ->expects($this->at(0))
             ->method('findOneBy')
             ->with(['role' => 'ROLE_USER'])
-            ->will($this->returnValue(new Role('ROLE_USER')));
+            ->willReturn(new Role('ROLE_USER'));
 
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $generator = $this->getMock(ActivationKeyCodeGeneratorInterface::class);
         $generator
             ->expects($this->any())
             ->method('generate')
             ->with(255)
-            ->will($this->returnValue(str_repeat('X', 255)));
+            ->willReturn(str_repeat('X', 255));
 
         $dispatcher = $this->getMock(EventDispatcherInterface::class);
         $dispatcher
@@ -128,7 +128,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $hasher
             ->expects($this->once())
             ->method('generateHash')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $provider = $this->getActivationProvider();
         $provider
@@ -160,18 +160,18 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     {
         $key = md5(uniqid());
 
-        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['activationKey' => $key, 'username' => 'Ma27'])
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
@@ -191,18 +191,18 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
 
-        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['activationKey' => $key, 'username' => 'Ma27'])
-            ->will($this->returnValue($user));
+            ->willReturn($user);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $readyUser = $user->setState(User::STATE_APPROVED);
 
@@ -244,16 +244,16 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $validatorMock
             ->expects($this->at(0))
             ->method('validate')
-            ->will($this->returnValue(new ConstraintViolationList()));
+            ->willReturn(new ConstraintViolationList());
 
         $validatorMock
             ->expects($this->exactly(200))
             ->method('validate')
-            ->will($this->returnValue(
+            ->willReturn(
                 new ConstraintViolationList(
                     [new ConstraintViolation('Invalid api key!', 'Invalid api key!', [], null, 'apiKey', '123456')]
                 )
-            ));
+            );
 
         $em = $this->getMock(EntityManagerInterface::class);
 
@@ -278,18 +278,18 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
 
-        $repository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['activationKey' => $key, 'username' => 'Ma27'])
-            ->will($this->returnValue($user));
+            ->willReturn($user);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $entityManager
             ->expects($this->once())
@@ -305,7 +305,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $provider
             ->expects($this->any())
             ->method('checkApprovalByActivationKey')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
@@ -341,7 +341,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $provider
             ->expects($this->any())
             ->method('checkApprovalByUser')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         return $provider;
     }
