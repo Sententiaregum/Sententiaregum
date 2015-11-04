@@ -56,33 +56,35 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
         $backend
             ->expects($this->once())
             ->method('publish')
-            ->will($this->returnCallback(function (...$args) use ($expected) {
-                $message = $args[0];
+            ->willReturnCallback(
+                function (...$args) use ($expected) {
+                    $message = $args[0];
 
-                $this->assertSame($message->getState(), $expected->getState());
-                $this->assertSame($message->getBody(), $expected->getBody());
-                $this->assertSame($message->getType(), $expected->getType());
-            }));
+                    $this->assertSame($message->getState(), $expected->getState());
+                    $this->assertSame($message->getBody(), $expected->getBody());
+                    $this->assertSame($message->getType(), $expected->getType());
+                }
+            );
 
-        $templatingEngine = $this->getMockBuilder(TwigEngine::class)->disableOriginalConstructor()->getMock();
+        $templatingEngine = $this->getMockWithoutInvokingTheOriginalConstructor(TwigEngine::class);
         $templatingEngine
             ->expects($this->at(0))
             ->method('render')
             ->with('AppBundle:emails:test.txt.twig', [])
-            ->will($this->returnValue('Notifications'));
+            ->willReturn('Notifications');
 
         $templatingEngine
             ->expects($this->at(1))
             ->method('render')
             ->with('AppBundle:emails:test.html.twig', [])
-            ->will($this->returnValue('<b>Notifications</b>'));
+            ->willReturn('<b>Notifications</b>');
 
         $translator = $this->getMock(TranslatorInterface::class);
         $translator
             ->expects($this->once())
             ->method('trans')
             ->with('NOTIFICATIONS_SUBJECT', [], 'notifications')
-            ->will($this->returnValue('Sententiaregum Notifications'));
+            ->willReturn('Sententiaregum Notifications');
 
         $listener = new NotificationListener($backend, $translator, $templatingEngine, $defaultEmail);
         $listener->onMailEvent($event);

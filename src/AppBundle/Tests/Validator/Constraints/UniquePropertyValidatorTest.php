@@ -34,35 +34,35 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->expects($this->any())
             ->method('findOneBy')
             ->with(['username' => 'Ma27'])
-            ->will($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev')));
+            ->willReturn($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev')));
 
-        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
         $manager
             ->expects($this->any())
             ->method('getClassMetadata')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($manager));
+            ->willReturn($manager);
 
         $suggestor = $this->getMock(SuggestorInterface::class);
         $suggestor
             ->expects($this->any())
             ->method('getPossibleSuggestions')
-            ->will($this->returnValue(['Ma.27']));
+            ->willReturn(['Ma.27']);
 
         return new UniquePropertyValidator($mockRegistry, $suggestor);
     }
@@ -142,23 +142,23 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidProperty()
     {
-        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getClassMetadata')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($manager));
+            ->willReturn($manager);
 
         $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
@@ -175,24 +175,24 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidEmbeddable()
     {
-        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getClassMetadata')
             ->with('AnotherMapping:User')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($manager));
+            ->willReturn($manager);
 
         $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
@@ -209,11 +209,11 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValueObjectProperty()
     {
-        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $classMetadata->embeddedClasses = ['foo' => ['class' => 'EmbeddedClass']]; // adding mocked field
 
@@ -222,25 +222,25 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->expects($this->at(0))
             ->method('getClassMetadata')
             ->with('AnotherMapping:User')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
-        $embeddedMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $embeddedMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $embeddedMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $manager
             ->expects($this->at(1))
             ->method('getClassMetadata')
             ->with('EmbeddedClass')
-            ->will($this->returnValue($embeddedMetadata));
+            ->willReturn($embeddedMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($manager));
+            ->willReturn($manager);
 
         $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
@@ -255,24 +255,24 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
     {
         $stdClass = new \stdClass();
 
-        $classMetadata = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $classMetadata
             ->expects($this->any())
             ->method('hasAssociation')
             ->with('foo')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->at(0))
             ->method('getClassMetadata')
             ->with('AnotherMapping:User')
-            ->will($this->returnValue($classMetadata));
+            ->willReturn($classMetadata);
 
         $manager
             ->expects($this->once())
@@ -283,13 +283,13 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
         $manager
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnValue($repository));
+            ->willReturn($repository);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
-            ->will($this->returnValue($manager));
+            ->willReturn($manager);
 
         $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
