@@ -24,6 +24,7 @@ class AppKernel extends Kernel
 
             new Sonata\CoreBundle\SonataCoreBundle(),
             new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Sonata\DatagridBundle\SonataDatagridBundle(),
 
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
