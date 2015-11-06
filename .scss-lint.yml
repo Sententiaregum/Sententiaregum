@@ -8,4 +8,4 @@ exclude:
 
 linters:
   Comment:
-    allowed: '^[/* ]* @copyright'
+    allowed: '^[/* ]* \(c\)'

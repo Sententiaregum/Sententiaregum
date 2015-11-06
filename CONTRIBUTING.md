@@ -13,7 +13,7 @@ If your code violates one of their convetions, the travis build will break and g
 
 __Note:__ before sending a PR that changes PHP code, please run the following command:
 
-    bin/phpcs fix
+    bin/php-cs-fixer fix
 
 So you don't need to worry about code style.
 

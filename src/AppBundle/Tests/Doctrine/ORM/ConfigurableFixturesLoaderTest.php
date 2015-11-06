@@ -1,12 +1,13 @@
 <?php
 
 /*
- * This file is part of the sententiaregum application.
+ * This file is part of the Sententiaregum project.
  *
- * Sententiaregum is a social network based on Symfony2 and BackboneJS/ReactJS
+ * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * (c) Ben Bieler <benjaminbieler2014@gmail.com>
  *
- * @copyright (c) 2015 Sententiaregum
- * Please check out the license file in the document root of this application
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace AppBundle\Tests\Doctrine\ORM;
