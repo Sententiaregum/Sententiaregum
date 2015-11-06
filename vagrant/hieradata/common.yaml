@@ -32,7 +32,7 @@ sententiaregum::backend::server::host_name: sententiaregum.dev
 sententiaregum::backend::server::doc_root: /var/www/sententiaregum/web
 sententiaregum::backend::server::front_controller: app_dev.php
 sententiaregum::backend::server::port: 80
-sententiaregum::backend::server::apache_modules:
+sententiaregum::backend::server::modules:
   rewrite: {}
 
 sententiaregum::backend::server::server_aliases: '192.168.66.211'
@@ -79,7 +79,6 @@ sententiaregum::frontend::npm::packages:
   - karma-cli
   - karma-jasmine
   - webpack
-  - node-sass
   - eslint
   - eslint-plugin-react
 

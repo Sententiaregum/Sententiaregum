@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.synced_folder ".", "/var/www/sententiaregum", :nfs => true
 
-  config.vm.hostname = "sententiaregum"
+  config.vm.hostname = "sententiaregum.dev"
 
   config.vm.provider "virtualbox" do |vb|
     # vb settings

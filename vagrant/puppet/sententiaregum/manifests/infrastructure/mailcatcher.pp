@@ -4,6 +4,7 @@ class sententiaregum::infrastructure::mailcatcher {
     require  => [
       Package['ruby-dev'],
       Package['build-essential'],
+      Package['libsqlite3-dev'],
     ],
   }
 }

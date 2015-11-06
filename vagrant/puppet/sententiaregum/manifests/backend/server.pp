@@ -17,7 +17,7 @@ class sententiaregum::backend::server(
 
   create_resources('::apache::module', $modules)
 
-  apache::vhost { $host_name:
+  ::apache::vhost { $host_name:
     server_name   => $host_name,
     port          => $port,
     docroot       => $doc_root,
