@@ -1,4 +1,5 @@
 
+import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils.js';
 import HelloWorld from '../../components/helloWorld.js';
 
