@@ -128,7 +128,7 @@ class User implements UserInterface, Serializable
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\User", indexBy="username")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\User", indexBy="username", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(
      *     name="Follower",
      *     joinColumns={@ORM\JoinColumn(name="userId")},

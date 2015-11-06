@@ -137,3 +137,7 @@ snc_redis:
             type: predis
             alias: doctrine_cache
             dsn: redis://localhost:%doctrine_redis_port%
+        online_users:
+            type: predis
+            alias: online_users
+            dsn: redis://localhost:%online_users_port%
