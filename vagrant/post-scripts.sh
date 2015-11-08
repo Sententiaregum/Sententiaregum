@@ -11,3 +11,6 @@ lsof=`sudo lsof | grep 1025`
 if [[ -z $lsof ]]; then
     sudo mailcatcher --http-ip 0.0.0.0
 fi
+
+# disable default page of apache2
+sudo a2dissite 000-default.conf && service apache2 reload

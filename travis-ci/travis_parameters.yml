@@ -14,3 +14,4 @@ parameters:
     mailer_from_address: info@sententiaregum.dev
     pending_activations_redis_port: 6379
     doctrine_redis_port: 6379
+    online_users_port: 6379

@@ -18,6 +18,11 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Context for the registration behavior.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ */
 class RegistrationContext extends BaseContext implements SnippetAcceptingContext
 {
     /**

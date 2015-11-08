@@ -1,10 +1,17 @@
 default:
   suites:
-    user:
+    registration:
       contexts:
         - AppBundle\Behat\RegistrationContext
       filters:
         tags: "@registration"
+      type:   symfony_bundle
+      bundle: AppBundle
+    online_users:
+      contexts:
+        - AppBundle\Behat\OnlineUsersContext
+      filters:
+        tags: "@online_users"
       type:   symfony_bundle
       bundle: AppBundle
   formatters:

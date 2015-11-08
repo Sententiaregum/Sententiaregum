@@ -14,8 +14,10 @@ namespace AppBundle\Model\User;
 
 use DateTime;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -70,6 +72,30 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Creates a list that contains the ids of all users following a specific user.
+     *
+     * @param User $user
+     *
+     * @return int[]
+     */
+    public function getFollowingIdsByUser(User $user)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $result = $qb
+            ->select('partial user.{id}')
+            ->distinct()
+            ->from('Account:User', 'user')
+            ->join('Account:User', 'current_user', Join::WITH, $qb->expr()->eq('current_user.id', ':user_id'))
+            ->where($qb->expr()->isMemberOf('user', 'current_user.following'))
+            ->setParameter(':user_id', $user->getId())
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        return array_column($result, 'id');
+    }
+
+    /**
      * Creates a list of old entity ids that should be removed.
      *
      * @param DateTime $dateTime
@@ -86,7 +112,7 @@ class UserRepository extends EntityRepository
             ->from('Account:User', 'user')
             ->join('user.pendingActivation', 'pending_activation')
             ->where($qb->expr()->lt('pending_activation.activationDate', ':date_time'))
-            ->setParameter(':date_time', $dateTime);
+            ->setParameter(':date_time', $dateTime, Type::DATETIME);
 
         return $qb->getQuery();
     }

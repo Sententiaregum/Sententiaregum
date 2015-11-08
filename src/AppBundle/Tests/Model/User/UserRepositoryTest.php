@@ -12,18 +12,18 @@
 
 namespace AppBundle\Tests\Model\User;
 
+use AppBundle\DataFixtures\ORM\AdminFixture;
+use AppBundle\DataFixtures\ORM\RoleFixture;
+use AppBundle\DataFixtures\ORM\UserFixture;
 use AppBundle\Test\KernelTestCase;
 use AppBundle\Tests\Fixtures\Doctrine\OutdatedApprovalFixture;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    protected function setUp()
-    {
-        $this->loadDataFixtures([OutdatedApprovalFixture::class]);
-    }
-
     public function testRemovePendingActivations()
     {
+        $this->loadDataFixtures([OutdatedApprovalFixture::class]);
+
         $dateTime = new \DateTime('-2 hours');
         /** @var \Doctrine\Common\Persistence\ManagerRegistry $doctrine */
         $doctrine = $this->getService('doctrine');
@@ -32,5 +32,18 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertCount(3, $repository->findAll());
         $this->assertSame(2, $repository->deletePendingActivationsByDate($dateTime));
         $this->assertCount(1, $repository->findAll());
+    }
+
+    public function testGetFollowingIds()
+    {
+        $this->loadDataFixtures([RoleFixture::class, AdminFixture::class, UserFixture::class]);
+
+        /** @var \Doctrine\Common\Persistence\ManagerRegistry $doctrine */
+        $doctrine = $this->getService('doctrine');
+
+        $repository = $doctrine->getRepository('Account:User');
+        $ids        = $repository->getFollowingIdsByUser($repository->findOneBy(['username' => 'Ma27']));
+
+        $this->assertCount(2, $ids);
     }
 }
