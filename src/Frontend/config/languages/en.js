@@ -8,15 +8,16 @@
  * file that was distributed with this source code.
  */
 
-import React from 'react';
-import Component from './app/Component';
-import {portal} from '../config/menu';
+'use strict';
 
-export default class HelloWorld extends Component {
-  getMenuData() {
-    return portal;
+export default {
+  menu: {
+    start: 'Homepage'
+  },
+  pages: {
+    not_found: {
+      title: 'Error 404',
+      text: 'It seems as this page doesn\'t exist.'
+    }
   }
-  renderPage() {
-    return <h1>Hello World!</h1>;
-  }
-}
+};

@@ -8,15 +8,14 @@
  * file that was distributed with this source code.
  */
 
-import React from 'react';
-import Component from './app/Component';
-import {portal} from '../config/menu';
-
-export default class HelloWorld extends Component {
-  getMenuData() {
-    return portal;
+body {
+  .navbar {
+    border-radius: 0;
   }
-  renderPage() {
-    return <h1>Hello World!</h1>;
+
+  // fix because of menu beeing at the top.
+  // this requires a higher distance in order to be shown properly.
+  #content {
+    margin-top: 70px;
   }
 }

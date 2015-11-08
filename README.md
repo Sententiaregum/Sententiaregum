@@ -45,15 +45,17 @@ If you use windows, [this blog post helps you to fix that issue](https://harvswo
 
 As a developer you may want to have a local nodejs environment. That can be helpful for local debugging as webstorm doesn't support remote node interpreters.
 
-You need a nodejs installation and you need to install some global packages. You just need to run the following command:
+All linting tools must be installed globally:
 
-    npm install -g karma-cli webpack node-sass eslint eslint-plugin-react
+The following list of npm packages must be installed globally:
 
-There are few ruby tools that are mandatory, too:
-
-    gem install compass
-    gem install sass
-    gem install scss_lint
+- webpack
+- webpack-core
+- node-gyp
+- mocha
+- eslint
+- eslint-plugin-react
+- less
 
 The dev server is currently not supported, if you'd like to auto-compile your bundle, you need to run the following command:
 
@@ -61,9 +63,9 @@ The dev server is currently not supported, if you'd like to auto-compile your bu
 
 If you'd like to make the assets production-ready, run the following:
 
-    npm run build
+    npm run frontend-build
 
-A lint script has been implemented in order to execute scss-lint and eslint:
+A lint script has been implemented in order to execute eslint:
 
     npm run lint
 
@@ -71,9 +73,8 @@ The rest of the linters used during the build process can be found at the __befo
 
 All local node packages and build production files will be synced.
 
-For SCSS lint and ESLint are some PHPStorm/WebStorm plugins available:
+For ESLint are some PHPStorm/WebStorm plugins available:
 
-- [SCSS Lint Integration for WebStorm](https://plugins.jetbrains.com/plugin/7530?pr=)
 - [ESLint Integration for PhpStorm](https://plugins.jetbrains.com/plugin/7494)
 
 ## Install

@@ -1,9 +1,6 @@
 {
   "rules": {
-    "indent": [
-      2,
-      4
-    ],
+    "indent": [2],
     "quotes": [
       2,
       "single"
@@ -15,12 +12,21 @@
     "semi": [
       2,
       "always"
+    ],
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "all",
+        "args": "after-used",
+        "argsIgnorePattern": "React"
+      }
     ]
   },
   "env": {
-    "es6": true,
+    "es6":     true,
     "browser": true,
-    "node": true
+    "node":    true,
+    "mocha":   true
   },
   "extends": "eslint:recommended",
   "ecmaFeatures": {

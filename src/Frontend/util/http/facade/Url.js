@@ -8,15 +8,7 @@
  * file that was distributed with this source code.
  */
 
-import React from 'react';
-import Component from './app/Component';
-import {portal} from '../config/menu';
+'use strict';
 
-export default class HelloWorld extends Component {
-  getMenuData() {
-    return portal;
-  }
-  renderPage() {
-    return <h1>Hello World!</h1>;
-  }
-}
+import HashbangRedirect from '../HashbangRedirect';
+export default new HashbangRedirect(typeof window === 'undefined' ? null : window);

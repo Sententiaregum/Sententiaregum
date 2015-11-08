@@ -45,6 +45,7 @@
         "post-install-cmd": [
             "WillemJan\\CheckBundles\\Composer\\CheckBundles::postPackageUpdate",
             "AppBundle\\Composer\\ScriptHandler::installNpmDependencies",
+            "AppBundle\\Composer\\ScriptHandler::buildFrontendData",
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
@@ -57,6 +58,7 @@
         "post-update-cmd": [
             "WillemJan\\CheckBundles\\Composer\\CheckBundles::postPackageUpdate",
             "AppBundle\\Composer\\ScriptHandler::installNpmDependencies",
+            "AppBundle\\Composer\\ScriptHandler::buildFrontendData",
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",

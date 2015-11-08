@@ -1,57 +1,101 @@
 /*
- * This file is part of the sententiaregum application.
+ * This file is part of the Sententiaregum project.
  *
- * Sententiaregum is a social network based on Symfony2 and ReactJS
+ * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * (c) Ben Bieler <benjaminbieler2014@gmail.com>
  *
- * @copyright (c) 2015 Sententiaregum
- * Please check out the license file in the document root of this application
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
+'use strict';
+
+import Navbar from 'react-bootstrap/lib/Navbar';
+import NavBrand from 'react-bootstrap/lib/NavBrand';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuStore from '../../store/MenuStore';
+import MenuActions from '../../actions/MenuActions';
 import React from 'react';
-import MenuConfig from '../../menu/model/MenuItem.js';
+import Translate from 'react-translate-component';
 
 /**
+ * Configurable menu rendering component.
+ *
  * @author Benjamin Bieler <benjaminbieler2014@gmail.com>
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class Menu extends React.Component {
-    /**
-     * Builds a virtual dom for the menu section.
-     *
-     * @returns {XML}
-     */
-    render() {
-        let api = this;
-        let items = this.props.items;
-        let menuItems = [];
+export default class Menu extends React.Component {
+  /**
+   * @type {Object}
+   */
+  static propTypes = {
+    items: React.PropTypes.array
+  };
 
-        if (MenuConfig.permissionRule == 'User') {
-            for (var i of items) {
-                menuItems.push(
-                    <li className={api.getMenuClass(items[i].url)} key={i}>
-                        <a href={items[i].url}>
-                            {SenTranslation.trans(items[i].label, {})}
-                        </a>
-                    </li>
-                );
-            }
-        }
+  /**
+   * Constructor.
+   *
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
 
-        return (
-            <nav className="top-bar" data-topbar role="navigation">
-                <ul className="title-area">
-                    <li className="name">
-                        <h1><a href="/">Sententiaregum</a></h1>
-                    </li>
-                    <li className="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-                </ul>
-                <section className="top-bar-section">
-                    <ul className="right">
-                        {menuItems}
-                    </ul>
-                </section>
-            </nav>
-        );
+    this.cls     = 'Menu';
+    this.state   = {
+      items: []
+    };
+    this.handler = function () {
+      this.storeMenuItems();
+    }.bind(this);
+  }
+
+  /**
+   * Connects the component with the data store.
+   */
+  componentDidMount() {
+    MenuStore.addChangeListener(this.handler, this.cls);
+    MenuActions.buildMenuItems(this.props.items);
+  }
+
+  /**
+   * Removes the hook to the menu store.
+   */
+  componentWillUnmount() {
+    MenuStore.removeChangeListener(this.handler, this.cls);
+  }
+
+  /**
+   * Stores a new menu item.
+   */
+  storeMenuItems() {
+    this.setState({
+      items: MenuStore.getItems()
+    });
+  }
+
+  /**
+   * Creates a configurable menu component for bootstrap3.
+   *
+   * @returns {Navbar}
+   */
+  render() {
+    const items = this.state.items.map((item) => {
+      return <NavItem href={item.url} key={Math.random()}>
+        <Translate component="option" content={item.label} />
+      </NavItem>;
+    });
+
+    let nav;
+    if (items.length > 0) {
+      nav = <Nav right>{items}</Nav>;
     }
-}
 
-export default Menu;
+    return (
+      <Navbar inverse fixedTop toggleNavKey={0}>
+        <NavBrand><a href="/#/">Sententiaregum</a></NavBrand>
+        {nav}
+      </Navbar>
+    );
+  }
+}

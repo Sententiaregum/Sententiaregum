@@ -31,17 +31,18 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function installNpmDependencies(CommandEvent $event)
     {
-        $npm     = (new ExecutableFinder())->find('npm');
-        $handler = function ($type, $buffer) use ($event) {
-            $event->getIO()->write($buffer, false);
-        };
+        static::executeNpmCommand('install --no-bin-links', $event, false, 1000);
+    }
 
-        $process = new Process(sprintf('%s install --no-bin-links', $npm), null, null, null, 1000);
-        $process->run($handler);
-
-        $npmScriptName = $event->isDevMode() ? 'build-dev' : 'build';
-        $frontendBuild = new Process(sprintf('%s run-script %s', $npm, $npmScriptName), null, null, null, 500);
-        $frontendBuild->run($handler);
+    /**
+     * Runs the frontend build.
+     *
+     * @param CommandEvent $event
+     */
+    public static function buildFrontendData(CommandEvent $event)
+    {
+        $npmScriptName = $event->isDevMode() ? 'dev-frontend-build' : 'frontend-build';
+        static::executeNpmCommand(sprintf('run %s', $npmScriptName), $event);
     }
 
     /**
@@ -118,5 +119,28 @@ class ScriptHandler extends AbstractScriptHandler
                 sprintf('doctrine:schema:drop --force --env=%s', $env)
             );
         }
+    }
+
+    /**
+     * Method which executes npm commands.
+     *
+     * @param string       $command
+     * @param CommandEvent $event
+     * @param bool|true    $showOutput
+     * @param int          $timeout
+     */
+    private static function executeNpmCommand($command, CommandEvent $event, $showOutput = true, $timeout = 500)
+    {
+        $npm     = (new ExecutableFinder())->find('npm');
+        $handler = function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        };
+
+        $process = new Process(sprintf('%s %s', $npm, $command), null, null, null, $timeout);
+        if (!$showOutput) {
+            $handler = function () {};
+        }
+
+        $process->run($handler);
     }
 }
