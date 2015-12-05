@@ -1,5 +1,17 @@
 ## Configuration parameters
 
+classes:
+  - sententiaregum::ssh
+  - sententiaregum::installs
+  - sententiaregum::backend::php
+  - sententiaregum::backend::server
+  - sententiaregum::infrastructure::mailcatcher
+  - sententiaregum::infrastructure::mysql
+  - sententiaregum::infrastructure::redis
+  - sententiaregum::infrastructure::jobs
+  - sententiaregum::frontend::node
+  - sententiaregum::frontend::npm
+
 # basic apt packages for the machine
 sententiaregum::installs::packages:
   - vim
@@ -76,6 +88,10 @@ sententiaregum::infrastructure::jobs::schedules:
     command: "php /var/www/sententiaregum/app/console sententiaregum:purge:pending-activations"
     user: vagrant
     hour: 5
+
+# nodejs
+sententiaregum::frontend::node::version: 'stable'
+sententiaregum::frontend::node::make_install: false
 
 # global npm packages
 sententiaregum::frontend::npm::packages:
