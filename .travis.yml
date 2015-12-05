@@ -13,6 +13,11 @@ matrix:
     - php: hhvm
     - php: 7
 
+# composer cache for faster install process and less issues with github api
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 # prepare travis ci for the build process
 install:
   - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
@@ -20,9 +25,7 @@ install:
   - echo "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';" | mysql -u root
   - echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
   - echo "FLUSH PRIVILEGES;" | mysql -u root
-  - gem install sass
-  - gem install scss_lint
-  - npm install -g karma-cli webpack node-sass eslint eslint-plugin-react
+  - npm install -g mocha webpack node-sass eslint eslint-plugin-react less
   - cp travis-ci/travis_parameters.yml app/config/parameters.yml
   - composer install
   - php app/check.php
@@ -34,7 +37,6 @@ before_script:
   - php app/console lint:yaml app/config
   - php app/console lint:yaml .scrutinizer.yml
   - php app/console lint:yaml .travis.yml
-  - php app/console lint:yaml .scss-lint.yml
   - php app/console lint:yaml .sensiolabs.yml
   - php app/console lint:yaml behat.yml.dist
   - php app/console lint:twig src
@@ -45,4 +47,4 @@ before_script:
 script:
   - bin/behat --strict -f progress --no-snippets
   - bin/phpunit -c app
-  - karma start --single-run
+  - npm test

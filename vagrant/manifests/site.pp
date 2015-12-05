@@ -7,7 +7,6 @@ class application {
   contain sententiaregum::infrastructure::redis
   contain sententiaregum::infrastructure::jobs
   contain sententiaregum::frontend::npm
-  contain sententiaregum::frontend::ruby
 }
 
 class { 'application': }

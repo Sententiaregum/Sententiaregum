@@ -4,12 +4,11 @@
   "description": "A social network based on Symfony2 and ReactJS",
   "main": "src/Frontend/App.js",
   "scripts": {
-    "test": "karma start",
-    "test-single": "karma start --single-run",
-    "build": "webpack --config webpack-prod.config.js",
-    "build-dev": "webpack",
+    "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter list --require babel-polyfill",
+    "frontend-build": "webpack --config webpack-prod.config.js",
+    "dev-frontend-build": "webpack",
     "watch": "webpack --watch",
-    "lint": "scss-lint && eslint ./src/Frontend/App.js"
+    "lint": "eslint ./src/Frontend/App.js && lessc src/Frontend/styles/custom.less --lint"
   },
   "repository": {
     "type": "git",
@@ -21,23 +20,40 @@
     "WebPack"
   ],
   "dependencies": {
-    "babel-core": "~5.8",
-    "babel-loader": "~5.0",
-    "cross-spawn": "~2.0",
+    "babel-core": "^6",
+    "babel-loader": "^6",
+    "babel-plugin-globals": "^1.0.1",
+    "babel-plugin-transform-react-jsx": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "babel-preset-stage-0": "^6.1.18",
+    "bootstrap": "^3.3.5",
+    "cookies-js": "^1.2.2",
+    "counterpart": "^0.16.10",
+    "cross-spawn": "^2.0.0",
     "css-loader": "~0.14",
     "extract-text-webpack-plugin": "~0.8",
+    "fbjs": "^0.4",
+    "file-loader": "^0.8.4",
+    "flux": "^2.1.1",
+    "less": "~2.5",
+    "less-loader": "^2.2",
     "mkdirp": "~0.5",
-    "node-sass": "^3.3.3",
     "npmconf": "~2.1.2",
+    "object.assign": "^4.0.3",
     "perfect-scrollbar": "0.6.5-1",
     "react": "~0.13",
+    "react-bootstrap": "^0.26",
+    "react-interpolate-component": "^0.7.1",
     "react-proxy-loader": "~0.3",
-    "reflux": "0.2.12 ",
+    "react-router": "~0.13",
+    "react-translate-component": "^0.9.0",
     "request": "~2.65",
-    "sass-loader": "~3.0",
+    "rewire": "^2.5.0",
     "style-loader": "~0.8",
     "uglify-js": "~2.4",
-    "zurb-foundation-5": "~5.4"
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.6"
   },
   "author": "ma27, benbieler",
   "license": "GPL-2.0",
@@ -45,10 +61,10 @@
     "url": "https://github.com/Sententiaregum/Sententiaregum/issues"
   },
   "devDependencies": {
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-sourcemap-loader": "^0.3.6",
-    "karma-webpack": "~1.7",
-    "phantomjs-polyfill": "~0.0.1"
+    "babel-polyfill": "^6.2.0",
+    "chai": "^3.4.1",
+    "jsdom": "^2.0.0",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2"
   }
 }

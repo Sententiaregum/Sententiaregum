@@ -14,10 +14,14 @@ insert_final_newline = true
 charset=utf-8
 indent_style=space
 
-# PHP, composer.json and JavaScript should be indented using 4 spaces
-[{*.{js,php},composer.json}]
+# Indent javascript with 2 spaces
+[*.js]
+indent_size=2
+
+# PHP, composer.json should be indented using 4 spaces
+[{*.php,composer.json}]
 indent_size=4
 
 # Puppet, Vagrant config and json files should be indented with two spaces
-[{*.pp,Vagrantfile,package.json,.travis.yml,karma.conf.js,.eslintrc,.scss-lint.yml}]
+[{*.pp,Vagrantfile,package.json,.travis.yml,.eslintrc,.scss-lint.yml,.babelrc}]
 indent_size=2

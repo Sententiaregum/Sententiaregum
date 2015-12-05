@@ -76,14 +76,10 @@ sententiaregum::infrastructure::jobs::schedules:
 
 # global npm packages
 sententiaregum::frontend::npm::packages:
-  - karma-cli
-  - karma-jasmine
+  - mocha
   - webpack
+  - webpack-core
+  - node-gyp
   - eslint
   - eslint-plugin-react
-
-# global ruby packages
-sententiaregum::frontend::ruby::packages:
-  - compass
-  - sass
-  - scss_lint
+  - less

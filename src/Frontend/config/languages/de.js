@@ -8,12 +8,16 @@
  * file that was distributed with this source code.
  */
 
-import React from 'react';
+'use strict';
 
-class HelloWorld extends React.Component {
-    render() {
-        return <h1>Hello World!</h1>;
+export default {
+  menu: {
+    start: 'Startseite'
+  },
+  pages: {
+    not_found: {
+      title: 'Fehler 404',
+      text: 'Diese Seite existiert nicht.'
     }
-}
-
-export default HelloWorld;
+  }
+};
