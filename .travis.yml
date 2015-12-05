@@ -4,6 +4,8 @@ php:
   - 7
   - hhvm
 
+sudo: false
+
 services:
   - redis-server
 
@@ -18,33 +20,16 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+before_install:
+  - chmod +x ./travis-ci/scripts/install.sh
+  - chmod +x ./travis-ci/scripts/lint.sh
+  - chmod +x ./travis-ci/scripts/tests.sh
+
 # prepare travis ci for the build process
-install:
-  - mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
-  - mysql -e "CREATE DATABASE IF NOT EXISTS behat;"
-  - echo "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';" | mysql -u root
-  - echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
-  - echo "FLUSH PRIVILEGES;" | mysql -u root
-  - npm install -g mocha webpack node-sass eslint eslint-plugin-react less
-  - cp travis-ci/travis_parameters.yml app/config/parameters.yml
-  - composer install
-  - php app/check.php
+install: ./travis-ci/scripts/install.sh
 
 # linters
-before_script:
-  - npm run lint
-  - php app/console security:check
-  - php app/console lint:yaml app/config
-  - php app/console lint:yaml .scrutinizer.yml
-  - php app/console lint:yaml .travis.yml
-  - php app/console lint:yaml .sensiolabs.yml
-  - php app/console lint:yaml behat.yml.dist
-  - php app/console lint:twig src
-  - php app/console lint:twig app
-  - php app/console doctrine:schema:validate
+before_script: ./travis-ci/scripts/lint.sh
 
 # execute tests
-script:
-  - bin/behat --strict -f progress --no-snippets
-  - bin/phpunit -c app
-  - npm test
+script: ./travis-ci/scripts/tests.sh
