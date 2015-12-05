@@ -1,4 +1,5 @@
 class application {
+  contain sententiaregum::ssh
   contain sententiaregum::installs
   contain sententiaregum::backend::php
   contain sententiaregum::backend::server
