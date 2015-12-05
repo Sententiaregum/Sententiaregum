@@ -11,6 +11,9 @@ sententiaregum::installs::packages:
   - libsqlite3-dev
   - curl
 
+# ssh entry point
+sententiaregum::ssh::entry_point: /var/www/sententiaregum
+
 # php/composer configurations
 sententiaregum::backend::php::version: '5.6'
 sententiaregum::backend::php::extensions:
