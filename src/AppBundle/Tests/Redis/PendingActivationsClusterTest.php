@@ -41,7 +41,7 @@ class PendingActivationsClusterTest extends KernelTestCase
         $cluster->attachNewApproval($key);
 
         $redis = self::$kernel->getContainer()->get('snc_redis.pending_activations');
-        $redis->del('activation_'.$key); // simulate expiration
+        $redis->del('activation:'.$key); // simulate expiration
 
         $user       = $this->createUserForKey($key);
         $activation = new PendingActivation();
@@ -59,7 +59,7 @@ class PendingActivationsClusterTest extends KernelTestCase
         $cluster->attachNewApproval($key);
 
         $redis = self::$kernel->getContainer()->get('snc_redis.pending_activations');
-        $redis->del('activation_'.$key); // simulate expiration
+        $redis->del('activation:'.$key); // simulate expiration
 
         $this->assertTrue($cluster->checkApprovalByUser($this->createUserForKey($key)));
     }

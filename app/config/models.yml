@@ -1,2 +1,0 @@
-parameters:
-  app.model.user: AppBundle\Model\User\User

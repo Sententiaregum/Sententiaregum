@@ -12,6 +12,7 @@
 
 namespace AppBundle\Tests\Model\User\Registration;
 
+use AppBundle\Doctrine\ORM\Id\UUIDInterface;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
@@ -67,7 +68,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getMock(PasswordHasherInterface::class),
             $suggestor,
-            $this->getActivationProvider()
+            $this->getActivationProvider(),
+            $this->getUUID()
         );
 
         $result = $registration->registration($dto);
@@ -95,12 +97,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->method('flush');
 
         $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
-        $repository
-            ->expects($this->at(1))
-            ->method('findOneBy')
-            ->with(['username' => 'Ma27'])
-            ->willReturn(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev'));
-
         $repository
             ->expects($this->at(0))
             ->method('findOneBy')
@@ -143,7 +139,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $dispatcher,
             $hasher,
             new ChainSuggestor($entityManager),
-            $provider
+            $provider,
+            $this->getUUID()
         );
 
         $result = $registration->registration($dto);
@@ -181,7 +178,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
-            $this->getActivationProvider()
+            $this->getActivationProvider(),
+            $this->getUUID()
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -224,7 +222,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
-            $this->getActivationProvider()
+            $this->getActivationProvider(),
+            $this->getUUID()
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -265,7 +264,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getMock(PasswordHasherInterface::class),
             new ChainSuggestor($em),
-            $this->getActivationProvider()
+            $this->getActivationProvider(),
+            $this->getUUID()
         );
 
         $registration->registration($dto);
@@ -315,7 +315,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
-            $provider
+            $provider,
+            $this->getUUID()
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -345,5 +346,19 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         return $provider;
+    }
+
+    /**
+     * @return UUIDInterface
+     */
+    private function getUUID()
+    {
+        $mock = $this->getMock(UUIDInterface::class, ['generateUUIDForEntity']);
+        $mock
+            ->expects($this->any())
+            ->method('generateUUIDForEntity')
+            ->willReturn('12345');
+
+        return $mock;
     }
 }

@@ -156,7 +156,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
         $user = $this->getRegisteredUser();
 
         $redis = $this->getContainer()->get('snc_redis.pending_activations');
-        $redis->del(sprintf('activation_%s', $user->getActivationKey()));
+        $redis->del(sprintf('activation:%s', $user->getActivationKey()));
 
         $pending       = $user->getPendingActivation();
         $entityManager = $this->getEntityManager();

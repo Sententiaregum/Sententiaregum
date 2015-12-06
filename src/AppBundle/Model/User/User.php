@@ -38,8 +38,8 @@ class User implements UserInterface, Serializable
      * @var int
      *
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -187,6 +187,20 @@ class User implements UserInterface, Serializable
         $this->lastAction       = new DateTime();
 
         $this->setState(self::STATE_NEW);
+    }
+
+    /**
+     * Set id.
+     *
+     * @param int $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**

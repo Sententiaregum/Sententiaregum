@@ -80,6 +80,6 @@ class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
      */
     private function createRedisStorageKeyByUserId($id)
     {
-        return sprintf('online_%d', $id);
+        return sprintf('online:%s', $id);
     }
 }
