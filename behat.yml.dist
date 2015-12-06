@@ -14,6 +14,13 @@ default:
         tags: "@online_users"
       type:   symfony_bundle
       bundle: AppBundle
+    uuid:
+      contexts:
+        - AppBundle\Behat\UUIDContext
+      filters:
+        tags: "@uuid"
+      type:   symfony_bundle
+      bundle: AppBundle
   formatters:
     pretty:
       paths:    false

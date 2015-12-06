@@ -19,15 +19,24 @@ class OnlineUserIdClusterTest extends KernelTestCase
     public function testProvidedOnlineOfflineMap()
     {
         /** @var \AppBundle\Redis\OnlineUserIdCluster $service */
-        $service = $this->getService('app.redis.cluster.online_users');
+        $service     = $this->getService('app.redis.cluster.online_users');
+        /** @var \AppBundle\Doctrine\ORM\UUID $uuidService */
+        $uuidService = $this->getService('app.doctrine.uuid');
+        $ids         = [];
+        for ($i = 0; $i < 2; $i++) {
+            $ids[] = $uuidService->generateUUIDForEntity(
+                $this->getService('doctrine.orm.default_entity_manager'),
+                new \stdClass()
+            );
+        }
 
-        $service->addUserId(1);
-        $onlineOfflineMap = $service->validateUserIds([1, 2]);
+        $service->addUserId($ids[0]);
+        $onlineOfflineMap = $service->validateUserIds($ids);
 
-        $this->assertArrayHasKey(1, $onlineOfflineMap);
-        $this->assertArrayHasKey(2, $onlineOfflineMap);
+        $this->assertArrayHasKey($ids[0], $onlineOfflineMap);
+        $this->assertArrayHasKey($ids[1], $onlineOfflineMap);
 
-        $this->assertTrue($onlineOfflineMap[1]);
-        $this->assertFalse($onlineOfflineMap[2]);
+        $this->assertTrue($onlineOfflineMap[$ids[0]]);
+        $this->assertFalse($onlineOfflineMap[$ids[1]]);
     }
 }

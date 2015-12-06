@@ -12,6 +12,7 @@
 
 namespace AppBundle\Model\User\Registration;
 
+use AppBundle\Doctrine\ORM\Id\UUIDInterface;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
@@ -86,6 +87,11 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private $expiredActivationProvider;
 
     /**
+     * @var UUIDInterface
+     */
+    private $uuid;
+
+    /**
      * Constructor.
      *
      * @param EntityManagerInterface              $entityManager
@@ -95,13 +101,15 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @param PasswordHasherInterface             $passwordHasher
      * @param SuggestorInterface                  $nameSuggestor
      * @param ExpiredActivationProviderInterface  $expiredActivationProvider
+     * @param UUIDInterface                       $uuidGenerator
      *
      * @DI\InjectParams({
      *     "entityManager"              = @DI\Inject("doctrine.orm.default_entity_manager"),
      *     "activationKeyCodeGenerator" = @DI\Inject("app.user.registration.activation_key_generator"),
      *     "passwordHasher"             = @DI\Inject("ma27_api_key_authentication.password.strategy"),
      *     "nameSuggestor"              = @DI\Inject("app.user.registration.name_suggestor"),
-     *     "expiredActivationProvider"  = @DI\Inject("app.redis.cluster.approval")
+     *     "expiredActivationProvider"  = @DI\Inject("app.redis.cluster.approval"),
+     *     "uuidGenerator"              = @DI\Inject("app.doctrine.uuid")
      * })
      */
     public function __construct(
@@ -111,7 +119,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         EventDispatcherInterface $eventDispatcher,
         PasswordHasherInterface $passwordHasher,
         SuggestorInterface $nameSuggestor,
-        ExpiredActivationProviderInterface $expiredActivationProvider
+        ExpiredActivationProviderInterface $expiredActivationProvider,
+        UUIDInterface $uuidGenerator
     ) {
         $this->entityManager              = $entityManager;
         $this->activationKeyCodeGenerator = $activationKeyCodeGenerator;
@@ -120,6 +129,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->hasher                     = $passwordHasher;
         $this->suggestor                  = $nameSuggestor;
         $this->expiredActivationProvider  = $expiredActivationProvider;
+        $this->uuid                       = $uuidGenerator;
     }
 
     /**
@@ -157,9 +167,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
 
-        $newUser = $this->getRegisteredUser($userParameters);
-        $this->sendActivationEmail($newUser);
-        $this->expiredActivationProvider->attachNewApproval($newUser->getActivationKey());
+        $this->sendActivationEmail($user);
+        $this->expiredActivationProvider->attachNewApproval($user->getActivationKey());
 
         return new Result(null, [], $user);
     }
@@ -190,6 +199,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $newUser->setLocale($userParameters->getLocale());
         $newUser->setActivationKey($this->getUniqueActivationKey());
         $newUser->addRole($this->getDefaultRole());
+        $newUser->setId($this->uuid->generateUUIDForEntity($this->entityManager, $newUser));
 
         return [
             'valid' => true,
@@ -346,21 +356,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         return $this->hasViolation($violations, 'username', UniqueProperty::NON_UNIQUE_PROPERTY)
             ? $this->suggestor->getPossibleSuggestions($username)
             : [];
-    }
-
-    /**
-     * Fetches the registered user by its parameters.
-     *
-     * @param CreateUserDTO $userParameters
-     *
-     * @return User
-     */
-    private function getRegisteredUser(CreateUserDTO $userParameters)
-    {
-        return $this
-            ->entityManager
-            ->getRepository('Account:User')
-            ->findOneBy(['username' => $userParameters->getUsername()]);
     }
 
     /**

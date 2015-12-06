@@ -16,6 +16,7 @@ use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
 use AppBundle\Model\User\User;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Id\UuidGenerator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
@@ -23,19 +24,23 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class AdminFixture implements ProductionFixtureInterface, OrderedFixtureInterface
+class AdminFixture extends BaseFixture implements ProductionFixtureInterface, OrderedFixtureInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
+        /* @var \Doctrine\ORM\EntityManager $manager */
+        $this->checkEntityManager($manager);
+
         $passwordHasher = new PhpPasswordHasher();
         $roleRepository = $manager->getRepository('Account:Role');
         $userRole       = $roleRepository->findOneBy(['role' => 'ROLE_USER']);
         $adminRole      = $roleRepository->findOneBy(['role' => 'ROLE_ADMIN']);
 
         $admin = new User();
+        $admin->setId((new UuidGenerator())->generate($manager, $admin));
         $admin->setUsername('admin');
         $admin->setPassword($passwordHasher->generateHash('123456'));
         $admin->setEmail('admin@sententiaregum.dev');

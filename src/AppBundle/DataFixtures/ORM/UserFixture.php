@@ -16,6 +16,7 @@ use AppBundle\Model\User\User;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Id\UuidGenerator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
@@ -23,13 +24,16 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UserFixture implements FixtureInterface, OrderedFixtureInterface
+class UserFixture extends BaseFixture implements FixtureInterface, OrderedFixtureInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
+        /* @var \Doctrine\ORM\EntityManager $manager */
+        $this->checkEntityManager($manager);
+
         $passwordHasher = new PhpPasswordHasher();
         $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
@@ -63,7 +67,9 @@ class UserFixture implements FixtureInterface, OrderedFixtureInterface
         $user1->addFollowing($user2);
         $user1->addFollowing($manager->getRepository('Account:User')->findOneBy(['username' => 'admin']));
 
+        /** @var User $userModel */
         foreach ([$user1, $user2, $locked] as $userModel) {
+            $userModel->setId((new UuidGenerator())->generate($manager, $userModel));
             $manager->persist($userModel);
         }
 

@@ -15,6 +15,7 @@ namespace AppBundle\Tests\Doctrine\ORM;
 use AppBundle\DataFixtures\ORM\AdminFixture;
 use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\Test\KernelTestCase;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 
 class ConfigurableFixturesLoaderTest extends KernelTestCase
 {
@@ -62,10 +63,14 @@ class ConfigurableFixturesLoaderTest extends KernelTestCase
 
         $fixtureInstances = $service->loadProductionFixturesFromDirectory(__DIR__.'/../../../DataFixtures/ORM');
 
-        $fixture = array_shift($fixtureInstances);
-        $this->assertInstanceOf(AdminFixture::class, $fixture);
+        $classList = array_map(
+            function (FixtureInterface $fixture) {
+                return get_class($fixture);
+            },
+            $fixtureInstances
+        );
 
-        $fixture = array_shift($fixtureInstances);
-        $this->assertInstanceOf(RoleFixture::class, $fixture);
+        $this->assertContains(AdminFixture::class, $classList);
+        $this->assertContains(RoleFixture::class, $classList);
     }
 }

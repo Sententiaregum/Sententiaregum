@@ -73,18 +73,6 @@ class PendingActivationsCluster implements ExpiredActivationProviderInterface
     }
 
     /**
-     * Generates a persistent key for redis.
-     *
-     * @param string $activationKey
-     *
-     * @return string
-     */
-    private function generateRedisKeyByApprovalKey($activationKey)
-    {
-        return sprintf('activation_%s', $activationKey);
-    }
-
-    /**
      * Checks if the activation key is present in the redis database.
      *
      * @param string $activationKey
@@ -102,5 +90,17 @@ class PendingActivationsCluster implements ExpiredActivationProviderInterface
         }
 
         return $exists;
+    }
+
+    /**
+     * Generates a persistent key for redis.
+     *
+     * @param string $activationKey
+     *
+     * @return string
+     */
+    private function generateRedisKeyByApprovalKey($activationKey)
+    {
+        return sprintf('activation:%s', $activationKey);
     }
 }
