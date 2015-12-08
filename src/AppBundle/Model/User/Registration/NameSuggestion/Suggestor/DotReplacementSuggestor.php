@@ -19,7 +19,7 @@ namespace AppBundle\Model\User\Registration\NameSuggestion\Suggestor;
  */
 final class DotReplacementSuggestor implements SuggestorInterface
 {
-    const SPECIAL_CHAR_MATCHING_REGEX = '/([\.\_\-]+)/';
+    const SPECIAL_CHAR_MATCHING_REGEX = '/([\._\-]+)/';
 
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ final class DotReplacementSuggestor implements SuggestorInterface
     public function getPossibleSuggestions($username)
     {
         $result = [];
-        if ($newName = $this->replaceSpecialCharsForUsername($username) !== $username) {
+        if ($username !== $newName = $this->replaceSpecialCharsForUsername($username)) {
             $result[] = $newName;
         }
 
@@ -46,7 +46,7 @@ final class DotReplacementSuggestor implements SuggestorInterface
         return preg_replace_callback(
             self::SPECIAL_CHAR_MATCHING_REGEX,
             function ($matches) {
-                return '_' === $matches[0] ? '-' === $matches[0] ? '.' : '-' : '_';
+                return '_' === $matches[0] ? ('-' === $matches[0] ? '.' : '-') : '_';
             },
             $username
         );

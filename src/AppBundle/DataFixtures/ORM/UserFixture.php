@@ -38,30 +38,30 @@ class UserFixture extends BaseFixture implements FixtureInterface, OrderedFixtur
         $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
         $user1 = new User();
+        $user1->setState(User::STATE_APPROVED);
         $user1->setUsername('Ma27');
         $user1->setPassword($passwordHasher->generateHash('72aM'));
         $user1->setEmail('Ma27@sententiaregum.dev');
         $user1->addRole($userRole);
         $user1->setLastAction(new \DateTime());
-        $user1->setState(User::STATE_APPROVED);
         $user1->setLocale('de');
 
         $user2 = new User();
+        $user2->setState(User::STATE_APPROVED);
         $user2->setUsername('benbieler');
         $user2->setPassword($passwordHasher->generateHash('releibneb'));
         $user2->setEmail('benbieler@sententiaregum.dev');
         $user2->addRole($userRole);
         $user2->setLastAction(new \DateTime());
-        $user2->setState(User::STATE_APPROVED);
 
         $locked = new User();
+        $locked->setState(User::STATE_APPROVED);
         $locked->setUsername('anonymus');
         $locked->setPassword($passwordHasher->generateHash('sumynona'));
         $locked->setEmail('anonymus@example.org');
         $locked->addRole($userRole);
         $locked->lock();
         $locked->setLastAction(new \DateTime());
-        $locked->setState(User::STATE_APPROVED);
 
         $user2->addFollowing($user1);
         $user1->addFollowing($user2);

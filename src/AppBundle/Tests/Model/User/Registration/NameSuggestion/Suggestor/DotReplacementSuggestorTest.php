@@ -26,6 +26,16 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
     }
 
+    public function testReplaceDash()
+    {
+        $name      = 'Ma-27';
+        $suggestor = new DotReplacementSuggestor();
+        $result    = $suggestor->getPossibleSuggestions($name);
+
+        $this->assertContains('Ma_27', $result);
+        $this->assertCount(1, $result);
+    }
+
     public function testReplaceMultipleSpecialChars()
     {
         $name      = 'M_a.2-7';
@@ -48,6 +58,6 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $name      = 'M_.-a...2.7__';
         $suggestor = new DotReplacementSuggestor();
 
-        $this->assertContains('M-__a___2_7--', $suggestor->getPossibleSuggestions($name));
+        $this->assertContains('M_a_2_7_', $suggestor->getPossibleSuggestions($name));
     }
 }

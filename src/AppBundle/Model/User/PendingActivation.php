@@ -31,11 +31,11 @@ use Doctrine\ORM\Mapping as ORM;
 class PendingActivation
 {
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -47,9 +47,23 @@ class PendingActivation
     private $activationDate;
 
     /**
+     * Set id.
+     *
+     * @param string $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Getter for the id.
      *
-     * @return int
+     * @return string
      */
     public function getId()
     {

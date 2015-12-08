@@ -35,11 +35,6 @@ abstract class BaseContext implements KernelAwareContext
     protected static $managerName = 'default';
 
     /**
-     * @var \Doctrine\Common\DataFixtures\FixtureInterface
-     */
-    protected static $fixtures = [];
-
-    /**
      * @var string
      */
     protected $apiKey;
@@ -49,14 +44,30 @@ abstract class BaseContext implements KernelAwareContext
      */
     protected $recentClient;
 
+    /**
+     * @var bool
+     */
+    protected static $applyUserFixtures = true;
+
+    /**
+     * @var bool
+     */
+    protected static $applyFixtures = true;
+
     /** @BeforeScenario */
     public function loadDataFixtures()
     {
-        /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
-        $service = $this->getContainer()->get('app.doctrine.fixtures_loader');
-        $service->applyFixtures(
-            array_merge([RoleFixture::class, AdminFixture::class, UserFixture::class], self::$fixtures)
-        );
+        if (static::$applyFixtures) {
+            /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
+            $service  = $this->getContainer()->get('app.doctrine.fixtures_loader');
+            $fixtures = [RoleFixture::class];
+
+            if (static::$applyUserFixtures) {
+                $fixtures[] = AdminFixture::class;
+                $fixtures[] = UserFixture::class;
+            }
+            $service->applyFixtures($fixtures);
+        }
     }
 
     /** @AfterScenario */

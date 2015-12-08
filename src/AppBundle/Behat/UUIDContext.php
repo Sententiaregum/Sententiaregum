@@ -15,7 +15,6 @@ namespace AppBundle\Behat;
 use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 /**
  * BDD context for UUID service.
@@ -25,6 +24,11 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 class UUIDContext extends BaseContext implements SnippetAcceptingContext
 {
     /**
+     * @var bool
+     */
+    protected static $applyFixtures = false;
+
+    /**
      * @var string
      */
     private $uuid;
@@ -33,14 +37,6 @@ class UUIDContext extends BaseContext implements SnippetAcceptingContext
      * @var User
      */
     private $user;
-
-    /**
-     * @Given there are no users
-     */
-    public function thereAreNoUsers()
-    {
-        (new ORMPurger($this->getEntityManager()))->purge();
-    }
 
     /**
      * @When I generate a UUID for a user
@@ -59,6 +55,7 @@ class UUIDContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iPersistThisUser()
     {
+        $this->user->setState(User::STATE_APPROVED);
         $this->user->setId($this->uuid);
         $this->user->setUsername('Ma27_2');
         $this->user->setPassword('123456');

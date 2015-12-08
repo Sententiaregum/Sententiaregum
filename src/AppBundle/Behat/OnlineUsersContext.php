@@ -30,27 +30,6 @@ class OnlineUsersContext extends BaseContext implements SnippetAcceptingContext
     private $response;
 
     /**
-     * @Given the following user exist:
-     *
-     * @param TableNode $table
-     */
-    public function theFollowingUserExist(TableNode $table)
-    {
-        /** @var \Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface $hasher */
-        $hasher        = $this->getContainer()->get('ma27_api_key_authentication.password.strategy');
-        $uuidService   = $this->getContainer()->get('app.doctrine.uuid');
-        $entityManager = $this->getEntityManager();
-        foreach ($table->getHash() as $row) {
-            $user = User::create($row['username'], $hasher->generateHash($row['password']), $row['email']);
-            $user->setId($uuidService->generateUUIDForEntity($entityManager, $user));
-            $user->setState(User::STATE_APPROVED);
-            $entityManager->persist($user);
-        }
-
-        $entityManager->flush();
-    }
-
-    /**
      * @Given this user follows the following users:
      *
      * @param TableNode $table

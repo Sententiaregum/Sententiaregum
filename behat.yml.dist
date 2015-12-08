@@ -2,13 +2,18 @@ default:
   suites:
     registration:
       contexts:
+        - AppBundle\Behat\AppContext
         - AppBundle\Behat\RegistrationContext
+        - AppBundle\Behat\PendingActivationsClusterContext
+        - AppBundle\Behat\UsernameSuggestionsContext
       filters:
         tags: "@registration"
       type:   symfony_bundle
       bundle: AppBundle
     online_users:
       contexts:
+        - AppBundle\Behat\AppContext
+        - AppBundle\Behat\OnlineUsersRedisClusterContext
         - AppBundle\Behat\OnlineUsersContext
       filters:
         tags: "@online_users"
@@ -16,9 +21,28 @@ default:
       bundle: AppBundle
     uuid:
       contexts:
+        - AppBundle\Behat\AppContext
         - AppBundle\Behat\UUIDContext
       filters:
         tags: "@uuid"
+      type:   symfony_bundle
+      bundle: AppBundle
+    fixtures:
+      contexts:
+        - AppBundle\Behat\AppContext
+        - AppBundle\Behat\DoctrineFixtureContext
+        - AppBundle\Behat\FixtureBasicsContext
+      filters:
+        tags: "@fixtures"
+      type:   symfony_bundle
+      bundle: AppBundle
+    user-basics:
+      contexts:
+        - AppBundle\Behat\AppContext
+        - AppBundle\Behat\UserPurgerContext
+        - AppBundle\Behat\UsersContext
+      filters:
+        tags: "@users"
       type:   symfony_bundle
       bundle: AppBundle
   formatters:
