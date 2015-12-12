@@ -24,7 +24,7 @@ use JMS\DiExtraBundle\Annotation as DI;
  *
  * @DI\Service("app.doctrine.uuid")
  */
-final class UUID implements  UUIDInterface
+final class UUID implements UUIDInterface
 {
     /**
      * {@inheritdoc}

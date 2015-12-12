@@ -3,14 +3,14 @@ Feature: online users
   As a user I'd like to see who of the people I follow are online
 
   Background:
-    Given the following user exist:
-      | username | password | email              |
-      | test_1   | 123456   | test_1@example.org |
+    Given the following users exist:
+        | user_id | username | password | email              |
+        |       1 | test_1   | 123456   | test_1@example.org |
       And this user follows the following users:
-      | username  |
-      | admin     |
-      | benbieler |
-      | Ma27      |
+        | username  |
+        | admin     |
+        | benbieler |
+        | Ma27      |
 
   Scenario: get online users list
     Given the following users are online:

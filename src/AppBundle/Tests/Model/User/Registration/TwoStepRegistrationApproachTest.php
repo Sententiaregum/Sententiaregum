@@ -96,18 +96,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
-        $repository
-            ->expects($this->at(0))
-            ->method('findOneBy')
-            ->with(['role' => 'ROLE_USER'])
-            ->willReturn(new Role('ROLE_USER'));
-
-        $entityManager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->willReturn($repository);
-
         $generator = $this->getMock(ActivationKeyCodeGeneratorInterface::class);
         $generator
             ->expects($this->any())
@@ -197,11 +185,25 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->with(['activationKey' => $key, 'username' => 'Ma27'])
             ->willReturn($user);
 
+        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $roleRepo
+            ->expects($this->at(0))
+            ->method('findOneBy')
+            ->with(['role' => 'ROLE_USER'])
+            ->willReturn(new Role('ROLE_USER'));
+
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
-            ->expects($this->any())
+            ->expects($this->at(0))
             ->method('getRepository')
+            ->with('Account:User')
             ->willReturn($repository);
+
+        $entityManager
+            ->expects($this->at(1))
+            ->method('getRepository')
+            ->with('Account:Role')
+            ->willReturn($roleRepo);
 
         $readyUser = $user->setState(User::STATE_APPROVED);
 

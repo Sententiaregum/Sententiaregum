@@ -103,6 +103,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = new User();
         $role = new Role('ROLE_USER');
 
+        $user->setState(User::STATE_APPROVED);
+
         $user->addRole($role);
         $this->assertTrue($user->hasRole($role));
 
@@ -113,9 +115,22 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $user->getRoles());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Cannot attach role on non-approved user!
+     */
+    public function testRolesOnNonApprovedUser()
+    {
+        $user = new User();
+        $role = new Role('ROLE_USER');
+
+        $user->addRole($role);
+    }
+
     public function testSerialization()
     {
         $user = User::create('Ma27', 'foo', 'foo@bar.de');
+        $user->setState(User::STATE_APPROVED);
         $user->addRole(new Role('ROLE_USER'));
 
         $serialized = serialize($user);
@@ -127,7 +142,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo@bar.de', $newUser->getEmail());
         $this->assertInstanceOf(\DateTime::class, $newUser->getLastAction());
         $this->assertInstanceOf(\DateTime::class, $newUser->getRegistrationDate());
-        $this->assertSame(User::STATE_NEW, $newUser->getState());
+        $this->assertSame(User::STATE_APPROVED, $newUser->getState());
         $this->assertCount(1, $newUser->getRoles());
     }
 }

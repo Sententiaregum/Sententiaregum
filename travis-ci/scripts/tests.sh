@@ -3,7 +3,7 @@
 set -e
 
 echo 'PHP Test Suite'
-bin/behat --strict -f progress --no-snippets
+bin/behat --strict -f progress --no-snippets --strict
 bin/phpunit -c app
 
 # install global npm dependencies

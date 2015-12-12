@@ -40,6 +40,7 @@ class AdminFixture extends BaseFixture implements ProductionFixtureInterface, Or
         $adminRole      = $roleRepository->findOneBy(['role' => 'ROLE_ADMIN']);
 
         $admin = new User();
+        $admin->setState(User::STATE_APPROVED);
         $admin->setId((new UuidGenerator())->generate($manager, $admin));
         $admin->setUsername('admin');
         $admin->setPassword($passwordHasher->generateHash('123456'));
@@ -47,7 +48,6 @@ class AdminFixture extends BaseFixture implements ProductionFixtureInterface, Or
         $admin->addRole($adminRole);
         $admin->addRole($userRole);
         $admin->setLastAction(new \DateTime());
-        $admin->setState(User::STATE_APPROVED);
 
         $manager->persist($admin);
         $manager->flush();

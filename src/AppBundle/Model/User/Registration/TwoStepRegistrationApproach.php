@@ -142,6 +142,12 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
         $user->setState(User::STATE_APPROVED);
 
+        // if the purger runs a bulk delete on users
+        // there occur foreign key constraint issues with the
+        // roles. Therefore roles are only allowed for
+        // approved users.
+        $user->addRole($this->getDefaultRole());
+
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
     }
@@ -198,8 +204,14 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
 
         $newUser->setLocale($userParameters->getLocale());
         $newUser->setActivationKey($this->getUniqueActivationKey());
-        $newUser->addRole($this->getDefaultRole());
         $newUser->setId($this->uuid->generateUUIDForEntity($this->entityManager, $newUser));
+
+        $newUser->getPendingActivation()->setId(
+            $this->uuid->generateUUIDForEntity(
+                $this->entityManager,
+                $newUser->getPendingActivation()
+            )
+        );
 
         return [
             'valid' => true,

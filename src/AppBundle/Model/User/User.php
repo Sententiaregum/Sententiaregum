@@ -35,7 +35,7 @@ class User implements UserInterface, Serializable
     const STATE_APPROVED = 'approved';
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -192,7 +192,7 @@ class User implements UserInterface, Serializable
     /**
      * Set id.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return $this
      */
@@ -206,7 +206,7 @@ class User implements UserInterface, Serializable
     /**
      * Get id.
      *
-     * @return int
+     * @return string
      */
     public function getId()
     {
@@ -500,10 +500,17 @@ class User implements UserInterface, Serializable
      *
      * @param Role $role
      *
+     * @throws \InvalidArgumentException If the user is not approved.
+     * @throws \LogicException           If the role is already attached.
+     *
      * @return $this
      */
     public function addRole(Role $role)
     {
+        if ($this->getState() === static::STATE_NEW) {
+            throw new \InvalidArgumentException('Cannot attach role on non-approved user!');
+        }
+
         if ($this->hasRole($role)) {
             throw new \LogicException(
                 sprintf('Role "%s" already in user by user "%s"!', $role->getRole(), $this->getUsername())

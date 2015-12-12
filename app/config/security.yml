@@ -8,7 +8,7 @@ security:
 
     firewalls:
         rest:
-            pattern:   ^/api/protected
+            pattern:   "^/api/protected"
             stateless: true
             simple_preauth:
                 authenticator: ma27_api_key_authentication.security.authenticator

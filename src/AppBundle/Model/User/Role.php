@@ -27,11 +27,11 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 class Role implements RoleInterface, Serializable
 {
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -53,9 +53,23 @@ class Role implements RoleInterface, Serializable
     }
 
     /**
+     * Set id.
+     *
+     * @param string $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get role id.
      *
-     * @return int
+     * @return string
      */
     public function getId()
     {
