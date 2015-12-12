@@ -23,7 +23,10 @@ describe('Menu', () => {
     const MenuComponent = new Menu({items:[]});
     const component     = MenuComponent.render();
 
-    chai.expect(component._store.props.children[1]).to.be.undefined;
+    chai.expect(component._store.props.children[2]).to.be.undefined;
+
+    let localeSwitcher = component._store.props.children[1];
+    chai.expect(localeSwitcher).not.to.be.undefined;
   });
 
   it('renders menu items', () => {
@@ -51,7 +54,7 @@ describe('Menu', () => {
 
     const result = MenuComponent.render();
 
-    let item = result._store.props.children[1]._store.props.children;
+    let item = result._store.props.children[2]._store.props.children;
     chai.expect(item).to.have.length(2);
     sinon.assert.calledOnce(MenuActions.buildMenuItems);
     sinon.assert.calledOnce(MenuStore.getItems);

@@ -27,7 +27,7 @@ class Locale extends Constraint
     /**
      * @var string
      */
-    public $message = 'Locale %locale% does not exist in locale list %locales%!';
+    public $message = 'Locale {{ value }} is invalid!';
 
     /**
      * {@inheritdoc}

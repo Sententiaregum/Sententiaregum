@@ -15,32 +15,55 @@ namespace AppBundle\Tests\Validator\Constraints;
 use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\LocaleValidator;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\ExecutionContextInterface as LegacyContext;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
-use Symfony\Component\Validator\Validation;
 
 class LocaleValidatorTest extends AbstractConstraintValidatorTest
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createValidator()
     {
-        return new LocaleValidator(['de', 'en']);
+        return new LocaleValidator(['de' => 'Deutsch', 'en' => 'English']);
     }
 
-    protected function getApiVersion()
+    /**
+     * {@inheritdoc}
+     */
+    protected function createContext()
     {
-        return Validation::API_VERSION_2_5;
+        $context = parent::createContext();
+
+        $validator           = $context->getValidator();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contextualValidator */
+        $contextualValidator = $validator->inContext($context);
+
+        $contextualValidator
+            ->expects($this->any())
+            ->method('validate')
+            ->will($this->returnCallback(
+                function ($value, Choice $choice) use ($context) {
+                    if (!in_array($value, $choice->choices)) {
+                        $context->buildViolation($choice->message)
+                            ->setParameter('{{ value }}', $value)
+                            ->setCode(Choice::NO_SUCH_CHOICE_ERROR)
+                            ->addViolation();
+                    }
+                }
+            ));
+
+        return $context;
     }
 
     public function testInvalidLocale()
     {
         $locale = new Locale();
-
         $this->validator->validate('fr', $locale);
-
-        $this->buildViolation('Locale %locale% does not exist in locale list %locales%!')
-            ->setParameter('%locale%', 'fr')
-            ->setParameter('%locales%', 'de, en')
-            ->setInvalidValue('fr')
+        $this->buildViolation('Locale {{ value }} is invalid!')
+            ->setParameter('{{ value }}', 'fr')
+            ->setCode(Choice::NO_SUCH_CHOICE_ERROR)
             ->assertRaised();
     }
 

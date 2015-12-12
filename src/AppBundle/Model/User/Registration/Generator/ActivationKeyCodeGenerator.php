@@ -33,10 +33,7 @@ class ActivationKeyCodeGenerator implements ActivationKeyCodeGeneratorInterface
      */
     public function generate($length = 10)
     {
-        $string = '';
-        $maxKey = strlen($this->randomKeys) - 1;
-
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0, $maxKey = strlen($this->randomKeys) - 1, $string = ''; $i < $length; ++$i) {
             $string .= $this->randomKeys[mt_rand(0, $maxKey)];
         }
 

@@ -18,6 +18,7 @@ import MenuStore from '../../store/MenuStore';
 import MenuActions from '../../actions/MenuActions';
 import React from 'react';
 import Translate from 'react-translate-component';
+import LanguageSwitcher from './widgets/LanguageSwitcher';
 
 /**
  * Configurable menu rendering component.
@@ -41,20 +42,17 @@ export default class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.cls     = 'Menu';
-    this.state   = {
+    this.cls   = 'Menu';
+    this.state = {
       items: []
     };
-    this.handler = function () {
-      this.storeMenuItems();
-    }.bind(this);
   }
 
   /**
    * Connects the component with the data store.
    */
   componentDidMount() {
-    MenuStore.addChangeListener(this.handler, this.cls);
+    MenuStore.addChangeListener(this.storeMenuItems.bind(this), this.cls);
     MenuActions.buildMenuItems(this.props.items);
   }
 
@@ -62,7 +60,7 @@ export default class Menu extends React.Component {
    * Removes the hook to the menu store.
    */
   componentWillUnmount() {
-    MenuStore.removeChangeListener(this.handler, this.cls);
+    MenuStore.removeChangeListener(this.storeMenuItems.bind(this), this.cls);
   }
 
   /**
@@ -80,8 +78,8 @@ export default class Menu extends React.Component {
    * @returns {Navbar}
    */
   render() {
-    const items = this.state.items.map((item) => {
-      return <NavItem href={item.url} key={Math.random()}>
+    const items = this.state.items.map((item, i) => {
+      return <NavItem href={item.url} key={i}>
         <Translate component="option" content={item.label} />
       </NavItem>;
     });
@@ -92,8 +90,11 @@ export default class Menu extends React.Component {
     }
 
     return (
-      <Navbar inverse fixedTop toggleNavKey={0}>
+      <Navbar inverse fixedTop toggleNavKey={0} navToggle={false}>
         <NavBrand><a href="/#/">Sententiaregum</a></NavBrand>
+        <Nav left>
+          <LanguageSwitcher />
+        </Nav>
         {nav}
       </Navbar>
     );

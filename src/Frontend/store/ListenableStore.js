@@ -40,7 +40,7 @@ class ListenableStore extends Events.EventEmitter {
   /**
    * Removes the change listener.
    *
-   * @param {string} callback
+   * @param {Function} callback
    * @param {string} cls
    */
   removeChangeListener(callback, cls) {

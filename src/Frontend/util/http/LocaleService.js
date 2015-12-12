@@ -13,6 +13,7 @@
 import Cookies from 'cookies-js';
 import CookieFactory from './CookieFactory';
 import counterpart from 'counterpart';
+import invariant from 'react/lib/invariant';
 
 /**
  * Simple helper class which utilizes locale management and
@@ -57,14 +58,12 @@ export default class LocaleService {
       locale = this.getLocale();
     } else {
       const allowedLocales = ['de', 'en'];
-      if (allowedLocales.indexOf(locale) < 0) {
-        throw new Error(
-          '[LocaleService.setLocale('
-          + locale + ')] Invalid locale! Allowed locales are '
-          + allowedLocales.join(',')
-          + ' !'
-        );
-      }
+      invariant(
+        allowedLocales.indexOf(locale) >= 0,
+        '[LocaleService.setLocale(%s) Invalid locale! Allowed locales are %s!',
+        locale,
+        allowedLocales.join(',')
+      );
     }
 
     this.cookieFactory.getCookies().set('language', locale);

@@ -31,7 +31,7 @@ export default class ApiKeyService {
    * @returns {boolean}
    */
   isLoggedIn() {
-    return !!this.cookieFactory.getCookies().get('api_key');
+    return !!this.getApiKey();
   }
 
   /**
@@ -41,5 +41,14 @@ export default class ApiKeyService {
    */
   isAdmin() {
     return false; // just for testing reasons, will be implemented in #35
+  }
+
+  /**
+   * Getter for the api key.
+   *
+   * @returns {string}
+   */
+  getApiKey() {
+    return this.cookieFactory.getCookies().get('api_key');
   }
 }

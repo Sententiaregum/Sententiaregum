@@ -23,7 +23,7 @@ class MenuActions {
   /**
    * Publishes all pre-configured menu items to a store.
    *
-   * @param items
+   * @param {Array.<string>} items
    */
   buildMenuItems(items) {
     AppDispatcher.dispatch({
