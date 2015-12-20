@@ -22,10 +22,6 @@ class AppKernel extends Kernel
 
             new Ma27\ApiKeyAuthenticationBundle\Ma27ApiKeyAuthenticationBundle(),
 
-            new Sonata\CoreBundle\SonataCoreBundle(),
-            new Sonata\NotificationBundle\SonataNotificationBundle(),
-            new Sonata\DatagridBundle\SonataDatagridBundle(),
-
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
