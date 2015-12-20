@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity
+ * @ORM\Entity(readOnly=true)
  * @ORM\Table(name="Role")
  */
 class Role implements RoleInterface, Serializable
