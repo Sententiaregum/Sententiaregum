@@ -49,10 +49,10 @@ class MailListener
     /**
      * Constructor.
      *
-     * @param \Swift_Mailer $mailer
+     * @param \Swift_Mailer       $mailer
      * @param TranslatorInterface $translator
-     * @param TwigEngine $engine
-     * @param string $defaultEmailAddress
+     * @param TwigEngine          $engine
+     * @param string              $defaultEmailAddress
      *
      * @DI\InjectParams({
      *     "engine"              = @DI\Inject("templating.engine.twig"),
@@ -61,9 +61,9 @@ class MailListener
      */
     public function __construct(\Swift_Mailer $mailer, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
     {
-        $this->mailer = $mailer;
-        $this->translator = $translator;
-        $this->engine = $engine;
+        $this->mailer       = $mailer;
+        $this->translator   = $translator;
+        $this->engine       = $engine;
         $this->emailAddress = $defaultEmailAddress;
     }
 
@@ -95,12 +95,15 @@ class MailListener
      * Renders a mailing part.
      *
      * @param MailerEvent $event
-     * @param string $extension
+     * @param string      $extension
      *
      * @return string
      */
     private function renderMailPart(MailerEvent $event, $extension)
     {
-        return $this->engine->render(sprintf('%s.%s', $event->getTemplateSource(), (string)$extension), $event->getParameters());
+        return $this->engine->render(
+            sprintf('%s.%s', $event->getTemplateSource(), (string) $extension),
+            $event->getParameters()
+        );
     }
 }
