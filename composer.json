@@ -34,7 +34,8 @@
         "fabpot/php-cs-fixer": "~1.11",
         "behat/behat": "~3.0",
         "behat/symfony2-extension": "~2.1",
-        "beberlei/assert": "~2.4"
+        "beberlei/assert": "~2.4",
+        "phploc/phploc": "~2.0"
     },
     "scripts": {
         "pre-install-cmd": [
