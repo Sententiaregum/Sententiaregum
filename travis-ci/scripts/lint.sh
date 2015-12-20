@@ -20,4 +20,7 @@ if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
     php app/console lint:twig app
     php app/console doctrine:schema:validate
     php app/check.php
+
+    # PHPLoc
+    ./vendor/phploc/phploc/phploc src
 fi
