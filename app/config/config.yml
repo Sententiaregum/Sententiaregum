@@ -133,3 +133,10 @@ snc_redis:
             type: predis
             alias: online_users
             dsn: "redis://localhost:%online_users_port%"
+
+# DoctrineMigrations Configuration
+doctrine_migrations:
+    dir_name:   "%kernel.root_dir%/migrations"
+    namespace:  "Sententiaregum\Migrations"
+    table_name: "sententiaregum_migrations"
+    name:       "Sententiaregum Migrations"

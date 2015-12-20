@@ -26,7 +26,8 @@
         "lunetics/locale-bundle": "~2.4",
         "snc/redis-bundle": "~1.1",
         "predis/predis": "~1.0",
-        "nelmio/api-doc-bundle": "^2.11"
+        "nelmio/api-doc-bundle": "^2.11",
+        "doctrine/doctrine-migrations-bundle": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.5",

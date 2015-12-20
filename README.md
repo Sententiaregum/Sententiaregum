@@ -101,6 +101,12 @@ If you'd like to override configuration values, you can create for every environ
 
     app/config/local_config_{environment}.yml
 
+## Migrations
+
+In order to change values in a DB from different versions in the 'Doctrine' way, we use [Doctrine Migrations](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html).
+
+All migrations files are located in the directory *app/migrations* having the namespace *Sententiaregum\Migrations*.
+
 ## License
 
 This project is under the GPL license. The whole license file can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/LCIENSE)
