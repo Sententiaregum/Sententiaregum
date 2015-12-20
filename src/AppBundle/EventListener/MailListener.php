@@ -14,24 +14,22 @@ namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
 use JMS\DiExtraBundle\Annotation as DI;
-use Sonata\NotificationBundle\Backend\BackendInterface;
-use Sonata\NotificationBundle\Model\Message;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Hook which is responsible for sending emails.
+ * Custom listener that sends the event payload as email.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Ben Bieler <benjaminbieler2014@gmail.com>
  *
  * @DI\Service
  */
-class NotificationListener
+class MailListener
 {
     /**
-     * @var BackendInterface
+     * @var \Swift_Mailer
      */
-    private $backend;
+    private $mailer;
 
     /**
      * @var TranslatorInterface
@@ -51,20 +49,19 @@ class NotificationListener
     /**
      * Constructor.
      *
-     * @param BackendInterface    $backend
+     * @param \Swift_Mailer       $mailer
      * @param TranslatorInterface $translator
      * @param TwigEngine          $engine
      * @param string              $defaultEmailAddress
      *
      * @DI\InjectParams({
-     *     "backend"             = @DI\Inject("sonata.notification.backend"),
      *     "engine"              = @DI\Inject("templating.engine.twig"),
      *     "defaultEmailAddress" = @DI\Inject("%mailer_from_address%")
      * })
      */
-    public function __construct(BackendInterface $backend, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
+    public function __construct(\Swift_Mailer $mailer, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
     {
-        $this->backend      = $backend;
+        $this->mailer       = $mailer;
         $this->translator   = $translator;
         $this->engine       = $engine;
         $this->emailAddress = $defaultEmailAddress;
@@ -84,22 +81,14 @@ class NotificationListener
             $targets[$user->getEmail()] = $user->getUsername();
         }
 
-        $body = new Message();
-        $body->setType('mailer');
-        $body->setBody([
-            'to'      => $targets,
-            'subject' => $this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications'),
-            'message' => [
-                'text' => $this->renderMailPart($event, 'txt.twig'),
-                'html' => $this->renderMailPart($event, 'html.twig'),
-            ],
-            'from' => [
-                'name'  => 'Sententiaregum',
-                'email' => $this->emailAddress,
-            ],
-        ]);
+        $message = \Swift_Message::newInstance($this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications'));
+        $message->setTo($targets);
+        $message->setFrom([$this->emailAddress => 'Sententiaregum']);
 
-        $this->backend->publish($body);
+        $message->addPart($this->renderMailPart($event, 'txt.twig'), 'text/plain');
+        $message->addPart($this->renderMailPart($event, 'html.twig'), 'text/html');
+
+        $this->mailer->send($message);
     }
 
     /**
@@ -112,6 +101,9 @@ class NotificationListener
      */
     private function renderMailPart(MailerEvent $event, $extension)
     {
-        return $this->engine->render(sprintf('%s.%s', $event->getTemplateSource(), (string) $extension), $event->getParameters());
+        return $this->engine->render(
+            sprintf('%s.%s', $event->getTemplateSource(), (string) $extension),
+            $event->getParameters()
+        );
     }
 }
