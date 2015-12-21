@@ -26,6 +26,11 @@ use Doctrine\ORM\Id\UuidGenerator;
 class AppContext extends BaseContext implements SnippetAcceptingContext
 {
     /**
+     * @var string
+     */
+    public static $apiKey;
+
+    /**
      * @Given the database is purged
      */
     public function theDatabaseIsPurged()
@@ -69,5 +74,13 @@ class AppContext extends BaseContext implements SnippetAcceptingContext
         }
 
         $em->flush();
+    }
+
+    /**
+     * @Given I'm logged in as :arg1 with password :arg2
+     */
+    public function iAmLoggedInAs($arg1, $arg2)
+    {
+        static::$apiKey = $this->authenticate($arg1, $arg2);
     }
 }

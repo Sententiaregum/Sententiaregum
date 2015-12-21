@@ -10,16 +10,8 @@
 
 'use strict';
 
-export default {
-  menu: {
-    start:        'Homepage',
-    l10n:         'Switch language',
-    l10n_loading: 'Loading languages...'
-  },
-  pages: {
-    not_found: {
-      title: 'Error 404',
-      text: 'It seems as this page doesn\'t exist.'
-    }
-  }
-};
+import keyMirror from 'react/lib/keyMirror';
+
+export default keyMirror({
+  GET_LOCALES: null
+});

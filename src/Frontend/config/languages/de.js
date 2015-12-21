@@ -12,7 +12,9 @@
 
 export default {
   menu: {
-    start: 'Startseite'
+    start:        'Startseite',
+    l10n:         'Sprache ändern',
+    l10n_loading: 'Lade Sprachen...'
   },
   pages: {
     not_found: {

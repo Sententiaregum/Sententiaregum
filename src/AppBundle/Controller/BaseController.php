@@ -44,4 +44,14 @@ abstract class BaseController extends Controller
 
         return $result;
     }
+
+    /**
+     * Gets the current user authenticated against firewall.
+     *
+     * @return \AppBundle\Model\User\User
+     */
+    protected function getCurrentUser()
+    {
+        return parent::getUser();
+    }
 }

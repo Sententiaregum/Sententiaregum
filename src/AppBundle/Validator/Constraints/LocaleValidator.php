@@ -14,6 +14,7 @@ namespace AppBundle\Validator\Constraints;
 
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -54,29 +55,21 @@ class LocaleValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, Locale::class);
         }
 
+        /** @var ExecutionContextInterface $context */
         $context = $this->context;
         if (!$context instanceof ExecutionContextInterface) {
             throw new UnexpectedTypeException($context, ExecutionContextInterface::class);
         }
 
-        if (!in_array($value, $this->allowedLocales)) {
-            $context->buildViolation($constraint->message)
-                ->setParameter('%locale%', $value)
-                ->setParameter('%locales%', self::getLocalesAsString($this->allowedLocales))
-                ->setInvalidValue($value)
-                ->addViolation();
-        }
-    }
+        $validator     = $context->getValidator();
+        $choiceOptions = [
+            'strict'  => true,
+            'choices' => array_keys($this->allowedLocales),
+            'message' => $constraint->message,
+        ];
 
-    /**
-     * Converts the allowed locales to string.
-     *
-     * @param string[] $allowedLocales
-     *
-     * @return string
-     */
-    private static function getLocalesAsString(array $allowedLocales)
-    {
-        return implode(', ', $allowedLocales);
+        $validator
+            ->inContext($context)
+            ->validate($value, new Choice($choiceOptions));
     }
 }

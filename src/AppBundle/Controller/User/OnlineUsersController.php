@@ -25,7 +25,7 @@ class OnlineUsersController extends Controller
      * @ApiDoc(
      *     resource=true,
      *     description="Creates a list of followers that contains a list showing which followers are online",
-     *     statusCodes={200="Successful generation"}
+     *     statusCodes={200="Successful generation","401"="Unauthorized"}
      * )
      *
      * Controller action that creates a list of users the current user follows that shows which users are online.

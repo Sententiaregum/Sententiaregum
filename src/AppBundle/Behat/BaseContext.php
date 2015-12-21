@@ -35,11 +35,6 @@ abstract class BaseContext implements KernelAwareContext
     protected static $managerName = 'default';
 
     /**
-     * @var string
-     */
-    protected $apiKey;
-
-    /**
      * @var \Symfony\Bundle\FrameworkBundle\Client
      */
     protected $recentClient;
@@ -73,7 +68,6 @@ abstract class BaseContext implements KernelAwareContext
     /** @AfterScenario */
     public function tearDown()
     {
-        $this->apiKey       = null;
         $this->recentClient = null;
     }
 
@@ -107,8 +101,8 @@ abstract class BaseContext implements KernelAwareContext
         $apiKey = null,
         $disableAssertions = false
     ) {
-        if (null !== $apiKey || null !== $this->apiKey) {
-            $headers[ApiKeyAuthenticator::API_KEY_HEADER] = $apiKey ?: $this->apiKey;
+        if (null !== $apiKey || null !== AppContext::$apiKey) {
+            $headers[ApiKeyAuthenticator::API_KEY_HEADER] = $apiKey ?: AppContext::$apiKey;
         }
 
         $headers = array_combine(
@@ -179,7 +173,7 @@ abstract class BaseContext implements KernelAwareContext
         );
 
         if ($expectSuccess) {
-            return $this->apiKey = $response['apiKey'];
+            return $response['apiKey'];
         } else {
             Assertion::false(isset($response['apiKey']));
 

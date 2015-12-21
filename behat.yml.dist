@@ -45,6 +45,14 @@ default:
         tags: "@users"
       type:   symfony_bundle
       bundle: AppBundle
+    locale:
+      contexts:
+        - AppBundle\Behat\AppContext
+        - AppBundle\Behat\LocaleContext
+      filters:
+        tags: "@locale"
+      type:   symfony_bundle
+      bundle: AppBundle
   formatters:
     pretty:
       paths:    false

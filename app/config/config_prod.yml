@@ -35,3 +35,15 @@ monolog:
 nelmio_api_doc:
     sandbox:
         enabled: false
+
+snc_redis:
+    doctrine:
+        metadata_cache:
+            client: doctrine_cache
+            entity_manager: default
+        result_cache:
+            client: doctrine_cache
+            entity_manager: default
+        query_cache:
+            client: doctrine_cache
+            entity_manager: default
