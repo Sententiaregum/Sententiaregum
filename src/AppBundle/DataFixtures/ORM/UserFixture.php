@@ -13,8 +13,8 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Model\User\User;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\UuidGenerator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
@@ -24,7 +24,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UserFixture extends BaseFixture implements FixtureInterface, OrderedFixtureInterface
+class UserFixture extends BaseFixture implements FixtureInterface, DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
@@ -79,8 +79,11 @@ class UserFixture extends BaseFixture implements FixtureInterface, OrderedFixtur
     /**
      * {@inheritdoc}
      */
-    public function getOrder()
+    public function getDependencies()
     {
-        return 3;
+        return [
+            AdminFixture::class,
+            RoleFixture::class,
+        ];
     }
 }

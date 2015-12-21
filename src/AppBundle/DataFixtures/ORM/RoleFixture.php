@@ -14,7 +14,6 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
 use AppBundle\Model\User\Role;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\UuidGenerator;
 
@@ -23,7 +22,7 @@ use Doctrine\ORM\Id\UuidGenerator;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RoleFixture implements ProductionFixtureInterface, OrderedFixtureInterface
+class RoleFixture implements ProductionFixtureInterface
 {
     /**
      * {@inheritdoc}
@@ -40,13 +39,5 @@ class RoleFixture implements ProductionFixtureInterface, OrderedFixtureInterface
         $manager->persist($adminRole);
 
         $manager->flush();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrder()
-    {
-        return 1;
     }
 }
