@@ -12,14 +12,10 @@
 
 namespace AppBundle\Model\User\Registration\Generator;
 
-use JMS\DiExtraBundle\Annotation as DI;
-
 /**
  * Generator the builds the activation key.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service(id="app.user.registration.activation_key_generator")
  */
 class ActivationKeyCodeGenerator implements ActivationKeyCodeGeneratorInterface
 {

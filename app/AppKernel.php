@@ -25,9 +25,6 @@ class AppKernel extends Kernel
 
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-
-            new JMS\AopBundle\JMSAopBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SerializerBundle\JMSSerializerBundle(),
 
             new Lunetics\LocaleBundle\LuneticsLocaleBundle(),

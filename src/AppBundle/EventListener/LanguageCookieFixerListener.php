@@ -13,9 +13,8 @@
 namespace AppBundle\EventListener;
 
 use AppBundle\Model\User\User;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Model\User\UserRepository;
 use FOS\RestBundle\Util\Codes;
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
  * Listener which fixes the language cookie after login.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service
  */
 class LanguageCookieFixerListener
 {
@@ -38,23 +35,17 @@ class LanguageCookieFixerListener
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface $entityManager
-     *
-     * @DI\InjectParams({
-     *     "entityManager" = @DI\Inject("doctrine.orm.default_entity_manager")
-     * })
+     * @param UserRepository $userRepository
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->userRepository = $entityManager->getRepository('Account:User');
+        $this->userRepository = $userRepository;
     }
 
     /**
      * Hook into the kernel process.
      *
      * @param FilterResponseEvent $event
-     *
-     * @DI\Observe("kernel.response")
      */
     public function onResponseFilter(FilterResponseEvent $event)
     {

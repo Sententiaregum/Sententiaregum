@@ -21,9 +21,10 @@ use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterf
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\Registration\Value\Result;
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\UserRepository;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
-use JMS\DiExtraBundle\Annotation as DI;
+use Doctrine\ORM\EntityRepository;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -44,8 +45,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * NOTE: the email validator checks the host, too, so accounts with not-existing hosts are impossible now.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.user.registration")
  */
 final class TwoStepRegistrationApproach implements AccountCreationInterface, AccountApprovalInterface
 {
@@ -92,6 +91,16 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private $uuid;
 
     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * @var EntityRepository
+     */
+    private $roleRepository;
+
+    /**
      * Constructor.
      *
      * @param EntityManagerInterface              $entityManager
@@ -102,15 +111,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @param SuggestorInterface                  $nameSuggestor
      * @param ExpiredActivationProviderInterface  $expiredActivationProvider
      * @param UUIDInterface                       $uuidGenerator
-     *
-     * @DI\InjectParams({
-     *     "entityManager"              = @DI\Inject("doctrine.orm.default_entity_manager"),
-     *     "activationKeyCodeGenerator" = @DI\Inject("app.user.registration.activation_key_generator"),
-     *     "passwordHasher"             = @DI\Inject("ma27_api_key_authentication.password.strategy"),
-     *     "nameSuggestor"              = @DI\Inject("app.user.registration.name_suggestor"),
-     *     "expiredActivationProvider"  = @DI\Inject("app.redis.cluster.approval"),
-     *     "uuidGenerator"              = @DI\Inject("app.doctrine.uuid")
-     * })
+     * @param UserRepository                      $userRepository
+     * @param EntityRepository                    $roleRepository
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -120,7 +122,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         PasswordHasherInterface $passwordHasher,
         SuggestorInterface $nameSuggestor,
         ExpiredActivationProviderInterface $expiredActivationProvider,
-        UUIDInterface $uuidGenerator
+        UUIDInterface $uuidGenerator,
+        UserRepository $userRepository,
+        EntityRepository $roleRepository
     ) {
         $this->entityManager              = $entityManager;
         $this->activationKeyCodeGenerator = $activationKeyCodeGenerator;
@@ -130,6 +134,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->suggestor                  = $nameSuggestor;
         $this->expiredActivationProvider  = $expiredActivationProvider;
         $this->uuid                       = $uuidGenerator;
+        $this->userRepository             = $userRepository;
+        $this->roleRepository             = $roleRepository;
     }
 
     /**
@@ -312,7 +318,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function getDefaultRole()
     {
-        return $this->entityManager->getRepository('Account:Role')->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
+        return $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
     }
 
     /**
@@ -325,11 +331,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function findUserByActivationKeyAndUsername($activationKey, $username)
     {
-        $repository = $this->entityManager->getRepository('Account:User');
-        $query      = ['activationKey' => $activationKey, 'username' => $username];
-
-        /** @var User $user */
-        if (!$user = $repository->findOneBy($query)) {
+        if (!$user = $this->userRepository->findUserByUsernameAndActivationKey($username, $activationKey)) {
             throw $this->createActivationException();
         } elseif ($this->isActivationExpired($user)) {
             $this->entityManager->remove($user);

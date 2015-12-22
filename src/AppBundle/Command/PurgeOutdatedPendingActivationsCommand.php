@@ -55,12 +55,10 @@ EOF
         $userRepository = $doctrine->getRepository('Account:User');
 
         $amount = $userRepository->deletePendingActivationsByDate($dateTimeRule);
-        $output->writeln(
-            sprintf(
-                '<fg=green;bg=black>Successfully purged <comment>%d</comment> pending activations</fg=green;bg=black>',
-                $amount
-            )
-        );
+        $output->writeln(sprintf(
+            '<fg=green;bg=black>Successfully purged <comment>%d</comment> pending activations</fg=green;bg=black>',
+            $amount
+        ));
 
         return 0;
     }

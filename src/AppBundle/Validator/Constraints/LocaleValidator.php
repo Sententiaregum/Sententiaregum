@@ -12,7 +12,6 @@
 
 namespace AppBundle\Validator\Constraints;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -24,8 +23,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * It is actually a choice validator that contains the locale config internally.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Validator("app.validator.locale")
  */
 class LocaleValidator extends ConstraintValidator
 {
@@ -38,8 +35,6 @@ class LocaleValidator extends ConstraintValidator
      * Constructor.
      *
      * @param string[] $allowedLocales
-     *
-     * @DI\InjectParams({"allowedLocales" = @DI\Inject("%app.locales%")})
      */
     public function __construct(array $allowedLocales)
     {

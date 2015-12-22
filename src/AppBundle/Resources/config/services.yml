@@ -1,0 +1,32 @@
+services:
+  app.doctrine.fixtures_loader:
+    class: AppBundle\Doctrine\ORM\ConfigurableFixturesLoader
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+  app.doctrine.uuid:
+    class: AppBundle\Doctrine\ORM\UUID
+  app.request.dto_param_converter:
+    class: AppBundle\Request\ParamConverter\DTOConverter
+    arguments:
+      - "@property_accessor"
+    tags:
+      - { name: request.param_converter, converter: dto }
+  app.user.registration.activation_key_generator:
+    class: AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGenerator
+  app.user.registration.name_suggestor:
+    class: AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+  app.user.registration:
+    class: AppBundle\Model\User\Registration\TwoStepRegistrationApproach
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+      - "@app.user.registration.activation_key_generator"
+      - "@validator"
+      - "@event_dispatcher"
+      - "@ma27_api_key_authentication.password.strategy"
+      - "@app.user.registration.name_suggestor"
+      - "@app.redis.cluster.approval"
+      - "@app.doctrine.uuid"
+      - "@app.repository.user"
+      - "@app.repository.role"

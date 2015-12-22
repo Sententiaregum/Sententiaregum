@@ -14,15 +14,12 @@ namespace AppBundle\Redis;
 
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
 use AppBundle\Model\User\User;
-use JMS\DiExtraBundle\Annotation as DI;
 use Predis\Client as Redis;
 
 /**
  * Redis aware implementation that checks whether the key is expired.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.redis.cluster.approval")
  */
 class PendingActivationsCluster implements ExpiredActivationProviderInterface
 {
@@ -35,10 +32,6 @@ class PendingActivationsCluster implements ExpiredActivationProviderInterface
      * Constructor.
      *
      * @param Redis $client
-     *
-     * @DI\InjectParams({
-     *     "client" = @DI\Inject("snc_redis.pending_activations")
-     * })
      */
     public function __construct(Redis $client)
     {

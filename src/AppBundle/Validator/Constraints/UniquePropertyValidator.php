@@ -14,7 +14,6 @@ namespace AppBundle\Validator\Constraints;
 
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -25,8 +24,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * Validator which validates a unique constraints.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Validator("app.validator.unique_property")
  */
 class UniquePropertyValidator extends ConstraintValidator
 {
@@ -45,11 +42,6 @@ class UniquePropertyValidator extends ConstraintValidator
      *
      * @param ManagerRegistry    $managerRegistry
      * @param SuggestorInterface $suggestor
-     *
-     * @DI\InjectParams({
-     *     "managerRegistry" = @DI\Inject("doctrine"),
-     *     "suggestor"       = @DI\Inject("app.user.registration.name_suggestor")
-     * })
      */
     public function __construct(ManagerRegistry $managerRegistry, SuggestorInterface $suggestor)
     {
@@ -118,9 +110,12 @@ class UniquePropertyValidator extends ConstraintValidator
                     $embeddableMetadata = $manager->getClassMetadata($metadata->embeddedClasses[$embeddable]['class']);
 
                     if (!$embeddableMetadata->hasField($embeddedField)) {
-                        throw new ConstraintDefinitionException(
-                            sprintf('Embeddable "%s" on entity "%s" has no field "%s"!', $embeddable, $entityAlias, $embeddedField)
-                        );
+                        throw new ConstraintDefinitionException(sprintf(
+                            'Embeddable "%s" on entity "%s" has no field "%s"!',
+                            $embeddable,
+                            $entityAlias,
+                            $embeddedField
+                        ));
                     }
                 } else {
                     throw new ConstraintDefinitionException(sprintf('Entity "%s" has no embeddable "%s"!', $entityAlias, $embeddable));

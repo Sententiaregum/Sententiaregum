@@ -1,0 +1,14 @@
+services:
+  app.validator.locale:
+    class: AppBundle\Validator\Constraints\LocaleValidator
+    arguments:
+      - "%app.locales%"
+    tags:
+      - { name: validator.constraint_validator, alias: "app.validator.locale" }
+  app.validator.unique_property:
+    class: AppBundle\Validator\Constraints\UniquePropertyValidator
+    arguments:
+      - "@doctrine"
+      - "@app.user.registration.name_suggestor"
+    tags:
+      - { name: validator.constraint_validator, alias: "app.validator.unique_property" }

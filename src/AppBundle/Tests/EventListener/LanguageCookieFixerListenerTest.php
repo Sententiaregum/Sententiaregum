@@ -14,8 +14,7 @@ namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\LanguageCookieFixerListener;
 use AppBundle\Model\User\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use AppBundle\Model\User\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -29,18 +28,9 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
     public function testWrongRequest(Request $request, Response $response)
     {
         $event = new FilterResponseEvent($this->getKernel(), $request, KernelInterface::MASTER_REQUEST, $response);
-        $em    = $this->getMock(EntityManagerInterface::class);
-        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
-        $repo
-            ->expects($this->never())
-            ->method('findOneBy');
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
 
-        $em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repo);
-
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
 
         $this->assertCount(0, $response->headers->getCookies());
@@ -56,9 +46,9 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $request1->attributes->set('_route', 'ma27_api_key_authentication.request');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('[', 200));
-        $em    = $this->getMock(EntityManagerInterface::class);
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
 
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
     }
 
@@ -72,9 +62,9 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $request1->attributes->set('_route', 'ma27_api_key_authentication.request');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('[]', 200));
-        $em    = $this->getMock(EntityManagerInterface::class);
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
 
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
     }
 
@@ -88,18 +78,9 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $request1->attributes->set('_route', 'ma27_api_key_authentication.request');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('{"apiKey":"12345"}'));
-        $em    = $this->getMock(EntityManagerInterface::class);
-        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
-        $repo
-            ->expects($this->once())
-            ->method('findOneBy');
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
 
-        $em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repo);
-
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
     }
 
@@ -111,19 +92,13 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('{"apiKey":"12345"}'));
-        $em    = $this->getMock(EntityManagerInterface::class);
-        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
         $repo
             ->expects($this->once())
             ->method('findOneBy')
             ->willReturn($user);
 
-        $em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repo);
-
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
 
         $this->assertCount(0, $event->getResponse()->headers->getCookies());
@@ -138,19 +113,13 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $user->setLocale('de');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('{"apiKey":"12345"}'));
-        $em    = $this->getMock(EntityManagerInterface::class);
-        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
         $repo
             ->expects($this->once())
             ->method('findOneBy')
             ->willReturn($user);
 
-        $em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repo);
-
-        $listener = new LanguageCookieFixerListener($em);
+        $listener = new LanguageCookieFixerListener($repo);
         $listener->onResponseFilter($event);
 
         $cookie = $event->getResponse()->headers->getCookies()[0];

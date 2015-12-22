@@ -68,6 +68,10 @@ class AppContext extends BaseContext implements SnippetAcceptingContext
                 }
             } else {
                 $user->getPendingActivation()->setId((new UuidGenerator())->generate($em, $user));
+
+                if (isset($row['activation_key'])) {
+                    $user->setActivationKey($row['activation_key']);
+                }
             }
 
             $em->persist($user);
