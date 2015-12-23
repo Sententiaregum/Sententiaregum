@@ -103,14 +103,6 @@ nelmio_api_doc:
     sandbox:
         enabled: true
 
-# LuneticsLocale Configuration
-lunetics_locale:
-    guessing_order:
-        - cookie
-    allowed_locales:
-        - de
-        - en
-
 # SncRedis Configuration
 snc_redis:
     clients:

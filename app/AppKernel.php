@@ -27,8 +27,6 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
 
-            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),
-
             new Snc\RedisBundle\SncRedisBundle(),
 
             new AppBundle\AppBundle(),

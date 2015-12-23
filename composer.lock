@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dede7327b7c5a1bd6ea37ab7cb4ae94c",
-    "content-hash": "de355c8709f3603abe3f6da29c853df2",
+    "hash": "cef23a67d990c16d1a1e9e859163b892",
+    "content-hash": "952362826dd3101471d660ffa4655a0c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1516,77 +1516,6 @@
             "time": "2015-11-10 12:26:42"
         },
         {
-            "name": "lunetics/locale-bundle",
-            "version": "2.4.4",
-            "target-dir": "Lunetics/LocaleBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lunetics/LocaleBundle.git",
-                "reference": "6149a024be34afc7e7e9af362ad020037d0ab87f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lunetics/LocaleBundle/zipball/6149a024be34afc7e7e9af362ad020037d0ab87f",
-                "reference": "6149a024be34afc7e7e9af362ad020037d0ab87f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "psr/log": "~1.0",
-                "symfony/framework-bundle": ">=2.3.0",
-                "symfony/locale": "~2.2",
-                "symfony/validator": "~2.2",
-                "symfony/yaml": "~2.2"
-            },
-            "conflict": {
-                "symfony/intl": "2.4.*"
-            },
-            "require-dev": {
-                "ext-intl": "*",
-                "symfony/form": "~2.2",
-                "twig/twig": "1.*"
-            },
-            "suggest": {
-                "ext-intl": "Needed for displaying the country name in the locale language"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Lunetics\\LocaleBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lunetics",
-                    "homepage": "http://www.lunetics.com"
-                },
-                {
-                    "name": "Christophe Willesmen",
-                    "homepage": "http://christophewillemsen.com"
-                }
-            ],
-            "description": "A Bundle for switching Languages",
-            "keywords": [
-                "browser",
-                "bundle",
-                "cookie",
-                "language",
-                "locale",
-                "multilanguage",
-                "router"
-            ],
-            "time": "2015-09-17 21:30:38"
-        },
-        {
             "name": "ma27/api-key-authentication-bundle",
             "version": "0.2.3",
             "source": {
@@ -1648,16 +1577,16 @@
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9"
+                "reference": "155287e4222d2dd69b6a21221617b50668d5892e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/e1aabe18173231ebcefc90e615565742fc1c7fd9",
-                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/155287e4222d2dd69b6a21221617b50668d5892e",
+                "reference": "155287e4222d2dd69b6a21221617b50668d5892e",
                 "shasum": ""
             },
             "require": {
@@ -1680,14 +1609,14 @@
             ],
             "authors": [
                 {
-                    "name": "John Gruber",
-                    "homepage": "http://daringfireball.net/"
-                },
-                {
                     "name": "Michel Fortin",
                     "email": "michel.fortin@michelf.ca",
                     "homepage": "https://michelf.ca/",
                     "role": "Developer"
+                },
+                {
+                    "name": "John Gruber",
+                    "homepage": "https://daringfireball.net/"
                 }
             ],
             "description": "PHP Markdown",
@@ -1695,7 +1624,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2015-03-01 12:03:08"
+            "time": "2015-12-22 18:18:12"
         },
         {
             "name": "monolog/monolog",
