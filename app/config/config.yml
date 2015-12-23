@@ -77,13 +77,6 @@ ma27_api_key_authentication:
         log_state:            true
         logger_service:       "logger"
 
-# JMSDiExtra Configuration
-jms_di_extra:
-    locations:
-        all_bundles: false
-        bundles:     [AppBundle]
-        directories: "%kernel.root_dir%/../src"
-
 # FOSRest Configuration
 fos_rest:
     body_listener:          true

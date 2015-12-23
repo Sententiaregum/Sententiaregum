@@ -96,6 +96,19 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Loads a user by its username and activation key.
+     *
+     * @param string $username
+     * @param string $activationKey
+     *
+     * @return User
+     */
+    public function findUserByUsernameAndActivationKey($username, $activationKey)
+    {
+        return $this->findOneBy(['username' => $username, 'activationKey' => $activationKey]);
+    }
+
+    /**
      * Creates a list of old entity ids that should be removed.
      *
      * @param DateTime $dateTime

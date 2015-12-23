@@ -1,0 +1,34 @@
+services:
+  app.listener.incomplete_user:
+    class: AppBundle\EventListener\IncompleteUserCheckListener
+    tags:
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: -255, method: validateUserOnAuthentication }
+  app.listener.language_cookie:
+    class: AppBundle\EventListener\LanguageCookieFixerListener
+    arguments:
+      - "@app.repository.user"
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onResponseFilter }
+  app.listener.email:
+    class: AppBundle\EventListener\MailListener
+    arguments:
+      - "@mailer"
+      - "@translator"
+      - "@templating.engine.twig"
+      - "%mailer_from_address%"
+    tags:
+      - { name: kernel.event_listener, event: app.events.notification, method: onMailEvent }
+  app.listener.online_users:
+    class: AppBundle\EventListener\OnlineUsersUpdateListener
+    arguments:
+      - "@app.redis.cluster.online_users"
+      - "@request_stack"
+      - "@doctrine.orm.default_entity_manager"
+    tags:
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authorization.firewall.login, method: onFirewallLogin }
+  app.listener.update_latest_activation:
+    class: AppBundle\EventListener\UpdateLatestActivationListener
+    arguments:
+      - "@request_stack"
+    tags:
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: -255, method: updateOnLogin }

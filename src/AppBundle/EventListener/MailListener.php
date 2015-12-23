@@ -13,7 +13,6 @@
 namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -21,8 +20,6 @@ use Symfony\Component\Translation\TranslatorInterface;
  * Custom listener that sends the event payload as email.
  *
  * @author Ben Bieler <benjaminbieler2014@gmail.com>
- *
- * @DI\Service
  */
 class MailListener
 {
@@ -53,11 +50,6 @@ class MailListener
      * @param TranslatorInterface $translator
      * @param TwigEngine          $engine
      * @param string              $defaultEmailAddress
-     *
-     * @DI\InjectParams({
-     *     "engine"              = @DI\Inject("templating.engine.twig"),
-     *     "defaultEmailAddress" = @DI\Inject("%mailer_from_address%")
-     * })
      */
     public function __construct(\Swift_Mailer $mailer, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
     {
@@ -71,8 +63,6 @@ class MailListener
      * Hook that sends notifications.
      *
      * @param MailerEvent $event
-     *
-     * @DI\Observe(event="app.events.notification")
      */
     public function onMailEvent(MailerEvent $event)
     {

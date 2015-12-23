@@ -12,7 +12,6 @@
 
 namespace AppBundle\EventListener;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -20,8 +19,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Hook that updates the latest activation of a user.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service
  */
 class UpdateLatestActivationListener
 {
@@ -34,10 +31,6 @@ class UpdateLatestActivationListener
      * Constructor.
      *
      * @param RequestStack $requestStack
-     *
-     * @DI\InjectParams({
-     *     "requestStack" = @DI\Inject("request_stack")
-     * })
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -48,8 +41,6 @@ class UpdateLatestActivationListener
      * Hook that updates the last action after the authentication.
      *
      * @param OnAuthenticationEvent $event
-     *
-     * @DI\Observe("ma27_api_key_authentication.authentication", priority=-255)
      */
     public function updateOnLogin(OnAuthenticationEvent $event)
     {

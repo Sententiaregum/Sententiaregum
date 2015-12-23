@@ -13,7 +13,6 @@
 namespace AppBundle\Request\ParamConverter;
 
 use Doctrine\Instantiator\Instantiator;
-use JMS\DiExtraBundle\Annotation as DI;
 use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -24,9 +23,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * Symfony2 param converter that transforms request attributes to data transfer objects.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service
- * @DI\Tag("request.param_converter", attributes={"converter"="dto"})
  */
 class DTOConverter implements ParamConverterInterface
 {
@@ -39,10 +35,6 @@ class DTOConverter implements ParamConverterInterface
      * Constructor.
      *
      * @param PropertyAccessorInterface $propertyAccess
-     *
-     * @DI\InjectParams({
-     *     "propertyAccess" = @DI\Inject("property_accessor")
-     * })
      */
     public function __construct(PropertyAccessorInterface $propertyAccess)
     {

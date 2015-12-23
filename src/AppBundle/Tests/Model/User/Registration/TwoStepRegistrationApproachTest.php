@@ -22,6 +22,7 @@ use AppBundle\Model\User\Registration\TwoStepRegistrationApproach;
 use AppBundle\Model\User\Registration\Value\Result;
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\UserRepository;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -69,7 +70,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(PasswordHasherInterface::class),
             $suggestor,
             $this->getActivationProvider(),
-            $this->getUUID()
+            $this->getUUID(),
+            $this->getUserRepository(),
+            $this->getRoleRepository()
         );
 
         $result = $registration->registration($dto);
@@ -128,7 +131,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $hasher,
             new ChainSuggestor($entityManager),
             $provider,
-            $this->getUUID()
+            $this->getUUID(),
+            $this->getUserRepository(),
+            $this->getRoleRepository()
         );
 
         $result = $registration->registration($dto);
@@ -146,18 +151,14 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     {
         $key = md5(uniqid());
 
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repository = $this->getUserRepository();
         $repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with(['activationKey' => $key, 'username' => 'Ma27'])
+            ->method('findUserByUsernameAndActivationKey')
+            ->with('Ma27', $key)
             ->willReturn(null);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->willReturn($repository);
 
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
@@ -167,7 +168,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $this->getActivationProvider(),
-            $this->getUUID()
+            $this->getUUID(),
+            $repository,
+            $this->getRoleRepository()
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -178,11 +181,11 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
 
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repository = $this->getUserRepository();
         $repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with(['activationKey' => $key, 'username' => 'Ma27'])
+            ->method('findUserByUsernameAndActivationKey')
+            ->with('Ma27', $key)
             ->willReturn($user);
 
         $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
@@ -193,19 +196,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new Role('ROLE_USER'));
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->at(0))
-            ->method('getRepository')
-            ->with('Account:User')
-            ->willReturn($repository);
-
-        $entityManager
-            ->expects($this->at(1))
-            ->method('getRepository')
-            ->with('Account:Role')
-            ->willReturn($roleRepo);
-
-        $readyUser = $user->setState(User::STATE_APPROVED);
+        $readyUser     = $user->setState(User::STATE_APPROVED);
 
         $entityManager
             ->expects($this->once())
@@ -225,7 +216,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $this->getActivationProvider(),
-            $this->getUUID()
+            $this->getUUID(),
+            $repository,
+            $roleRepo
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -267,7 +260,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(PasswordHasherInterface::class),
             new ChainSuggestor($em),
             $this->getActivationProvider(),
-            $this->getUUID()
+            $this->getUUID(),
+            $this->getUserRepository(),
+            $this->getRoleRepository()
         );
 
         $registration->registration($dto);
@@ -281,19 +276,14 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
 
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repository = $this->getUserRepository();
         $repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with(['activationKey' => $key, 'username' => 'Ma27'])
+            ->method('findUserByUsernameAndActivationKey')
+            ->with('Ma27', $key)
             ->willReturn($user);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->willReturn($repository);
-
         $entityManager
             ->expects($this->once())
             ->method('remove')
@@ -318,7 +308,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $provider,
-            $this->getUUID()
+            $this->getUUID(),
+            $repository,
+            $this->getRoleRepository()
         );
 
         $registration->approveByActivationKey($key, 'Ma27');
@@ -362,5 +354,21 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->willReturn('12345');
 
         return $mock;
+    }
+
+    /**
+     * @return UserRepository
+     */
+    private function getUserRepository()
+    {
+        return $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    private function getRoleRepository()
+    {
+        return $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
     }
 }

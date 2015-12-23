@@ -99,9 +99,10 @@ EOF
                 $fixturesPath = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
 
                 if (!is_dir($fixturesPath)) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Data fixtures directory "%s" does not exist!', $fixturesPath)
-                    );
+                    throw new \InvalidArgumentException(sprintf(
+                        'Data fixtures directory "%s" does not exist!',
+                        $fixturesPath
+                    ));
                 }
 
                 $instanceList = $loader->loadProductionFixturesFromDirectory($fixturesPath);

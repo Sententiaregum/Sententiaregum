@@ -512,9 +512,11 @@ class User implements UserInterface, Serializable
         }
 
         if ($this->hasRole($role)) {
-            throw new \LogicException(
-                sprintf('Role "%s" already in user by user "%s"!', $role->getRole(), $this->getUsername())
-            );
+            throw new \LogicException(sprintf(
+                'Role "%s" already in user by user "%s"!',
+                $role->getRole(),
+                $this->getUsername()
+            ));
         }
 
         $this->roles->add($role);

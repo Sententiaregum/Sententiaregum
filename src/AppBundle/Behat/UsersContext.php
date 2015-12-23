@@ -15,6 +15,7 @@ namespace AppBundle\Behat;
 use AppBundle\DataFixtures\ORM\AdminFixture;
 use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\DataFixtures\ORM\UserFixture;
+use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 
@@ -39,6 +40,11 @@ class UsersContext extends BaseContext implements SnippetAcceptingContext
      * @var int[]
      */
     private $followerIds = [];
+
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      * @When I try to delete all users with pending activation
@@ -95,5 +101,21 @@ class UsersContext extends BaseContext implements SnippetAcceptingContext
     public function iShouldGetTwoIds()
     {
         Assertion::count($this->followerIds, 2);
+    }
+
+    /**
+     * @When I'd like to see a user by with username :arg1 and key :arg2
+     */
+    public function iDLikeToSeeAUserByWithUsernameAndKey($arg1, $arg2)
+    {
+        $this->user = $this->getEntityManager()->getRepository('Account:User')->findUserByUsernameAndActivationKey($arg1, $arg2);
+    }
+
+    /**
+     * @Then I should see the user with id :arg1
+     */
+    public function iShouldSeeTheUserWithId($arg1)
+    {
+        Assertion::eq((int) $arg1, $this->user->getId());
     }
 }

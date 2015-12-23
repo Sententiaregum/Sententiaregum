@@ -16,14 +16,11 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * Fixture loader which automates the whole loading process.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.doctrine.fixtures_loader")
  */
 class ConfigurableFixturesLoader
 {
@@ -36,10 +33,6 @@ class ConfigurableFixturesLoader
      * Constructor.
      *
      * @param EntityManagerInterface $entityManager
-     *
-     * @DI\InjectParams({
-     *     "entityManager" = @DI\Inject("doctrine.orm.default_entity_manager")
-     * })
      */
     public function __construct(EntityManagerInterface $entityManager)
     {

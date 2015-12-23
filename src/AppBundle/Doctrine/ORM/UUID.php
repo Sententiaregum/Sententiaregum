@@ -15,14 +15,11 @@ namespace AppBundle\Doctrine\ORM;
 use AppBundle\Doctrine\ORM\Id\UUIDInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Id\UuidGenerator;
-use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * Utility to generate universal unique identifiers for domain models.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.doctrine.uuid")
  */
 final class UUID implements UUIDInterface
 {

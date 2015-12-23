@@ -16,14 +16,11 @@ use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\DotReplacementSug
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\YearPostfixSuggestor;
 use Doctrine\ORM\EntityManagerInterface;
-use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * Class that builds suggestions for usernames.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.user.registration.name_suggestor")
  */
 class ChainSuggestor implements ChainSuggestorInterface
 {
@@ -41,10 +38,6 @@ class ChainSuggestor implements ChainSuggestorInterface
      * Constructor.
      *
      * @param EntityManagerInterface $entityManager
-     *
-     * @DI\InjectParams({
-     *     "entityManager" = @DI\Inject("doctrine.orm.default_entity_manager")
-     * })
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -99,10 +92,6 @@ class ChainSuggestor implements ChainSuggestorInterface
             ->where($qb->expr()->in('user.username', ':nameList'))
             ->setParameter(':nameList', $suggestions);
 
-        $result = $qb->getQuery()->getResult();
-
-        return array_map(function ($row) {
-            return $row['username'];
-        }, $result);
+        return array_column($qb->getQuery()->getResult(), 'username');
     }
 }

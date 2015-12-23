@@ -13,15 +13,12 @@
 namespace AppBundle\Redis;
 
 use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
-use JMS\DiExtraBundle\Annotation as DI;
 use Predis\Client as Redis;
 
 /**
  * Concrete redis aware implementation of a data provider for user ids of online users.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @DI\Service("app.redis.cluster.online_users")
  */
 class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
 {
@@ -34,10 +31,6 @@ class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
      * Constructor.
      *
      * @param Redis $redis
-     *
-     * @DI\InjectParams({
-     *     "redis" = @DI\Inject("snc_redis.online_users")
-     * })
      */
     public function __construct(Redis $redis)
     {
