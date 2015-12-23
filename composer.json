@@ -22,7 +22,6 @@
         "twig/extensions": "~1.3",
         "friendsofsymfony/rest-bundle": "~1.7",
         "jms/serializer-bundle": "^1.1",
-        "lunetics/locale-bundle": "~2.4",
         "snc/redis-bundle": "~1.1",
         "predis/predis": "~1.0",
         "nelmio/api-doc-bundle": "^2.11",
