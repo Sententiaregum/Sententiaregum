@@ -77,11 +77,18 @@ For ESLint are some PHPStorm/WebStorm plugins available:
 
 - [ESLint Integration for PhpStorm](https://plugins.jetbrains.com/plugin/7494)
 
+#### [Optional] Deploying an ssh key to the VM
+
+Just copy the file *vagrant/ssh_key_path.yaml.dist* to *vagrant/ssh_key_path.yaml* and uncomment the first line.
+Now fix the path to the proper ssh key path and then re-create the vagrant box.
+
 ## Install
 
 The installation is really simple.
 
 You just have to call __composer install --no-dev__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
+
+Just have a look at the *travis-ci/scripts/install.sh* section which runs a setup for continuous integration and contains all necessary installation steps.
 
 #### Deployment
 

@@ -31,7 +31,12 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function installNpmDependencies(CommandEvent $event)
     {
-        static::executeNpmCommand('install --no-bin-links', $event, $event->isDevMode(), 1000);
+        $cmd = 'install --no-bin-links';
+        if (!$event->isDevMode()) {
+            $cmd .= ' --production';
+        }
+
+        self::executeNpmCommand($cmd, $event, $event->isDevMode(), 1000);
     }
 
     /**
@@ -42,7 +47,7 @@ class ScriptHandler extends AbstractScriptHandler
     public static function buildFrontendData(CommandEvent $event)
     {
         $npmScriptName = $event->isDevMode() ? 'dev-frontend-build' : 'frontend-build';
-        static::executeNpmCommand(sprintf('run %s', $npmScriptName), $event);
+        self::executeNpmCommand(sprintf('run %s', $npmScriptName), $event);
     }
 
     /**

@@ -24,4 +24,12 @@ class sententiaregum::backend::server(
     serveraliases => $server_aliases,
     template      => 'sententiaregum/vhost.erb',
   }
+
+  exec { 'disable default site':
+    command => '/usr/sbin/a2dissite 000-default.conf',
+    notify  => Service['apache2'],
+    require => [
+      ::Apache::Vhost[$host_name],
+    ],
+  }
 }

@@ -69,3 +69,9 @@ npm-debug.log
 
 # PHPCS
 /.php_cs.cache
+
+# SSH Key Deployment
+/vagrant/ssh_key_path.yaml
+
+# Capistrano Configuration
+/deploy/config/deploy.yaml
