@@ -3,7 +3,12 @@ global_exclude_dirs:
   - features
   - Tests
   - DataFixtures
+  - Behat
+  - travis-ci
+  - vagrant
 
 rules:
   symfony.configuration.error_pages_should_be_customised: # we use FOSRest, so a custom "error" template is not necessary
     enabled: false
+  symfony.application_not_bootable: # when booting the application, it connects to redis and does other stuff, so sensiolabs insight will always fail.
+    enabled: false                  # unless the application is bootable, the behat test suite will fail and the CI will become red, so the code cannot be merged.

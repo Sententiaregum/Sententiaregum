@@ -142,6 +142,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * {@inheritdoc}
      *
      * @throws UserActivationException If the activation fails
+     * @throws \RuntimeException       If the role is not present
      */
     public function approveByActivationKey($activationKey, $username)
     {
@@ -152,7 +153,15 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         // there occur foreign key constraint issues with the
         // roles. Therefore roles are only allowed for
         // approved users.
-        $user->addRole($this->getDefaultRole());
+        $defaultRole = $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
+        if (!$defaultRole) {
+            throw new \RuntimeException(sprintf(
+                'Role "%s" is not present!',
+                self::DEFAULT_USER_ROLE
+            ));
+        }
+
+        $user->addRole($defaultRole);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
@@ -309,16 +318,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         }
 
         return false;
-    }
-
-    /**
-     * Gets the default role of a new user.
-     *
-     * @return \AppBundle\Model\User\Role
-     */
-    private function getDefaultRole()
-    {
-        return $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
     }
 
     /**

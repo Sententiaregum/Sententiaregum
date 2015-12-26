@@ -5,6 +5,8 @@ filter:
     excluded_paths:
         - src/AppBundle/Tests/
         - src/AppBundle/Resources/
+        - src/AppBundle/Behat/
+        - src/AppBundle/DataFixtures/
         - app/
 
 checks:
@@ -14,6 +16,9 @@ checks:
             ruleset_path: 'ruleset.xml'
         duplication: true
         code_rating: true
+    ruby:
+        code_rating: true
+        duplicate_code: true
 
 tools:
     php_code_sniffer:

@@ -30,8 +30,30 @@ class PreInstallHandler
      */
     public static function determineFirstInstall()
     {
-        if (!is_dir(__DIR__.'/../../../vendor')) {
+        if (!is_dir(self::projectDirectory().'/vendor')) {
             self::$firstInstall = true;
         }
+    }
+
+    /**
+     * Hacky way to get the project directory.
+     *
+     * @return string
+     */
+    private static function projectDirectory()
+    {
+        $r    = new \ReflectionClass(static::class);
+        $file = explode('/', $r->getFileName());
+
+        $path = [];
+        foreach ($file as $item) {
+            if ($item === 'src') {
+                break;
+            }
+
+            $path[] = $item;
+        }
+
+        return implode('/', $path);
     }
 }

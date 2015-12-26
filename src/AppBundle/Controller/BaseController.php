@@ -12,6 +12,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Model\User\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -48,10 +49,19 @@ abstract class BaseController extends Controller
     /**
      * Gets the current user authenticated against firewall.
      *
-     * @return \AppBundle\Model\User\User
+     * @return User
      */
     protected function getCurrentUser()
     {
-        return parent::getUser();
+        $user = $this->getUser();
+        if ($user && !$user instanceof User) {
+            throw new \RuntimeException(sprintf(
+                'Expect user object of instance "%s", but found "%s"!',
+                User::class,
+                get_class($user)
+            ));
+        }
+
+        return $user;
     }
 }

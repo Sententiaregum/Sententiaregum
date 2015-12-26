@@ -17,4 +17,4 @@ swiftmailer:
 
 doctrine:
     dbal:
-        dbname: behat
+        dbname: "%test_db%"

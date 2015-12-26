@@ -25,3 +25,6 @@ parameters:
     pending_activations_redis_port: 6903
     doctrine_redis_port:            6900
     online_users_port:              6904
+
+    # Functional testing
+    test_db:                        behat
