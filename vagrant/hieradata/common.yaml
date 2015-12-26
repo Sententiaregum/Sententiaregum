@@ -4,7 +4,11 @@ classes:
   - sententiaregum::ssh
   - sententiaregum::installs
   - sententiaregum::backend::php
+  - sententiaregum::backend::php::composer
+  - sententiaregum::backend::ruby
   - sententiaregum::backend::server
+  - sententiaregum::deploy::capistrano
+  - sententiaregum::deploy::capistrano::plugins
   - sententiaregum::infrastructure::mailcatcher
   - sententiaregum::infrastructure::mysql
   - sententiaregum::infrastructure::redis
@@ -17,7 +21,6 @@ sententiaregum::installs::packages:
   - vim
   - git
   - bash-completion
-  - ruby-dev
   - software-properties-common
   - python-software-properties
   - libsqlite3-dev
@@ -25,6 +28,17 @@ sententiaregum::installs::packages:
 
 # ssh entry point
 sententiaregum::ssh::entry_point: /var/www/sententiaregum
+
+# ruby
+sententiaregum::backend::ruby::version: '2.0'
+
+# mailcatcher
+sententiaregum::infrastructure::mailcatcher::dest_ip: '0.0.0.0'
+
+# capistrano plugins
+sententiaregum::deploy::capistrano::plugins::plugins:
+  symfony:  {}
+  composer: {}
 
 # php/composer configurations
 sententiaregum::backend::php::version: '5.6'

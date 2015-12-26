@@ -1,0 +1,18 @@
+# Target
+deploy_to: /var/www/sententiaregum
+
+# Releases
+keep_releases: 3
+
+# SSH
+port:           22
+webserver_user: www-data
+local_user:     foobar
+ssh_user:       foobar
+
+# Server Config
+server:
+  production:
+    domain: 'example.com'
+  develop:
+    domain: 'example.dev'

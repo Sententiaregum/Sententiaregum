@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
 Vagrant.configure(2) do |config|
   unless Vagrant.has_plugin?('vagrant-hostmanager')
     puts 'It is recommended to use the "vagrant-hostmanager" plugin!'
@@ -10,6 +12,15 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder '.', '/var/www/sententiaregum', :nfs => true, :mount_options => ['dmode=777','fmode=777','uid=33','gid=33']
 
   config.vm.hostname = "sententiaregum.dev"
+
+  file_path = 'vagrant/ssh_key_path.yaml'
+  if File.exist?(file_path)
+    data = YAML::load(File.open(file_path))
+
+    unless data['ssh_key'].nil?
+      config.ssh.private_key_path = data['ssh_key']
+    end
+  end
 
   config.vm.provider "virtualbox" do |vb|
     # vb settings
@@ -32,6 +43,4 @@ Vagrant.configure(2) do |config|
     puppet.options           = ['--verbose']
     puppet.hiera_config_path = 'vagrant/hiera.yaml'
   end
-
-  config.vm.provision :shell, path: 'vagrant/post-scripts.sh'
 end

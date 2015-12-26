@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 if [ -f /etc/puppet/.vagrant-puppet-stamp ]; then
     exit 0
 fi
