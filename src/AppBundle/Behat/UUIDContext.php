@@ -12,6 +12,8 @@
 
 namespace AppBundle\Behat;
 
+use AppBundle\Behat\Doctrine\EmptyEntityManager;
+use AppBundle\Doctrine\ORM\UUID;
 use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -37,6 +39,11 @@ class UUIDContext extends BaseContext implements SnippetAcceptingContext
      * @var User
      */
     private $user;
+
+    /**
+     * @var \LogicException
+     */
+    private $exception;
 
     /**
      * @When I generate a UUID for a user
@@ -82,5 +89,26 @@ class UUIDContext extends BaseContext implements SnippetAcceptingContext
         $user = $this->getEntityManager()->find('Account:User', $this->uuid);
 
         Assertion::eq($this->user->getUsername(), $user->getUsername());
+    }
+
+    /**
+     * @When I try to generate a uuid with wrong entity manager
+     */
+    public function iTryToGenerateAUuidWithWrongEntityManager()
+    {
+        try {
+            $uuid = new UUID();
+            $uuid->generateUUIDForEntity(new EmptyEntityManager(), new \stdClass());
+        } catch (\LogicException $ex) {
+            $this->exception = $ex;
+        }
+    }
+
+    /**
+     * @Then I should get an error
+     */
+    public function iShouldGetAnError()
+    {
+        Assertion::notNull($this->exception);
     }
 }

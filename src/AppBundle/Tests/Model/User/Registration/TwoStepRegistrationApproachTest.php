@@ -317,6 +317,57 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Role "ROLE_USER" is not present!
+     */
+    public function testNoDefaultRole()
+    {
+        $key  = md5(uniqid());
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+
+        $repository = $this->getUserRepository();
+        $repository
+            ->expects($this->once())
+            ->method('findUserByUsernameAndActivationKey')
+            ->with('Ma27', $key)
+            ->willReturn($user);
+
+        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $roleRepo
+            ->expects($this->at(0))
+            ->method('findOneBy')
+            ->with(['role' => 'ROLE_USER']);
+
+        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $readyUser     = $user->setState(User::STATE_APPROVED);
+
+        $entityManager
+            ->expects($this->never())
+            ->method('persist')
+            ->with($readyUser);
+
+        $entityManager
+            ->expects($this->never())
+            ->method('flush')
+            ->with($readyUser);
+
+        $registration = new TwoStepRegistrationApproach(
+            $entityManager,
+            $this->getMock(ActivationKeyCodeGeneratorInterface::class),
+            $this->getMock(ValidatorInterface::class),
+            $this->getMock(EventDispatcherInterface::class),
+            $this->getPasswordHasher(),
+            new ChainSuggestor($entityManager),
+            $this->getActivationProvider(),
+            $this->getUUID(),
+            $repository,
+            $roleRepo
+        );
+
+        $registration->approveByActivationKey($key, 'Ma27');
+    }
+
+    /**
      * Creates the password hasher mock.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject

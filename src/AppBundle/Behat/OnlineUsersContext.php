@@ -12,7 +12,6 @@
 
 namespace AppBundle\Behat;
 
-use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
