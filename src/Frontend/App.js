@@ -16,7 +16,7 @@ import routes from './config/routes';
 import de from './config/languages/de';
 import en from './config/languages/en';
 import counterpart from 'counterpart';
-import {Locale} from './util/http/facade/HttpServices';
+import { Locale } from './util/http/facade/HttpServices';
 
 Locale.setLocale(null);
 counterpart.registerTranslations('de', de);

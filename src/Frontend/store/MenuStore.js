@@ -23,8 +23,10 @@ class MenuStore extends ListenableStore {
   /**
    * Adds new items
    *
-   * @param {Array.<Object>} items
-   * @param {Object.<boolean>} authData
+   * @param {Array.<Object>}   items    The processed items.
+   * @param {Object.<boolean>} authData Some properties about authentication to filter wrong menu items.
+   *
+   * @returns {void}
    */
   addItems(items, authData) {
     if (!this.items) {
@@ -38,7 +40,7 @@ class MenuStore extends ListenableStore {
   /**
    * Returns all menu items.
    *
-   * @returns {Array}
+   * @returns {Array} List of all menu items.
    */
   getItems() {
     return this.items;
@@ -47,13 +49,13 @@ class MenuStore extends ListenableStore {
   /**
    * Gets a list of items being visible for the current user.
    *
-   * @param {Array.<Object>} items
-   * @param {Object.<boolean>} authData
+   * @param {Array.<Object>}   items    The items to filter.
+   * @param {Object.<boolean>} authData The authentication properties.
    *
-   * @returns {Array.<Object>}
+   * @returns {Array.<Object>} All visible menu items.
    */
   getVisibleItems(items, authData) {
-    return items.filter((item) => !(item.role === 'ROLE_ADMIN' && !authData.is_admin || item.logged_in && !authData.logged_in));
+    return items.filter((item) => !('ROLE_ADMIN' === item.role && !authData.is_admin || item.logged_in && !authData.logged_in));
   }
 }
 

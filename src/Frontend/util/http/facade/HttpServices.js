@@ -14,6 +14,6 @@ import ApiKeyService from '../ApiKeyService';
 import CookieFactory from '../CookieFactory';
 import LocaleService from '../LocaleService';
 
-const CookieInstance = new CookieFactory(typeof window === 'undefined' ? null : window);
-export var ApiKey  = new ApiKeyService(CookieInstance);
-export var Locale  = new LocaleService('en', CookieInstance);
+const CookieInstance = new CookieFactory('undefined' === typeof window ? null : window);
+export var ApiKey    = new ApiKeyService(CookieInstance);
+export var Locale    = new LocaleService('en', CookieInstance);

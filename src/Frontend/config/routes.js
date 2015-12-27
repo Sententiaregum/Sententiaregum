@@ -13,7 +13,7 @@
 import React from 'react';
 import HelloWorld from '../components/HelloWorld';
 import NotFoundPage from '../components/app/NotFoundPage';
-import {Route, NotFoundRoute} from 'react-router';
+import { Route, NotFoundRoute } from 'react-router';
 
 export default (
   <Route>

@@ -19,7 +19,9 @@ export default class ApiKeyService {
   /**
    * Constructor.
    *
-   * @param {Object} cookieFactory
+   * @param {Object} cookieFactory Cookie factory instance.
+   *
+   * @returns {void}
    */
   constructor(cookieFactory) {
     this.cookieFactory = cookieFactory;
@@ -28,7 +30,7 @@ export default class ApiKeyService {
   /**
    * Checks if a user is logged in.
    *
-   * @returns {boolean}
+   * @returns {boolean} Whether the user is logged in or not.
    */
   isLoggedIn() {
     return !!this.getApiKey();
@@ -37,7 +39,7 @@ export default class ApiKeyService {
   /**
    * Checks if the current user is an admin.
    *
-   * @returns {boolean}
+   * @returns {boolean} Whether the user is an admin or not.
    */
   isAdmin() {
     return false; // just for testing reasons, will be implemented in #35
@@ -46,7 +48,7 @@ export default class ApiKeyService {
   /**
    * Getter for the api key.
    *
-   * @returns {string}
+   * @returns {string} Api key of the current logged in user.
    */
   getApiKey() {
     return this.cookieFactory.getCookies().get('api_key');

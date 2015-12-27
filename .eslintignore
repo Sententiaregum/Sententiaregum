@@ -2,5 +2,6 @@
 karma.conf.js
 
 # tests
-./src/Frontend/__tests__/**/*.js
-
+./src/Frontend/test/**/*.js
+./src/Frontend/config/*.js
+./src/Frontend/**/facade/*.js

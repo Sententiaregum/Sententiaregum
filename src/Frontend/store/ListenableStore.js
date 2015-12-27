@@ -21,8 +21,10 @@ class ListenableStore extends Events.EventEmitter {
   /**
    * Adds a new change listener.
    *
-   * @param {Function} callback
-   * @param {string} cls
+   * @param {Function} callback The callback to trigger.
+   * @param {string}   cls      The class name.
+   *
+   * @returns {void}
    */
   addChangeListener(callback, cls) {
     this.on(this.getEventNameByCls(cls), callback);
@@ -31,7 +33,9 @@ class ListenableStore extends Events.EventEmitter {
   /**
    * Emits the store changes;
    *
-   * @param {string} cls
+   * @param {string} cls The class name.
+   *
+   * @returns {void}
    */
   emitChange(cls) {
     this.emit(this.getEventNameByCls(cls));
@@ -40,8 +44,10 @@ class ListenableStore extends Events.EventEmitter {
   /**
    * Removes the change listener.
    *
-   * @param {Function} callback
-   * @param {string} cls
+   * @param {Function} callback The callback to trigger.
+   * @param {string}   cls      The class name.
+   *
+   * @returns {void}
    */
   removeChangeListener(callback, cls) {
     this.removeListener(this.getEventNameByCls(cls), callback);
@@ -50,11 +56,12 @@ class ListenableStore extends Events.EventEmitter {
   /**
    * Creates the event name.
    *
-   * @param {string} cls
-   * @returns {string}
+   * @param {string} cls The event class name.
+   *
+   * @returns {string} The generated event name.
    */
   getEventNameByCls(cls) {
-    return 'change_' + cls;
+    return `change_${cls}`;
   }
 }
 

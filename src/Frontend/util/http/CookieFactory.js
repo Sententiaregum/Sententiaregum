@@ -21,7 +21,9 @@ export default class CookieFactory {
   /**
    * Constructor.
    *
-   * @param {Object} window
+   * @param {Object} window Window instance.
+   *
+   * @returns {void}
    */
   constructor(window) {
     this.window = window;
@@ -30,7 +32,7 @@ export default class CookieFactory {
   /**
    * Returns the cookie instance.
    *
-   * @returns {Object}
+   * @returns {Object} Cookie instance.
    */
   getCookies() {
     this.buildCookieInstance();
@@ -41,7 +43,7 @@ export default class CookieFactory {
   /**
    * Builds an instance of the cookie factory.
    *
-   * @returns {Object}
+   * @returns {Object} CookieInstance.
    */
   buildCookieInstance() {
     if (!this.cookies) {
@@ -54,9 +56,9 @@ export default class CookieFactory {
   /**
    * Checks if the current environment is a brwoser environment.
    *
-   * @returns {boolean}
+   * @returns {boolean} Whether the current execution context is a browser environment or not.
    */
   static isBrowserEnvironment() {
-    return typeof window !== 'undefined';
+    return 'undefined' !== typeof window;
   }
 }

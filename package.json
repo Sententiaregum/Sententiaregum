@@ -8,7 +8,7 @@
     "frontend-build": "webpack --config webpack-prod.config.js",
     "dev-frontend-build": "webpack",
     "watch": "webpack --watch",
-    "lint": "eslint ./src/Frontend/App.js && lessc src/Frontend/styles/custom.less --lint"
+    "lint": "eslint ./src/Frontend && lessc src/Frontend/styles/custom.less --lint"
   },
   "repository": {
     "type": "git",

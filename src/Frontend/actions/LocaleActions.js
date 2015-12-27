@@ -12,7 +12,7 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import LocaleConstants from '../constants/Locale';
-import {Locale, ApiKey} from '../util/http/facade/HttpServices';
+import { Locale, ApiKey } from '../util/http/facade/HttpServices';
 import $ from 'jquery';
 
 /**
@@ -23,6 +23,8 @@ import $ from 'jquery';
 class LocaleActions {
   /**
    * Loads supported items and dispatch them to the store.
+   *
+   * @returns {void}
    */
   loadLanguages() {
     $.ajax({
@@ -40,15 +42,15 @@ class LocaleActions {
   /**
    * Changes the locale.
    *
-   * @param {string} locale
+   * @param {string} locale The new locale.
+   *
+   * @returns {void}
    */
   changeLocale(locale) {
     Locale.setLocale(locale);
 
     if (ApiKey.isLoggedIn()) {
-      const params = {
-        locale: locale
-      };
+      const params = { locale };
 
       $.ajax({
         url:     '/api/protected/locale.json',

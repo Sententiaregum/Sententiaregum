@@ -19,7 +19,9 @@ export default class HashbangRedirect {
   /**
    * Constructor.
    *
-   * @param {Object} window
+   * @param {Object} window The window object.
+   *
+   * @returns {void}
    */
   constructor(window) {
     this.window = window;
@@ -28,9 +30,11 @@ export default class HashbangRedirect {
   /**
    * Redirects to another route
    *
-   * @param {string} url
+   * @param {string} url The target url.
+   *
+   * @returns {void}
    */
   redirect(url) {
-    this.window.location.href = '/#/' + url;
+    this.window.location.href = `/#/${url}`;
   }
 }
