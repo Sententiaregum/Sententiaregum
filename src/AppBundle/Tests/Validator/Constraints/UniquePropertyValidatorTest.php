@@ -43,6 +43,9 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('hasField')
             ->willReturn(true);
 
+        $classMetadata->isEmbeddedClass    = false;
+        $classMetadata->isMappedSuperclass = false;
+
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
@@ -97,7 +100,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /^Expected argument of type "scalar or object", "array" given$/
+     * @expectedExceptionMessageRegExp /^Expected argument of type "scalar", "array" given$/
      */
     public function testValueMustBeString()
     {
@@ -139,7 +142,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage Entity "AnotherMapping:User" has no field "invalid"!
+     * @expectedExceptionMessage Invalid field "invalid"!
      */
     public function testInvalidProperty()
     {
@@ -172,21 +175,20 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage Entity "AnotherMapping:User" has no embeddable "foo"!
+     * @expectedExceptionMessage The configured field "test-field" must not be an embeddable, an association or an identifier!
      */
-    public function testInvalidEmbeddable()
+    public function testFieldIsAssociation()
     {
         $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
-            ->method('hasField')
-            ->willReturn(false);
+            ->method('hasAssociation')
+            ->willReturn(true);
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getClassMetadata')
-            ->with('AnotherMapping:User')
             ->willReturn($classMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
@@ -200,42 +202,30 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
         $propertyMock->validate(
             'test',
-            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo.bar'])
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'test-field'])
         );
     }
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage Embeddable "foo" on entity "AnotherMapping:User" has no field "bar"!
+     * @expectedExceptionMessage The given entity "AnotherMapping:User" must not be an embeddable or an abstract/superclass object!
      */
-    public function testInvalidValueObjectProperty()
+    public function testClassIsEmbeddable()
     {
         $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
-            ->willReturn(false);
+            ->willReturn(true);
 
-        $classMetadata->embeddedClasses = ['foo' => ['class' => 'EmbeddedClass']]; // adding mocked field
+        $classMetadata->isEmbeddedClass    = true;
+        $classMetadata->isMappedSuperclass = false;
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
-            ->expects($this->at(0))
-            ->method('getClassMetadata')
-            ->with('AnotherMapping:User')
-            ->willReturn($classMetadata);
-
-        $embeddedMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
-        $embeddedMetadata
             ->expects($this->any())
-            ->method('hasField')
-            ->willReturn(false);
-
-        $manager
-            ->expects($this->at(1))
             ->method('getClassMetadata')
-            ->with('EmbeddedClass')
-            ->willReturn($embeddedMetadata);
+            ->willReturn($classMetadata);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
@@ -248,56 +238,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
         $propertyMock->validate(
             'test',
-            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo.bar'])
-        );
-    }
-
-    public function testReInitializeRelatedObject()
-    {
-        $stdClass = new \stdClass();
-
-        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
-        $classMetadata
-            ->expects($this->any())
-            ->method('hasField')
-            ->willReturn(false);
-
-        $classMetadata
-            ->expects($this->any())
-            ->method('hasAssociation')
-            ->with('foo')
-            ->willReturn(true);
-
-        $manager = $this->getMock(ObjectManager::class);
-        $manager
-            ->expects($this->at(0))
-            ->method('getClassMetadata')
-            ->with('AnotherMapping:User')
-            ->willReturn($classMetadata);
-
-        $manager
-            ->expects($this->once())
-            ->method('initializeObject')
-            ->with($stdClass);
-
-        $repository = $this->getMock(ObjectRepository::class);
-        $manager
-            ->expects($this->any())
-            ->method('getRepository')
-            ->willReturn($repository);
-
-        $mockRegistry = $this->getMock(ManagerRegistry::class);
-        $mockRegistry
-            ->expects($this->any())
-            ->method('getManagerForClass')
-            ->willReturn($manager);
-
-        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
-
-        $propertyMock->validate(
-            $stdClass,
-            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'foo'])
+            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'test-field'])
         );
     }
 
@@ -310,8 +251,6 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
                     'entity'              => 'TestMapping:User',
                     'field'               => 'username',
                     'propertyPath'        => 'custom',
-                    'generateSuggestions' => true,
-                    'suggestionMessage'   => '%suggestions%',
                 ]
             )
         );
@@ -324,12 +263,6 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->atPath('property.path.custom')
             ->setInvalidValue('Ma27')
             ->setCode(UniqueProperty::NON_UNIQUE_PROPERTY)
-            ->buildNextViolation('%suggestions%')
-            ->setParameter('%property%', 'username')
-            ->setParameter('%entity%', 'TestMapping:User')
-            ->setParameter('%value%', 'Ma27')
-            ->setParameter('%suggestions%', 'Ma.27')
-            ->atPath('property.path.custom')
             ->assertRaised();
     }
 }

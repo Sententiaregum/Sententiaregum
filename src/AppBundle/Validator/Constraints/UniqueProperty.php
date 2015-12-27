@@ -62,20 +62,6 @@ class UniqueProperty extends Constraint
     public $propertyPath;
 
     /**
-     * Flag whether to suggest other values.
-     *
-     * @var bool
-     */
-    public $generateSuggestions = false;
-
-    /**
-     * Translation key of the suggestion message.
-     *
-     * @var string
-     */
-    public $suggestionMessage = 'There are the following suggested values for %field%: %suggestions%';
-
-    /**
      * {@inheritdoc}
      */
     public function getRequiredOptions()
