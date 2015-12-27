@@ -19,7 +19,7 @@ export default {
   pages: {
     not_found: {
       title: 'Fehler 404',
-      text: 'Diese Seite existiert nicht.'
+      text:  'Diese Seite existiert nicht.'
     }
   }
 };

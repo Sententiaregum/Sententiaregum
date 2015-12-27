@@ -28,16 +28,11 @@ import LanguageSwitcher from './widgets/LanguageSwitcher';
  */
 export default class Menu extends React.Component {
   /**
-   * @type {Object}
-   */
-  static propTypes = {
-    items: React.PropTypes.array
-  };
-
-  /**
    * Constructor.
    *
-   * @param {Object} props
+   * @param {Object} props Internal properties.
+   *
+   * @returns {void}
    */
   constructor(props) {
     super(props);
@@ -50,6 +45,8 @@ export default class Menu extends React.Component {
 
   /**
    * Connects the component with the data store.
+   *
+   * @returns {void}
    */
   componentDidMount() {
     MenuStore.addChangeListener(this.storeMenuItems.bind(this), this.cls);
@@ -58,6 +55,8 @@ export default class Menu extends React.Component {
 
   /**
    * Removes the hook to the menu store.
+   *
+   * @returns {void}
    */
   componentWillUnmount() {
     MenuStore.removeChangeListener(this.storeMenuItems.bind(this), this.cls);
@@ -65,6 +64,8 @@ export default class Menu extends React.Component {
 
   /**
    * Stores a new menu item.
+   *
+   * @returns {void}
    */
   storeMenuItems() {
     this.setState({
@@ -75,7 +76,7 @@ export default class Menu extends React.Component {
   /**
    * Creates a configurable menu component for bootstrap3.
    *
-   * @returns {Navbar}
+   * @returns {Navbar} Renders the menu bar.
    */
   render() {
     const items = this.state.items.map((item, i) => {
@@ -85,7 +86,7 @@ export default class Menu extends React.Component {
     });
 
     let nav;
-    if (items.length > 0) {
+    if (0 < items.length) {
       nav = <Nav right>{items}</Nav>;
     }
 
@@ -100,3 +101,7 @@ export default class Menu extends React.Component {
     );
   }
 }
+
+Menu.propTypes = {
+  items: React.PropTypes.array
+};

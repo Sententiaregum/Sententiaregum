@@ -1,6 +1,12 @@
 {
   "rules": {
-    "indent": [2],
+    "indent": [
+      2,
+      2,
+      {
+        "VariableDeclarator": 2
+      }
+    ],
     "quotes": [
       2,
       "single"
@@ -18,9 +24,103 @@
       {
         "vars": "all",
         "args": "after-used",
-        "argsIgnorePattern": "React"
+        "varsIgnorePattern": "^React$"
       }
-    ]
+    ],
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "no-console": [2],
+    "no-constant-condition": [2],
+    "no-control-regex": [2],
+    "no-debugger": [2],
+    "no-duplicate-case": [2],
+    "no-dupe-keys": [2],
+    "no-empty-character-class": [2],
+    "no-empty": [2],
+    "no-ex-assign": [2],
+    "no-extra-semi": [2],
+    "no-func-assign": [2],
+    "no-inner-declarations": [2],
+    "no-invalid-regexp": [2],
+    "no-irregular-whitespace": [2],
+    "no-negated-in-lhs": [2],
+    "no-obj-calls": [2],
+    "no-regex-spaces": [2],
+    "no-sparse-arrays": [2],
+    "no-unexpected-multiline": [2],
+    "no-unreachable": [2],
+    "use-isnan": [2],
+    "valid-jsdoc": [2],
+    "valid-typeof": [2],
+    "yoda": [2, "always"],
+    "eqeqeq": [2],
+    "prefer-const": [2],
+    "prefer-spread": [2],
+    "no-arrow-condition": [2],
+    "no-class-assign": [2],
+    "no-const-assign": [2],
+    "no-dupe-class-members": [2],
+    "no-this-before-super": [2],
+    "no-var": [2],
+    "object-shorthand": [2],
+    "prefer-arrow-callback": [2],
+    "no-else-return": [2],
+    "no-eval": [2],
+    "no-loop-func": [2],
+    "no-new-wrappers": [2],
+    "no-new": [2],
+    "no-param-reassign": [2],
+    "no-script-url": [2],
+    "no-undefined": [2],
+    "no-use-before-define": [2],
+    "max-len": [2, 200],
+    "no-lonely-if": [2],
+    "no-mixed-spaces-and-tabs": [2],
+    "no-new-object": [2],
+    "no-native-reassign": [2],
+    "no-useless-concat": [2],
+    "radix": [2],
+    "no-redeclare": [2],
+    "no-iterator": [2],
+    "key-spacing": [
+      2,
+      {
+        "align": "value"
+      }
+    ],
+    "no-multi-str": [2],
+    "no-octal": [2],
+    "no-new-func": [2],
+    "no-void": [2],
+    "no-useless-call": [2],
+    "curly": [2],
+    "no-alert": [2],
+    "no-case-declarations": [2],
+    "no-div-regex": [2],
+    "guard-for-in": [2],
+    "no-eq-null": [2],
+    "no-fallthrough": [2],
+    "no-floating-decimal": [2],
+    "no-invalid-this": [2],
+    "no-lone-blocks": [2],
+    "vars-on-top": [2],
+    "max-depth": [2, 10],
+    "max-nested-callbacks": [2, 3],
+    "max-params": [2, 10],
+    "max-statements": [2, 25],
+    "new-parens": [2],
+    "no-array-constructor": [2],
+    "no-spaced-func": [2],
+    "no-trailing-spaces": [2],
+    "object-curly-spacing": [
+      2,
+      "always"
+    ],
+    "require-jsdoc": [2],
+    "require-yield": [2],
+    "prefer-template": [2]
   },
   "env": {
     "es6":     true,

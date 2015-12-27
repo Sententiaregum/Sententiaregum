@@ -10,8 +10,6 @@
 
 'use strict';
 
-import Cookies from 'cookies-js';
-import CookieFactory from './CookieFactory';
 import counterpart from 'counterpart';
 import invariant from 'react/lib/invariant';
 
@@ -30,8 +28,10 @@ export default class LocaleService {
   /**
    * Constructor.
    *
-   * @param {string} defaultLanguage
-   * @param {Object} cookieFactory
+   * @param {string} defaultLanguage Language whether to use if the language cookie is empty.
+   * @param {Object} cookieFactory   Instance of a factory for the cookie handling.
+   *
+   * @returns {void}
    */
   constructor(defaultLanguage, cookieFactory) {
     this.defaultLanguage = defaultLanguage || 'en';
@@ -41,7 +41,7 @@ export default class LocaleService {
   /**
    * Gets the current locale.
    *
-   * @returns {string}
+   * @returns {string} Language value.
    */
   getLocale() {
     return this.cookieFactory.getCookies().get('language') || this.defaultLanguage;
@@ -51,22 +51,27 @@ export default class LocaleService {
    * Changes the locale.
    * If no locale is given, the default locale will be chosen.
    *
-   * @param {string|null} locale
+   * @param {string|null} locale The new locale.
+   *
+   * @returns {void}
    */
   setLocale(locale) {
+    let newLocale;
     if (null === locale) {
-      locale = this.getLocale();
+      newLocale = this.getLocale();
     } else {
       const allowedLocales = ['de', 'en'];
       invariant(
-        allowedLocales.indexOf(locale) >= 0,
+        0 <= allowedLocales.indexOf(locale),
         '[LocaleService.setLocale(%s) Invalid locale! Allowed locales are %s!',
         locale,
         allowedLocales.join(',')
       );
+
+      newLocale = locale;
     }
 
-    this.cookieFactory.getCookies().set('language', locale);
-    counterpart.setLocale(locale);
+    this.cookieFactory.getCookies().set('language', newLocale);
+    counterpart.setLocale(newLocale);
   }
 }

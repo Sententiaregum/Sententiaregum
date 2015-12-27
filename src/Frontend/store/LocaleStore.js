@@ -22,6 +22,8 @@ import Locale from '../constants/Locale';
 class LocaleStore extends ListenableStore {
   /**
    * Constructor.
+   *
+   * @returns {void}
    */
   constructor() {
     super();
@@ -31,10 +33,16 @@ class LocaleStore extends ListenableStore {
   /**
    * Registers new locales.
    *
-   * @param {Object} locales
+   * @param {Object} locales The locales to store.
+   *
+   * @returns {void}
    */
   registerLocales(locales) {
-    for (let key in locales) {
+    for (const key in locales) {
+      if (!locales.hasOwnProperty(key)) {
+        continue;
+      }
+
       this.locales[key] = locales[key];
     }
 
@@ -44,14 +52,14 @@ class LocaleStore extends ListenableStore {
   /**
    * Gets all locales persisted in the store.
    *
-   * @returns {Object}
+   * @returns {Object} List of all available locales.
    */
   getAllLocales() {
     return this.locales;
   }
 }
 
-const store = new LocaleStore;
+const store = new LocaleStore();
 
 AppDispatcher.register((payload) => {
   if (payload.event === Locale.GET_LOCALES) {

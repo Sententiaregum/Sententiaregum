@@ -10,7 +10,7 @@
 
 import React from 'react';
 import Component from './app/Component';
-import {portal} from '../config/menu';
+import { portal } from '../config/menu';
 
 export default class HelloWorld extends Component {
   getMenuData() {

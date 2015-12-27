@@ -15,7 +15,7 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Translate from 'react-translate-component';
 import LocaleActions from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
-import {Locale} from '../../../util/http/facade/HttpServices';
+import { Locale } from '../../../util/http/facade/HttpServices';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 /**
@@ -26,6 +26,10 @@ import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 export default class LanguageSwitcher extends React.Component {
   /**
    * Constructor.
+   *
+   * @param {Array} props List of component properties.
+   *
+   * @returns {void}
    */
   constructor(props) {
     super(props);
@@ -37,6 +41,8 @@ export default class LanguageSwitcher extends React.Component {
 
   /**
    * Connects the component with the data store.
+   *
+   * @returns {void}
    */
   componentDidMount() {
     LocaleStore.addChangeListener(this.refreshLocales.bind(this), 'Locale');
@@ -45,6 +51,8 @@ export default class LanguageSwitcher extends React.Component {
 
   /**
    * Removes the hook to the locale store.
+   *
+   * @returns {void}
    */
   componentWillUnmount() {
     LocaleStore.removeChangeListener(this.refreshLocales.bind(this), 'Locale');
@@ -52,6 +60,8 @@ export default class LanguageSwitcher extends React.Component {
 
   /**
    * Refreshes locale list.
+   *
+   * @returns {void}
    */
   refreshLocales() {
     this.setState({
@@ -62,7 +72,9 @@ export default class LanguageSwitcher extends React.Component {
   /**
    * Change handler for the locale.
    *
-   * @param {Object} e
+   * @param {Object} e Event object
+   *
+   * @returns {void}
    */
   changeLocale(e) {
     LocaleActions.changeLocale(e.target.id);
@@ -74,14 +86,14 @@ export default class LanguageSwitcher extends React.Component {
   /**
    * Renders the component.
    *
-   * @returns {React.DOM}
+   * @returns {React.DOM} React dom that contains the locale switcher
    */
   render() {
     const translatedMenuItem = <Translate content="menu.l10n" />,
-      localeKeys = Object.keys(this.state.locales);
+        localeKeys = Object.keys(this.state.locales);
     let languageItems;
 
-    if (localeKeys.length === 0) {
+    if (0 === localeKeys.length) {
       languageItems = (
         <MenuItem eventKey="1.1">
             <span className="loading">
@@ -91,7 +103,8 @@ export default class LanguageSwitcher extends React.Component {
       );
     } else {
       languageItems = localeKeys.map((key) => {
-        let displayName = this.state.locales[key], className;
+        const displayName = this.state.locales[key];
+        let className;
         if (Locale.getLocale() === key) {
           className = 'active';
         }

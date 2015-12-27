@@ -27,7 +27,7 @@ class NotFoundPage extends Component {
     return [
       {
         label: 'menu.start',
-        url: '/#/'
+        url:   '/#/'
       }
     ];
   }

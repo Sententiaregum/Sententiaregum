@@ -12,7 +12,7 @@
 
 import React from 'react';
 import Menu from './Menu';
-import {ApiKey} from '../../util/http/facade/HttpServices';
+import { ApiKey } from '../../util/http/facade/HttpServices';
 import Url from '../../util/http/facade/Url';
 
 /**
@@ -23,17 +23,16 @@ import Url from '../../util/http/facade/Url';
  */
 export default class Component extends React.Component {
   /**
-   * @type {Object.<boolean>}
-   */
-  authConfig = {};
-
-  /**
    * Constructor.
    *
-   * @param {Object.<Array>} props
+   * @param {Object.<Array>} props List of properties this component contains.
+   *
+   * @returns {void}
    */
   constructor(props) {
     super(props);
+
+    this.authConfig = {};
   }
 
   /**
@@ -44,7 +43,7 @@ export default class Component extends React.Component {
    *  // ...
    * ]
    *
-   * @returns {Array}
+   * @returns {Array} The given menu items.
    */
   getMenuData() {
     return [];
@@ -55,7 +54,7 @@ export default class Component extends React.Component {
    * This method must be used since the actual render() method adapts the result
    * of this method with the menu and a security check.
    *
-   * @returns {React.DOM}
+   * @returns {React.DOM} The virtual dom of the actual page to be rendered.
    */
   renderPage() {
   }
@@ -63,7 +62,7 @@ export default class Component extends React.Component {
   /**
    * Adapts the actual part of the component with the menu.
    *
-   * @returns {React.DOM}
+   * @returns {React.DOM} The full page dom.
    */
   render() {
     let renderPage = true;
@@ -81,9 +80,9 @@ export default class Component extends React.Component {
           {basicPage}
         </div>
       );
-    } else {
-      Url.redirect('');
-      return <span>Redirecting...</span>;
     }
+
+    Url.redirect('');
+    return <span>Redirecting...</span>;
   }
 }

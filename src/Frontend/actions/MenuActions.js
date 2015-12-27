@@ -12,7 +12,7 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import Menu from '../constants/Menu';
-import {ApiKey} from '../util/http/facade/HttpServices';
+import { ApiKey } from '../util/http/facade/HttpServices';
 
 /**
  * Action creator that executes menu lifecycle actions such as menu creation.
@@ -23,12 +23,14 @@ class MenuActions {
   /**
    * Publishes all pre-configured menu items to a store.
    *
-   * @param {Array.<string>} items
+   * @param {Array.<string>} items List of items to be processed.
+   *
+   * @returns {void}
    */
   buildMenuItems(items) {
     AppDispatcher.dispatch({
       event:    Menu.TRANSFORM_ITEMS,
-      items:    items,
+      items,
       authData: {
         logged_in: ApiKey.isLoggedIn(),
         is_admin:  ApiKey.isAdmin()
@@ -37,4 +39,4 @@ class MenuActions {
   }
 }
 
-export default new MenuActions;
+export default new MenuActions();

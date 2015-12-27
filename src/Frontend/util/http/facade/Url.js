@@ -11,4 +11,4 @@
 'use strict';
 
 import HashbangRedirect from '../HashbangRedirect';
-export default new HashbangRedirect(typeof window === 'undefined' ? null : window);
+export default new HashbangRedirect('undefined' === typeof window ? null : window);
