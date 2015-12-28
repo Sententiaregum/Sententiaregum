@@ -10,8 +10,8 @@
 
 'use strict';
 
-import keyMirror from 'react/lib/keyMirror';
+const TRANSFORM_ITEMS = 'TRANSFORM_ITEMS';
 
-export default keyMirror({
-  TRANSFORM_ITEMS: null
-});
+export default {
+  TRANSFORM_ITEMS
+};

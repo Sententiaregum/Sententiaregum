@@ -9,6 +9,6 @@ describe('helloWorld', () => {
     renderer.render(<HelloWorld />);
 
     const component = renderer.getRenderOutput();
-    chai.expect(component._store.props.children[1]._store.props.children).to.equal('Hello World!');
+    chai.expect(component.props.children[1].props.children).to.equal('Hello World!');
   });
 });

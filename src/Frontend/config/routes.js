@@ -13,12 +13,11 @@
 import React from 'react';
 import HelloWorld from '../components/HelloWorld';
 import NotFoundPage from '../components/app/NotFoundPage';
-import { Route, NotFoundRoute } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 
 export default (
-  <Route>
-    <Route handler={HelloWorld} path="/"/>
-
-    <NotFoundRoute handler={NotFoundPage}/>
-  </Route>
+  <Router history={browserHistory}>
+    <Route component={HelloWorld} path="/"/>
+    <Route component={NotFoundPage} path="*" />
+  </Router>
 );
