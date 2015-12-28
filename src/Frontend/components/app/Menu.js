@@ -11,7 +11,6 @@
 'use strict';
 
 import Navbar from 'react-bootstrap/lib/Navbar';
-import NavBrand from 'react-bootstrap/lib/NavBrand';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import MenuStore from '../../store/MenuStore';
