@@ -24,11 +24,11 @@ describe('Component', () => {
 
     const component = renderer.getRenderOutput();
 
-    const Menu    = component._store.props.children[0];
-    const Content = component._store.props.children[1];
+    const Menu    = component.props.children[0];
+    const Content = component.props.children[1];
 
-    chai.expect(Menu._store.props.items).to.have.length(1);
-    chai.expect(Content._store.props.children).to.equal('Hello World!');
+    chai.expect(Menu.props.items).to.have.length(1);
+    chai.expect(Content.props.children).to.equal('Hello World!');
   });
 
   it('redirects on authentication failure', () => {
