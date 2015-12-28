@@ -10,9 +10,7 @@
 
 'use strict';
 
-import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'react-router';
 import routes from './config/routes';
 import de from './config/languages/de';
 import en from './config/languages/en';
@@ -23,4 +21,4 @@ Locale.setLocale(null);
 counterpart.registerTranslations('de', de);
 counterpart.registerTranslations('en', en);
 
-Router.run(routes, (Root) => ReactDOM.render(<Root />, document.getElementById('content')));
+ReactDOM.render(routes, document.getElementById('content'));
