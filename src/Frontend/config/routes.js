@@ -17,7 +17,7 @@ import { Router, Route, browserHistory } from 'react-router';
 
 export default (
   <Router history={browserHistory}>
-    <Route handler={HelloWorld} path="/"/>
-    <Route handler={NotFoundPage} path="*" />
+    <Route component={HelloWorld} path="/"/>
+    <Route component={NotFoundPage} path="*" />
   </Router>
 );
