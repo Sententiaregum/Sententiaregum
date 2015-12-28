@@ -10,8 +10,8 @@
 
 'use strict';
 
-import keyMirror from 'react/lib/keyMirror';
+const GET_LOCALES = 'GET_LOCALES';
 
-export default keyMirror({
-  GET_LOCALES: null
-});
+export default {
+  GET_LOCALES
+};

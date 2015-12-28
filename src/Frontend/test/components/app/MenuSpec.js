@@ -23,9 +23,9 @@ describe('Menu', () => {
     const MenuComponent = new Menu({items:[]});
     const component     = MenuComponent.render();
 
-    chai.expect(component._store.props.children[2]).to.be.undefined;
+    chai.expect(component.props.children[2]).to.be.undefined;
 
-    let localeSwitcher = component._store.props.children[1];
+    let localeSwitcher = component.props.children[1];
     chai.expect(localeSwitcher).not.to.be.undefined;
   });
 
@@ -54,17 +54,17 @@ describe('Menu', () => {
 
     const result = MenuComponent.render();
 
-    let item = result._store.props.children[2]._store.props.children;
+    let item = result.props.children[1].props.children[1].props.children;
     chai.expect(item).to.have.length(2);
     sinon.assert.calledOnce(MenuActions.buildMenuItems);
     sinon.assert.calledOnce(MenuStore.getItems);
 
     for (let menuItem of item) {
-      chai.expect(menuItem._store.props.key).to.equal(menuItem._store.props.children._store.props.children);
+      chai.expect(menuItem.props.key).to.equal(menuItem.props.children.props.children);
     }
 
     let menuItem1 = item[0];
-    let itemprop  = menuItem1._store.props.children._store.props;
+    let itemprop  = menuItem1.props.children.props;
     chai.expect(itemprop.content).to.equal('Start');
 
     MenuStore.getItems.restore();

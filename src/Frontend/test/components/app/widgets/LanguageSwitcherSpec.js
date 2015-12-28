@@ -36,15 +36,15 @@ describe('LanguageSwitcher', () => {
     component.refreshLocales();
 
     const result   = component.render();
-    const dropdown = result._store.props.children;
+    const dropdown = result.props.children;
 
     chai.expect(dropdown.length).to.equal(2);
-    chai.expect(dropdown[0]._store.props.id).to.equal('de');
-    chai.expect(dropdown[0]._store.props.children).to.equal('Deutsch');
+    chai.expect(dropdown[0].props.id).to.equal('de');
+    chai.expect(dropdown[0].props.children).to.equal('Deutsch');
 
-    chai.expect(dropdown[1]._store.props.id).to.equal('en');
-    chai.expect(dropdown[1]._store.props.className).to.equal('active');
-    chai.expect(dropdown[1]._store.props.children).to.equal('English');
+    chai.expect(dropdown[1].props.id).to.equal('en');
+    chai.expect(dropdown[1].props.className).to.equal('active');
+    chai.expect(dropdown[1].props.children).to.equal('English');
 
     LocaleStore.getAllLocales.restore();
   });
@@ -53,8 +53,8 @@ describe('LanguageSwitcher', () => {
     const component = new LanguageSwitcher({});
 
     const result = component.render();
-    const bar    = result._store.props.children;
+    const bar    = result.props.children;
 
-    chai.expect(bar._store.props.children._store.props.children._store.props.content).to.equal('menu.l10n_loading');
+    chai.expect(bar.props.children.props.children.props.content).to.equal('menu.l10n_loading');
   });
 });
