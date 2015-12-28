@@ -11,7 +11,7 @@
 'use strict';
 
 import counterpart from 'counterpart';
-import invariant from 'react/lib/invariant';
+import invariant from 'invariant';
 
 /**
  * Simple helper class which utilizes locale management and
