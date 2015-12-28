@@ -13,7 +13,7 @@ class sententiaregum::infrastructure::mailcatcher($dest_ip) {
 
   if !$is_mailcatcher_running {
     exec { 'start mailcatcher':
-      command => "/usr/local/bin/mailcatcher --http-ip ${dest_ip}",
+      command => "mailcatcher --http-ip ${dest_ip}",
       require => [
         Package['mailcatcher'],
       ],

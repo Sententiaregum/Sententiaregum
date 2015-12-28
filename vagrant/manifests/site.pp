@@ -1,4 +1,4 @@
-Exec { path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/www/sententiaregum/bin' }
+Exec { path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/www/sententiaregum/bin:/usr/local/node/node-default/bin' }
 Class['::apt::update'] -> Package <|
   title != 'python-software-properties'
   and title != 'software-properties-common'

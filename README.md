@@ -82,6 +82,16 @@ For ESLint are some PHPStorm/WebStorm plugins available:
 Just copy the file *vagrant/ssh_key_path.yaml.dist* to *vagrant/ssh_key_path.yaml* and uncomment the first line.
 Now fix the path to the proper ssh key path and then re-create the vagrant box.
 
+#### Custom timezone
+
+The default timezone inside the vagrant box is "UTC".
+
+In order to change it create a file called "vagrant/hieradata/local.yaml" which should look like this:
+
+``` yaml
+timezone: 'Europe/Berlin' # your custom timezone
+```
+
 ## Install
 
 The installation is really simple.

@@ -26,7 +26,7 @@ class sententiaregum::backend::server(
   }
 
   exec { 'disable default site':
-    command => '/usr/sbin/a2dissite 000-default.conf',
+    command => 'a2dissite 000-default.conf',
     notify  => Service['apache2'],
     require => [
       ::Apache::Vhost[$host_name],
