@@ -1,7 +1,7 @@
 class sententiaregum::backend::php(
   $version    = '5.6',
   $extensions = {},
-  $timezone   = 'UTC'
+  $timezone   = hiera('timezone')
 ) {
   validate_string($version)
   validate_hash($extensions)

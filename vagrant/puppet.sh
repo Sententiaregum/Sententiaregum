@@ -20,6 +20,7 @@ puppet module install willdurand/composer --force
 puppet module install willdurand/nodejs --force
 puppet module install thomasvandoren-redis --force
 puppet module install maestrodev/wget --force
+puppet module install saz-timezone --force
 
 # create stamp file in order to mark module install completed
 touch /etc/puppet/.vagrant-puppet-stamp

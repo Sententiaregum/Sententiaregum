@@ -7,7 +7,7 @@ class sententiaregum::backend::php::composer {
   }
 
   exec { 'composer install':
-    command     => '/usr/local/bin/composer install',
+    command     => 'composer install',
     cwd         => '/var/www/sententiaregum',
     user        => 'vagrant',
     environment => ['HOME=/home/vagrant'],
