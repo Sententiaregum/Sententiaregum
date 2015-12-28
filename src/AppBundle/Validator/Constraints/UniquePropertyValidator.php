@@ -12,7 +12,6 @@
 
 namespace AppBundle\Validator\Constraints;
 
-use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -33,20 +32,13 @@ class UniquePropertyValidator extends ConstraintValidator
     private $managerRegistry;
 
     /**
-     * @var SuggestorInterface
-     */
-    private $suggestor;
-
-    /**
      * Constructor.
      *
-     * @param ManagerRegistry    $managerRegistry
-     * @param SuggestorInterface $suggestor
+     * @param ManagerRegistry $managerRegistry
      */
-    public function __construct(ManagerRegistry $managerRegistry, SuggestorInterface $suggestor)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
-        $this->suggestor       = $suggestor;
     }
 
     /**
@@ -60,6 +52,7 @@ class UniquePropertyValidator extends ConstraintValidator
      * @throws UnexpectedTypeException       If the value is not a scalar value or has a __toString() interceptor.
      * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class.
      * @throws ConstraintDefinitionException If the entity field cannot be found.
+     * @throws ConstraintDefinitionException If the entity field is an invalid mapping (e.g. an association or an identifier)
      */
     public function validate($value, Constraint $constraint)
     {
@@ -74,11 +67,8 @@ class UniquePropertyValidator extends ConstraintValidator
             throw new UnexpectedTypeException($context, ExecutionContextInterface::class);
         }
 
-        if (!is_scalar($value)
-            && (!is_object($value) && !method_exists($value, '__toString'))
-            && !is_object($value) // allowing objects as one-to-one values should be validated, too
-        ) {
-            throw new UnexpectedTypeException($value, 'scalar or object');
+        if (!is_scalar($value) && (!is_object($value) && !method_exists($value, '__toString'))) {
+            throw new UnexpectedTypeException($value, 'scalar');
         }
 
         $entityAlias = $constraint->entity;
@@ -101,32 +91,29 @@ class UniquePropertyValidator extends ConstraintValidator
         /** @var \Doctrine\ORM\Mapping\ClassMetadata $metadata */
         $metadata = $manager->getClassMetadata($entityAlias);
 
-        if (!$metadata->hasField($field) && !$metadata->hasAssociation($field)) {
-            if (false !== strpos($field, '.')) {
-                list($embeddable, $embeddedField) = explode('.', $field, 2);
-
-                if (isset($metadata->embeddedClasses[$embeddable])) {
-                    /** @var \Doctrine\ORM\Mapping\ClassMetadata $embeddableMetadata */
-                    $embeddableMetadata = $manager->getClassMetadata($metadata->embeddedClasses[$embeddable]['class']);
-
-                    if (!$embeddableMetadata->hasField($embeddedField)) {
-                        throw new ConstraintDefinitionException(sprintf(
-                            'Embeddable "%s" on entity "%s" has no field "%s"!',
-                            $embeddable,
-                            $entityAlias,
-                            $embeddedField
-                        ));
-                    }
-                } else {
-                    throw new ConstraintDefinitionException(sprintf('Entity "%s" has no embeddable "%s"!', $entityAlias, $embeddable));
-                }
-            } else {
-                throw new ConstraintDefinitionException(sprintf('Entity "%s" has no field "%s"!', $entityAlias, $field));
-            }
+        if ($metadata->hasAssociation($field)
+            || isset($metadata->embeddedClasses[$field])
+            || $metadata->isIdentifier($field)
+        ) {
+            throw new ConstraintDefinitionException(sprintf(
+                'The configured field "%s" must not be an embeddable, an association or an identifier!',
+                $field
+            ));
+        } elseif (!$metadata->hasField($field)) {
+            throw new ConstraintDefinitionException(sprintf(
+                'Invalid field "%s"!',
+                $field
+            ));
         }
 
-        if ($metadata->hasAssociation($field)) {
-            $manager->initializeObject($value);
+        if ($metadata->isEmbeddedClass
+            || $metadata->isMappedSuperclass
+            || (($reflection = $metadata->getReflectionClass()) && $reflection->isAbstract())
+        ) {
+            throw new ConstraintDefinitionException(sprintf(
+                'The given entity "%s" must not be an embeddable or an abstract/superclass object!',
+                $entityAlias
+            ));
         }
 
         /** @var \Doctrine\Common\Persistence\ObjectRepository $repository */
@@ -135,63 +122,15 @@ class UniquePropertyValidator extends ConstraintValidator
         $search     = $repository->findOneBy($query);
 
         if (!empty($search)) {
-            $notUniqueBuilder = $this->buildBasicViolationByMessage(
-                $constraint->message,
-                $field,
-                $entityAlias,
-                $value,
-                $constraint->propertyPath
-            );
-
-            $notUniqueBuilder
+            $context
+                ->buildViolation($constraint->message)
+                ->setParameter('%property%', $field)
+                ->setParameter('%entity%', $entityAlias)
+                ->setParameter('%value%', $value)
                 ->setInvalidValue($value)
                 ->setCode(UniqueProperty::NON_UNIQUE_PROPERTY)
+                ->atPath($constraint->propertyPath)
                 ->addViolation();
-
-            if ($constraint->generateSuggestions
-                && !empty($suggestions = $this->suggestor->getPossibleSuggestions($value))
-            ) {
-                $suggestionBuilder = $this->buildBasicViolationByMessage(
-                    $constraint->suggestionMessage,
-                    $field,
-                    $entityAlias,
-                    $value,
-                    $constraint->propertyPath
-                );
-
-                $suggestionBuilder
-                    ->setParameter('%suggestions%', implode(', ', $suggestions))
-                    ->addViolation();
-            }
         }
-    }
-
-    /**
-     * Creates the basic constraint violation builder.
-     *
-     * @param string $message
-     * @param string $property
-     * @param string $entity
-     * @param mixed  $value
-     * @param string $propertyPath
-     *
-     * @return \Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface
-     */
-    private function buildBasicViolationByMessage($message, $property, $entity, $value, $propertyPath = null)
-    {
-        /** @var ExecutionContextInterface $context */
-        $context = $this->context;
-
-        $violationBuilder = $context
-            ->buildViolation($message)
-            ->setParameter('%property%', $property)
-            ->setParameter('%entity%', $entity)
-            ->setParameter('%value%', $value);
-
-        if (null !== $path = $propertyPath) {
-            $violationBuilder->atPath($path);
-        }
-
-        return $violationBuilder;
     }
 }

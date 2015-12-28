@@ -9,6 +9,11 @@ services:
     class: AppBundle\Validator\Constraints\UniquePropertyValidator
     arguments:
       - "@doctrine"
-      - "@app.user.registration.name_suggestor"
     tags:
       - { name: validator.constraint_validator, alias: "app.validator.unique_property" }
+  app.validator.unique_dto_params:
+    class: AppBundle\Validator\Constraints\UniqueDTOParamsValidator
+    arguments:
+      - "@property_accessor"
+    tags:
+      - { name: validator.constraint_validator, alias: "app.validator.unique_dto_params" }
