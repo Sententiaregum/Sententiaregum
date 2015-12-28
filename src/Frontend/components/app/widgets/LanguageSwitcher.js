@@ -96,9 +96,9 @@ export default class LanguageSwitcher extends React.Component {
     if (0 === localeKeys.length) {
       languageItems = (
         <MenuItem eventKey="1.1">
-            <span className="loading">
-              <Translate content="menu.l10n_loading" />
-            </span>
+          <span className="loading">
+            <Translate content="menu.l10n_loading" />
+          </span>
         </MenuItem>
       );
     } else {

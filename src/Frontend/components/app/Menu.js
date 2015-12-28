@@ -87,16 +87,23 @@ export default class Menu extends React.Component {
 
     let nav;
     if (0 < items.length) {
-      nav = <Nav right>{items}</Nav>;
+      nav = <Nav pullRight>{items}</Nav>;
     }
 
     return (
-      <Navbar inverse fixedTop toggleNavKey={0} navToggle={false}>
-        <NavBrand><a href="/#/">Sententiaregum</a></NavBrand>
-        <Nav left>
-          <LanguageSwitcher />
-        </Nav>
-        {nav}
+      <Navbar inverse fixedTop>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href="/#/">Sententiaregum</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <LanguageSwitcher />
+          </Nav>
+          {nav}
+        </Navbar.Collapse>
       </Navbar>
     );
   }
