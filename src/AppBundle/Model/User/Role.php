@@ -13,6 +13,7 @@
 namespace AppBundle\Model\User;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Serializable;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
@@ -45,25 +46,12 @@ class Role implements RoleInterface, Serializable
     /**
      * Constructor.
      *
-     * @param $role
+     * @param string $role
      */
     public function __construct($role)
     {
         $this->role = (string) $role;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param string $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
+        $this->id   = Uuid::uuid4();
     }
 
     /**

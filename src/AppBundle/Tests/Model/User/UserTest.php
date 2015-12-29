@@ -127,11 +127,53 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->addRole($role);
     }
 
+    public function testNewUserIp()
+    {
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $this->assertTrue($user->isNewUserIp($ip));
+        $this->assertFalse($user->isNewUserIp($ip));
+    }
+
+    public function testFailedAuthIp()
+    {
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip));
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip));
+    }
+
+    public function testFailedAuthWithKnownIp()
+    {
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $this->assertTrue($user->isNewUserIp($ip));
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip));
+    }
+
     public function testSerialization()
     {
         $user = User::create('Ma27', 'foo', 'foo@bar.de');
         $user->setState(User::STATE_APPROVED);
         $user->addRole(new Role('ROLE_USER'));
+        $user->isNewUserIp('33.33.33.33');
+
+        $user->addFailedAuthenticationWithIp('127.0.0.1');
+        $user->addFailedAuthenticationWithIp('127.0.0.1');
+        $user->addFailedAuthenticationWithIp('127.0.0.1');
 
         $serialized = serialize($user);
 
@@ -144,5 +186,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\DateTime::class, $newUser->getRegistrationDate());
         $this->assertSame(User::STATE_APPROVED, $newUser->getState());
         $this->assertCount(1, $newUser->getRoles());
+        $this->assertFalse($user->isNewUserIp('33.33.33.33'));
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1'));
     }
 }

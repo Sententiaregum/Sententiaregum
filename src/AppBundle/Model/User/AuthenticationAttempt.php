@@ -12,24 +12,20 @@
 
 namespace AppBundle\Model\User;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Model that represents the internal activation life cycle during the user approval.
+ * Model that contains data of an authentication attempt.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(
- *     name="pending_activation",
- *     indexes={
- *         @ORM\Index(name="pendingActivation_activationDate", columns={"activation_date"})
- *     }
- * )
+ * @ORM\Entity
+ * @ORM\Table(name="authentication_attempt", indexes={
+ *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"})
+ * })
  */
-class PendingActivation
+class AuthenticationAttempt
 {
     /**
      * @var string
@@ -41,11 +37,18 @@ class PendingActivation
     private $id;
 
     /**
-     * @var DateTime
+     * @var string
      *
-     * @ORM\Column(name="activation_date", type="datetime")
+     * @ORM\Column(name="ip", type="string", length=255, unique=true)
      */
-    private $activationDate;
+    private $ip;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="attempt_count", type="integer")
+     */
+    private $attemptCount = 0;
 
     /**
      * Constructor.
@@ -56,7 +59,7 @@ class PendingActivation
     }
 
     /**
-     * Getter for the id.
+     * Get id.
      *
      * @return string
      */
@@ -66,32 +69,48 @@ class PendingActivation
     }
 
     /**
-     * Sets the activation date.
+     * Get ip.
      *
-     * @param DateTime $dateTime
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * Set ip.
+     *
+     * @param string $ip
      *
      * @return $this
      */
-    public function setActivationDate(DateTime $dateTime)
+    public function setIp($ip)
     {
-        $this->activationDate = $dateTime;
+        $this->ip = (string) $ip;
 
         return $this;
     }
 
     /**
-     * Checks if the activation is expired.
+     * Get attempt count.
      *
-     * @throws \LogicException If the activation is missing
-     *
-     * @return bool
+     * @return int
      */
-    public function isActivationExpired()
+    public function getAttemptCount()
     {
-        if (!$this->activationDate) {
-            throw new \LogicException('Missing activation date!');
-        }
+        return $this->attemptCount;
+    }
 
-        return time() - $this->activationDate->getTimestamp() >= 3600 * 2;
+    /**
+     * Increase attempt count.
+     *
+     * @return $this
+     */
+    public function increaseAttemptCount()
+    {
+        $this->attemptCount++;
+
+        return $this;
     }
 }
