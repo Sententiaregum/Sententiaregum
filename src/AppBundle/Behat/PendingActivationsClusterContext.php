@@ -16,7 +16,7 @@ use AppBundle\Model\User\PendingActivation;
 use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Doctrine\ORM\Id\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Context for the pending activations cluster functionality.
@@ -49,10 +49,8 @@ class PendingActivationsClusterContext extends BaseContext implements SnippetAcc
         $key = $this->getContainer()->get('app.user.registration.activation_key_generator')->generate();
 
         $activation = new PendingActivation();
-        $activation->setId((new UuidGenerator())->generate($this->getEntityManager(), $activation));
         $activation->setActivationDate(new \DateTime());
         $user = User::create('Ma27-2', '123456', 'ma27-2@sententiaregum.dev');
-        $user->setId($this->getContainer()->get('app.doctrine.uuid')->generateUUIDForEntity($this->getEntityManager(), $user));
         $user->setPendingActivation($activation);
         $user->setActivationKey($key);
 
@@ -95,7 +93,6 @@ class PendingActivationsClusterContext extends BaseContext implements SnippetAcc
         $user->setPendingActivation(
             (new PendingActivation())
                 ->setActivationDate(new \DateTime('-6 hours'))
-                ->setId((new UuidGenerator())->generate($this->getEntityManager(), $user->getPendingActivation()))
         );
 
         $this->getEntityManager()->persist($user);
