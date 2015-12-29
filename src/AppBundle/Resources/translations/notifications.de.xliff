@@ -26,6 +26,26 @@
                 <source>NOTIFICATIONS_ACTIVATION_HTML_LINK</source>
                 <target>Link zur Aktivierung</target>
             </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_NEW_LOGIN">
+                <source>NOTIFICATIONS_NEW_LOGIN</source>
+                <target>Dein Account wurde von einer bisher unbekannten IP angemeldet. Im folgenden siehst du die IP und das Tracking Ergebnis. Solltest du für diesen Login nicht verantwortlich sein, ändere bitte unverzüglich dein Passwort oder beantrage eine Sperrung.</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_IP_TRACE_LAT_LONG">
+                <source>NOTIFICATIONS_IP_TRACE_LAT_LONG</source>
+                <target>Höhen- und Breitengrad</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_IP_TRACE_NO_RESULT">
+                <source>NOTIFICATIONS_IP_TRACE_NO_RESULT</source>
+                <target>Es konnte leider nichts geortet werden!</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_FAILED_AUTHENTICATION">
+                <source>NOTIFICATIONS_FAILED_AUTHENTICATION</source>
+                <target>Es wurde mindestens dreimal von einer fremden IP versucht, auf deinen Account zuzugreifen. Im folgenden siehst du den Ort und die IP Adresse selbst. Wir empfehlen dringendst, dein Passwort zu ändern.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

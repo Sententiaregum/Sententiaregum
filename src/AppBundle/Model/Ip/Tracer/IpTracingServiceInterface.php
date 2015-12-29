@@ -10,24 +10,22 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Doctrine\ORM\Id;
-
-use Doctrine\ORM\EntityManagerInterface;
+namespace AppBundle\Model\Ip\Tracer;
 
 /**
- * Interface for a UUID generator.
+ * Interface which attempts to trace an ip and returns an object containing all the necessary data.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-interface UUIDInterface
+interface IpTracingServiceInterface
 {
     /**
-     * Generates a uuid.
+     * Gets the ip location object.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param object                 $entity
+     * @param string $ip
+     * @param string $userLocale
      *
-     * @return string
+     * @return \AppBundle\Model\Ip\IpLocation
      */
-    public function generateUUIDForEntity(EntityManagerInterface $entityManager, $entity);
+    public function getIpLocationData($ip, $userLocale);
 }

@@ -19,14 +19,6 @@ default:
         tags: "@online_users"
       type:   symfony_bundle
       bundle: AppBundle
-    uuid:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\UUIDContext
-      filters:
-        tags: "@uuid"
-      type:   symfony_bundle
-      bundle: AppBundle
     fixtures:
       contexts:
         - AppBundle\Behat\AppContext

@@ -1,0 +1,9 @@
+{% extends 'AppBundle:Email:email_layout.html.twig' %}
+
+{% block username %}{{ notification_target.username }}{% endblock %}
+
+{% block content %}
+    <span>{{ 'NOTIFICATIONS_FAILED_AUTHENTICATION'|trans({}, 'notifications') }}</span>
+
+    {% include 'AppBundle:Email/AuthAttempt/Ip:ip_tracing_result.html.twig' %}
+{% endblock %}

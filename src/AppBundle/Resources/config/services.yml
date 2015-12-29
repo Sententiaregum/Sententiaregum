@@ -3,8 +3,6 @@ services:
     class: AppBundle\Doctrine\ORM\ConfigurableFixturesLoader
     arguments:
       - "@doctrine.orm.default_entity_manager"
-  app.doctrine.uuid:
-    class: AppBundle\Doctrine\ORM\UUID
   app.request.dto_param_converter:
     class: AppBundle\Request\ParamConverter\DTOConverter
     arguments:
@@ -27,6 +25,9 @@ services:
       - "@ma27_api_key_authentication.password.strategy"
       - "@app.user.registration.name_suggestor"
       - "@app.redis.cluster.approval"
-      - "@app.doctrine.uuid"
       - "@app.repository.user"
       - "@app.repository.role"
+  app.ip.tracer:
+    class: AppBundle\Model\Ip\Tracer\FreeGeoIpTracingService
+    arguments:
+      - "@guzzle.client.freegeoip"

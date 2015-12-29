@@ -26,6 +26,26 @@
                 <source>NOTIFICATIONS_ACTIVATION_HTML_LINK</source>
                 <target>Link to the activation</target>
             </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_NEW_LOGIN">
+                <source>NOTIFICATIONS_NEW_LOGIN</source>
+                <target>New login on your account with a new ip address. Here you can see the tracing result and the ip address. If you're unresponsible for this, please change your password immediately or request a ban.</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_IP_TRACE_LAT_LONG">
+                <source>NOTIFICATIONS_IP_TRACE_LAT_LONG</source>
+                <target>Latitude and Longitude</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_IP_TRACE_NO_RESULT">
+                <source>NOTIFICATIONS_IP_TRACE_NO_RESULT</source>
+                <target>Unable to trace ip address!</target>
+            </trans-unit>
+
+            <trans-unit id="NOTIFICATIONS_FAILED_AUTHENTICATION">
+                <source>NOTIFICATIONS_FAILED_AUTHENTICATION</source>
+                <target>Some tried at least three times to access your account. In this email you can see the location and the ip address itself. We recommend a password change.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
