@@ -14,6 +14,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import LocaleConstants from '../constants/Locale';
 import { Locale, ApiKey } from '../util/http/facade/HttpServices';
 import $ from 'jquery';
+import LocaleStore from '../store/LocaleStore';
 
 /**
  * Action creator which dispatches actions for the locale switcher.
@@ -27,16 +28,20 @@ class LocaleActions {
    * @returns {void}
    */
   loadLanguages() {
-    $.ajax({
-      url:     '/api/locale.json',
-      method:  'GET',
-      success: (response) => {
-        AppDispatcher.dispatch({
-          event:  LocaleConstants.GET_LOCALES,
-          result: response
-        });
-      }
-    });
+    if (!LocaleStore.isInitialized()) {
+      $.ajax({
+        url:     '/api/locale.json',
+        method:  'GET',
+        success: (response) => {
+          AppDispatcher.dispatch({
+            event:  LocaleConstants.GET_LOCALES,
+            result: response
+          });
+        }
+      });
+    } else {
+      LocaleStore.triggerLocaleChange();
+    }
   }
 
   /**

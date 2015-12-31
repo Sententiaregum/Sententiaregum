@@ -18,6 +18,7 @@ import AppDispatcher from '../../dispatcher/AppDispatcher';
 import LocaleConstants from '../../constants/Locale';
 import {ApiKey, Locale} from '../../util/http/facade/HttpServices';
 import Cookies from 'cookies-js';
+import LocaleStore from '../../store/LocaleStore';
 
 describe('LocaleActions', () => {
   it('changes the locale', () => {
@@ -41,6 +42,22 @@ describe('LocaleActions', () => {
     ApiKey.isLoggedIn.restore();
     ApiKey.getApiKey.restore();
     Locale.setLocale.restore();
+  });
+
+  it('avoids locale change if store is already initialized', () => {
+    $.ajax = function () {};
+
+    sinon.stub(LocaleStore, 'isInitialized', () => true);
+    sinon.stub(LocaleStore, 'triggerLocaleChange');
+    sinon.stub($, 'ajax');
+
+    LocaleActions.loadLanguages();
+    sinon.assert.calledOnce(LocaleStore.triggerLocaleChange);
+    sinon.assert.notCalled($.ajax);
+
+    LocaleStore.isInitialized.restore();
+    LocaleStore.triggerLocaleChange.restore();
+    $.ajax.restore();
   });
 
   it('loads available locales', () => {

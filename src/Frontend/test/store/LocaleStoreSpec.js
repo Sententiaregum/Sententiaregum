@@ -26,11 +26,13 @@ describe('LocaleStore', () => {
       en: 'English'
     };
 
+    chai.expect(LocaleStore.isInitialized()).to.equal(false);
     AppDispatcher.dispatch({
       event:  Locale.GET_LOCALES,
       result: data
     });
 
+    chai.expect(LocaleStore.isInitialized()).to.equal(true);
     chai.expect(spy.called);
     chai.expect(LocaleStore.getAllLocales(), data);
   });
