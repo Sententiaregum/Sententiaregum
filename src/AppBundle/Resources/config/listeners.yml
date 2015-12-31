@@ -38,3 +38,12 @@ services:
       - "%locale%"
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+  app.listener.credential_notify:
+    class: AppBundle\EventListener\CredentialNotifyListener
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+      - "@event_dispatcher"
+      - "@request_stack"
+      - "@app.ip.tracer"
+    tags:
+      - { name: kernel.event_subscriber }

@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
 
             new Snc\RedisBundle\SncRedisBundle(),
+            new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
 
             new AppBundle\AppBundle(),
         ];

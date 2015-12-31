@@ -15,7 +15,6 @@ namespace AppBundle\DataFixtures\ORM;
 use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
 use AppBundle\Model\User\Role;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\Id\UuidGenerator;
 
 /**
  * Fixture class that creates the basic role entities.
@@ -31,9 +30,6 @@ class RoleFixture implements ProductionFixtureInterface
     {
         $userRole  = new Role('ROLE_USER');
         $adminRole = new Role('ROLE_ADMIN');
-
-        $userRole->setId((new UuidGenerator())->generate($manager, $userRole));
-        $adminRole->setId((new UuidGenerator())->generate($manager, $adminRole));
 
         $manager->persist($userRole);
         $manager->persist($adminRole);

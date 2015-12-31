@@ -16,7 +16,6 @@ use AppBundle\Model\User\User;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\Id\UuidGenerator;
 
 /**
  * Behat context class containing basic steps.
@@ -52,7 +51,13 @@ class AppContext extends BaseContext implements SnippetAcceptingContext
 
         foreach ($table->getHash() as $row) {
             $user = User::create($row['username'], $hasher->generateHash($row['password']), $row['email']);
-            $user->setId($row['user_id']);
+
+            if (isset($row['user_id'])) {
+                // there are cases where the user id should be known
+                $r = new \ReflectionProperty(User::class, 'id');
+                $r->setAccessible(true);
+                $r->setValue($user, $row['user_id']);
+            }
 
             if (isset($row['activation_date'])) {
                 $user->getPendingActivation()->setActivationDate(new \DateTime($row['activation_date']));
@@ -67,8 +72,6 @@ class AppContext extends BaseContext implements SnippetAcceptingContext
                     $user->addRole($adminRole);
                 }
             } else {
-                $user->getPendingActivation()->setId((new UuidGenerator())->generate($em, $user));
-
                 if (isset($row['activation_key'])) {
                     $user->setActivationKey($row['activation_key']);
                 }

@@ -4,8 +4,8 @@ Feature: online users
 
   Background:
     Given the following users exist:
-        | user_id | username | password | email              |
-        |       1 | test_1   | 123456   | test_1@example.org |
+        | username | password | email              |
+        | test_1   | 123456   | test_1@example.org |
       And this user follows the following users:
         | username  |
         | admin     |

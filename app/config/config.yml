@@ -119,6 +119,14 @@ snc_redis:
             alias: online_users
             dsn: "redis://localhost:%online_users_port%"
 
+# Guzzle Configuration
+guzzle:
+    clients:
+        freegeoip:
+            base_url: "http://freegeoip.net"
+            headers:
+                Accept: "application/json"
+
 # DoctrineMigrations Configuration
 doctrine_migrations:
     dir_name:   "%kernel.root_dir%/migrations"

@@ -1,0 +1,6 @@
+{% if tracing_data is not null %}
+    {{ tracing_data.ip }}: {{ tracing_data.city }}, {{ tracing_data.region }}, {{ tracing_data.country }}
+    {{ 'NOTIFICATIONS_IP_TRACE_LAT_LONG'|trans({}, 'notifications') }}: {{ tracing_data.latitude }}, {{ tracing_data.longitude }}
+{% else %}
+    {{ 'NOTIFICATIONS_IP_TRACE_NO_RESULT'|trans({}, 'notifications') }}
+{% endif %}

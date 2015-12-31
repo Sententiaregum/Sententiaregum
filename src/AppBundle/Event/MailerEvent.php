@@ -71,7 +71,7 @@ class MailerEvent extends Event
      * Adds a templating parameter.
      *
      * @param string $name
-     * @param string $value
+     * @param mixed  $value
      *
      * @return $this
      */

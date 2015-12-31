@@ -12,7 +12,6 @@
 
 namespace AppBundle\Model\User\Registration;
 
-use AppBundle\Doctrine\ORM\Id\UUIDInterface;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
@@ -86,11 +85,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private $expiredActivationProvider;
 
     /**
-     * @var UUIDInterface
-     */
-    private $uuid;
-
-    /**
      * @var UserRepository
      */
     private $userRepository;
@@ -110,7 +104,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @param PasswordHasherInterface             $passwordHasher
      * @param SuggestorInterface                  $nameSuggestor
      * @param ExpiredActivationProviderInterface  $expiredActivationProvider
-     * @param UUIDInterface                       $uuidGenerator
      * @param UserRepository                      $userRepository
      * @param EntityRepository                    $roleRepository
      */
@@ -122,7 +115,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         PasswordHasherInterface $passwordHasher,
         SuggestorInterface $nameSuggestor,
         ExpiredActivationProviderInterface $expiredActivationProvider,
-        UUIDInterface $uuidGenerator,
         UserRepository $userRepository,
         EntityRepository $roleRepository
     ) {
@@ -133,7 +125,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->hasher                     = $passwordHasher;
         $this->suggestor                  = $nameSuggestor;
         $this->expiredActivationProvider  = $expiredActivationProvider;
-        $this->uuid                       = $uuidGenerator;
         $this->userRepository             = $userRepository;
         $this->roleRepository             = $roleRepository;
     }
@@ -219,14 +210,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
 
         $newUser->setLocale($userParameters->getLocale());
         $newUser->setActivationKey($this->getUniqueActivationKey());
-        $newUser->setId($this->uuid->generateUUIDForEntity($this->entityManager, $newUser));
-
-        $newUser->getPendingActivation()->setId(
-            $this->uuid->generateUUIDForEntity(
-                $this->entityManager,
-                $newUser->getPendingActivation()
-            )
-        );
 
         return [
             'valid' => true,
@@ -243,7 +226,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         $mailerEvent = new MailerEvent();
         $mailerEvent
-            ->setTemplateSource('AppBundle:Email:activation')
+            ->setTemplateSource('AppBundle:Email/Activation:activation')
             ->addUser($persistentUser)
             ->addParameter('activation_key', $persistentUser->getActivationKey())
             ->addParameter('username', $persistentUser->getUsername());

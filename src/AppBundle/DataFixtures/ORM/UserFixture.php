@@ -16,7 +16,6 @@ use AppBundle\Model\User\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\Id\UuidGenerator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
@@ -69,7 +68,6 @@ class UserFixture extends BaseFixture implements FixtureInterface, DependentFixt
 
         /** @var User $userModel */
         foreach ([$user1, $user2, $locked] as $userModel) {
-            $userModel->setId((new UuidGenerator())->generate($manager, $userModel));
             $manager->persist($userModel);
         }
 

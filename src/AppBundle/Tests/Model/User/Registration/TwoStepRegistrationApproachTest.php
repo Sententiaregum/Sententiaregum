@@ -12,7 +12,6 @@
 
 namespace AppBundle\Tests\Model\User\Registration;
 
-use AppBundle\Doctrine\ORM\Id\UUIDInterface;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
@@ -70,7 +69,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(PasswordHasherInterface::class),
             $suggestor,
             $this->getActivationProvider(),
-            $this->getUUID(),
             $this->getUserRepository(),
             $this->getRoleRepository()
         );
@@ -131,7 +129,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $hasher,
             new ChainSuggestor($entityManager),
             $provider,
-            $this->getUUID(),
             $this->getUserRepository(),
             $this->getRoleRepository()
         );
@@ -168,7 +165,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $this->getActivationProvider(),
-            $this->getUUID(),
             $repository,
             $this->getRoleRepository()
         );
@@ -216,7 +212,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $this->getActivationProvider(),
-            $this->getUUID(),
             $repository,
             $roleRepo
         );
@@ -260,7 +255,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(PasswordHasherInterface::class),
             new ChainSuggestor($em),
             $this->getActivationProvider(),
-            $this->getUUID(),
             $this->getUserRepository(),
             $this->getRoleRepository()
         );
@@ -308,7 +302,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $provider,
-            $this->getUUID(),
             $repository,
             $this->getRoleRepository()
         );
@@ -359,7 +352,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getPasswordHasher(),
             new ChainSuggestor($entityManager),
             $this->getActivationProvider(),
-            $this->getUUID(),
             $repository,
             $roleRepo
         );
@@ -391,20 +383,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         return $provider;
-    }
-
-    /**
-     * @return UUIDInterface
-     */
-    private function getUUID()
-    {
-        $mock = $this->getMock(UUIDInterface::class, ['generateUUIDForEntity']);
-        $mock
-            ->expects($this->any())
-            ->method('generateUUIDForEntity')
-            ->willReturn('12345');
-
-        return $mock;
     }
 
     /**

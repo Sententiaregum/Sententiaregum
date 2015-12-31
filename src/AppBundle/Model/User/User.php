@@ -16,6 +16,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ma27\ApiKeyAuthenticationBundle\Model\User\UserInterface;
+use Ramsey\Uuid\Uuid;
 use Serializable;
 
 /**
@@ -31,8 +32,11 @@ use Serializable;
  */
 class User implements UserInterface, Serializable
 {
-    const STATE_NEW      = 'new';
-    const STATE_APPROVED = 'approved';
+    const STATE_NEW                   = 'new';
+    const STATE_APPROVED              = 'approved';
+    const MAX_FAILED_ATTEMPTS_FROM_IP = 3;
+    const FAILED_AUTH_POOL            = 'failed_auths';
+    const AUTH_ATTEMPT_POOL           = 'auth_attempts';
 
     /**
      * @var string
@@ -158,6 +162,40 @@ class User implements UserInterface, Serializable
     private $pendingActivation;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="AppBundle\Model\User\AuthenticationAttempt",
+     *     indexBy="username",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinTable(
+     *     name="FailedAuthAttempt2User",
+     *     joinColumns={@ORM\JoinColumn(name="userId")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="attemptId")}
+     * )
+     */
+    private $failedAuthentications;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="AppBundle\Model\User\AuthenticationAttempt",
+     *     indexBy="username",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinTable(
+     *     name="Auth2User",
+     *     joinColumns={@ORM\JoinColumn(name="userId")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="attemptId")}
+     * )
+     */
+    private $authentications;
+
+    /**
      * Factory that fills the required fields of the user.
      *
      * @param string $username
@@ -181,26 +219,17 @@ class User implements UserInterface, Serializable
      */
     public function __construct()
     {
-        $this->roles            = new ArrayCollection();
-        $this->following        = new ArrayCollection();
-        $this->registrationDate = new DateTime();
-        $this->lastAction       = new DateTime();
+        $this->id = Uuid::uuid4()->toString();
+
+        $this->roles                 = new ArrayCollection();
+        $this->following             = new ArrayCollection();
+        $this->failedAuthentications = new ArrayCollection();
+        $this->authentications       = new ArrayCollection();
+
+        $this->registrationDate      = new DateTime();
+        $this->lastAction            = new DateTime();
 
         $this->setState(self::STATE_NEW);
-    }
-
-    /**
-     * Set id.
-     *
-     * @param string $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -679,6 +708,73 @@ class User implements UserInterface, Serializable
     }
 
     /**
+     * Checks whether the user ip is new and if true it will be persisted.
+     *
+     * @param string $ip
+     *
+     * @return bool
+     */
+    public function isNewUserIp($ip)
+    {
+        if (!($isKnown = $this->isKnownIp($ip))) {
+            $attempt = new AuthenticationAttempt();
+            $attempt
+                ->setIp($ip)
+                ->increaseAttemptCount();
+
+            $this->authentications->add($attempt);
+        }
+
+        return !$isKnown;
+    }
+
+    /**
+     * Adds one ip of a failed authentication unless its authentication succeeded previously (users may mistype some times).
+     *
+     * @param string $ip
+     *
+     * @return $this
+     */
+    public function addFailedAuthenticationWithIp($ip)
+    {
+        if (!$this->isKnownIp($ip)) {
+            if ($attempt = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL)) {
+                $attempt->increaseAttemptCount();
+            } else {
+                $attempt = new AuthenticationAttempt();
+                $attempt->setIp($ip);
+                $attempt->increaseAttemptCount();
+
+                $this->failedAuthentications->add($attempt);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Checks if one ip exceeds the attempt count.
+     *
+     * @param string $ip
+     *
+     * @return bool
+     */
+    public function exceedsIpFailedAuthAttemptMaximum($ip)
+    {
+        if (!$this->isKnownIp($ip, self::FAILED_AUTH_POOL)) {
+            return false;
+        }
+
+        $model  = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL);
+        $result = self::MAX_FAILED_ATTEMPTS_FROM_IP <= $model->getAttemptCount();
+        if ($result) {
+            $this->failedAuthentications->removeElement($model);
+        }
+
+        return $result;
+    }
+
+    /**
      * Serializes the internal dataset.
      *
      * @return string
@@ -699,6 +795,8 @@ class User implements UserInterface, Serializable
             $this->aboutText,
             $this->getRoles(),
             $this->getFollowing(),
+            $this->authentications->toArray(),
+            $this->failedAuthentications->toArray(),
         ]);
     }
 
@@ -711,19 +809,21 @@ class User implements UserInterface, Serializable
     {
         $data = unserialize($serialized);
 
-        $this->id               = $data[0];
-        $this->username         = $data[1];
-        $this->password         = $data[2];
-        $this->email            = $data[3];
-        $this->lastAction       = new DateTime(sprintf('@%s', $data[4]));
-        $this->registrationDate = new DateTime(sprintf('@%s', $data[5]));
-        $this->apiKey           = $data[6];
-        $this->activationKey    = $data[7];
-        $this->state            = $data[8];
-        $this->locked           = $data[9];
-        $this->aboutText        = $data[10];
-        $this->roles            = new ArrayCollection($data[11]);
-        $this->following        = new ArrayCollection($data[12]);
+        $this->id                    = $data[0];
+        $this->username              = $data[1];
+        $this->password              = $data[2];
+        $this->email                 = $data[3];
+        $this->lastAction            = new DateTime(sprintf('@%s', $data[4]));
+        $this->registrationDate      = new DateTime(sprintf('@%s', $data[5]));
+        $this->apiKey                = $data[6];
+        $this->activationKey         = $data[7];
+        $this->state                 = $data[8];
+        $this->locked                = $data[9];
+        $this->aboutText             = $data[10];
+        $this->roles                 = new ArrayCollection($data[11]);
+        $this->following             = new ArrayCollection($data[12]);
+        $this->authentications       = new ArrayCollection($data[13]);
+        $this->failedAuthentications = new ArrayCollection($data[14]);
     }
 
     /**
@@ -738,5 +838,44 @@ class User implements UserInterface, Serializable
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Checks whether the following ip is known.
+     *
+     * @param string $ip
+     * @param string $dataSource
+     *
+     * @return bool
+     */
+    private function isKnownIp($ip, $dataSource = self::AUTH_ATTEMPT_POOL)
+    {
+        return !empty($this->getAuthAttemptModelByIp($ip, $dataSource));
+    }
+
+    /**
+     * Gets the auth model by the given ip.
+     *
+     * @param string $ip
+     * @param string $dataSource
+     *
+     * @return AuthenticationAttempt|null
+     */
+    private function getAuthAttemptModelByIp($ip, $dataSource = self::AUTH_ATTEMPT_POOL)
+    {
+        $authAttempt = null;
+        $pool        = $dataSource === self::AUTH_ATTEMPT_POOL
+            ? $this->authentications->toArray()
+            : $this->failedAuthentications->toArray();
+
+        /** @var AuthenticationAttempt $authenticationAttempt */
+        foreach ($pool as $authenticationAttempt) {
+            if ((string) $ip === $authenticationAttempt->getIp()) {
+                $authAttempt = $authenticationAttempt;
+                break;
+            }
+        }
+
+        return $authAttempt;
     }
 }
