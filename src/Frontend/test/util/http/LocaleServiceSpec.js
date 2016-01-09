@@ -70,6 +70,6 @@ describe('LocaleService', () => {
 
     chai.expect(
       () => instance.setLocale('fr')
-    ).to.throw('[LocaleService.setLocale(fr) Invalid locale! Allowed locales are de,en!')
+    ).to.throw('[LocaleService.setLocale(fr)] Invalid locale! Allowed locales are de,en!')
   });
 });

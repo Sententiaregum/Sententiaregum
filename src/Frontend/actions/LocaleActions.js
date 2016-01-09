@@ -13,8 +13,8 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import LocaleConstants from '../constants/Locale';
 import { Locale, ApiKey } from '../util/http/facade/HttpServices';
-import $ from 'jquery';
 import LocaleStore from '../store/LocaleStore';
+import LocaleWebAPIUtils from '../util/api/LocaleWebAPIUtils';
 
 /**
  * Action creator which dispatches actions for the locale switcher.
@@ -29,15 +29,11 @@ class LocaleActions {
    */
   loadLanguages() {
     if (!LocaleStore.isInitialized()) {
-      $.ajax({
-        url:     '/api/locale.json',
-        method:  'GET',
-        success: (response) => {
-          AppDispatcher.dispatch({
-            event:  LocaleConstants.GET_LOCALES,
-            result: response
-          });
-        }
+      LocaleWebAPIUtils.getLocales(response => {
+        AppDispatcher.dispatch({
+          event:  LocaleConstants.GET_LOCALES,
+          result: response
+        });
       });
     } else {
       LocaleStore.triggerLocaleChange();
@@ -55,16 +51,7 @@ class LocaleActions {
     Locale.setLocale(locale);
 
     if (ApiKey.isLoggedIn()) {
-      const params = { locale };
-
-      $.ajax({
-        url:     '/api/protected/locale.json',
-        method:  'PATCH',
-        data:    params,
-        headers: {
-          'X-API-KEY': ApiKey.getApiKey()
-        }
-      });
+      LocaleWebAPIUtils.changeUserLocale(locale);
     }
   }
 }

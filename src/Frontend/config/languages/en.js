@@ -20,6 +20,9 @@ export default {
     not_found: {
       title: 'Error 404',
       text:  'It seems as this page doesn\'t exist.'
+    },
+    hello: {
+      head: 'Hello World!'
     }
   }
 };

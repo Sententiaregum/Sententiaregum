@@ -11,12 +11,13 @@
 'use strict';
 
 import React from 'react';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Translate from 'react-translate-component';
 import LocaleActions from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
 import { Locale } from '../../../util/http/facade/HttpServices';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
+import LoadingDropDown from '../markup/LoadingDropDown';
+import DropDownItem from '../markup/DropDownItem';
 
 /**
  * Widget which changes the user locale.
@@ -37,6 +38,8 @@ export default class LanguageSwitcher extends React.Component {
     this.state = {
       locales: {}
     };
+
+    this.handle = this._refreshLocales.bind(this);
   }
 
   /**
@@ -45,7 +48,7 @@ export default class LanguageSwitcher extends React.Component {
    * @returns {void}
    */
   componentDidMount() {
-    LocaleStore.addChangeListener(this.refreshLocales.bind(this), 'Locale');
+    LocaleStore.addChangeListener(this.handle, 'Locale');
     LocaleActions.loadLanguages();
   }
 
@@ -55,7 +58,30 @@ export default class LanguageSwitcher extends React.Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    LocaleStore.removeChangeListener(this.refreshLocales.bind(this), 'Locale');
+    LocaleStore.removeChangeListener(this.handle, 'Locale');
+  }
+
+  /**
+   * Renders the component.
+   *
+   * @returns {React.Element} React dom that contains the locale switcher
+   */
+  render() {
+    const translatedMenuItem = <Translate content="menu.l10n" />,
+        localeKeys           = Object.keys(this.state.locales),
+        languageItems        = 0 === localeKeys.length
+          ? <LoadingDropDown translationContent="menu.l10n_loading" />
+          : localeKeys.map(key => this._buildDropDown(key));
+
+    return (
+      <NavDropdown
+        eventKey={1}
+        id="l10n-dropdown"
+        title={translatedMenuItem}
+      >
+        {languageItems}
+      </NavDropdown>
+    );
   }
 
   /**
@@ -63,7 +89,7 @@ export default class LanguageSwitcher extends React.Component {
    *
    * @returns {void}
    */
-  refreshLocales() {
+  _refreshLocales() {
     this.setState({
       locales: LocaleStore.getAllLocales()
     });
@@ -76,57 +102,32 @@ export default class LanguageSwitcher extends React.Component {
    *
    * @returns {void}
    */
-  changeLocale(e) {
-    LocaleActions.changeLocale(e.target.id);
-    this.forceUpdate();
+  _changeLocale(e) {
+    if (-1 === e.target.parentNode.className.indexOf('active')) {
+      LocaleActions.changeLocale(e.target.id);
+      this.forceUpdate();
+    }
 
     e.preventDefault();
   }
 
   /**
-   * Renders the component.
+   * Builds a dropdown item by its locale key.
    *
-   * @returns {React.DOM} React dom that contains the locale switcher
+   * @param {string} key Locale key.
+   *
+   * @returns {React.Element} The markup.
    */
-  render() {
-    const translatedMenuItem = <Translate content="menu.l10n" />,
-        localeKeys = Object.keys(this.state.locales);
-    let languageItems;
+  _buildDropDown(key) {
+    const displayName = this.state.locales[key],
+        isActive        = Locale.getLocale() === key;
 
-    if (0 === localeKeys.length) {
-      languageItems = (
-        <MenuItem eventKey="1.1">
-          <span className="loading">
-            <Translate content="menu.l10n_loading" />
-          </span>
-        </MenuItem>
-      );
-    } else {
-      languageItems = localeKeys.map((key) => {
-        const displayName = this.state.locales[key];
-        let className;
-        if (Locale.getLocale() === key) {
-          className = 'active';
-        }
-
-        return (
-          <MenuItem
-            eventKey={key}
-            key={key}
-            className={className}
-            onSelect={this.changeLocale.bind(this)}
-            id={key}
-          >
-            {displayName}
-          </MenuItem>
-        );
-      });
-    }
-
-    return (
-      <NavDropdown eventKey={1} id="l10n-dropdown" title={translatedMenuItem}>
-        {languageItems}
-      </NavDropdown>
-    );
+    return <DropDownItem
+      key={key}
+      isActive={isActive}
+      onSelect={(e) => this._changeLocale(e)}
+      displayName={displayName}
+      id={key}
+    />;
   }
 }

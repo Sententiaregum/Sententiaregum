@@ -14,10 +14,18 @@ import React from 'react';
 import HelloWorld from '../components/HelloWorld';
 import NotFoundPage from '../components/app/NotFoundPage';
 import { Router, Route, browserHistory } from 'react-router';
+import ReactPageComponentDecorator from '../components/app/ReactPageComponentDecorator';
+import { portal, network } from './menu';
+
+function createComponentDecorator(node, menuData, authConfig) {
+  return <ReactPageComponentDecorator menuData={menuData} app={node} authConfig={authConfig} />;
+}
+
+const HelloWorldPage = createComponentDecorator(<HelloWorld />, portal);
 
 export default (
   <Router history={browserHistory}>
-    <Route component={HelloWorld} path="/"/>
+    <Route component={() => HelloWorldPage} path="/"/>
     <Route component={NotFoundPage} path="*" />
   </Router>
 );

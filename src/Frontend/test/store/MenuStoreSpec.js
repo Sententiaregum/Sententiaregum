@@ -66,7 +66,8 @@ describe('MenuStore', () => {
             url: '/#/',
             label: 'Home'
           }
-        ]
+        ],
+        authData: {}
       });
 
       for (let val of MenuStore.getItems()) {

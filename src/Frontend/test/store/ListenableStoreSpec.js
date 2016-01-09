@@ -23,7 +23,7 @@ describe('ListenableStore', () => {
     ListenableStore.addChangeListener(callback, 'spec');
     ListenableStore.emitChange('spec');
 
-    chai.assert(callback.called);
+    chai.assert(callback.calledOnce);
 
     ListenableStore.removeChangeListener(callback, 'spec');
     ListenableStore.emitChange('spec');

@@ -63,7 +63,7 @@ export default class LocaleService {
       const allowedLocales = ['de', 'en'];
       invariant(
         0 <= allowedLocales.indexOf(locale),
-        '[LocaleService.setLocale(%s) Invalid locale! Allowed locales are %s!',
+        '[LocaleService.setLocale(%s)] Invalid locale! Allowed locales are %s!',
         locale,
         allowedLocales.join(',')
       );

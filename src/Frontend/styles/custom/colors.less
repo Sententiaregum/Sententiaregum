@@ -3,8 +3,15 @@ body {
     color: #aaa !important;
     font-style: italic;
 
-    @media (min-width: 768px) {
-      color: #eee;
+    // blinking animation
+    -webkit-animation: blinker 1s linear infinite;
+       -moz-animation: blinker 1s linear infinite;
+        -ms-animation: blinker 1s linear infinite;
+         -o-animation: blinker 1s linear infinite;
+            animation: blinker 1s linear infinite;
+
+    @keyframes blinker {
+      50% { opacity: 0.4; }
     }
   }
 }

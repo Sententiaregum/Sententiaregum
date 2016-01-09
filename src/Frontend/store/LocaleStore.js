@@ -10,17 +10,16 @@
 
 'use strict';
 
-import ListenableStore from './ListenableStore';
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import Locale from '../constants/Locale';
 import invariant from 'invariant';
+import FluxEventHubStore from './FluxEventHubStore';
+import Locale from '../constants/Locale';
 
 /**
  * Store for locales.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class LocaleStore extends ListenableStore {
+class LocaleStore extends FluxEventHubStore {
   /**
    * Constructor.
    *
@@ -86,14 +85,18 @@ class LocaleStore extends ListenableStore {
   getAllLocales() {
     return this.locales;
   }
+
+  /**
+   * @inheritdoc
+   */
+  getSubscribedEvents() {
+    return [
+      { name: Locale.GET_LOCALES, callback: this.registerLocales.bind(this), params: ['result'] }
+    ];
+  }
 }
 
 const store = new LocaleStore();
-
-AppDispatcher.register((payload) => {
-  if (payload.event === Locale.GET_LOCALES) {
-    store.registerLocales(payload.result);
-  }
-});
+store.init();
 
 export default store;

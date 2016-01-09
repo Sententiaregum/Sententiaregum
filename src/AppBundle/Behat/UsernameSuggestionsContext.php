@@ -14,7 +14,6 @@ namespace AppBundle\Behat;
 
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\TableNode;
 
 /**
  * Context for the username suggestions.
@@ -40,12 +39,10 @@ class UsernameSuggestionsContext extends BaseContext implements SnippetAccepting
     }
 
     /**
-     * @Then I should see the following name suggestions:
+     * @Then I should see 2 name suggestions
      */
-    public function iShouldSeeTheFollowingNameSuggestions(TableNode $table)
+    public function iShouldSee2NameSuggestions()
     {
-        Assertion::inArray($table->getRow(1)[0], $this->suggestions);
-
         Assertion::count($this->suggestions, 2);
     }
 }

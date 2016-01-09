@@ -11,10 +11,10 @@
 'use strict';
 
 export const portal = [
-    {
-      label: 'menu.start',
-      url:   '/#/'
-    }
+  {
+    label: 'menu.start',
+    url:   '/#/'
+  }
 ];
 
 export const network = [

@@ -12,6 +12,7 @@
 
 import React from 'react';
 import Menu from './Menu';
+import MenuWrapper from './MenuWrapper';
 import { ApiKey } from '../../util/http/facade/HttpServices';
 import Url from '../../util/http/facade/Url';
 
@@ -54,7 +55,7 @@ export default class Component extends React.Component {
    * This method must be used since the actual render() method adapts the result
    * of this method with the menu and a security check.
    *
-   * @returns {React.DOM} The virtual dom of the actual page to be rendered.
+   * @returns {React.Element} The virtual dom of the actual page to be rendered.
    */
   renderPage() {
   }
@@ -62,7 +63,7 @@ export default class Component extends React.Component {
   /**
    * Adapts the actual part of the component with the menu.
    *
-   * @returns {React.DOM} The full page dom.
+   * @returns {React.Element|bool} The full page dom.
    */
   render() {
     let renderPage = true;
@@ -71,18 +72,21 @@ export default class Component extends React.Component {
     }
 
     if (renderPage) {
-      const menuItems = this.getMenuData();
-      const basicPage = this.renderPage();
-
       return (
         <div className="container">
-          <Menu items={menuItems} />
-          {basicPage}
+          <MenuWrapper>
+            <Menu items={this.getMenuData()} />
+          </MenuWrapper>
+          {this.renderPage()}
         </div>
       );
     }
 
     Url.redirect('');
-    return <span>Redirecting...</span>;
+
+    // when returning false, a noscript tag will be rendered, but no content.
+    // until the redirect and re-render is complete (which won't take much time), nothing should be rendered.
+    // Actually nothing can be seen, but an invariant violation must be avoided.
+    return false;
   }
 }

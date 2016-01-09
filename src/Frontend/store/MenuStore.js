@@ -10,8 +10,7 @@
 
 'use strict';
 
-import ListenableStore from './ListenableStore';
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import FluxEventHubStore from './FluxEventHubStore';
 import Menu from '../constants/Menu';
 
 /**
@@ -19,7 +18,7 @@ import Menu from '../constants/Menu';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class MenuStore extends ListenableStore {
+class MenuStore extends FluxEventHubStore {
   /**
    * Adds new items
    *
@@ -57,14 +56,18 @@ class MenuStore extends ListenableStore {
   getVisibleItems(items, authData) {
     return items.filter((item) => !('ROLE_ADMIN' === item.role && !authData.is_admin || item.logged_in && !authData.logged_in));
   }
+
+  /**
+   * @inheritdoc
+   */
+  getSubscribedEvents() {
+    return [
+      { name: Menu.TRANSFORM_ITEMS, callback: this.addItems.bind(this), params: ['items', 'authData'] }
+    ];
+  }
 }
 
 const store = new MenuStore();
-
-AppDispatcher.register((payload) => {
-  if (payload.event === Menu.TRANSFORM_ITEMS) {
-    store.addItems(payload.items, payload.authData);
-  }
-});
+store.init();
 
 export default store;

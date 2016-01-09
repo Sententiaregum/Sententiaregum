@@ -13,12 +13,12 @@
 import sinon from 'sinon';
 import LocaleActions from '../../actions/LocaleActions';
 import chai from 'chai';
-import $ from 'jquery';
 import AppDispatcher from '../../dispatcher/AppDispatcher';
 import LocaleConstants from '../../constants/Locale';
 import {ApiKey, Locale} from '../../util/http/facade/HttpServices';
 import Cookies from 'cookies-js';
 import LocaleStore from '../../store/LocaleStore';
+import LocaleWebAPIUtils from '../../util/api/LocaleWebAPIUtils';
 
 describe('LocaleActions', () => {
   it('changes the locale', () => {
@@ -29,35 +29,32 @@ describe('LocaleActions', () => {
     sinon.stub(ApiKey, 'getApiKey', () => apiKey);
     sinon.stub(Locale, 'setLocale', (locale) => chai.expect(locale).to.equal('en'));
 
-    $.ajax = function () {};
-    sinon.stub($, 'ajax', (payload) => {
-      chai.expect(payload.url).to.equal('/api/protected/locale.json');
-      chai.expect(payload.method).to.equal('PATCH');
-      chai.expect(payload.data.locale).to.equal('en');
-      chai.expect(payload.headers['X-API-KEY']).to.equal(apiKey);
+    sinon.stub(LocaleWebAPIUtils, 'changeUserLocale', (locale) => {
+      chai.expect(locale).to.equal('en');
     });
 
     LocaleActions.changeLocale('en');
 
+    sinon.assert.calledOnce(LocaleWebAPIUtils.changeUserLocale);
+
     ApiKey.isLoggedIn.restore();
     ApiKey.getApiKey.restore();
     Locale.setLocale.restore();
+    LocaleWebAPIUtils.changeUserLocale.restore();
   });
 
   it('avoids locale change if store is already initialized', () => {
-    $.ajax = function () {};
-
     sinon.stub(LocaleStore, 'isInitialized', () => true);
     sinon.stub(LocaleStore, 'triggerLocaleChange');
-    sinon.stub($, 'ajax');
+    sinon.stub(LocaleWebAPIUtils, 'getLocales');
 
     LocaleActions.loadLanguages();
     sinon.assert.calledOnce(LocaleStore.triggerLocaleChange);
-    sinon.assert.notCalled($.ajax);
+    sinon.assert.notCalled(LocaleWebAPIUtils.getLocales);
 
     LocaleStore.isInitialized.restore();
     LocaleStore.triggerLocaleChange.restore();
-    $.ajax.restore();
+    LocaleWebAPIUtils.getLocales.restore();
   });
 
   it('loads available locales', () => {
@@ -68,16 +65,13 @@ describe('LocaleActions', () => {
       chai.expect(payload.result).to.equal(response);
     });
 
-    $.ajax = function () {};
-    sinon.stub($, 'ajax', (payload) => {
-      chai.expect(payload.url).to.equal('/api/locale.json');
-      chai.expect(payload.method).to.equal('GET');
-      payload.success.apply(null, [response]);
+    sinon.stub(LocaleWebAPIUtils, 'getLocales', (callable) => {
+      callable.apply(this, [response]);
     });
 
     LocaleActions.loadLanguages();
 
-    $.ajax.restore();
     AppDispatcher.dispatch.restore();
+    LocaleWebAPIUtils.getLocales.restore();
   });
 });
