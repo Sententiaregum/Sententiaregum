@@ -4,8 +4,10 @@ services:
     tags:
       - { name: app.tag.repository, entity: Account:User }
     public: false
+    lazy: true
   app.repository.role:
     class: Doctrine\ORM\EntityRepository
     tags:
       - { name: app.tag.repository, entity: Account:Role }
     public: false
+    lazy: true
