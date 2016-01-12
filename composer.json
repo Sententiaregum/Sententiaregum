@@ -27,7 +27,8 @@
         "nelmio/api-doc-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^1.1",
         "ramsey/uuid": "^3.1",
-        "eightpoints/guzzle-bundle": "^4.4"
+        "eightpoints/guzzle-bundle": "^4.4",
+        "ocramius/proxy-manager": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.5",
