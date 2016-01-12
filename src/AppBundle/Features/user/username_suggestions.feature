@@ -5,12 +5,10 @@ Feature: username suggestions
 
   Background:
     Given the following users exist:
-      | username     | password | email                  |
-      | test-foo     | 123456   | test-foo@localhost     |
-      | test-foo2015 | 123456   | test-foo2015@localhost |
+      | username | password | email                  |
+      | test-foo | 123456   | test-foo@localhost     |
+      | test_foo | 123456   | test-foo2015@localhost |
 
   Scenario: username suggestions
      When I generate suggestions for "test-foo"
-     Then I should see the following name suggestions:
-      | suggestion |
-      | test_foo   |
+     Then I should see 2 name suggestions

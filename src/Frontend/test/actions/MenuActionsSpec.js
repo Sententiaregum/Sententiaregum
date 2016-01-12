@@ -47,5 +47,6 @@ describe('MenuActions', () => {
     sinon.assert.calledOnce(dispatcher.dispatch);
 
     dispatcher.dispatch.restore();
+    ApiKey.isLoggedIn.restore();
   });
 });

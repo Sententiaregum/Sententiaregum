@@ -9,14 +9,10 @@
  */
 
 import React from 'react';
-import Component from './app/Component';
-import { portal } from '../config/menu';
+import Translate from 'react-translate-component';
 
-export default class HelloWorld extends Component {
-  getMenuData() {
-    return portal;
-  }
-  renderPage() {
-    return <h1>Hello World!</h1>;
+export default class HelloWorld extends React.Component {
+  render() {
+    return <Translate content="pages.hello.head" component="h1" />;
   }
 }

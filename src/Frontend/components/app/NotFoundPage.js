@@ -13,23 +13,20 @@
 import React from 'react';
 import Component from './Component';
 import Translate from 'react-translate-component';
+import { portal, network } from '../../config/menu';
+import { ApiKey } from '../../util/http/facade/HttpServices';
 
 /**
  * React component for 404 pages.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class NotFoundPage extends Component {
+export default class NotFoundPage extends Component {
   /**
    * @inheritdoc
    */
   getMenuData() {
-    return [
-      {
-        label: 'menu.start',
-        url:   '/#/'
-      }
-    ];
+    return ApiKey.isLoggedIn() ? network : portal;
   }
 
   /**
@@ -48,5 +45,3 @@ class NotFoundPage extends Component {
     );
   }
 }
-
-export default NotFoundPage;

@@ -16,6 +16,7 @@ import Events from 'events';
  * Simple configurable store which stores event callbacks.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @abstract
  */
 class ListenableStore extends Events.EventEmitter {
   /**

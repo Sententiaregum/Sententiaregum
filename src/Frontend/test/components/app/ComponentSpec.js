@@ -11,32 +11,40 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react/lib/ReactTestUtils';
 import Component from '../../../components/app/Component';
 import chai from 'chai';
 import Url from '../../../util/http/facade/Url';
 import sinon from 'sinon';
+import Cookies from 'cookies-js';
+import {ApiKey} from '../../../util/http/facade/HttpServices';
 
 describe('Component', () => {
   it('adapts page with menu', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(<Test />);
+    const result    = TestUtils.renderIntoDocument(<Test />);
+    const component = ReactDOM.findDOMNode(result);
 
-    const component = renderer.getRenderOutput();
+    const Menu    = component._childNodes[0];
+    const Content = component._childNodes[1];
 
-    const Menu    = component.props.children[0];
-    const Content = component.props.children[1];
-
-    chai.expect(Menu.props.items).to.have.length(1);
-    chai.expect(Content.props.children).to.equal('Hello World!');
+    chai.expect(Menu._childNodes[0]._childNodes[1]._childNodes[1]._childNodes).to.have.length(1);
+    chai.expect(Content._childNodes[0]._nodeValue).to.equal('Hello World!');
   });
 
   it('redirects on authentication failure', () => {
+    sinon.createStubInstance(Cookies);
     sinon.stub(Url, 'redirect');
+    sinon.stub(ApiKey, 'isLoggedIn', () => false);
 
     const cmp = new ProtectedTest();
-    cmp.render();
+    const res = cmp.render();
     sinon.assert.calledOnce(Url.redirect);
+
+    chai.expect(res).to.equal(false);
+
+    Url.redirect.restore();
+    ApiKey.isLoggedIn.restore();
   });
 });
 

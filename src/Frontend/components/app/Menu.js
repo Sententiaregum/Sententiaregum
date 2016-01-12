@@ -10,14 +10,12 @@
 
 'use strict';
 
-import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import MenuStore from '../../store/MenuStore';
 import MenuActions from '../../actions/MenuActions';
 import React from 'react';
 import Translate from 'react-translate-component';
-import LanguageSwitcher from './widgets/LanguageSwitcher';
 
 /**
  * Configurable menu rendering component.
@@ -40,6 +38,8 @@ export default class Menu extends React.Component {
     this.state = {
       items: []
     };
+
+    this.handle = this._storeMenuItems.bind(this);
   }
 
   /**
@@ -48,7 +48,7 @@ export default class Menu extends React.Component {
    * @returns {void}
    */
   componentDidMount() {
-    MenuStore.addChangeListener(this.storeMenuItems.bind(this), this.cls);
+    MenuStore.addChangeListener(this.handle, this.cls);
     MenuActions.buildMenuItems(this.props.items);
   }
 
@@ -58,7 +58,29 @@ export default class Menu extends React.Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    MenuStore.removeChangeListener(this.storeMenuItems.bind(this), this.cls);
+    MenuStore.removeChangeListener(this.handle, this.cls);
+  }
+
+  /**
+   * Creates a configurable menu component for bootstrap3.
+   *
+   * @returns {React.Element} Renders the menu bar.
+   */
+  render() {
+    const items = this.state.items.map((item, i) => {
+      return (
+        <NavItem href={item.url} key={i}>
+          <Translate content={item.label} />
+        </NavItem>
+      );
+    });
+
+    let nav = false;
+    if (0 < items.length) {
+      nav = <Nav pullRight>{items}</Nav>;
+    }
+
+    return nav;
   }
 
   /**
@@ -66,45 +88,10 @@ export default class Menu extends React.Component {
    *
    * @returns {void}
    */
-  storeMenuItems() {
+  _storeMenuItems() {
     this.setState({
       items: MenuStore.getItems()
     });
-  }
-
-  /**
-   * Creates a configurable menu component for bootstrap3.
-   *
-   * @returns {Navbar} Renders the menu bar.
-   */
-  render() {
-    const items = this.state.items.map((item, i) => {
-      return <NavItem href={item.url} key={i}>
-        <Translate component="option" content={item.label} />
-      </NavItem>;
-    });
-
-    let nav;
-    if (0 < items.length) {
-      nav = <Nav pullRight>{items}</Nav>;
-    }
-
-    return (
-      <Navbar inverse fixedTop>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <a href="/#/">Sententiaregum</a>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LanguageSwitcher />
-          </Nav>
-          {nav}
-        </Navbar.Collapse>
-      </Navbar>
-    );
   }
 }
 

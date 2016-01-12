@@ -4,7 +4,7 @@
   "description": "A social network based on Symfony2 and ReactJS",
   "main": "src/Frontend/App.js",
   "scripts": {
-    "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter list --require babel-polyfill",
+    "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter spec --require babel-polyfill --require src/Frontend/test/mocha_start.js",
     "frontend-build": "webpack --config webpack-prod.config.js",
     "dev-frontend-build": "webpack",
     "watch": "webpack --watch",
@@ -20,6 +20,7 @@
     "WebPack"
   ],
   "dependencies": {
+    "axios": "^0.8.1",
     "babel-core": "^6",
     "babel-loader": "^6",
     "babel-plugin-globals": "^1.0.1",
@@ -39,7 +40,6 @@
     "flux": "^2.1.1",
     "history": "^1.17.0",
     "invariant": "^2.2.0",
-    "jquery": "^2.1.4",
     "less": "~2.5",
     "less-loader": "^2.2",
     "mkdirp": "~0.5",

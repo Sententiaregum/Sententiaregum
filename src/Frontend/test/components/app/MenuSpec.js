@@ -11,6 +11,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Menu from '../../../components/app/Menu';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -20,20 +21,18 @@ import TestUtils from 'react/lib/ReactTestUtils';
 
 describe('Menu', () => {
   it('renders empty menu bar into document', () => {
-    const MenuComponent = new Menu({items:[]});
-    const component     = MenuComponent.render();
+    const result    = TestUtils.renderIntoDocument(<Menu items={[]} />);
+    const component = ReactDOM.findDOMNode(result);
 
-    chai.expect(component.props.children[2]).to.be.undefined;
-
-    let localeSwitcher = component.props.children[1];
-    chai.expect(localeSwitcher).not.to.be.undefined;
+    chai.expect(component).to.equal(null);
   });
 
   it('renders menu items', () => {
+    let clock  = sinon.useFakeTimers();
     let config = [
       {
         url: '/#/',
-        label: 'Start'
+        label: 'menu.start'
       },
       {
         url: '/#/cmp',
@@ -41,33 +40,25 @@ describe('Menu', () => {
       }
     ];
 
-    const MenuComponent = new Menu({items:[]});
-    sinon.stub(MenuActions, 'buildMenuItems');
     sinon.stub(MenuStore, 'getItems', () => config);
 
-    MenuComponent.componentDidMount();
+    const result = TestUtils.renderIntoDocument(<Menu items={[]} />);
+    clock.tick(1000);
+    const component = ReactDOM.findDOMNode(result);
 
-    sinon.stub(MenuComponent, 'setState', (change) => {
-      MenuComponent.state.items = change.items;
-    });
-    MenuComponent.storeMenuItems(); // simulate refreshing
+    let items = component._childNodes;
+    chai.expect(items).to.have.length(2);
+    sinon.assert.called(MenuStore.getItems);
 
-    const result = MenuComponent.render();
-
-    let item = result.props.children[1].props.children[1].props.children;
-    chai.expect(item).to.have.length(2);
-    sinon.assert.calledOnce(MenuActions.buildMenuItems);
-    sinon.assert.calledOnce(MenuStore.getItems);
-
-    for (let menuItem of item) {
-      chai.expect(menuItem.props.key).to.equal(menuItem.props.children.props.children);
-    }
-
-    let menuItem1 = item[0];
-    let itemprop  = menuItem1.props.children.props;
-    chai.expect(itemprop.content).to.equal('Start');
+    let menuItem1 = items[0];
+    let itemprop  = menuItem1._childNodes[0];
+    chai.expect(itemprop._attributes.href._nodeValue).to.equal('/#/');
+    chai.expect(itemprop._childNodes[0]._tagName).to.equal('span');
+    chai.expect(itemprop._tagName).to.equal('a');
+    chai.expect(itemprop._childNodes[0]._childNodes[0]._nodeValue).to.equal('Homepage');
+    chai.expect();
 
     MenuStore.getItems.restore();
-    MenuActions.buildMenuItems.restore();
+    clock.restore();
   });
 });
