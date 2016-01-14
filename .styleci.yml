@@ -1,3 +1,5 @@
+preset: recommended
+
 finder:
   exclude:
     - "app"
@@ -8,3 +10,7 @@ disabled:
 
 enabled:
   - align_equals
+  - php_unit_construct
+  - php_unit_strict
+  - strict_param
+  - strict

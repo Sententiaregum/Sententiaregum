@@ -45,7 +45,7 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
             ->method('validate')
             ->will($this->returnCallback(
                 function ($value, Choice $choice) use ($context) {
-                    if (!in_array($value, $choice->choices)) {
+                    if (!in_array($value, $choice->choices, true)) {
                         $context->buildViolation($choice->message)
                             ->setParameter('{{ value }}', $value)
                             ->setCode(Choice::NO_SUCH_CHOICE_ERROR)

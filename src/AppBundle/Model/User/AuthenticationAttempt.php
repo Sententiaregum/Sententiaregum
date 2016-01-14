@@ -109,7 +109,7 @@ class AuthenticationAttempt
      */
     public function increaseAttemptCount()
     {
-        $this->attemptCount++;
+        ++$this->attemptCount;
 
         return $this;
     }
