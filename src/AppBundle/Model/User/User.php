@@ -391,7 +391,7 @@ class User implements UserInterface, Serializable
      */
     public function setState($state)
     {
-        if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED])) {
+        if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED], true)) {
             throw new \InvalidArgumentException(sprintf('Invalid state!'));
         }
 

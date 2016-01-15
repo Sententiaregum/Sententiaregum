@@ -15,7 +15,12 @@ __Note:__ before sending a PR that changes PHP code, please run the following co
 
     bin/php-cs-fixer fix
 
-So you don't need to worry about code style.
+So you don't need to worry about code style. If you don't do and there are still code style issues, then the PR cannot be merged since StyleCI will fail.
+The JavaScript CS will be validated using eslint.
+
+To view javascript errors (cannot be fixed automatically atm), run the following command:
+
+    npm run lint
 
 2) Branch name and commit message
 ---------------------------------
@@ -24,12 +29,12 @@ So you don't need to worry about code style.
 
 If you'd like to fix an issue, the branch name should look like this: 
 
-    Sententiaregum-{issue key}
+    #{issue key}-short-description
 
 If you'd like to add a new feature without an issue, the branch should contain the name of the feature separated with dashes.
 So if you add a realtime messenger to this application, the branch could look like this:
 
-    realtime-messenger
+    short-description
 
 ### Commit message
 

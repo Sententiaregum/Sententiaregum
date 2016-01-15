@@ -62,7 +62,7 @@ class ChainSuggestor implements ChainSuggestorInterface
         return array_filter(
             $suggestions,
             function ($username) use ($result) {
-                return !in_array($username, $result);
+                return !in_array($username, $result, true);
             }
         );
     }
