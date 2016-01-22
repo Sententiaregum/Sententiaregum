@@ -12,7 +12,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
+use AppBundle\Doctrine\ProductionFixtureInterface;
 use AppBundle\Model\User\Role;
 use Doctrine\Common\Persistence\ObjectManager;
 

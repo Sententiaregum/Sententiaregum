@@ -58,7 +58,7 @@ class FixtureBasicsContext extends BaseContext implements SnippetAcceptingContex
      */
     public function iApplyFixtures()
     {
-        /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
         $loader->applyFixtures([RoleFixture::class], $this->callback);
@@ -111,7 +111,7 @@ class FixtureBasicsContext extends BaseContext implements SnippetAcceptingContex
      */
     public function iApplyAnInvalidFixture()
     {
-        /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
         try {

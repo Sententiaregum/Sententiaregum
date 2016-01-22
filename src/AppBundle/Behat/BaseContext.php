@@ -53,7 +53,7 @@ abstract class BaseContext implements KernelAwareContext
     public function loadDataFixtures()
     {
         if (static::$applyFixtures) {
-            /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $service */
+            /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $service */
             $service  = $this->getContainer()->get('app.doctrine.fixtures_loader');
             $fixtures = [RoleFixture::class];
 

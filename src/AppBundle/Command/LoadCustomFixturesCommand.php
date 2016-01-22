@@ -12,7 +12,7 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Doctrine\ORM\ProductionFixtureInterface;
+use AppBundle\Doctrine\ProductionFixtureInterface;
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +59,7 @@ It is also possible to chain such bundle names:
 
   <info>php %command.full_name% FooBundle BarBundle BazBundle</info>
 
-All fixtures implementing the <comment>\AppBundle\Doctrine\ORM\ProductionFixtureInterface</comment>
+All fixtures implementing the <comment>\AppBundle\Doctrine\ProductionFixtureInterface</comment>
 will be loaded from the directory <comment>DataFixtures/ORM</comment> inside the bundle directory.
 EOF
             );
@@ -88,7 +88,7 @@ EOF
         $bundles   = $input->getArgument('bundles');
         $container = $this->getContainer();
 
-        /** @var \AppBundle\Doctrine\ORM\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
         $loader = $container->get('app.doctrine.fixtures_loader');
         /** @var \Symfony\Component\HttpKernel\KernelInterface $kernel */
         $kernel = $container->get('kernel');
