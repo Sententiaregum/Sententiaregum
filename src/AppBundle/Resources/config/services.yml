@@ -1,6 +1,6 @@
 services:
   app.doctrine.fixtures_loader:
-    class: AppBundle\Doctrine\ORM\ConfigurableFixturesLoader
+    class: AppBundle\Doctrine\ConfigurableFixturesLoader
     arguments:
       - "@doctrine.orm.default_entity_manager"
   app.request.dto_param_converter:
