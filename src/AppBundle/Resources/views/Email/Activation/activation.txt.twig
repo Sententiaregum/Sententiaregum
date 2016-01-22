@@ -1,6 +1,6 @@
-{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications') }} {{ username }}!
+{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications', locale) }} {{ username }}!
 
-{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications') }}
-{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications') }}
+{{ 'NOTIFICATIONS_ACTIVATION_THANKS'|trans({}, 'notifications', locale) }}
+{{ 'NOTIFICATIONS_ACTIVATION_ACTIVATE'|trans({}, 'notifications', locale) }}
 
-{{ app.request.scheme }}://{{ app.request.host }}/#!/activate/{{ username }}/{{ activation_key }}
+{{ app.request.scheme }}://{{ app.request.host }}/#/activate/{{ username }}/{{ activation_key }}

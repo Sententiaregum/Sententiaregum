@@ -1,5 +1,5 @@
-{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications') }} {{ notification_target.username }}!
+{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications', locale) }} {{ notification_target.username }}!
 
-{{ 'NOTIFICATIONS_NEW_LOGIN'|trans({}, 'notifications') }}
+{{ 'NOTIFICATIONS_NEW_LOGIN'|trans({}, 'notifications', locale) }}
 
 {% include 'AppBundle:Email/AuthAttempt/Ip:ip_tracing_result.txt.twig' %}

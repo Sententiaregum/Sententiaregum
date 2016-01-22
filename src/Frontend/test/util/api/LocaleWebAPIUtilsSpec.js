@@ -40,6 +40,8 @@ describe('LocaleWebAPIUtils', () => {
     LocaleWebAPIUtils.getLocales(handler);
 
     sinon.assert.calledOnce(handler);
+
+    axios.get.restore();
   });
 
   it('changes user locale', () => {
@@ -56,5 +58,8 @@ describe('LocaleWebAPIUtils', () => {
 
     sinon.assert.calledOnce(axios.patch);
     sinon.assert.calledOnce(ApiKey.getApiKey);
+
+    ApiKey.getApiKey.restore();
+    axios.patch.restore();
   });
 });

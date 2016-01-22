@@ -25,7 +25,7 @@ describe('ReactPageComponentDecorator', () => {
     });
 
     const result = TestUtils.renderIntoDocument((
-      <ReactPageComponentDecorator app={<HelloWorldMockComponent />} />
+      <ReactPageComponentDecorator app={HelloWorldMockComponent} />
     ));
 
     const component = ReactDOM.findDOMNode(result);

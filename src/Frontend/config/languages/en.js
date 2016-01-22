@@ -23,6 +23,26 @@ export default {
     },
     hello: {
       head: 'Hello World!'
+    },
+    portal: {
+      head:           'Create Account',
+      create_account: {
+        info_box: 'Please fill all these fields. After that you\'ll get an activation email in order to activate your account.',
+        form:     {
+          username: 'Pick a username',
+          password: 'Pick a password',
+          email:    'Choose an email address',
+          button:   'Create Account'
+        },
+        suggestions: 'The following suggestions for your name were generated:',
+        success:     'The account has been created successfully. You can now activate your account using the activation email.'
+      },
+      activate: {
+        progress: 'Activating account of ',
+        success:  'Activation successful.',
+        error:    'Activation failed. Is the activation expired?',
+        headline: 'Activation page'
+      }
     }
   }
 };

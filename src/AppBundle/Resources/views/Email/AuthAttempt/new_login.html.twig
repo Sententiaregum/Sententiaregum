@@ -3,7 +3,7 @@
 {% block username %}{{ notification_target.username }}{% endblock %}
 
 {% block content %}
-    <span>{{ 'NOTIFICATIONS_NEW_LOGIN'|trans({}, 'notifications') }}</span>
+    <span>{{ 'NOTIFICATIONS_NEW_LOGIN'|trans({}, 'notifications', locale) }}</span>
 
     {% include 'AppBundle:Email/AuthAttempt/Ip:ip_tracing_result.html.twig' %}
 {% endblock %}

@@ -14,6 +14,10 @@ export const portal = [
   {
     label: 'menu.start',
     url:   '/#/'
+  },
+  {
+    label: 'pages.portal.head',
+    url:   '/#/sign-up'
   }
 ];
 

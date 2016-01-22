@@ -19,7 +19,7 @@
 
             <trans-unit id="NOTIFICATIONS_ACTIVATION_ACTIVATE">
                 <source>NOTIFICATIONS_ACTIVATION_ACTIVATE</source>
-                <target>Du kannste deinen Account hier aktivieren:</target>
+                <target>Du kannst deinen Account hier aktivieren:</target>
             </trans-unit>
 
             <trans-unit id="NOTIFICATIONS_ACTIVATION_HTML_LINK">

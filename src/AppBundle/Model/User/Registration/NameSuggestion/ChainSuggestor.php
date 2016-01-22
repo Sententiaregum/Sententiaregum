@@ -59,11 +59,13 @@ class ChainSuggestor implements ChainSuggestorInterface
 
         $result = $this->queryExistingUsersBySuggestedNames($suggestions);
 
-        return array_filter(
-            $suggestions,
-            function ($username) use ($result) {
-                return !in_array($username, $result, true);
-            }
+        return array_values(// re-index array after filter process
+            array_filter(
+                $suggestions,
+                function ($username) use ($result) {
+                    return !in_array($username, $result, true);
+                }
+            )
         );
     }
 

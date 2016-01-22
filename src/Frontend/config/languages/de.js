@@ -23,6 +23,26 @@ export default {
     },
     hello: {
       head: 'Hallo Welt!'
+    },
+    portal: {
+      head:           'Konto anlegen',
+      create_account: {
+        info_box: 'Bitte alle Felder ausfüllen. Danach wirst du eine Bestätigungsmail bekommen, um deinen Account aktivieren zu können.',
+        form:     {
+          username: 'Wähle einen Benutzernamen',
+          password: 'Wähle ein Passwort',
+          email:    'Wähle eine Email Adresse',
+          button:   'Konto anlegen'
+        },
+        suggestions: 'Die folgenden Optionen für deinen Benutzernamen wurden generiert:',
+        success:     'Du hast erfolgreich einen Account angelegt. Du bekommst nun eine Email zugeschickt mit deren Hilfe du deinen Account aktivieren kannst.'
+      },
+      activate: {
+        progress: 'Aktiviere den Account für',
+        success:  'Aktivierung erfolgreich.',
+        error:    'Aktivierung fehlgeschlagen. Ist die Aktivierung abgelaufen?',
+        headline: 'Nutzeraktivierung'
+      }
     }
   }
 };

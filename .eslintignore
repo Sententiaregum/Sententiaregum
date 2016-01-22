@@ -1,5 +1,5 @@
 # basic config files
-karma.conf.js
+webpack.*.js
 
 # tests
 ./src/Frontend/test/**/*.js

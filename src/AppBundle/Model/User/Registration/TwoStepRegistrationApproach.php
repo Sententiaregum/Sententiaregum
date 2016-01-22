@@ -229,7 +229,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
             ->setTemplateSource('AppBundle:Email/Activation:activation')
             ->addUser($persistentUser)
             ->addParameter('activation_key', $persistentUser->getActivationKey())
-            ->addParameter('username', $persistentUser->getUsername());
+            ->addParameter('username', $persistentUser->getUsername())
+            ->setLanguage($persistentUser->getLocale());
 
         $this->eventDispatcher->dispatch(MailerEvent::EVENT_NAME, $mailerEvent);
     }

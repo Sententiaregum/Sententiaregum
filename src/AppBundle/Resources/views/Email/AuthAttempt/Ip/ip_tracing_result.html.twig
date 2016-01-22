@@ -1,6 +1,6 @@
 {% if tracing_data is not null %}
     <p class="location_result">{{ tracing_data.ip }}: {{ tracing_data.city }}, {{ tracing_data.region }}, {{ tracing_data.country }}</p>
-    <p class="location-result">{{ 'NOTIFICATIONS_IP_TRACE_LAT_LONG'|trans({}, 'notifications') }}: {{ tracing_data.latitude }}, {{ tracing_data.longitude }}</p>
+    <p class="location-result">{{ 'NOTIFICATIONS_IP_TRACE_LAT_LONG'|trans({}, 'notifications', locale) }}: {{ tracing_data.latitude }}, {{ tracing_data.longitude }}</p>
 {% else %}
-    <p>{{ 'NOTIFICATIONS_IP_TRACE_NO_RESULT'|trans({}, 'notifications') }}</p>
+    <p>{{ 'NOTIFICATIONS_IP_TRACE_NO_RESULT'|trans({}, 'notifications', locale) }}</p>
 {% endif %}

@@ -33,7 +33,16 @@ class RegistrationController extends BaseController
      * @ApiDoc(
      *     resource=true,
      *     description="Creates a new user",
-     *     statusCodes={201="Successful creation", 400="Invalid parameters"}
+     *     statusCodes={201="Successful creation", 400="Invalid parameters"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     },
+     *     parameters={
+     *         {"name"="username", "dataType"="string", "required"=true, "description"="Name of the new user"},
+     *         {"name"="password", "dataType"="string", "required"=true, "description"="Password of the new user"},
+     *         {"name"="email", "dataType"="string", "required"=true, "description"="Email of the new user"},
+     *         {"name"="locale", "dataType"="string", "required"=true, "description"="Locale/Language of the new user"},
+     *     }
      * )
      *
      * Route that contains the first step of the registration
@@ -42,7 +51,7 @@ class RegistrationController extends BaseController
      *
      * @return mixed[]
      *
-     * @Rest\Post("/users.{_format}", name="app.user.create")
+     * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=201)
      *
      * @ParamConverter(name="dto", class="AppBundle\Model\User\Registration\DTO\CreateUserDTO")
@@ -69,14 +78,17 @@ class RegistrationController extends BaseController
      * @ApiDoc(
      *     resource=true,
      *     description="Activates the recently created user",
-     *     statusCodes={204="Successful activation", 403="Invalid activation key"}
+     *     statusCodes={204="Successful activation", 403="Invalid activation key"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
      * )
      *
      * @param ParamFetcher $paramFetcher
      *
      * @return View
      *
-     * @Rest\Patch("/users/activate.{_format}", name="app.user.activate")
+     * @Rest\Patch("/users/activate.{_format}", name="app.user.activate", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=204)
      *
      * @Rest\QueryParam(name="username", description="Name of the user to activate")

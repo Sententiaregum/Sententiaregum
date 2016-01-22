@@ -8,7 +8,8 @@
             </trans-unit>
 
             <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_BLANK">
-                <source>Der Benutzername darf nicht leer sein!</source>
+                <source>VALIDATORS_REGISTRATION_USERNAME_BLANK</source>
+                <target>Der Benutzername darf nicht leer sein!</target>
             </trans-unit>
 
             <trans-unit id="VALIDATORS_REGISTRATION_USERNAME_TOO_SHORT">

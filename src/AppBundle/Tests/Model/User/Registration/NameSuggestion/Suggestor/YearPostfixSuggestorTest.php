@@ -33,7 +33,7 @@ class YearPostfixSuggestorTest extends \PHPUnit_Framework_TestCase
         $suggestions = $suggestor->getPossibleSuggestions($name);
 
         $randomYear = $suggestions[1];
-        $bareYear   = (integer) preg_replace('/^benbieler([0-9]+)$/', '$1', $randomYear);
+        $bareYear   = (int) preg_replace('/^benbieler([0-9]+)$/', '$1', $randomYear);
 
         $this->assertLessThan(date('Y'), $bareYear);
     }
