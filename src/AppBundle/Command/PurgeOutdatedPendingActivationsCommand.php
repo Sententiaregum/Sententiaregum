@@ -32,7 +32,7 @@ class PurgeOutdatedPendingActivationsCommand extends ContainerAwareCommand
         $this
             ->setName('sententiaregum:purge:pending-activations')
             ->setDescription('Purger job that removes all pending activations that are outdated')
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> purges all pending activations that are older than two hours.
 
 It loads all pending activations and deletes them in one big transaction.

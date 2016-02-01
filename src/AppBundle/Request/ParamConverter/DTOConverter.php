@@ -115,8 +115,11 @@ class DTOConverter implements ParamConverterInterface
     private function findAttributeInRequest(Request $request, ReflectionProperty $property)
     {
         $propertyPath = $property->getName();
-        if ($value = $request->get($propertyPath)) {
-            return $value;
+        if ($request->query->has($propertyPath)
+            || $request->attributes->has($propertyPath)
+            || $request->request->has($propertyPath)
+        ) {
+            return $request->get($propertyPath);
         }
 
         if ($request->files->has($propertyPath)) {

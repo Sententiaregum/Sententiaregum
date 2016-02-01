@@ -31,7 +31,10 @@ class LocaleController extends BaseController
      * @ApiDoc(
      *     resource=true,
      *     description="Creates a list of all supported languages: ['de' => 'Deutsch', ...]",
-     *     statusCodes={200="Successful generation of locale config"}
+     *     statusCodes={200="Successful generation of locale config"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
      * )
      *
      * Controller action that returns all supported languages.
@@ -40,7 +43,7 @@ class LocaleController extends BaseController
      *
      * @return string[]
      *
-     * @Rest\Get("/locale.{_format}", name="app.language.supported_locales")
+     * @Rest\Get("/locale.{_format}", name="app.language.supported_locales", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
      */
     public function getSupportedLocalesAction()
@@ -52,7 +55,13 @@ class LocaleController extends BaseController
      * @ApiDoc(
      *     resource=true,
      *     description="Switches the locale of a user",
-     *     statusCodes={204="Successfully updated",401="Unauthorized",400="Invalid locale"}
+     *     statusCodes={204="Successfully updated",401="Unauthorized",400="Invalid locale"},
+     *     parameters={
+     *         {"name"="locale", "dataType"="string", "required"=true, "description"="New locale of a user"}
+     *     },
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
      * )
      *
      * Switches the locale property of a user.
@@ -61,7 +70,7 @@ class LocaleController extends BaseController
      *
      * @return Response
      *
-     * @Rest\Patch("/protected/locale.{_format}", name="app.language.switch_locale")
+     * @Rest\Patch("/protected/locale.{_format}", name="app.language.switch_locale", requirements={"_format"="^(json|xml)$"})
      * @ParamConverter(name="localeSwitcherDTO", class="AppBundle\Model\User\Locale\DTO\LocaleSwitcherDTO")
      */
     public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO)

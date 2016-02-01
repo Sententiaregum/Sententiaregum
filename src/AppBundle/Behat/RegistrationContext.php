@@ -92,7 +92,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
 
         /** @var \Swift_Message $message */
         $message = $mailCollector->getMessages()[0];
-        Assertion::eq($message->getSubject(), 'Sententiaregum Notifications');
+        Assertion::eq($message->getSubject(), 'Benachrichtigungen von Sententiaregum');
         Assertion::eq(key($message->getTo()), 'sententiaregum@sententiaregum.dev');
 
         $crawler = new Crawler();
@@ -100,7 +100,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
 
         Assertion::count($message->getChildren(), 2);
         Assertion::eq(1, $crawler->filter('#n-ac-l-p')->count());
-        Assertion::notEq(0, preg_match('/!\/activate\/(.*)/', $message->getChildren()[0]->getBody()));
+        Assertion::notEq(0, preg_match('/\/activate\/(.*)/', $message->getChildren()[0]->getBody()));
     }
 
     /**

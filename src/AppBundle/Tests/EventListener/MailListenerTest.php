@@ -35,13 +35,13 @@ class MailListenerTest extends \PHPUnit_Framework_TestCase
         $templatingEngine
             ->expects($this->at(0))
             ->method('render')
-            ->with('AppBundle:emails:test.txt.twig', [])
+            ->with('AppBundle:emails:test.txt.twig', ['locale' => 'en'])
             ->willReturn('Notifications');
 
         $templatingEngine
             ->expects($this->at(1))
             ->method('render')
-            ->with('AppBundle:emails:test.html.twig', [])
+            ->with('AppBundle:emails:test.html.twig', ['locale' => 'en'])
             ->willReturn('<b>Notifications</b>');
 
         $translator = $this->getMock(TranslatorInterface::class);
@@ -50,6 +50,11 @@ class MailListenerTest extends \PHPUnit_Framework_TestCase
             ->method('trans')
             ->with('NOTIFICATIONS_SUBJECT', [], 'notifications')
             ->willReturn('Sententiaregum Notifications');
+
+        $translator
+            ->expects($this->once())
+            ->method('getLocale')
+            ->willReturn('en');
 
         $listener = new MailListener($mailer, $translator, $templatingEngine, $defaultEmail);
         $listener->onMailEvent($event);

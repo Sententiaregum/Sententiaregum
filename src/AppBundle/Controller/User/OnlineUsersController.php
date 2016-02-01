@@ -25,14 +25,17 @@ class OnlineUsersController extends Controller
      * @ApiDoc(
      *     resource=true,
      *     description="Creates a list of followers that contains a list showing which followers are online",
-     *     statusCodes={200="Successful generation","401"="Unauthorized"}
+     *     statusCodes={200="Successful generation","401"="Unauthorized"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
      * )
      *
      * Controller action that creates a list of users the current user follows that shows which users are online.
      *
      * @return bool[]
      *
-     * @Rest\Get("/protected/online-users.{_format}", name="app.user.online")
+     * @Rest\Get("/protected/online-users.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
      */
     public function onlineFollowingListAction()

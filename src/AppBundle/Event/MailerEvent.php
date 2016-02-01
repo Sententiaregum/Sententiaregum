@@ -40,6 +40,11 @@ class MailerEvent extends Event
     private $parameters = [];
 
     /**
+     * @var string
+     */
+    private $language;
+
+    /**
      * Adds a user.
      *
      * @param User $user
@@ -73,10 +78,15 @@ class MailerEvent extends Event
      * @param string $name
      * @param mixed  $value
      *
+     * @throws \InvalidArgumentException Cannot use paameter locale as it is reserved
+     *
      * @return $this
      */
     public function addParameter($name, $value)
     {
+        if ('locale' === $name) {
+            throw new \InvalidArgumentException('Cannot apply parameter locale!');
+        }
         $this->parameters[$name] = $value;
 
         return $this;
@@ -110,5 +120,29 @@ class MailerEvent extends Event
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Get language.
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set language.
+     *
+     * @param string $language
+     *
+     * @return $this
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
     }
 }

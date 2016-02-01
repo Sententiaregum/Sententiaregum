@@ -22,7 +22,7 @@ class ActivationKeyCodeGenerator implements ActivationKeyCodeGeneratorInterface
     /**
      * @var string
      */
-    private $randomKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$!~';
+    private $randomKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 
     /**
      * {@inheritdoc}

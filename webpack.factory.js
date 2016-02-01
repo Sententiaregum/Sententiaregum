@@ -45,7 +45,10 @@ function factory(environment) {
     entry: {
       js: './src/Frontend/App.js',
       bundle: './src/Frontend/styles/custom.less',
-      bootstrap: ['./node_modules/bootstrap/dist/css/bootstrap.min.css']
+      bootstrap: [
+        './node_modules/bootstrap/dist/css/bootstrap.min.css',
+        './node_modules/spinkit/css/spinkit.css'
+      ]
     },
     module: {
       loaders: [

@@ -54,13 +54,15 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $request   = Request::create('/');
 
         $request->attributes->set('username', 'Ma27');
-        $request->attributes->set('password', '123456');
-        $request->attributes->set('email', 'Ma27@sententiaregum.dev');
+        $request->query->set('password', null);
+        $request->request->set('email', 'Ma27@sententiaregum.dev');
         $request->attributes->set('locale', 'de');
 
         $this->assertFalse($request->attributes->has('dto'));
         $this->assertTrue($converter->apply($request, new ParamConverter(['class' => CreateUserDTO::class, 'name' => 'dto'])));
         $this->assertInstanceOf(CreateUserDTO::class, $request->attributes->get('dto'));
+
+        $this->assertEmpty($request->get('dto')->getPassword());
     }
 
     /**

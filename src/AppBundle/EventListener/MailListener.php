@@ -71,12 +71,13 @@ class MailListener
             $targets[$user->getEmail()] = $user->getUsername();
         }
 
-        $message = \Swift_Message::newInstance($this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications'));
+        $locale  = null === $event->getLanguage() ? $this->translator->getLocale() : $event->getLanguage();
+        $message = \Swift_Message::newInstance($this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications', $locale));
         $message->setTo($targets);
         $message->setFrom([$this->emailAddress => 'Sententiaregum']);
 
-        $message->addPart($this->renderMailPart($event, 'txt.twig'), 'text/plain');
-        $message->addPart($this->renderMailPart($event, 'html.twig'), 'text/html');
+        $message->addPart($this->renderMailPart($event, 'txt.twig', $locale), 'text/plain');
+        $message->addPart($this->renderMailPart($event, 'html.twig', $locale), 'text/html');
 
         $this->mailer->send($message);
     }
@@ -86,14 +87,15 @@ class MailListener
      *
      * @param MailerEvent $event
      * @param string      $extension
+     * @param string      $locale
      *
      * @return string
      */
-    private function renderMailPart(MailerEvent $event, $extension)
+    private function renderMailPart(MailerEvent $event, $extension, $locale)
     {
         return $this->engine->render(
             sprintf('%s.%s', $event->getTemplateSource(), (string) $extension),
-            $event->getParameters()
+            array_merge(['locale' => $locale], $event->getParameters())
         );
     }
 }

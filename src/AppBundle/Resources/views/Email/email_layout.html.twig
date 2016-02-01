@@ -4,8 +4,7 @@
     <head></head>
     <body>
         <div style="font-family: sans-serif !important;">
-            <h3>{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications') }} {% block username %}{% endblock %}!</h3>
-
+            <h3>{{ 'NOTIFICATIONS_HELLO_PHRASE'|trans({}, 'notifications', locale) }} {% block username %}{% endblock %}!</h3>
             <p>{% block content %}{% endblock %}</p>
         </div>
     </body>

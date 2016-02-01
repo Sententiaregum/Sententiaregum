@@ -37,7 +37,11 @@ export default class ReactPageComponentDecorator extends Component {
    * @inheritdoc
    */
   renderPage() {
-    return this.props.app;
+    const props = {};
+    if ('undefined' !== typeof this.props.params) {
+      props.params = this.props.params;
+    }
+    return React.createElement(this.props.app, props);
   }
 
   /**
@@ -50,7 +54,7 @@ export default class ReactPageComponentDecorator extends Component {
 
 ReactPageComponentDecorator.propTypes = {
   menuData:   React.PropTypes.array,
-  app:        React.PropTypes.node,
+  app:        React.PropTypes.any,
   authConfig: React.PropTypes.object
 };
 
