@@ -165,7 +165,7 @@ abstract class BaseContext implements KernelAwareContext
         $response = $this->performRequest(
             'POST',
             '/api/api-key.json',
-            ['username' => $username, 'password' => $password],
+            ['login' => $username, 'password' => $password],
             $expectSuccess,
             [],
             [],
