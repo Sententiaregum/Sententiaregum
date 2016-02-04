@@ -66,16 +66,13 @@ swiftmailer:
 ma27_api_key_authentication:
     user:
         object_manager: doctrine.orm.default_entity_manager
-        model_name:     Account:User
-        properties:
-            username: username
-            password:
-                strategy: php55
+        model_name:     "AppBundle\\Model\\User\\User"
+        password:
+            strategy: php55
     api_key_purge:
-        enabled:              true
-        last_active_property: lastAction
-        log_state:            true
-        logger_service:       "logger"
+        enabled:        true
+        log_state:      true
+        logger_service: "logger"
 
 # FOSRest Configuration
 fos_rest:

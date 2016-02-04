@@ -15,9 +15,10 @@ namespace AppBundle\Model\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Ma27\ApiKeyAuthenticationBundle\Model\User\UserInterface;
+use Ma27\ApiKeyAuthenticationBundle\Annotation as Auth;
 use Ramsey\Uuid\Uuid;
 use Serializable;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User.
@@ -51,6 +52,7 @@ class User implements UserInterface, Serializable
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=50, unique=true)
+     * @Auth\Login
      */
     private $username;
 
@@ -58,6 +60,7 @@ class User implements UserInterface, Serializable
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=500)
+     * @Auth\Password
      */
     private $password;
 
@@ -72,18 +75,20 @@ class User implements UserInterface, Serializable
      * @var string
      *
      * @ORM\Column(name="api_key", type="string", length=200, unique=true, nullable=true)
+     * @Auth\ApiKey
      */
     private $apiKey;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_action", type="datetime")
+     * @Auth\LastAction
      */
     private $lastAction;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="registration_date", type="datetime")
      */
@@ -351,11 +356,11 @@ class User implements UserInterface, Serializable
     /**
      * Set lastAction.
      *
-     * @param \DateTime $lastAction
+     * @param DateTime $lastAction
      *
      * @return User
      */
-    public function setLastAction(\DateTime $lastAction)
+    public function setLastAction(DateTime $lastAction)
     {
         $this->lastAction = $lastAction;
 
@@ -365,7 +370,7 @@ class User implements UserInterface, Serializable
     /**
      * Get lastAction.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastAction()
     {
@@ -375,7 +380,7 @@ class User implements UserInterface, Serializable
     /**
      * Get registrationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRegistrationDate()
     {
