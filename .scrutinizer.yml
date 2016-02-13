@@ -35,3 +35,7 @@ tools:
     php_cpd:
         enabled: true
         excluded_dirs: [src/AppBundle/Tests]
+    sensiolabs_security_checker:
+        enabled: true
+    puppet_lint:
+        enabled: true
