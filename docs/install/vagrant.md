@@ -1,4 +1,4 @@
-## Vagrant
+# Vagrant
 
 The simplest way to install Sententiaregum is locally is using vagrant:
 
@@ -10,7 +10,6 @@ Now you just need to boot vagrant:
     vagrant up
 
 Now a box with Ubuntu 14.04 and PHP 5.6 will be created automatically.
-There's a shell provisioner that runs the composer and npm and runs the grunt task runner that compiles the css and js.
 
 The settings for the box can be found here: *vagrant/hieradata/common.yaml*
 
@@ -19,13 +18,13 @@ This file is capable at overriding all parameters provided in the *common.yaml* 
 
 This file is optional, but will always be ignored by git.
 
-#### Windows
+## Windows
 
 It is not recommended to use windows. When installing the npm dependencies on shared folders, you'll run into big trouble with the path limit.
 
 If you use windows, [this blog post helps you to fix that issue](https://harvsworld.com/2015/how-to-fix-npm-install-errors-on-vagrant-on-windows-because-the-paths-are-too-long/).
 
-#### Local nodejs environment
+## Local nodejs environment
 
 As a developer you may want to have a local nodejs environment. That can be helpful for local debugging as webstorm doesn't support remote node interpreters.
 

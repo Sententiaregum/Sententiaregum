@@ -1,9 +1,8 @@
-load './deploy/config'
+require_relative '../config'
 
 set :stage,                  :production
 set :symfony_env,            'prod'
-set :branch,                 'master'
-set :composer_install_flags, '--no-dev --no-interaction --quiet --optimize-autoloader'
+set :composer_install_flags, '--no-dev --no-interaction --optimize-autoloader'
 
 data = parse_config
 
