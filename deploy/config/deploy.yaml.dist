@@ -9,6 +9,7 @@ port:           22
 webserver_user: www-data
 local_user:     foobar
 ssh_user:       foobar
+allow_sudo:     true
 
 # Server Config
 server:
@@ -16,3 +17,13 @@ server:
     domain: 'example.com'
   develop:
     domain: 'example.dev'
+
+# Repository
+repo_url: 'git@github.com:Sententiaregum/Sententiaregum.git'
+
+# Branch
+branch: master
+
+# Git SSH Credentials
+#git_username: sententiaregum
+#git_password: sententiaregum

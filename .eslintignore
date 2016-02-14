@@ -2,6 +2,6 @@
 webpack.*.js
 
 # tests
-./src/Frontend/test/**/*.js
-./src/Frontend/config/*.js
-./src/Frontend/**/facade/*.js
+src/Frontend/test/**/*.js
+src/Frontend/config/*.js
+src/Frontend/**/facade/*.js

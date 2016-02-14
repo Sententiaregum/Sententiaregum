@@ -23,8 +23,7 @@
       2,
       {
         "vars": "all",
-        "args": "after-used",
-        "varsIgnorePattern": "^React$"
+        "args": "after-used"
       }
     ],
     "comma-dangle": [
@@ -58,7 +57,7 @@
     "eqeqeq": [2],
     "prefer-const": [2],
     "prefer-spread": [2],
-    "no-arrow-condition": [2],
+    "no-confusing-arrow": [2],
     "no-class-assign": [2],
     "no-const-assign": [2],
     "no-dupe-class-members": [2],
@@ -120,7 +119,9 @@
     ],
     "require-jsdoc": [2],
     "require-yield": [2],
-    "prefer-template": [2]
+    "prefer-template": [2],
+    "react/jsx-uses-react": [2],
+    "react/jsx-uses-vars": [2]
   },
   "env": {
     "es6":     true,
@@ -129,12 +130,15 @@
     "mocha":   true
   },
   "extends": "eslint:recommended",
-  "ecmaFeatures": {
-    "jsx": true,
-    "experimentalObjectRestSpread": true,
-    "modules": true
-  },
   "plugins": [
     "react"
-  ]
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  }
 }
