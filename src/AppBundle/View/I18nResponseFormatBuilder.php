@@ -45,7 +45,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
+final class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
 {
     /**
      * @var TranslatorInterface

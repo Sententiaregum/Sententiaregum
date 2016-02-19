@@ -108,6 +108,6 @@ abstract class BaseController extends Controller
      */
     protected function getLocaleShortNames()
     {
-        return array_keys($this->getLocales());
+        return $this->getParameter('app.locale_keys');
     }
 }

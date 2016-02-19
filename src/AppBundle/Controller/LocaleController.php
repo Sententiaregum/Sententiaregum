@@ -10,9 +10,8 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller\Language;
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\BaseController;
 use AppBundle\Model\User\DTO\LocaleSwitcherDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -66,8 +65,6 @@ class LocaleController extends BaseController
      * Switches the locale property of a user.
      *
      * @param LocaleSwitcherDTO $localeSwitcherDTO
-     *
-     * @return Response
      *
      * @Rest\Patch("/protected/locale.{_format}", name="app.language.switch_locale", requirements={"_format"="^(json|xml)$"})
      * @ParamConverter(name="localeSwitcherDTO", class="AppBundle\Model\User\DTO\LocaleSwitcherDTO")

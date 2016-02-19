@@ -154,9 +154,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user = $result['user'];
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
 
         $this->sendActivationEmail($user);
+        $this->entityManager->flush();
 
         return new RegistrationResult(null, [], $user);
     }

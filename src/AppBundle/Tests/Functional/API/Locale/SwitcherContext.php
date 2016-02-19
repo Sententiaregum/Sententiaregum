@@ -46,7 +46,7 @@ class SwitcherContext extends FixtureLoadingContext implements SnippetAcceptingC
             null,
             [],
             [],
-            null,
+            204,
             false,
             null,
             true
