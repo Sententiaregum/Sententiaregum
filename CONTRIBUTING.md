@@ -22,8 +22,8 @@ To view javascript errors (cannot be fixed automatically atm), run the following
 
     npm run lint
 
-2) Branch name and commit message
----------------------------------
+2) Branch name, user stories and commit message
+-----------------------------------------------
 
 ### Branch name
 
@@ -35,6 +35,14 @@ If you'd like to add a new feature without an issue, the branch should contain t
 So if you add a realtime messenger to this application, the branch could look like this:
 
     short-description
+
+### Stories
+
+####When assigning yourself to a ticket
+
+- Stories **MUST** not have an assignee. This is due to the fact, that it is quite impossible to work on big ones by yourself.
+- In case of a story the commits should **NOT** be squashed, as a story contains a lot of sub-tasks (which on the other hand should be squashed) written in the PR of the story. 
+- Every story has to have at least **two** reviewers. 
 
 ### Commit message
 
@@ -56,6 +64,7 @@ As there are no labels, the commit message should look like this:
 If there's a label added to your PR, the commit message should be renamed to the following pattern:
 
     {Issue Type (red label)} {short description what you've done}
+
 
 3) Pull Request
 ---------------
