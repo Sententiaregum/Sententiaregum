@@ -10,9 +10,8 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller\User;
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\BaseController;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -23,11 +22,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API for the registration implementation.
+ * API for the user resource.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RegistrationController extends BaseController
+class UserController extends BaseController
 {
     /**
      * @ApiDoc(
@@ -47,14 +46,14 @@ class RegistrationController extends BaseController
      *
      * Route that contains the first step of the registration
      *
-     * @param \AppBundle\Model\User\DTO\CreateUserDTO $dto
+     * @param CreateUserDTO $dto
      *
      * @return mixed[]
      *
      * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=201)
      *
-     * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\CreateUserDTO")
+     * @ParamConverter(name="dto", class="AppBundle\Model\User\Registration\DTO\CreateUserDTO")
      */
     public function createUserAction(CreateUserDTO $dto)
     {
@@ -104,5 +103,32 @@ class RegistrationController extends BaseController
         } catch (UserActivationException $ex) {
             return View::create(null, Response::HTTP_FORBIDDEN);
         }
+    }
+
+    /**
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Creates a list of followers that contains a list showing which followers are online",
+     *     statusCodes={200="Successful generation","401"="Unauthorized"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
+     * )
+     *
+     * Controller action that creates a list of users the current user follows that shows which users are online.
+     *
+     * @return bool[]
+     *
+     * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
+     * @Rest\View
+     */
+    public function onlineFollowingListAction()
+    {
+        /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
+        $cluster        = $this->get('app.redis.cluster.online_users');
+        $userRepository = $this->getDoctrine()->getRepository('Account:User');
+        $currentUser    = $this->getCurrentUser();
+
+        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
     }
 }

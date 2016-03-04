@@ -21,7 +21,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class LocaleContext extends BaseContext implements SnippetAcceptingContext
+class LocaleContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var mixed

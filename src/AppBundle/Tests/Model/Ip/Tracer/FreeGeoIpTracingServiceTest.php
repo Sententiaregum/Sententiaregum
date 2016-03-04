@@ -87,20 +87,20 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $client
             ->expects($this->once())
             ->method('__call')
-            ->with('get', ['/json/127.0.0.1', ['headers' => ['Accept-Language' => 'en']]])
+            ->with('get', ['/json/192.168.56.112', ['headers' => ['Accept-Language' => 'en']]])
             ->will($this->returnCallback(function () {
                 throw new ClientException('404 file not found', $this->getMockWithoutInvokingTheOriginalConstructor(Request::class));
             }));
 
         $service = new FreeGeoIpTracingService($client);
-        $result  = $service->getIpLocationData('127.0.0.1', 'en');
+        $result  = $service->getIpLocationData('192.168.56.112', 'en');
 
         $this->assertNull($result);
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /^Unable to decode response body \("\{ip"\:"127\.0\.0\.1"\}"\) due to the following error \".*\"!$/
+     * @expectedExceptionMessageRegExp /^Unable to decode response body \("\{ip"\:"192\.168\.56\.112"\}"\) due to the following error \".*\"!$/
      */
     public function testBrokenResponse()
     {
@@ -108,7 +108,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $stream
             ->expects($this->any())
             ->method('__toString')
-            ->willReturn('{ip":"127.0.0.1"}');
+            ->willReturn('{ip":"192.168.56.112"}');
 
         $response = $this->getMock(ResponseInterface::class);
         $response
@@ -120,11 +120,22 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $client
             ->expects($this->once())
             ->method('__call')
-            ->with('get', ['/json/127.0.0.1', ['headers' => ['Accept-Language' => 'en']]])
+            ->with('get', ['/json/192.168.56.112', ['headers' => ['Accept-Language' => 'en']]])
             ->willReturn($response);
 
         $service = new FreeGeoIpTracingService($client);
-        $service->getIpLocationData('127.0.0.1', 'en');
+        $service->getIpLocationData('192.168.56.112', 'en');
+    }
+
+    /**
+     * @dataProvider getLocalIps
+     */
+    public function testLocalIp($ip)
+    {
+        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+
+        $service = new FreeGeoIpTracingService($client);
+        $this->assertNull($service->getIpLocationData($ip, 'en'));
     }
 
     /**
@@ -135,8 +146,21 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     public function getIps()
     {
         return [
-            ['127.0.0.1'],
+            ['192.168.56.112'],
             ['FE80:0000:0000:0000:0202:B3FF:FE1E:8329'],
+        ];
+    }
+
+    /**
+     * Provider for local ips.
+     *
+     * @return string[]
+     */
+    public function getLocalIps()
+    {
+        return [
+            ['127.0.0.1'],
+            ['::1'],
         ];
     }
 }

@@ -23,7 +23,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UserPurgerContext extends BaseContext implements SnippetAcceptingContext
+class UserPurgerContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var bool

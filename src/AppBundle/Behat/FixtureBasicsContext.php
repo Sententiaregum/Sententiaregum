@@ -23,7 +23,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class FixtureBasicsContext extends BaseContext implements SnippetAcceptingContext
+class FixtureBasicsContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var bool

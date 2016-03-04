@@ -12,9 +12,6 @@
 
 namespace AppBundle\Behat;
 
-use AppBundle\DataFixtures\ORM\AdminFixture;
-use AppBundle\DataFixtures\ORM\RoleFixture;
-use AppBundle\DataFixtures\ORM\UserFixture;
 use AppBundle\Model\User\User;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -24,7 +21,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UsersContext extends BaseContext implements SnippetAcceptingContext
+class UsersContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var bool
@@ -69,17 +66,6 @@ class UsersContext extends BaseContext implements SnippetAcceptingContext
     public function twoUsersShouldBeRemoved()
     {
         Assertion::eq(2, $this->resultCount);
-    }
-
-    /**
-     * @Given the user fixtures have been applied
-     */
-    public function theUserFixturesHaveBeenApplied()
-    {
-        $this
-            ->getContainer()
-            ->get('app.doctrine.fixtures_loader')
-            ->applyFixtures([RoleFixture::class, AdminFixture::class, UserFixture::class]);
     }
 
     /**

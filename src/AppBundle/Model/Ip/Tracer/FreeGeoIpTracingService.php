@@ -24,6 +24,8 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FreeGeoIpTracingService implements IpTracingServiceInterface
 {
+    const PRIVATE_IPS = ['::1', '127.0.0.1'];
+
     /**
      * @var Client
      */
@@ -41,9 +43,15 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException If the ip is invalid.
      */
     public function getIpLocationData($ip, $userLocale)
     {
+        if (in_array($ip, self::PRIVATE_IPS, true)) {
+            return;
+        }
+
         try {
             $response = $this->client->get(
                 sprintf('/json/%s', $ip),

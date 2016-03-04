@@ -23,7 +23,7 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RegistrationContext extends BaseContext implements SnippetAcceptingContext
+class RegistrationContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var mixed[]
@@ -84,7 +84,7 @@ class RegistrationContext extends BaseContext implements SnippetAcceptingContext
      */
     public function iShouldHaveAnActivationEmail()
     {
-        $client = $this->recentClient;
+        $client = $this->getRecentClient();
         /** @var \Symfony\Bundle\SwiftMailerBundle\DataCollector\MessageDataCollector $mailCollector */
         $mailCollector = $client->getProfile()->getCollector('swiftmailer');
 

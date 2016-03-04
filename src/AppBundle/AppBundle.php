@@ -12,7 +12,6 @@
 
 namespace AppBundle;
 
-use AppBundle\DependencyInjection\Compiler\RegisterDoctrineRepositoriesPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -25,8 +24,6 @@ class AppBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new RegisterDoctrineRepositoriesPass());
-
         // the extension classes of symfony2 were made in order to provide a flexible
         // and complex solution in order to process complex configuration and create a flexible service layer.
         // In this case we simply need to apply config files and this can be done in the build() method, too, as it

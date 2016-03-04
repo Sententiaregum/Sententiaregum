@@ -20,7 +20,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UsernameSuggestionsContext extends BaseContext implements SnippetAcceptingContext
+class UsernameSuggestionsContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var string[]
