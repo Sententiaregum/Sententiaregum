@@ -11,7 +11,7 @@
 'use strict';
 
 import React from 'react';
-import HelloWorld from '../components/HelloWorld';
+import Login from '../components/portal/Login';
 import CreateAccount from '../components/portal/CreateAccount';
 import ActivateAccount from '../components/portal/ActivateAccount';
 import NotFoundPage from '../components/app/layout/NotFoundPage';
@@ -21,7 +21,7 @@ import { IndexRoute, Router, Route, hashHistory } from 'react-router';
 export default (
   <Router history={hashHistory}>
     <Route component={Application} path="/">
-      <IndexRoute component={HelloWorld} />
+      <IndexRoute component={Login} />
       <Route component={CreateAccount} path="sign-up" />
       <Route component={ActivateAccount} path="activate/:name/:key" />
       <Route component={NotFoundPage} path="*" />

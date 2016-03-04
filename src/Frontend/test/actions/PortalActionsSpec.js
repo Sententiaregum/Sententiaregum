@@ -10,13 +10,14 @@
 
 'use strict';
 
-import { registration, activate } from '../../actions/PortalActions';
+import { registration, activate, authenticate } from '../../actions/PortalActions';
 import { stub, assert } from 'sinon';
 import { expect } from 'chai'
 import AccountWebAPIUtils from '../../util/api/AccountWebAPIUtils';
 import RegistrationStore from '../../store/RegistrationStore';
 import { runAction } from 'sententiaregum-flux-container';
 import ActivationStore from '../../store/ActivationStore';
+import AuthenticationStore from '../../store/AuthenticationStore';
 
 describe('PortalActions', () => {
   it('triggers the registration process', () => {
@@ -67,5 +68,16 @@ describe('PortalActions', () => {
     expect(ActivationStore.getState().success).to.equal(false);
 
     AccountWebAPIUtils.activate.restore();
+  });
+
+  it('authenticates users', () => {
+    stub(AccountWebAPIUtils, 'requestApiKey', (username, password, error) => {
+      error({ message: 'Credential error!' })
+    });
+
+    runAction(authenticate, ['Ma27', '123456']);
+    expect(AuthenticationStore.getState().message).to.equal('Credential error!');
+
+    AccountWebAPIUtils.requestApiKey.restore();
   });
 });

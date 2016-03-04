@@ -11,9 +11,3 @@ services:
       - "@app.repository.user"
     tags:
       - { name: console.command }
-  app.command.load_custom_fixtures:
-    class: AppBundle\Command\LoadCustomFixturesCommand
-    tags:
-      - { name: console.command }
-    calls:
-      - [setContainer, ['@service_container']]

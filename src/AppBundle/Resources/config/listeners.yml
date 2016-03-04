@@ -2,7 +2,13 @@ services:
   app.listener.incomplete_user:
     class: AppBundle\EventListener\IncompleteUserCheckListener
     tags:
-      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: 255, method: validateUserOnAuthentication }
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: -255, method: validateUserOnAuthentication }
+  app.listener.language_cookie:
+    class: AppBundle\EventListener\LanguageCookieFixerListener
+    arguments:
+      - "@app.repository.user"
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onResponseFilter }
   app.listener.email:
     class: AppBundle\EventListener\MailListener
     arguments:

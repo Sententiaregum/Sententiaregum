@@ -73,7 +73,7 @@ describe('FormHelper', () => {
     const helper = new FormHelper({ username: 'Foo' }, { password: '' }, { extra: {} }, () => {}, 'namespace');
 
     const nextState = helper.getSuccessState({ username: 'Foo', password: 'Bar' });
-    expect(helper._submitted).to.equal(true);
+    expect(helper.isSubmitted()).to.equal(true);
     expect(nextState.data.password).to.equal('');
     expect(nextState.data.username).to.equal('Foo');
     expect(nextState.success).to.equal(true);
@@ -87,7 +87,7 @@ describe('FormHelper', () => {
 
     const structure = { property: { en: ['Error'] } };
     const nextState = helper.getErrorState({ username: 'Foo' }, structure, { extra: {} });
-    expect(helper._submitted).to.equal(true);
+    expect(helper.isSubmitted()).to.equal(true);
     expect(nextState.progress).to.equal(false);
     expect(nextState.success).to.equal(false);
     expect(nextState.data.username).to.equal('Foo');
@@ -108,7 +108,7 @@ describe('FormHelper', () => {
     const helper = new FormHelper({ username: '' }, {}, {}, () => {}, 'namespace');
 
     const nextState = helper.getInitialState();
-    expect(helper._submitted).to.equal(false);
+    expect(helper.isSubmitted()).to.equal(false);
     expect(nextState.progress).to.equal(false);
     expect(nextState.success).to.equal(false);
 
@@ -123,7 +123,7 @@ describe('FormHelper', () => {
     const helper = new FormHelper({ username: '' }, {}, {}, () => {}, 'namespace');
 
     const nextState = helper.getInitialState();
-    expect(helper._submitted).to.equal(false);
+    expect(helper.isSubmitted()).to.equal(false);
     expect(Object.keys(nextState.data).length).to.equal(1);
     expect(nextState.data.username).to.equal('Test');
 
@@ -136,7 +136,7 @@ describe('FormHelper', () => {
     const struct    = { property: { en: ['Foolish error'] } };
     const nextState = helper.getInitialState(struct);
 
-    expect(helper._submitted).to.equal(true);
+    expect(helper.isSubmitted()).to.equal(true);
     expect(nextState.validation.errors).to.equal(struct);
   });
 
@@ -165,5 +165,24 @@ describe('FormHelper', () => {
     handler(eventObject);
 
     expect(localStorage.getItem('namespace.username')).to.equal(null);
+  });
+
+  it('checks whether the form is submitted', () => {
+    const helper = new FormHelper({}, {}, {}, () => {}, 'namespace');
+
+    expect(helper.isSubmitted()).to.equal(false);
+
+    // simulate change of the submitted clause by telling the helper that the form is submitted
+    helper.getSuccessState({});
+    expect(helper.isSubmitted()).to.equal(true);
+  });
+
+  it('builds error state for single-field validation forms', () => {
+    const helper = new FormHelper({}, {}, {}, () => {}, 'namespace', false);
+    // simulate change of the submitted clause by telling the helper that the form is submitted
+    helper.getErrorState({}, {});
+
+    expect(helper.associateFieldsWithStyle(['blah'])).to.equal('error');
+    expect(helper.hasErrors()).to.equal(true);
   });
 });

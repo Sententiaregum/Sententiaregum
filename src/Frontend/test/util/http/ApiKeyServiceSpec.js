@@ -11,13 +11,30 @@
 'use strict';
 
 import ApiKeyService from '../../../util/http/ApiKeyService';
-import chai from 'chai';
+import { expect } from 'chai';
 
 describe('ApiKeyService', () => {
-  beforeEach(() => {
-    localStorage.setItem('api_key', Math.random());
+  it('checks against empty data', () => {
+    localStorage.removeItem('api_key');
+    localStorage.removeItem('username');
+    localStorage.removeItem('user_roles');
+
+    expect(ApiKeyService.isLoggedIn()).to.equal(false);
+    expect(ApiKeyService.getApiKey()).to.equal(null);
+    expect(ApiKeyService.isAdmin()).to.equal(false);
   });
-  it('checks whether the user is logged in', () => {
-    chai.expect(ApiKeyService.isLoggedIn()).to.equal(true);
+
+  it('adds credentials', () => {
+    const data = {
+      apiKey:   'key',
+      roles:    [{ role: 'ROLE_USER' }, { role: 'ROLE_ADMIN' }],
+      username: 'Ma27'
+    };
+
+    ApiKeyService.addCredentials(data);
+    expect(ApiKeyService.isLoggedIn()).to.equal(true);
+    expect(ApiKeyService.getApiKey()).to.equal('key');
+    expect(ApiKeyService.isAdmin()).to.equal(true);
+    expect(ApiKeyService.getUsername()).to.equal('Ma27');
   });
 });

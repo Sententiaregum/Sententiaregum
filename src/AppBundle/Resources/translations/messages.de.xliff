@@ -11,6 +11,11 @@
                 <source>BACKEND_AUTH_NON_APPROVED</source>
                 <target>Du musst erst die Aktivierungsmail bestätigen!</target>
             </trans-unit>
+
+            <trans-unit id="BACKEND_AUTH_FAILURE">
+                <source>BACKEND_AUTH_FAILURE</source>
+                <target>Die Zugangsdaten sind ungültig!</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

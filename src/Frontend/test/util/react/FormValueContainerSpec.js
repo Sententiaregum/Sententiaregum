@@ -18,6 +18,11 @@ describe('FormValueContainer', () => {
   beforeEach(() => {
     instance = new FormValueContainer();
   });
+  afterEach(() => {
+    localStorage.removeItem('prefix.value1');
+    localStorage.removeItem('prefix.value2');
+    localStorage.removeItem('prefix.value');
+  });
 
   it('can set/get form values', () => {
     instance.persistFormValue('prefix.value', 'blah');

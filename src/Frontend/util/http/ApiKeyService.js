@@ -31,7 +31,12 @@ class ApiKeyService {
    * @returns {boolean} Whether the user is an admin or not.
    */
   isAdmin() {
-    return false; // just for testing reasons, will be implemented in #35
+    const roles = localStorage.getItem('user_roles');
+    if (roles) {
+      return -1 !== JSON.parse(roles).indexOf('ROLE_ADMIN');
+    }
+
+    return false;
   }
 
   /**
@@ -40,7 +45,35 @@ class ApiKeyService {
    * @returns {string} Api key of the current logged in user.
    */
   getApiKey() {
-    return localStorage.getItem('api_key'); // todo refactor this in #35
+    return localStorage.getItem('api_key');
+  }
+
+  /**
+   * Getter for the username.
+   *
+   * @returns {string} The username.
+   */
+  getUsername() {
+    return localStorage.getItem('username');
+  }
+
+  /**
+   * Stores the credentials as cookies.
+   *
+   * @param {Object} data Credentials.
+   *
+   * @returns {void}
+   */
+  addCredentials(data) {
+    const {
+      apiKey,
+      roles,
+      username
+    } = data;
+
+    localStorage.setItem('api_key', apiKey);
+    localStorage.setItem('user_roles', JSON.stringify(roles.map(entity => entity.role)));
+    localStorage.setItem('username', username);
   }
 }
 
