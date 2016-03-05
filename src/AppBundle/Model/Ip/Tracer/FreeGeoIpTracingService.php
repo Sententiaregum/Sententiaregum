@@ -24,7 +24,7 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FreeGeoIpTracingService implements IpTracingServiceInterface
 {
-    const PRIVATE_IPS = ['::1', '127.0.0.1'];
+    private static $PRIVATE_IPS = ['::1', '127.0.0.1'];
 
     /**
      * @var Client
@@ -48,7 +48,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      */
     public function getIpLocationData($ip, $userLocale)
     {
-        if (in_array($ip, self::PRIVATE_IPS, true)) {
+        if (in_array($ip, self::$PRIVATE_IPS, true)) {
             return;
         }
 
