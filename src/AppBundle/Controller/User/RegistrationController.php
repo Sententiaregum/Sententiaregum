@@ -17,10 +17,10 @@ use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * API for the registration implementation.
@@ -68,7 +68,7 @@ class RegistrationController extends BaseController
                 $response['name_suggestions'] = $result->getSuggestions();
             }
 
-            return View::create($response, Codes::HTTP_BAD_REQUEST);
+            return View::create($response, Response::HTTP_BAD_REQUEST);
         }
 
         return ['id' => $result->getUser()->getId()];
@@ -102,7 +102,7 @@ class RegistrationController extends BaseController
         try {
             $registrator->approveByActivationKey($paramFetcher->get('activation_key'), $paramFetcher->get('username'));
         } catch (UserActivationException $ex) {
-            return View::create(null, Codes::HTTP_FORBIDDEN);
+            return View::create(null, Response::HTTP_FORBIDDEN);
         }
     }
 }
