@@ -15,7 +15,6 @@ namespace AppBundle\Controller\Language;
 use AppBundle\Controller\BaseController;
 use AppBundle\Model\User\Locale\DTO\LocaleSwitcherDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -79,11 +78,11 @@ class LocaleController extends BaseController
         $validator = $this->get('validator');
 
         if (count($validator->validate($localeSwitcherDTO)) > 0) {
-            throw new HttpException(Codes::HTTP_BAD_REQUEST);
+            throw new HttpException(Response::HTTP_BAD_REQUEST);
         }
 
         $user     = $this->getCurrentUser();
-        $response = new Response(null, Codes::HTTP_NO_CONTENT);
+        $response = new Response(null, Response::HTTP_NO_CONTENT);
 
         if ($user->getLocale() !== $newLocale = $localeSwitcherDTO->getLocale()) {
             $em = $this->getDoctrine()->getManager();

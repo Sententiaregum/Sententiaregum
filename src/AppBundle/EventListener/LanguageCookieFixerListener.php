@@ -14,7 +14,6 @@ namespace AppBundle\EventListener;
 
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
-use FOS\RestBundle\Util\Codes;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +75,7 @@ class LanguageCookieFixerListener
     private function isProperRequest(Request $request, Response $response)
     {
         return $request->attributes->get('_route') === 'ma27_api_key_authentication.request'
-            && Codes::HTTP_OK === $response->getStatusCode();
+            && Response::HTTP_OK === $response->getStatusCode();
     }
 
     /**
