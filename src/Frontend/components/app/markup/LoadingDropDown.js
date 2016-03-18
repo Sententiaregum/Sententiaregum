@@ -24,7 +24,7 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
  */
 const LoadingDropDown = props => {
   return (
-    <MenuItem eventKey="1.1">
+    <MenuItem eventKey="1.1" className="languageLoader">
       <span className="loading">
         <Translate content={props.translationContent} />
       </span>
