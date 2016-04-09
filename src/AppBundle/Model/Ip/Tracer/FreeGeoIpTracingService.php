@@ -11,6 +11,7 @@
  */
 
 namespace AppBundle\Model\Ip\Tracer;
+
 use AppBundle\Model\Ip\Value\IpLocation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
