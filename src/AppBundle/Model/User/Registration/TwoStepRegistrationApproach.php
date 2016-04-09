@@ -18,9 +18,9 @@ use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterf
 use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
-use AppBundle\Model\User\Value\Registration;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
+use AppBundle\Model\User\Value\Registration;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
