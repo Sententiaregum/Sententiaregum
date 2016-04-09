@@ -14,8 +14,8 @@ namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\CredentialNotifyListener;
 use AppBundle\Model\Ip\Tracer\IpTracingServiceInterface;
-use AppBundle\Model\User\User;
 use AppBundle\Model\Ip\Value\IpLocation;
+use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnInvalidCredentialsEvent;
