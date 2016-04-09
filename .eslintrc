@@ -72,7 +72,6 @@
     "no-new": [2],
     "no-param-reassign": [2],
     "no-script-url": [2],
-    "no-undefined": [2],
     "no-use-before-define": [2],
     "max-len": [2, 200],
     "no-lonely-if": [2],
