@@ -13,7 +13,7 @@
 namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\CredentialNotifyListener;
-use AppBundle\Model\Ip\IpLocation;
+use AppBundle\Model\Ip\Value\IpLocation;
 use AppBundle\Model\Ip\Tracer\IpTracingServiceInterface;
 use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;

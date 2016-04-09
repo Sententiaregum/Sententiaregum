@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Model\User\Registration\Value;
+namespace AppBundle\Model\User\Value\Registration;
 
 use AppBundle\Model\User\User;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
