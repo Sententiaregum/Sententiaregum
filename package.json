@@ -51,6 +51,7 @@
     "react-dom": "~0.14",
     "react-interpolate-component": "^0.8",
     "react-router": "~1.0",
+    "react-spinkit": "^1.1.6",
     "react-translate-component": "^0.10",
     "request": "~2.65",
     "rewire": "^2.5.0",
