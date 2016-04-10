@@ -18,7 +18,7 @@ use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterf
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;
 use AppBundle\Model\User\Registration\TwoStepRegistrationApproach;
-use AppBundle\Model\User\Registration\Value\Result;
+use AppBundle\Model\User\Value\RegistrationResult as Result;
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
