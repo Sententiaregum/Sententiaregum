@@ -51,8 +51,8 @@
     "react-dom": "~0.14",
     "react-interpolate-component": "^0.8",
     "react-router": "~1.0",
+    "react-spinkit": "^1.1.6",
     "react-translate-component": "^0.10",
-    "request": "~2.65",
     "rewire": "^2.5.0",
     "style-loader": "~0.8",
     "uglify-js": "~2.4",
@@ -70,6 +70,7 @@
     "jsdom": "^2.0.0",
     "mocha": "^2.3.4",
     "sinon": "^1.17.2",
+    "request": "~2.65",
     "xhr2": "^0.1.3"
   }
 }

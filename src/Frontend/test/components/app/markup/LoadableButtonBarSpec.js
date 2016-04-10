@@ -23,6 +23,6 @@ describe('LoadableButtonBar', () => {
 
     chai.expect(node._childNodes[0]._childNodes[0]._nodeValue).to.equal('Label');
     chai.expect(node._childNodes[0]._attributes.class._nodeValue).to.equal('btn btn-primary spinner-btn');
-    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('sk-double-bounce custom-spinner');
+    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('custom-spinner');
   });
 });

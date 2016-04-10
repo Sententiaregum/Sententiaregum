@@ -11,6 +11,7 @@
 'use strict';
 
 import React from 'react';
+import spinner from 'react-spinkit';
 
 /**
  * Component which combines a button bar with a component.
@@ -72,12 +73,7 @@ export default class LoadableButtonBar extends React.Component {
    * @private
    */
   _renderSpinner() {
-    return (
-      <div className="sk-double-bounce custom-spinner">
-        <div className="sk-child sk-double-bounce1"></div>
-        <div className="sk-child sk-double-bounce2"></div>
-      </div>
-    );
+    return <spinner spinnerName="double-bounce" className="custom-spinner" />;
   }
 }
 

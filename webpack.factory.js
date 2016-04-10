@@ -47,7 +47,7 @@ function factory(environment) {
       bundle: './src/Frontend/styles/custom.less',
       bootstrap: [
         './node_modules/bootstrap/dist/css/bootstrap.min.css',
-        './node_modules/spinkit/css/spinkit.css'
+        './node_modules/react-spinkit/css/double-bounce.css'
       ]
     },
     module: {
