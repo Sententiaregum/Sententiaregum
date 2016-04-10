@@ -13,8 +13,8 @@
 namespace AppBundle\Tests\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
+use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;
 use AppBundle\Model\User\Registration\TwoStepRegistrationApproach;

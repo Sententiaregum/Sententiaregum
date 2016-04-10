@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Model\User\Registration\Value;
+namespace AppBundle\Model\User\Value;
 
 use AppBundle\Model\User\User;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class Result
+class RegistrationResult
 {
     /**
      * @var ConstraintViolationListInterface

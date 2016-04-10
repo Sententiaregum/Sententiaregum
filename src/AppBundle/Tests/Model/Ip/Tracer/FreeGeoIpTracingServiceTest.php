@@ -12,8 +12,8 @@
 
 namespace AppBundle\Tests\Model\Ip\Tracer;
 
-use AppBundle\Model\Ip\IpLocation;
 use AppBundle\Model\Ip\Tracer\FreeGeoIpTracingService;
+use AppBundle\Model\Ip\Value\IpLocation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;

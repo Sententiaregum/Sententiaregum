@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Model\Ip;
+namespace AppBundle\Model\Ip\Value;
 
 /**
  * Ip location class that contains all necessary data of the location of a ip.

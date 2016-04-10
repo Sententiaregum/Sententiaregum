@@ -12,7 +12,7 @@
 
 namespace AppBundle\Tests\Request\ParamConverter;
 
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
+use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Request\ParamConverter\DTOConverter;
 use AppBundle\Tests\Fixtures\DTO\FileUploadDTO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -32,7 +32,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot attach property "username" on object instance "AppBundle\Model\User\Registration\DTO\CreateUserDTO"!
+     * @expectedExceptionMessage Cannot attach property "username" on object instance "AppBundle\Model\User\DTO\CreateUserDTO"!
      */
     public function testImmutableProperty()
     {

@@ -14,7 +14,7 @@ namespace AppBundle\Controller\User;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Exception\UserActivationException;
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
+use AppBundle\Model\User\DTO\CreateUserDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
@@ -47,14 +47,14 @@ class RegistrationController extends BaseController
      *
      * Route that contains the first step of the registration
      *
-     * @param CreateUserDTO $dto
+     * @param \AppBundle\Model\User\DTO\CreateUserDTO $dto
      *
      * @return mixed[]
      *
      * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=201)
      *
-     * @ParamConverter(name="dto", class="AppBundle\Model\User\Registration\DTO\CreateUserDTO")
+     * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\CreateUserDTO")
      */
     public function createUserAction(CreateUserDTO $dto)
     {

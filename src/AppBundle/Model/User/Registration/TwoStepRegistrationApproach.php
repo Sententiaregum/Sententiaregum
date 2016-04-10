@@ -14,13 +14,13 @@ namespace AppBundle\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
 use AppBundle\Exception\UserActivationException;
+use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
-use AppBundle\Model\User\Registration\Value\Result;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
+use AppBundle\Model\User\Value\RegistrationResult;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -165,7 +165,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         $result = $this->buildAndValidateUserModelByDTO($userParameters);
         if (!$result['valid']) {
-            return new Result(
+            return new RegistrationResult(
                 $result['violations'],
                 $this->generateUsernameSuggestionsByNonUniqueUsername(
                     $result['violations'],
@@ -182,13 +182,13 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->sendActivationEmail($user);
         $this->expiredActivationProvider->attachNewApproval($user->getActivationKey());
 
-        return new Result(null, [], $user);
+        return new RegistrationResult(null, [], $user);
     }
 
     /**
      * Builds a new user and validates it.
      *
-     * @param CreateUserDTO $userParameters
+     * @param \AppBundle\Model\User\DTO\CreateUserDTO $userParameters
      *
      * @return mixed[]
      */

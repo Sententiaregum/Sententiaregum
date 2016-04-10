@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Model\User\Registration\DTO;
+namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\UniqueDTOParams;
@@ -72,7 +72,7 @@ class CreateUserDTO
      * @var string
      *
      * @Assert\NotBlank(message="VALIDATORS_REGISTRATION_EMAIL_EMPTY")
-     * @Assert\Email(message="VALIDATORS_REGISTRATION_INVALID_EMAIL", checkHost=true)
+     * @Assert\Email(message="VALIDATORS_REGISTRATION_INVALID_EMAIL")
      */
     private $email;
 

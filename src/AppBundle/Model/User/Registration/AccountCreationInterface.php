@@ -12,7 +12,7 @@
 
 namespace AppBundle\Model\User\Registration;
 
-use AppBundle\Model\User\Registration\DTO\CreateUserDTO;
+use AppBundle\Model\User\DTO\CreateUserDTO;
 
 /**
  * Interface which represents the account creation step.
