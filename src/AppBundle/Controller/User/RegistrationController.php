@@ -10,8 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\User;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -22,11 +23,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API for the user resource.
+ * API for the registration implementation
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UserController extends BaseController
+class RegistrationController extends BaseController
 {
     /**
      * @ApiDoc(
@@ -53,7 +54,7 @@ class UserController extends BaseController
      * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=201)
      *
-     * @ParamConverter(name="dto", class="AppBundle\Model\User\Registration\DTO\CreateUserDTO")
+     * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\CreateUserDTO")
      */
     public function createUserAction(CreateUserDTO $dto)
     {
