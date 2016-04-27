@@ -10,8 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Language;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Model\User\DTO\LocaleSwitcherDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
