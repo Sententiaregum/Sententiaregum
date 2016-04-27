@@ -105,31 +105,4 @@ class RegistrationController extends BaseController
             return View::create(null, Response::HTTP_FORBIDDEN);
         }
     }
-
-    /**
-     * @ApiDoc(
-     *     resource=true,
-     *     description="Creates a list of followers that contains a list showing which followers are online",
-     *     statusCodes={200="Successful generation","401"="Unauthorized"},
-     *     requirements={
-     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
-     *     }
-     * )
-     *
-     * Controller action that creates a list of users the current user follows that shows which users are online.
-     *
-     * @return bool[]
-     *
-     * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
-     * @Rest\View
-     */
-    public function onlineFollowingListAction()
-    {
-        /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
-        $cluster        = $this->get('app.redis.cluster.online_users');
-        $userRepository = $this->getDoctrine()->getRepository('Account:User');
-        $currentUser    = $this->getCurrentUser();
-
-        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
-    }
 }

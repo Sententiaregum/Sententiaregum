@@ -78,7 +78,7 @@ class OnlineUsersContext extends FixtureLoadingContext implements SnippetAccepti
         $apiKey         = $this->authenticate($arg1, '123456');
         $this->response = $this->performRequest(
             'GET',
-            '/api/protected/online-users.json',
+            '/api/protected/users/online.json',
             [],
             true,
             [],
