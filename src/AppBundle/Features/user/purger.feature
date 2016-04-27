@@ -1,4 +1,4 @@
-@users
+@purger
 Feature: activation purger
   Unfinished activations older than two hours will be purged during a purger job
 

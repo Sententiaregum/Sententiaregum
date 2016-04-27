@@ -22,7 +22,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class PendingActivationsClusterContext extends BaseContext implements SnippetAcceptingContext
+class PendingActivationsClusterContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var bool

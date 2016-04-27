@@ -12,14 +12,14 @@
 
 namespace AppBundle\Controller\User;
 
+use AppBundle\Controller\BaseController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class OnlineUsersController extends Controller
+class OnlineUsersController extends BaseController
 {
     /**
      * @ApiDoc(
@@ -35,16 +35,15 @@ class OnlineUsersController extends Controller
      *
      * @return bool[]
      *
-     * @Rest\Get("/protected/online-users.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
+     * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
      */
     public function onlineFollowingListAction()
     {
-        /** @var \AppBundle\Model\User\User $currentUser */
-        $currentUser = $this->getUser();
         /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
         $cluster        = $this->get('app.redis.cluster.online_users');
         $userRepository = $this->getDoctrine()->getRepository('Account:User');
+        $currentUser    = $this->getCurrentUser();
 
         return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
     }

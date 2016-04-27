@@ -25,7 +25,7 @@ interface IpTracingServiceInterface
      * @param string $ip
      * @param string $userLocale
      *
-     * @return \AppBundle\Model\Ip\Value\IpLocation
+     * @return \AppBundle\Model\Ip\Value\IpLocation|null
      */
     public function getIpLocationData($ip, $userLocale);
 }

@@ -21,7 +21,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class OnlineUsersContext extends BaseContext implements SnippetAcceptingContext
+class OnlineUsersContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**
      * @var bool[]
@@ -78,7 +78,7 @@ class OnlineUsersContext extends BaseContext implements SnippetAcceptingContext
         $apiKey         = $this->authenticate($arg1, '123456');
         $this->response = $this->performRequest(
             'GET',
-            '/api/protected/online-users.json',
+            '/api/protected/users/online.json',
             [],
             true,
             [],

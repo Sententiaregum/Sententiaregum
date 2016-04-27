@@ -31,10 +31,17 @@ default:
     user-basics:
       contexts:
         - AppBundle\Behat\AppContext
-        - AppBundle\Behat\UserPurgerContext
         - AppBundle\Behat\UsersContext
       filters:
         tags: "@users"
+      type:   symfony_bundle
+      bundle: AppBundle
+    purger:
+      contexts:
+        - AppBundle\Behat\AppContext
+        - AppBundle\Behat\UserPurgerContext
+      filters:
+        tags: "@purger"
       type:   symfony_bundle
       bundle: AppBundle
     locale:

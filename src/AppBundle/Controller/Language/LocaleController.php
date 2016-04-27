@@ -65,7 +65,7 @@ class LocaleController extends BaseController
      *
      * Switches the locale property of a user.
      *
-     * @param \AppBundle\Model\User\DTO\LocaleSwitcherDTO $localeSwitcherDTO
+     * @param LocaleSwitcherDTO $localeSwitcherDTO
      *
      * @return Response
      *

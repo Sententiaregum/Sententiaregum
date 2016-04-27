@@ -12,9 +12,13 @@
 
 namespace AppBundle\Behat;
 
+use AppBundle\DataFixtures\ORM\AdminFixture;
+use AppBundle\DataFixtures\ORM\RoleFixture;
+use AppBundle\DataFixtures\ORM\UserFixture;
 use AppBundle\Model\User\User;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 /**
@@ -22,8 +26,10 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class AppContext extends BaseContext implements SnippetAcceptingContext
+class AppContext implements SnippetAcceptingContext, KernelAwareContext
 {
+    use BaseTrait;
+
     /**
      * @var string
      */
@@ -89,5 +95,18 @@ class AppContext extends BaseContext implements SnippetAcceptingContext
     public function iAmLoggedInAs($arg1, $arg2)
     {
         static::$apiKey = $this->authenticate($arg1, $arg2);
+    }
+
+    /**
+     * NOTE: might be helpful when fixtures are disabled by default, but required for a certain scenario.
+     *
+     * @Given the user fixtures have been applied
+     */
+    public function theUserFixturesHaveBeenApplied()
+    {
+        $this
+            ->getContainer()
+            ->get('app.doctrine.fixtures_loader')
+            ->applyFixtures([RoleFixture::class, AdminFixture::class, UserFixture::class]);
     }
 }

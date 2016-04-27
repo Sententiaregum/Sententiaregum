@@ -12,63 +12,44 @@
 
 namespace AppBundle\Behat;
 
-use AppBundle\DataFixtures\ORM\AdminFixture;
-use AppBundle\DataFixtures\ORM\RoleFixture;
-use AppBundle\DataFixtures\ORM\UserFixture;
 use Assert\Assertion;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Ma27\ApiKeyAuthenticationBundle\Security\ApiKeyAuthenticator;
 
 /**
- * Base context that contains basic features of every behat context.
+ * Basic trait to separate the AppContext from the BaseContext.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-abstract class BaseContext implements KernelAwareContext
+trait BaseTrait
 {
     use KernelDictionary;
 
     /**
-     * @var string
-     */
-    protected static $managerName = 'default';
-
-    /**
      * @var \Symfony\Bundle\FrameworkBundle\Client
      */
-    protected $recentClient;
+    private $recentClient;
 
     /**
-     * @var bool
+     * Gets an entity manager.
+     *
+     * @return \Doctrine\ORM\EntityManagerInterface
      */
-    protected static $applyUserFixtures = true;
-
-    /**
-     * @var bool
-     */
-    protected static $applyFixtures = true;
-
-    /** @BeforeScenario */
-    public function loadDataFixtures()
+    public function getEntityManager()
     {
-        if (static::$applyFixtures) {
-            /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $service */
-            $service  = $this->getContainer()->get('app.doctrine.fixtures_loader');
-            $fixtures = [RoleFixture::class];
-
-            if (static::$applyUserFixtures) {
-                $fixtures[] = AdminFixture::class;
-                $fixtures[] = UserFixture::class;
-            }
-            $service->applyFixtures($fixtures);
-        }
+        return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    /** @AfterScenario */
-    public function tearDown()
+    /**
+     * Gets a repository by its name.
+     *
+     * @param string $entity
+     *
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    public function getRepository($entity)
     {
-        $this->recentClient = null;
+        return $this->getEntityManager()->getRepository($entity);
     }
 
     /**
@@ -89,7 +70,7 @@ abstract class BaseContext implements KernelAwareContext
      *
      * @return string[]
      */
-    protected function performRequest(
+    public function performRequest(
         $method,
         $uri,
         array $parameters = [],
@@ -160,7 +141,7 @@ abstract class BaseContext implements KernelAwareContext
      *
      * @return string
      */
-    protected function authenticate($username, $password, $expectSuccess = true)
+    public function authenticate($username, $password, $expectSuccess = true)
     {
         $response = $this->performRequest(
             'POST',
@@ -182,24 +163,10 @@ abstract class BaseContext implements KernelAwareContext
     }
 
     /**
-     * Gets an entity manager.
-     *
-     * @return \Doctrine\ORM\EntityManagerInterface
+     * @return \Symfony\Bundle\FrameworkBundle\Client
      */
-    protected function getEntityManager()
+    public function getRecentClient()
     {
-        return $this->getContainer()->get('doctrine')->getManager(self::$managerName);
-    }
-
-    /**
-     * Gets a repository by its name.
-     *
-     * @param string $entity
-     *
-     * @return \Doctrine\ORM\EntityRepository
-     */
-    protected function getRepository($entity)
-    {
-        return $this->getEntityManager()->getRepository($entity);
+        return $this->recentClient;
     }
 }

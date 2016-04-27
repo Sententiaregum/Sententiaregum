@@ -10,6 +10,7 @@ echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
 echo "FLUSH PRIVILEGES;" | mysql -u root
 
 # install global npm dependencies
+npm update -g npm
 npm install -g mocha webpack eslint eslint-plugin-react less node-pre-gyp
 
 # copy custom travis configuration

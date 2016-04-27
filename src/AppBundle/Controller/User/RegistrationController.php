@@ -47,7 +47,7 @@ class RegistrationController extends BaseController
      *
      * Route that contains the first step of the registration
      *
-     * @param \AppBundle\Model\User\DTO\CreateUserDTO $dto
+     * @param CreateUserDTO $dto
      *
      * @return mixed[]
      *

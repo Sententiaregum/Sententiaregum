@@ -1,13 +1,15 @@
 services:
   app.repository.user:
     class: AppBundle\Model\User\UserRepository
-    tags:
-      - { name: app.tag.repository, entity: Account:User }
     public: false
     lazy: true
+    factory: ["@doctrine.orm.default_entity_manager", 'getRepository']
+    arguments:
+      - "Account:User"
   app.repository.role:
     class: Doctrine\ORM\EntityRepository
-    tags:
-      - { name: app.tag.repository, entity: Account:Role }
     public: false
     lazy: true
+    factory: ["@doctrine.orm.default_entity_manager", 'getRepository']
+    arguments:
+      - "Account:Role"
