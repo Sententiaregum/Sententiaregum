@@ -44,14 +44,6 @@ default:
         tags: "@purger"
       type:   symfony_bundle
       bundle: AppBundle
-    profile:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\UserDetailsContext
-      filters:
-        tags: "@profile"
-      type:   symfony_bundle
-      bundle: AppBundle
     locale:
       contexts:
         - AppBundle\Behat\AppContext
