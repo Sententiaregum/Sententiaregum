@@ -70,7 +70,7 @@ class LocaleController extends BaseController
      * @return Response
      *
      * @Rest\Patch("/protected/locale.{_format}", name="app.language.switch_locale", requirements={"_format"="^(json|xml)$"})
-     * @ParamConverter(name="localeSwitcherDTO", class="AppBundle\Model\User\Locale\DTO\LocaleSwitcherDTO")
+     * @ParamConverter(name="localeSwitcherDTO", class="AppBundle\Model\User\DTO\LocaleSwitcherDTO")
      */
     public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO)
     {
