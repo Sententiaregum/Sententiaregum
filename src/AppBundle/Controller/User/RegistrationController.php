@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API for the registration implementation
+ * API for the registration implementation.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
