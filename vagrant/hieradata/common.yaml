@@ -18,7 +18,7 @@ composer::target_dir: '/usr/local/bin'
 
 # php extensions
 php::service: apache
-x
+
 sententiaregum::backend::php::extensions:
   gd:     {}
   cli:    {}
