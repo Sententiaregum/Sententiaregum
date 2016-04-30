@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+forge 'http://forge.puppetlabs.com'
+
+mod 'puppetlabs/stdlib', '4.11.0'
+mod 'puppetlabs/apt', '2.2.2'
+mod 'puppetlabs/mysql', '3.7.0'
+mod 'puppetlabs/gcc', '0.3.0'
+mod 'example42/php', '2.0.26'
+mod 'example42/puppi', '2.1.13'
+mod 'example42/apache', '2.1.12'
+mod 'willdurand/nodejs', '1.9.5'
+mod 'willdurand/composer', '1.2.0'
+mod 'thomasvandoren/redis', '0.10.0'
+mod 'maestrodev/wget', '1.7.3'
+mod 'saz/timezone', '3.3.0'

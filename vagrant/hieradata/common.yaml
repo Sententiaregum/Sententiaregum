@@ -1,10 +1,8 @@
-## Configuration parameters
-timezone: 'UTC'
-
 # basic apt packages for the machine
 sententiaregum::installs::packages:
   - vim
   - git
+  - build-essential
   - bash-completion
   - software-properties-common
   - python-software-properties
@@ -14,9 +12,13 @@ sententiaregum::installs::packages:
 # ssh entry point
 sententiaregum::ssh::entry_point: /var/www/sententiaregum
 
-# backend
-sententiaregum::backend::php::composer: true
-sententiaregum::backend::php::version: '5.6'
+# composer config
+composer::command_name: composer
+composer::target_dir: '/usr/local/bin'
+
+# php extensions
+php::service: apache
+x
 sententiaregum::backend::php::extensions:
   gd:     {}
   cli:    {}
@@ -28,15 +30,10 @@ sententiaregum::backend::php::extensions:
   apc:
     module_prefix: 'php-'
 
+# apache config
 sententiaregum::backend::server::server_aliases: '192.168.66.211'
-sententiaregum::backend::server::host_name: sententiaregum.dev
-sententiaregum::backend::server::doc_root: /var/www/sententiaregum/web
-sententiaregum::backend::server::front_controller: app_dev.php
-sententiaregum::backend::server::port: 80
 sententiaregum::backend::server::modules:
   rewrite: {}
-
-sententiaregum::backend::ruby::version: '2.0'
 
 # mysql configurations
 sententiaregum::infrastructure::mysql::databases:
@@ -51,6 +48,7 @@ sententiaregum::infrastructure::mysql::databases:
     host: localhost
     grant: ['ALL']
 
+# redis instances
 sententiaregum::infrastructure::redis::instances:
   doctrine-cache:
     redis_port: 6900
@@ -63,6 +61,7 @@ sententiaregum::infrastructure::redis::instances:
   online-users:
     redis_port: 6904
 
+# cronjobs
 sententiaregum::infrastructure::jobs::schedules:
   cleanup_sessions:
     command: "php /var/www/sententiaregum/app/console ma27:auth:session-cleanup"
@@ -73,11 +72,12 @@ sententiaregum::infrastructure::jobs::schedules:
     user: vagrant
     hour: 5
 
+# mailcatcher
 sententiaregum::infrastructure::mailcatcher::dest_ip: '0.0.0.0'
 
-# nodejs
-sententiaregum::frontend::node::version: 'stable'
-sententiaregum::frontend::node::make_install: false
+# frontend config (nodejs + npm packages)
+nodejs::version: 'stable'
+nodejs::make_install: false
 
 sententiaregum::frontend::npm::packages:
   - mocha
@@ -87,3 +87,6 @@ sententiaregum::frontend::npm::packages:
   - eslint
   - eslint-plugin-react
   - less
+
+# timezone
+timezone::timezone: 'UTC'

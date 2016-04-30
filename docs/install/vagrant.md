@@ -1,5 +1,14 @@
 # Vagrant
 
+## Prerequisites
+
+In order to run the box properly, ``vagrant`` and ``VirtualBox`` must be installed.
+
+To run the puppet provisioners properly, the ``vagrant-r10k`` plugin and the ``puppet`` gem should be present.
+This is because of the lifecycle driven by the ``r10k`` plugin.
+
+## Installation
+
 The simplest way to install Sententiaregum is locally is using vagrant:
 
     git clone git@github.com:Sententiaregum/Sententiaregum.git /path/to/target

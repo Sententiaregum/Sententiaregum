@@ -1,6 +1,6 @@
 class sententiaregum::backend::server(
-  $host_name,
-  $doc_root,
+  $host_name        = 'sententiaregum.dev',
+  $doc_root         = '/var/www/sententiaregum/web',
   $front_controller = 'app_dev.php',
   $server_aliases   = '',
   $port             = 80,
@@ -13,7 +13,7 @@ class sententiaregum::backend::server(
   validate_integer($port)
   validate_hash($modules)
 
-  class { '::apache': }
+  include ::apache
 
   create_resources('::apache::module', $modules)
 
