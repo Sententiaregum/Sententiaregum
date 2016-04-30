@@ -1,22 +1,4 @@
 ## Configuration parameters
-
-classes:
-  - sententiaregum::ssh
-  - sententiaregum::installs
-  - sententiaregum::backend::php
-  - sententiaregum::backend::php::composer
-  - sententiaregum::backend::ruby
-  - sententiaregum::backend::server
-  - sententiaregum::deploy::capistrano
-  - sententiaregum::deploy::capistrano::plugins
-  - sententiaregum::infrastructure::mailcatcher
-  - sententiaregum::infrastructure::mysql
-  - sententiaregum::infrastructure::redis
-  - sententiaregum::infrastructure::jobs
-  - sententiaregum::infrastructure::timezone
-  - sententiaregum::frontend::node
-  - sententiaregum::frontend::npm
-
 timezone: 'UTC'
 
 # basic apt packages for the machine
@@ -31,11 +13,6 @@ sententiaregum::installs::packages:
 
 # ssh entry point
 sententiaregum::ssh::entry_point: /var/www/sententiaregum
-
-# capistrano plugins
-sententiaregum::deploy::capistrano::plugins::plugins:
-  symfony:  {}
-  composer: {}
 
 # backend
 sententiaregum::backend::php::composer: true
