@@ -9,6 +9,8 @@ classes:
   - sententiaregum::infrastructure::mysql
   - sententiaregum::infrastructure::redis
   - sententiaregum::infrastructure::jobs
-  - sententiaregum::infrastructure::timezone
-  - sententiaregum::frontend::node
   - sententiaregum::frontend::npm
+  - timezone
+  - nodejs
+  - composer
+  - php

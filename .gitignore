@@ -48,6 +48,8 @@
 
 # Puppet
 /vagrant/hieradata/local.yaml
+/vagrant/puppet/modules/*
+!vagrant/puppet/modules/.gitkeep
 
 # Frontend files and tools
 /node_modules/

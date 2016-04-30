@@ -1,7 +1,6 @@
 class sententiaregum::infrastructure::mysql($databases = {}) {
   validate_hash($databases)
 
-  class { '::mysql::server': }
-
+  include ::mysql::server
   create_resources('::mysql::db', $databases)
 }
