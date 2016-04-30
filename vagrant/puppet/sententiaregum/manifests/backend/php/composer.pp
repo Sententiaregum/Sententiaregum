@@ -11,6 +11,7 @@ class sententiaregum::backend::php::composer {
     cwd         => '/var/www/sententiaregum',
     user        => 'vagrant',
     environment => ['HOME=/home/vagrant'],
+    timeout     => 500,
     require     => [
       Class['::composer'],
       Class['::sententiaregum::frontend::node'],

@@ -9,7 +9,6 @@ sudo apt-get update
 sudo add-apt-repository ppa:ondrej/php5-5.6
 sudo apt-get -y install php5
 sudo apt-get -y install php5-mysql
-sudo apt-get -y install php5-xdebug
 sudo apt-get -y install curl
 
 # mysql + db setup
