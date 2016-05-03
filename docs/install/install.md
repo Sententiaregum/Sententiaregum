@@ -26,9 +26,10 @@ The dev server is currently not supported, if you'd like to auto-compile your bu
 
     npm run watch
 
+The build type (production or development) can be controlled by the ``NODE_ENV`` environment variable.
 If you'd like to make the assets production-ready, run the following:
 
-    npm run frontend-build
+    npm run frontend
 
 A lint script has been implemented in order to execute eslint:
 

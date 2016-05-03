@@ -14,9 +14,9 @@ A social network based on Symfony2 and ReactJS
 
 Sententiaregum is a social network based on a REST api written with symfony2 and a frontend in ECMAScript6 using React and Reflux.
 
-##Docs
+## Docs
 
 The docs can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/)
 ## License
 
-This project is under the GPL license. The whole license file can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/LCIENSE)
+This project is under the GPL license. The whole license file can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/LICENSE)
