@@ -31,7 +31,7 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function installNpmDependencies(CommandEvent $event)
     {
-        $cmd = 'install --no-bin-links';
+        $cmd = 'install';
         if (!$event->isDevMode()) {
             $cmd .= ' --production';
         }
