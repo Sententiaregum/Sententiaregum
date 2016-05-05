@@ -2,52 +2,30 @@
 
 ## Manual setup
 
+### Prerequisites
+
+Before running an installation, some packages must be present:
+
+- ``mysql`` (two databases, one development and one dev database, database names can be configured in the ``parameters.yml`` during ``composer install``)
+- ``PHP`` (at least ``5.6``)
+- ``NodeJS`` (at least ``5.0``, ``6.0`` is recommended)
+- ``Composer`` (recommended ``1.0``)
+- ``Redis`` (multiple ports recommended, can be configured in the ``parameters.yml`` during ``composer install``)
+
+### Composer install
+
 The installation is really simple.
 
-You just have to call __composer install --no-dev__ and all dependencies will be configured and the setup of the backend and frontend will be processed.
-
-## Local nodejs environment
-
-As a developer you may want to have a local nodejs environment. That can be helpful for local debugging as webstorm doesn't support remote node interpreters.
-
-All linting tools must be installed globally:
-
-The following list of npm packages must be installed globally:
-
-- webpack
-- webpack-core
-- node-gyp
-- mocha
-- eslint
-- eslint-plugin-react
-- less
-
-The dev server is currently not supported, if you'd like to auto-compile your bundle, you need to run the following command:
-
-    npm run watch
-
-The build type (production or development) can be controlled by the ``NODE_ENV`` environment variable.
-If you'd like to make the assets production-ready, run the following:
-
-    npm run frontend
-
-A lint script has been implemented in order to execute eslint:
-
-    npm run lint
-
-The rest of the linters used during the build process can be found at the __before_script__ section of the [.travis.yml](https://github.com/Sententiaregum/Sententiaregum/blob/master/.travis.yml)
-
-All local node packages and build production files will be synced.
-
-For ESLint are some PHPStorm/WebStorm plugins available:
-
-- [ESLint Integration for PhpStorm](https://plugins.jetbrains.com/plugin/7494)
+You just have to call __composer install --no-dev__ and all dependencies will be configured
+and the setup of the backend and frontend will be processed.
 
 ## Deployment
 
+> __NOTE:__ the capistrano implementation is currently experimental and needs some more work during [#265](https://github.com/Sententiaregum/Sententiaregum/issues/265) and [#186](https://github.com/Sententiaregum/Sententiaregum/issues/186).
+
 ### Note about fixture appliance
 
-At the deployment for production some fixtures will be applied.
+At the deployment for production some fixtures implemented for production will be applied.
 These fixtures must implement the interface __AppBundle\Doctrine\ORM\ProductionFixtureInterface__ which extends the basic __FixtureInterface__ of the data fixtures library.
 
 Currently the following fixtures implement this interface:
@@ -74,5 +52,4 @@ The following gems are obligatory for deploying with capistrano:
 
 #### Prerequirements to the server
 
-Capistrano is responsible for the deploy, but not for setting up the whole server. We provide a basic example script that
-is runs all basic install processes: [deploy/examples/server-setup.sh](https://github.com/Sententiaregum/Sententiaregum/tree/master/deploy/examples/server-setup.sh)
+Above some necessary packages are shown that must be present before running capistrano.

@@ -1,9 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+Vagrant.require_version ">= 1.7"
 Vagrant.configure(2) do |config|
   # Check for require plugins
-  unless Vagrant.has_plugin?('vagrant-r10k')
+  unless Vagrant.has_plugin?('vagrant-r10k', '>=0.4')
     abort 'The `r10k` plugin is required! Install by typing `vagrant plugin install vagrant-r10k`'
   end
 
