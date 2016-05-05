@@ -11,37 +11,29 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
 import Component from '../../../components/app/Component';
-import chai from 'chai';
+import { expect } from 'chai';
 import Url from '../../../util/http/facade/Url';
-import sinon from 'sinon';
-import Cookies from 'cookies-js';
-import {ApiKey} from '../../../util/http/facade/HttpServices';
+import { stub } from 'sinon';
+import { ApiKey } from '../../../util/http/facade/HttpServices';
+import { shallow } from 'enzyme';
 
 describe('Component', () => {
   it('adapts page with menu', () => {
-    const result    = TestUtils.renderIntoDocument(<Test />);
-    const component = ReactDOM.findDOMNode(result);
+    const result = shallow(<Test />),
+        menu     = result.find('Menu'),
+        content  = result.find('h1');
 
-    const Menu    = component._childNodes[0];
-    const Content = component._childNodes[1];
-
-    chai.expect(Menu._childNodes[0]._childNodes[1]._childNodes[1]._childNodes).to.have.length(1);
-    chai.expect(Content._childNodes[0]._nodeValue).to.equal('Hello World!');
+    expect(menu.prop('items')).to.have.length(1);
+    expect(content.contains('Hello World!')).to.equal(true);
   });
 
-  it('redirects on authentication failure', () => {
-    sinon.createStubInstance(Cookies);
-    sinon.stub(Url, 'redirect');
-    sinon.stub(ApiKey, 'isLoggedIn', () => false);
+  it('handles insufficient credentials', () => {
+    stub(Url, 'redirect');
+    stub(ApiKey, 'isLoggedIn', () => false);
 
-    const cmp = new ProtectedTest();
-    const res = cmp.render();
-    sinon.assert.calledOnce(Url.redirect);
-
-    chai.expect(res).to.equal(false);
+    expect(shallow(<ProtectedTest />).contains('h1')).to.equal(false);
+    expect(Url.redirect.calledOnce).to.equal(true);
 
     Url.redirect.restore();
     ApiKey.isLoggedIn.restore();

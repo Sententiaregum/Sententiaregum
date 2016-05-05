@@ -11,13 +11,16 @@
 'use strict';
 
 import React from 'react';
-import Input from 'react-bootstrap/lib/Input';
 import LoadableButtonBar from '../../app/markup/LoadableButtonBar';
 import PortalActions from '../../../actions/PortalActions';
 import FormComponent from '../../app/FormComponent';
 import RegistrationStore from '../../../store/RegistrationStore';
 import Suggestions from './Suggestions';
 import Success from './Success';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import { Locale } from '../../../util/http/facade/HttpServices';
 
 /**
  * Form component for the signup page.
@@ -44,10 +47,10 @@ export default class Form extends FormComponent {
     this.state = {
       progress: false,
       data:     {
-        username: null,
-        password: null,
-        email:    null,
-        locale:   'de'
+        username: '',
+        password: '',
+        email:    '',
+        locale:   Locale.getLocale() || 'de'
       },
       success: false,
       validation
@@ -108,53 +111,33 @@ export default class Form extends FormComponent {
       <form onSubmit={this._createAccount.bind(this)} ref="form">
         <Suggestions suggestions={this.state.validation.suggestions} />
         {this.state.success ? <Success /> : null}
-        <Input
-          type="text"
-          name="username"
-          placeholder={username}
-          bsStyle={usernameStyle}
-          value={this.state.data.username}
-          onChange={this.changeProperty.bind(this)}
-          hasFeedback
-          help={errors.hasOwnProperty('username') ? errors['username'] : null}
-          ref="username"
-          autoFocus={true}
-        />
-        <Input
-          type="password"
-          name="password"
-          placeholder={password}
-          value={this.state.data.password}
-          bsStyle={passwordStyle}
-          onChange={this.changeProperty.bind(this)}
-          hasFeedback
-          help={errors.hasOwnProperty('password') ? errors['password'] : null}
-          ref="password"
-        />
-        <Input
-          type="email"
-          name="email"
-          placeholder={email}
-          value={this.state.data.email}
-          bsStyle={emailStyle}
-          onChange={this.changeProperty.bind(this)}
-          hasFeedback
-          help={errors.hasOwnProperty('email') ? errors['email'] : null}
-          ref="email"
-        />
-        <Input
-          type="select"
-          name="locale"
-          onChange={this.changeProperty.bind(this)}
-          value={this.state.data.locale}
-          bsStyle={localeStyle}
-          help={errors.hasOwnProperty('locale') ? errors['locale'] : null}
-          ref="locale"
-        >
-          <option value="de">Deutsch (Deutschland)</option>
-          <option value="en">English (USA)</option>
-        </Input>
-
+        <FormGroup controlId="username" validationState={usernameStyle} ref="username">
+          <FormControl name="username" type="text" value={this.state.data.username} placeholder={username} onChange={this.changeProperty.bind(this)} />
+          <FormControl.Feedback />
+          <HelpBlock>{errors.hasOwnProperty('username') ? errors['username'] : null}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="password" validationState={passwordStyle} ref="password">
+          <FormControl name="password" type="password" value={this.state.data.password} placeholder={password} onChange={this.changeProperty.bind(this)} />
+          <FormControl.Feedback />
+          <HelpBlock>{errors.hasOwnProperty('password') ? errors['password'] : null}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="email" validationState={emailStyle} ref="email">
+          <FormControl name="email" type="email" value={this.state.data.email} placeholder={email} onChange={this.changeProperty.bind(this)} />
+          <FormControl.Feedback />
+          <HelpBlock>{errors.hasOwnProperty('email') ? errors['email'] : null}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="locale" validationState={localeStyle} ref="locale">
+          <FormControl
+            componentClass="select"
+            value={this.state.data.locale}
+            onChange={this.changeProperty.bind(this)}
+            name="locale"
+          >
+            <option value="de">Deutsch (Deutschland)</option>
+            <option value="en">English (USA)</option>
+          </FormControl>
+          <HelpBlock>{errors.hasOwnProperty('locale') ? errors['locale'] : null}</HelpBlock>
+        </FormGroup>
         <LoadableButtonBar btnLabel={button} progress={this.state.progress} ref="button" />
       </form>
     );
@@ -239,7 +222,7 @@ export default class Form extends FormComponent {
    */
   _getErasedFormFieldPatch() {
     const patch       = this.state.data;
-    patch['password'] = null;
+    patch['password'] = '';
 
     return patch;
   }

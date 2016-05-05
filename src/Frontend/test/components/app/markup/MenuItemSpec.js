@@ -11,14 +11,14 @@
 'use strict';
 
 import React from 'react';
-import Success from '../../../../components/portal/signup/Success';
-import { expect } from 'chai';
 import { shallow } from 'enzyme';
+import MenuItem from '../../../../components/app/markup/MenuItem';
+import { expect } from 'chai';
 
-describe('Success', () => {
-  it('renders success box', () => {
-    const markup = shallow(<Success />);
-    expect(markup.find('Translate').prop('content')).to.equal('pages.portal.create_account.success');
-    expect(markup.prop('bsStyle')).to.equal('success');
+describe('MenuItem', () => {
+  it('builds a menu item from configuration', () => {
+    const markup = shallow(<MenuItem url="/#/foo" label="FooBar" key={1} />);
+    expect(markup.prop('href')).to.equal('/#/foo');
+    expect(markup.find('Translate').prop('content')).to.equal('FooBar');
   });
 });

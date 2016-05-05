@@ -16,36 +16,33 @@ import LanguageSwitcher from './widgets/LanguageSwitcher';
 import Nav from 'react-bootstrap/lib/Nav';
 
 /**
- * Wrapper class for menu.
+ * Renderer for the menu markup.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @param {Object} props The component properties.
+ *
+ * @returns {React.Element} The markup of the menu.
  */
-export default class MenuWrapper extends React.Component {
-  /**
-   * Renders the wrapper of the menu.
-   *
-   * @returns {React.Element} Basic menu rendering markup.
-   */
-  render() {
-    return (
-      <Navbar inverse fixedTop>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <a href="/#/">Sententiaregum</a>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LanguageSwitcher />
-          </Nav>
-          {this.props.children}
-        </Navbar.Collapse>
-      </Navbar>
-    );
-  }
-}
+const MenuWrapper = props => {
+  return (
+    <Navbar inverse fixedTop>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a href="/#/">Sententiaregum</a>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+        <Nav>
+          <LanguageSwitcher />
+        </Nav>
+        {props.children}
+      </Navbar.Collapse>
+    </Navbar>
+  );
+};
 
 MenuWrapper.propTypes = {
   children: React.PropTypes.node
 };
+
+export default MenuWrapper;

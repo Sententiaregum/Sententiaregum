@@ -23,16 +23,13 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class AdminFixture extends BaseFixture implements ProductionFixtureInterface, DependentFixtureInterface
+class AdminFixture implements ProductionFixtureInterface, DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        /* @var \Doctrine\ORM\EntityManager $manager */
-        $this->checkEntityManager($manager);
-
         $passwordHasher = new PhpPasswordHasher();
         $roleRepository = $manager->getRepository('Account:Role');
         $userRole       = $roleRepository->findOneBy(['role' => 'ROLE_USER']);

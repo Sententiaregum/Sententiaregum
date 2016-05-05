@@ -11,13 +11,13 @@
 'use strict';
 
 import Form from '../../../../components/portal/signup/Form';
-import TestUtils from 'react/lib/ReactTestUtils';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import RegistrationStore from '../../../../store/RegistrationStore';
-import sinon from 'sinon';
-import chai from 'chai';
+import { stub } from 'sinon';
+import { expect } from 'chai';
 import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
+import { shallow } from 'enzyme';
+import { Locale } from '../../../../util/http/facade/HttpServices';
+import mockDOMEventObject from '../../../fixtures/mockDOMEventObject';
 
 describe('Form', () => {
   it('handles invalid data and renders its errors into the markup', () => {
@@ -26,70 +26,32 @@ describe('Form', () => {
     };
     const suggestions = ['Ma27_2016'];
 
-    sinon.stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
+    stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
       error({
         name_suggestions: suggestions,
         errors:           errors
       });
     });
 
-    const cmp = TestUtils.renderIntoDocument(<Form />);
+    stub(Locale, 'getLocale', () => 'en');
+    const cmp = shallow(<Form />);
 
-    const username = cmp.refs.username;
-    const password = cmp.refs.password;
-    const email    = cmp.refs.email;
+    const username = cmp.find('[controlId="username"] > FormControl');
+    const password = cmp.find('[controlId="password"] > FormControl');
+    const email    = cmp.find('[controlId="email"] > FormControl');
 
-    username.value = 'Ma27';
-    TestUtils.Simulate.change(username);
+    username.simulate('change', mockDOMEventObject({ username: 'Ma27' }));
+    password.simulate('change', mockDOMEventObject({ password: '123456' }));
+    email.simulate('change', mockDOMEventObject({ email: 'foo@bar.de' }));
 
-    password.value = '123456';
-    TestUtils.Simulate.change(password);
+    cmp.find('form').simulate('submit', { preventDefault: () => {} });
 
-    email.value = 'invalid email';
-    TestUtils.Simulate.change(email);
-
-    TestUtils.Simulate.submit(cmp.refs.form);
-
-    const node = ReactDOM.findDOMNode(cmp);
-
-    chai.expect(node._childNodes.length).to.equal(6);
-    chai.expect(node._childNodes[1]._childNodes[2]._childNodes[0]._childNodes[0]._childNodes[0]._childNodes[0]._nodeValue).to.equal('Username in use!');
-    chai.expect(node._childNodes[0]._childNodes[2]._childNodes[0]._childNodes[0]._nodeValue).to.equal('Ma27_2016');
-    chai.expect(node._childNodes[0]._attributes.class._nodeValue).to.equal('alert alert-warning alert-dismissable');
-
-    AccountWebAPIUtils.createAccount.restore();
-  });
-
-  it('renders success box after successful account creation', () => {
-    sinon.stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
-      success({});
+    setTimeout(() => {
+      expect(cmp.find('form').contains('Success')).to.equal(false);
+      expect(cmp.find('[controlId="username"] > HelpBlock').prop('validationState')).to.equal('error');
     });
 
-    const cmp = TestUtils.renderIntoDocument(<Form />);
-
-    const username = cmp.refs.username;
-    const password = cmp.refs.password;
-    const email    = cmp.refs.email;
-
-    username.value = 'Ma27';
-    TestUtils.Simulate.change(username);
-
-    password.value = '123456';
-    TestUtils.Simulate.change(password);
-
-    email.value = 'ma27@sententiaregum.dev';
-    TestUtils.Simulate.change(email);
-
-    TestUtils.Simulate.submit(cmp.refs.form);
-
-    const node = ReactDOM.findDOMNode(cmp);
-    chai.expect(node._childNodes.length).to.equal(7);
-    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('alert alert-success alert-dismissable');
-
     AccountWebAPIUtils.createAccount.restore();
-  });
-
-  afterEach(() => {
-    RegistrationStore.constructor(); // run cleanup process
+    Locale.getLocale.restore();
   });
 });

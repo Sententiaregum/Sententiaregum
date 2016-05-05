@@ -27,11 +27,13 @@ function createConfig() {
     cssQueryString += '?minimize&keepSpecialComments=0';
   } else {
     cssQueryString += '?sourceMap';
+    plugins.push(new webpack.OldWatchingPlugin());
   }
 
   lessQueryString = cssQueryString + '!less';
 
   return {
+    devtool: env === 'production' ? 'eval' : 'source-map',
     cache: true,
     entry: {
       bundle: [
@@ -44,7 +46,8 @@ function createConfig() {
       loaders: [
         {
           test: /\.js$/,
-          loaders: ['babel-loader']
+          loaders: ['babel-loader'],
+          exclude:  /(node_modules)/
         },
         {
           test: /\.less/,

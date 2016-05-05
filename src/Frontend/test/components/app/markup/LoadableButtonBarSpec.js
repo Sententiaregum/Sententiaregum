@@ -12,17 +12,25 @@
 
 import LoadableButtonBar from '../../../../components/app/markup/LoadableButtonBar';
 import React from 'react';
-import TestUtils from 'react/lib/ReactTestUtils';
-import ReactDOM from 'react-dom';
-import chai from 'chai';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
 
 describe('LoadableButtonBar', () => {
-  it('renders button bar with a loading spinner', () => {
-    const cmp  = TestUtils.renderIntoDocument(<LoadableButtonBar progress={true} btnLabel="Label" />);
-    const node = ReactDOM.findDOMNode(cmp);
+  it('renders a button bar', () => {
+    const markup = shallow(<LoadableButtonBar progress={false} btnLabel="Label" />);
+    expect(markup.hasClass('form-group'));
 
-    chai.expect(node._childNodes[0]._childNodes[0]._nodeValue).to.equal('Label');
-    chai.expect(node._childNodes[0]._attributes.class._nodeValue).to.equal('btn btn-primary spinner-btn');
-    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('custom-spinner');
+    const btn = markup.find('button');
+    expect(btn.prop('type')).to.equal('submit');
+    expect(btn.hasClass('btn btn-primary spinner-btn')).to.equal(true);
+    expect(btn.contains('Label')).to.equal(true);
+  });
+
+  it('changes the progress state', () => {
+    const markup = shallow(<LoadableButtonBar progress={false} btnLabel="Label" />);
+    expect(markup.find('button').prop('disabled')).to.not.equal(true);
+
+    markup.setProps({ progress: true });
+    expect(markup.find('button').prop('disabled')).to.equal('disabled');
   });
 });

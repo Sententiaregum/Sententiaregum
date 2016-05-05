@@ -16,25 +16,18 @@ import Form from './signup/Form';
 import InfoBox from './signup/InfoBox';
 
 /**
- * React component for the signup page.
+ * Markup component which renders the `create account` page.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @returns {React.Element} The markup.
  */
-export default class CreateAccount extends React.Component {
-  /**
-   * Renders the component.
-   *
-   * @returns {React.Element} The vDOM markup.
-   */
-  render() {
-    return (
+export default () => {
+  return (
+    <div>
+      <h1><Translate content="pages.portal.head" /></h1>
       <div>
-        <h1><Translate content="pages.portal.head" /></h1>
-        <div>
-          <InfoBox />
-          <Form />
-        </div>
+        <InfoBox />
+        <Form />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};

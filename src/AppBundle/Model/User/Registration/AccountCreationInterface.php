@@ -26,7 +26,7 @@ interface AccountCreationInterface
      *
      * @param CreateUserDTO $userParameters
      *
-     * @return Value\Result
+     * @return \AppBundle\Model\User\Value\RegistrationResult
      */
     public function registration(CreateUserDTO $userParameters);
 }

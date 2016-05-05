@@ -11,11 +11,10 @@
 'use strict';
 
 import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import MenuStore from '../../store/MenuStore';
 import MenuActions from '../../actions/MenuActions';
 import React from 'react';
-import Translate from 'react-translate-component';
+import MenuItem from './markup/MenuItem';
 
 /**
  * Configurable menu rendering component.
@@ -68,11 +67,7 @@ export default class Menu extends React.Component {
    */
   render() {
     const items = this.state.items.map((item, i) => {
-      return (
-        <NavItem href={item.url} key={i}>
-          <Translate content={item.label} />
-        </NavItem>
-      );
+      return <MenuItem label={item.label} url={item.url} key={i} />;
     });
 
     let nav = false;

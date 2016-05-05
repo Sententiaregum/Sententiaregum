@@ -12,28 +12,21 @@
 
 import MenuWrapper from '../../../components/app/MenuWrapper';
 import Menu from '../../../components/app/Menu';
-import TestUtils from 'react/lib/ReactTestUtils';
 import React from 'react';
-import chai from 'chai';
-import ReactDOM from 'react-dom';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
 
 describe('MenuWrapper', () => {
-  it('renders menu component as child near the brand', () => {
-    const result = TestUtils.renderIntoDocument((
+  it('renders menu component as child next to the brand', () => {
+    const markup = shallow((
       <MenuWrapper>
-        <Menu items={[]} />
+        <Menu items={[{ url: '/#/login', label: 'Login' }]} />
       </MenuWrapper>
     ));
 
-    const component = ReactDOM.findDOMNode(result);
-    const bars      = component._childNodes[0]._childNodes[1];
-
-    chai.expect(bars._childNodes).to.have.length(2);
-
-    const brand = component._childNodes[0]._childNodes[0]._childNodes[0];
-
-    chai.expect(brand._tagName).to.equal('a');
-    chai.expect(brand._attributes.href._nodeValue).to.equal('/#/');
-    chai.expect(brand._childNodes[0]._nodeValue).to.equal('Sententiaregum');
+    const brand = markup.find('a');
+    expect(brand.prop('href')).to.equal('/#/');
+    expect(brand.contains('Sententiaregum')).to.equal(true);
+    expect(markup.find('Menu').prop('items')).to.have.length(1);
   });
 });

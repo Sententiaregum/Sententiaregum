@@ -16,7 +16,6 @@ import CreateAccount from '../components/portal/CreateAccount';
 import ActivateAccount from '../components/portal/ActivateAccount';
 import NotFoundPage from '../components/app/NotFoundPage';
 import { Router, Route, hashHistory } from 'react-router';
-import ReactPageComponentDecorator from '../components/app/ReactPageComponentDecorator';
 import { portal, network } from './menu';
 import ComponentBuilder from '../util/react/ComponentBuilder';
 

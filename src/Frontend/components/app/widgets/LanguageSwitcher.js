@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import LocaleActions from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
@@ -24,7 +24,7 @@ import DropDownItem from '../markup/DropDownItem';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class LanguageSwitcher extends React.Component {
+export default class LanguageSwitcher extends Component {
   /**
    * Constructor.
    *
@@ -71,7 +71,7 @@ export default class LanguageSwitcher extends React.Component {
         localeKeys           = Object.keys(this.state.locales),
         languageItems        = 0 === localeKeys.length
           ? <LoadingDropDown translationContent="menu.l10n_loading" />
-          : localeKeys.map(key => this._buildDropDown(key));
+          : localeKeys.map((key, i) => this._buildDropDown(key, i));
 
     return (
       <NavDropdown
@@ -98,7 +98,7 @@ export default class LanguageSwitcher extends React.Component {
   /**
    * Change handler for the locale.
    *
-   * @param {Object} e Event object
+   * @param {Object} e Event object.
    *
    * @returns {void}
    */
@@ -115,17 +115,18 @@ export default class LanguageSwitcher extends React.Component {
    * Builds a dropdown item by its locale key.
    *
    * @param {string} key Locale key.
+   * @param {number} i   The counter.
    *
    * @returns {React.Element} The markup.
    */
-  _buildDropDown(key) {
+  _buildDropDown(key, i) {
     const displayName = this.state.locales[key],
         isActive      = Locale.getLocale() === key;
 
     return <DropDownItem
-      key={key}
+      key={i}
       isActive={isActive}
-      onSelect={(e) => this._changeLocale(e)}
+      onSelect={(k, e) => this._changeLocale(e)}
       displayName={displayName}
       id={key}
     />;

@@ -144,6 +144,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         // there occur foreign key constraint issues with the
         // roles. Therefore roles are only allowed for
         // approved users.
+        /** @var \AppBundle\Model\User\Role $defaultRole */
         $defaultRole = $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
         if (!$defaultRole) {
             throw new \RuntimeException(sprintf(

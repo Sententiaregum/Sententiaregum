@@ -11,21 +11,19 @@
 'use strict';
 
 import React from 'react';
-import TestUtils from 'react/lib/ReactTestUtils';
 import NotFoundPage from '../../../components/app/NotFoundPage';
-import chai from 'chai';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
+import { stub } from 'sinon';
+import { ApiKey } from '../../../util/http/facade/HttpServices';
 
 describe('NotFoundPage', () => {
   it('renders a 404 page', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(<NotFoundPage />);
+    stub(ApiKey, 'isLoggedIn');
+    const markup = shallow(<NotFoundPage />);
+    expect(markup.find('h1 Translate').prop('content')).to.equal('pages.not_found.title');
+    expect(markup.find('.content Translate').prop('content')).to.equal('pages.not_found.text');
 
-    const component = renderer.getRenderOutput();
-    const translate = component.props.children[1].props.children;
-    const heading   = translate[0].props.children.props.content;
-    const body      = translate[1].props.children.props.content;
-
-    chai.expect(heading).to.equal('pages.not_found.title');
-    chai.expect(body).to.equal('pages.not_found.text');
+    ApiKey.isLoggedIn.restore();
   });
 });

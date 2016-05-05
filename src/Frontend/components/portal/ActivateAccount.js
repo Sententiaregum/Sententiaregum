@@ -70,14 +70,10 @@ export default class ActivateAccount extends React.Component {
    * @returns {React.Element} The markup.
    */
   render() {
-    const content = this.state.progress
-      ? <span><Translate content="pages.portal.activate.progress" /> {this.props.params.name}...</span>
-      : this.state.success
-        ? <span><Translate content="pages.portal.activate.success" /></span>
-        : <span><Translate content="pages.portal.activate.error" /></span>;
+    const content = this._getState();
 
     if (this.state.success) {
-      Url.redirect('');
+      Url.redirect('/');
     }
     return (
       <div>
@@ -127,5 +123,21 @@ export default class ActivateAccount extends React.Component {
       progress: false,
       failure:  true
     });
+  }
+
+  /**
+   * Provider which renders the appropriate translation result.
+   *
+   * @returns {React.Element} The markup for the state.
+   * @private
+   */
+  _getState() {
+    if (this.state.progress) {
+      return <span><Translate content="pages.portal.activate.progress" /> {this.props.params.name}...</span>;
+    }
+
+    return this.state.success
+      ? <span><Translate content="pages.portal.activate.success" /></span>
+      : <span><Translate content="pages.portal.activate.error" /></span>;
   }
 }

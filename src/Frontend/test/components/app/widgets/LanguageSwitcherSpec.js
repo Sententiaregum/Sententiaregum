@@ -12,51 +12,34 @@
 
 import LanguageSwitcher from '../../../../components/app/widgets/LanguageSwitcher';
 import LocaleStore from '../../../../store/LocaleStore';
-import sinon from 'sinon';
-import chai from 'chai';
-import Cookies from 'cookies-js';
+import { stub } from 'sinon';
+import { expect } from 'chai';
 import { Locale } from '../../../../util/http/facade/HttpServices';
-import TestUtils from 'react/lib/ReactTestUtils';
-import ReactDOM from 'react-dom';
 import React from 'react';
+import { shallow } from 'enzyme';
 
 describe('LanguageSwitcher', () => {
-  it('renders locales', () => {
-    let clock  = sinon.useFakeTimers();
-    sinon.createStubInstance(Cookies);
-    sinon.stub(Locale, 'getLocale', () => 'en');
+  it('renders the locales received from flux', () => {
+    stub(Locale, 'getLocale', () => 'de');
+    stub(LocaleStore, 'getAllLocales', () => ({ de: 'Deutsch' }));
+    stub(LocaleStore, 'isInitialized', () => true);
 
-    const locales = {
-      de: 'Deutsch',
-      en: 'English'
-    };
+    const markup = shallow(<LanguageSwitcher />);
+    setTimeout(() => {
+      expect(markup.find('LoadingDropDown')).to.have.length(0);
 
-    sinon.stub(LocaleStore, 'getAllLocales', () => locales);
-    sinon.stub(LocaleStore, 'isInitialized', () => true);
+      const item = markup.find('DropDownItem');
+      expect(item.prop('isActive')).to.equal(true);
+      expect(item.prop('displayName')).to.equal('Deutsch');
+    });
 
-    const result = TestUtils.renderIntoDocument(<LanguageSwitcher />);
-    clock.tick(1000);
-    const cmp = ReactDOM.findDOMNode(result);
-
-    const dropdown = cmp._childNodes[1]._childNodes;
-
-    chai.expect(dropdown.length).to.equal(2);
-    chai.expect(dropdown[0]._childNodes[0]._attributes.id._nodeValue).to.equal('de');
-    chai.expect(dropdown[0]._childNodes[0]._childNodes[0]._nodeValue).to.equal('Deutsch');
-
-    chai.expect(dropdown[1]._childNodes[0]._attributes.id._nodeValue).to.equal('en');
-    chai.expect(dropdown[1]._attributes.class._nodeValue).to.equal('active');
-    chai.expect(dropdown[1]._childNodes[0]._childNodes[0]._nodeValue).to.equal('English');
-
+    Locale.getLocale.restore();
     LocaleStore.getAllLocales.restore();
     LocaleStore.isInitialized.restore();
-    clock.restore();
   });
 
-  it('shows loading bar until locales were loaded', () => {
-    const result = TestUtils.renderIntoDocument(<LanguageSwitcher />);
-    const node   = ReactDOM.findDOMNode(result);
-
-    chai.expect(node._childNodes[1]._childNodes[0]._childNodes[0]._childNodes[0]._childNodes[0]._childNodes[0]._nodeValue).to.equal('Loading languages...');
+  it('shows loading bar', () => {
+    const markup = shallow(<LanguageSwitcher />);
+    expect(markup.find('LoadingDropDown')).to.have.length(1);
   });
 });

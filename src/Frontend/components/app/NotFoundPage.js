@@ -36,10 +36,10 @@ export default class NotFoundPage extends Component {
     return (
       <div>
         <h1>
-          <Translate component="option" content="pages.not_found.title" />
+          <Translate content="pages.not_found.title" />
         </h1>
-        <div>
-          <Translate component="option" content="pages.not_found.text" />
+        <div className="content">
+          <Translate content="pages.not_found.text" />
         </div>
       </div>
     );
