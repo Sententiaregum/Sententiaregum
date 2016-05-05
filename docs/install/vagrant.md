@@ -10,6 +10,28 @@ This is because of the lifecycle driven by the ``r10k`` plugin.
 ``r10k`` deploys puppet modules declared in a ``Puppetfile`` will be deployed into another modules
  directory which is a more maintainable approach than using a hacky shell provisioner to deploy modules somewhere into the ``/etc/puppet`` directory.
 
+## Customizing the VM
+
+The Vagrant VM contains a sensitive configuration by default (1GB memory only) and contributors with more
+powerful machines should be able to increase hardware-related settings like the memory in order to avoid issues with memory leaks
+such as ``composer update`` processes in the VM.
+
+Furthermore settings like the private network IP is modifiable to avoid collisions in the private network.
+Those parameters can be customized in a file named *vagrant/machine/local.yaml*.
+
+This may look like this:
+
+``` yaml
+# vagrant/machine/local.yaml
+# NOTE: all values displayed here are the values used by default
+
+cpus: 1
+memory: 1024
+name: "Sententiaregum VM"
+ip: "192.168.56.232"
+hostname: "sententiaregum.dev"
+```
+
 ## Installation
 
 The simplest way to install Sententiaregum is locally is using vagrant:

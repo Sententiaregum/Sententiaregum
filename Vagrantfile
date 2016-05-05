@@ -51,7 +51,9 @@ def load_config
     .select { |file| File.exist?(file) }
 
   settings = {}
-  files.each { |file| settings.merge!(YAML::load(File.open(file))) }
+  files.each do |file|
+    settings.merge!(YAML::load(File.open(file)))
+  end
 
   return settings
 end
