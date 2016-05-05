@@ -45,6 +45,7 @@
 
 # Vagrant
 /.vagrant/
+/vagrant/machine/local.yaml
 
 # Puppet
 /vagrant/hieradata/local.yaml

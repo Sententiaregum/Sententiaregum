@@ -1,0 +1,8 @@
+# Hardware settings
+cpus: 1
+memory: 1024
+
+# Network settings
+name: "Sententiaregum VM"
+ip: "192.168.56.232"
+hostname: "sententiaregum.dev"
