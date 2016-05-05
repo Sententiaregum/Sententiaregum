@@ -7,6 +7,9 @@ In order to run the box properly, ``vagrant`` and ``VirtualBox`` must be install
 To run the puppet provisioners properly, the ``vagrant-r10k`` plugin and the ``puppet`` gem should be present.
 This is because of the lifecycle driven by the ``r10k`` plugin.
 
+``r10k`` deploys puppet modules declared in a ``Puppetfile`` will be deployed into another modules
+ directory which is a more maintainable approach than using a hacky shell provisioner to deploy modules somewhere into the ``/etc/puppet`` directory.
+
 ## Installation
 
 The simplest way to install Sententiaregum is locally is using vagrant:
@@ -18,11 +21,14 @@ Now you just need to boot vagrant:
 
     vagrant up
 
-Now a box with Ubuntu 14.04 and PHP 5.6 will be created automatically.
+Now a box with Ubuntu 14.04 (``ubuntu/trusty64``) and PHP 5.6 and NodeJS 6.x will be created automatically.
 
-The settings for the box can be found here: *vagrant/hieradata/common.yaml*
+The hiera config is stored in two files managed by GIT:
 
-If you'd like to override some parameters for some special cases, you just need to create a file called *local.yaml* in the *vagrant/hieradata* directory.
-This file is capable at overriding all parameters provided in the *common.yaml* file thanks to hiera's deep merge feature.
+- *vagrant/hieradata/common.yaml* (``common.yaml`` contains all class parameter)
+- *vagrant/hieradata/classes.yaml* (``classes.yaml`` contains all classes to be managed and included by hiera)
 
-This file is optional, but will always be ignored by git.
+If you'd like to override some parameters for some special cases,
+you just have to create a file called *local.yaml* in the *vagrant/hieradata* directory.
+This file is capable at overriding all parameters provided in the *common.yaml* file
+thanks to hiera's merge feature and is ignored by GIT.

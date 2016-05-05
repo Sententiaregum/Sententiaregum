@@ -31,7 +31,7 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function installNpmDependencies(CommandEvent $event)
     {
-        $cmd = 'install --no-bin-links';
+        $cmd = 'install';
         if (!$event->isDevMode()) {
             $cmd .= ' --production';
         }
@@ -46,8 +46,14 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function buildFrontendData(CommandEvent $event)
     {
-        $npmScriptName = $event->isDevMode() ? 'dev-frontend-build' : 'frontend-build';
-        self::executeNpmCommand(sprintf('run %s', $npmScriptName), $event);
+        $devMode = $event->isDevMode();
+        self::executeNpmCommand(
+            'run frontend',
+            $event,
+            $devMode,
+            500,
+            $devMode ? 'development' : 'production'
+        );
     }
 
     /**
@@ -133,19 +139,17 @@ class ScriptHandler extends AbstractScriptHandler
      * @param CommandEvent $event
      * @param bool|true    $showOutput
      * @param int          $timeout
+     * @param string       $nodeEnv
      */
-    private static function executeNpmCommand($command, CommandEvent $event, $showOutput = true, $timeout = 500)
+    private static function executeNpmCommand($command, CommandEvent $event, $showOutput = true, $timeout = 500, $nodeEnv = null)
     {
-        $npm     = (new ExecutableFinder())->find('npm');
-        $handler = function ($type, $buffer) use ($event) {
+        $npm         = (new ExecutableFinder())->find('npm');
+        $fullCommand = sprintf('%s %s %s', $nodeEnv ? sprintf('NODE_ENV=%s', $nodeEnv) : null, $npm, $command);
+        $handler     = function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
         };
 
-        $process = new Process(sprintf('%s %s', $npm, $command), null, null, null, $timeout);
-        if (!$showOutput) {
-            $handler = function () {};
-        }
-
-        $process->run($handler);
+        (new Process($fullCommand, null, null, null, $timeout))
+            ->run($showOutput ? $handler : function () {});
     }
 }
