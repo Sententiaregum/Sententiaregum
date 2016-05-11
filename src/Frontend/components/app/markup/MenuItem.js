@@ -23,15 +23,16 @@ import Translate from 'react-translate-component';
  */
 const MenuItem = props => {
   return (
-    <NavItem href={props.url}>
+    <NavItem href={props.url} active={props.isActive}>
       <Translate content={props.label} />
     </NavItem>
   );
 };
 
 MenuItem.PropTypes = {
-  url:   React.PropTypes.string,
-  label: React.PropTypes.string
+  url:      React.PropTypes.string,
+  label:    React.PropTypes.string,
+  isActive: React.PropTypes.bool
 };
 
 export default MenuItem;

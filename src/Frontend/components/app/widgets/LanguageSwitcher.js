@@ -14,7 +14,7 @@ import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import LocaleActions from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
-import { Locale } from '../../../util/http/facade/HttpServices';
+import Locale from '../../../util/http/LocaleService';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import LoadingDropDown from '../markup/LoadingDropDown';
 import DropDownItem from '../markup/DropDownItem';

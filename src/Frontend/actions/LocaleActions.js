@@ -12,7 +12,8 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import LocaleConstants from '../constants/Locale';
-import { Locale, ApiKey } from '../util/http/facade/HttpServices';
+import Locale from '../util/http/LocaleService';
+import ApiKey from '../util/http/ApiKeyService';
 import LocaleStore from '../store/LocaleStore';
 import LocaleWebAPIUtils from '../util/api/LocaleWebAPIUtils';
 

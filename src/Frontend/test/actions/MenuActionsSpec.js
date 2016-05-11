@@ -14,7 +14,7 @@ import MenuActions from '../../actions/MenuActions';
 import sinon from 'sinon';
 import dispatcher from '../../dispatcher/AppDispatcher';
 import chai from 'chai';
-import {ApiKey} from '../../util/http/facade/HttpServices';
+import ApiKey from '../../util/http/ApiKeyService';
 import Cookies from 'cookies-js';
 
 describe('MenuActions', () => {

@@ -67,7 +67,7 @@ export default class Menu extends React.Component {
    */
   render() {
     const items = this.state.items.map((item, i) => {
-      return <MenuItem label={item.label} url={item.url} key={i} />;
+      return <MenuItem label={item.label} url={item.url} key={i} isActive={this.context.router.isActive(item.url.slice(2))} />;
     });
 
     let nav = false;
@@ -92,4 +92,11 @@ export default class Menu extends React.Component {
 
 Menu.propTypes = {
   items: React.PropTypes.array
+};
+
+Menu.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
 };

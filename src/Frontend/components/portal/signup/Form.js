@@ -20,7 +20,7 @@ import Success from './Success';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import FormControl from 'react-bootstrap/lib/FormControl';
-import { Locale } from '../../../util/http/facade/HttpServices';
+import Locale from '../../../util/http/LocaleService';
 
 /**
  * Form component for the signup page.

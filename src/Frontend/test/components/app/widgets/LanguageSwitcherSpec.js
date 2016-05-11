@@ -14,7 +14,7 @@ import LanguageSwitcher from '../../../../components/app/widgets/LanguageSwitche
 import LocaleStore from '../../../../store/LocaleStore';
 import { stub } from 'sinon';
 import { expect } from 'chai';
-import { Locale } from '../../../../util/http/facade/HttpServices';
+import Locale from '../../../../util/http/LocaleService';
 import React from 'react';
 import { shallow } from 'enzyme';
 

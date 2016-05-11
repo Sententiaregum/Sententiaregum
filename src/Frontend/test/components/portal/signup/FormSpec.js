@@ -16,7 +16,7 @@ import { stub } from 'sinon';
 import { expect } from 'chai';
 import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
 import { shallow } from 'enzyme';
-import { Locale } from '../../../../util/http/facade/HttpServices';
+import Locale from '../../../../util/http/LocaleService';
 import mockDOMEventObject from '../../../fixtures/mockDOMEventObject';
 
 describe('Form', () => {

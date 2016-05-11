@@ -23,7 +23,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UserFixtur implements FixtureInterface, DependentFixtureInterface
+class UserFixture implements FixtureInterface, DependentFixtureInterface
 {
     /**
      * {@inheritdoc}

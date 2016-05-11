@@ -17,8 +17,9 @@ import { expect } from 'chai';
 
 describe('MenuItem', () => {
   it('builds a menu item from configuration', () => {
-    const markup = shallow(<MenuItem url="/#/foo" label="FooBar" key={1} />);
+    const markup = shallow(<MenuItem url="/#/foo" label="FooBar" key={1} isActive={true} />);
     expect(markup.prop('href')).to.equal('/#/foo');
     expect(markup.find('Translate').prop('content')).to.equal('FooBar');
+    expect(markup.prop('active')).to.equal(true);
   });
 });

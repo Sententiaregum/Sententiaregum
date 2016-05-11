@@ -15,7 +15,6 @@ import DismissableAlertBox from '../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
 import PortalActions from '../../actions/PortalActions';
 import ActivationStore from '../../store/ActivationStore';
-import Url from '../../util/http/facade/Url';
 
 /**
  * Activation component to be used when activating a account.
@@ -73,7 +72,7 @@ export default class ActivateAccount extends React.Component {
     const content = this._getState();
 
     if (this.state.success) {
-      Url.redirect('/');
+      this.context.router.replace('/');
     }
     return (
       <div>
@@ -135,9 +134,13 @@ export default class ActivateAccount extends React.Component {
     if (this.state.progress) {
       return <span><Translate content="pages.portal.activate.progress" /> {this.props.params.name}...</span>;
     }
-
-    return this.state.success
-      ? <span><Translate content="pages.portal.activate.success" /></span>
-      : <span><Translate content="pages.portal.activate.error" /></span>;
+    return <Translate content={this.state.success ? 'pages.portal.activate.success' : 'pages.portal.activate.error'} />;
   }
 }
+
+ActivateAccount.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
+};

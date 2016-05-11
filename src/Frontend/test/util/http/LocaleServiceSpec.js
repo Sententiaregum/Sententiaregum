@@ -10,66 +10,38 @@
 
 'use strict';
 
-import LocaleService from '../../../util/http/LocaleService';
-import CookieFactory from '../../../util/http/CookieFactory';
 import sinon from 'sinon';
 import chai from 'chai';
-import jsdom from 'jsdom';
-import counterpart from 'counterpart';
+import Cookies from 'cookies-js';
+import LocaleService from '../../../util/http/LocaleService';
 
 describe('LocaleService', () => {
   it('returns default locale if cookie store is empty', () => {
-    let window          = jsdom.jsdom().parentWindow;
-    let factoryInstance = new CookieFactory(window);
-    let mock            = {
-      get: () => null
-    };
-
-    sinon.stub(factoryInstance, 'getCookies', () => mock);
-    let instance = new LocaleService('en', factoryInstance);
-
-    chai.expect(instance.getLocale()).to.equal('en');
-
-    factoryInstance.getCookies.restore();
+    sinon.stub(Cookies, 'get', () => null);
+    chai.expect(LocaleService.getLocale()).to.equal('en');
+    Cookies.get.restore();
   });
 
-  it('fetches locale from cookie store', () => {
-    let window          = jsdom.jsdom().parentWindow;
-    let factoryInstance = new CookieFactory(window);
-    let mock            = {
-      get: () => 'de'
-    };
+  it('fetches locale from local store', () => {
+    sinon.stub(Cookies, 'get', () => 'de');
 
-    sinon.stub(factoryInstance, 'getCookies', () => mock);
-    let instance = new LocaleService('en', factoryInstance);
-
-    chai.expect(instance.getLocale()).to.equal('de');
-
-    factoryInstance.getCookies.restore();
+    chai.expect(LocaleService.getLocale()).to.equal('de');
+    Cookies.get.restore();
   });
 
   it('sets default locale', () => {
-    let spy             = sinon.spy();
-    let window          = jsdom.jsdom().parentWindow;
-    let factoryInstance = new CookieFactory(window);
-    let mock            = {
-      get: () => null,
-      set: spy
-    };
+    sinon.stub(Cookies, 'get', () => null);
+    sinon.stub(Cookies, 'set');
 
-    sinon.stub(factoryInstance, 'getCookies', () => mock);
-    let instance = new LocaleService('en', factoryInstance);
-    instance.setLocale(null);
-
-    chai.expect(spy.calledOnce).to.equals(true);
-    chai.expect(spy.calledWith('language', 'en')).to.equals(true);
+    LocaleService.setLocale(null);
+    chai.expect(Cookies.set.calledWith('language', 'en')).to.equals(true);
+    Cookies.get.restore();
+    Cookies.set.restore();
   });
 
   it('throws error on invalid languages', () => {
-    let instance = new LocaleService('en');
-
     chai.expect(
-      () => instance.setLocale('fr')
+      () => LocaleService.setLocale('fr')
     ).to.throw('[LocaleService.setLocale(fr)] Invalid locale! Allowed locales are de,en!')
   });
 });

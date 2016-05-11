@@ -14,7 +14,7 @@ import sinon from 'sinon';
 import chai from 'chai';
 import LocaleWebAPIUtils from '../../../util/api/LocaleWebAPIUtils';
 import axios from 'axios';
-import {ApiKey} from '../../../util/http/facade/HttpServices';
+import ApiKey from '../../../util/http/ApiKeyService';
 
 describe('LocaleWebAPIUtils', () => {
   it('loads available locales', () => {

@@ -67,11 +67,22 @@ class RegistrationStore extends FluxEventHubStore {
   }
 
   /**
+   * Success handler.
+   *
+   * @returns {void}
+   */
+  onSuccess() {
+    this.errors      = [];
+    this.suggestions = [];
+    this.emitChange('CreateAccount.Success');
+  }
+
+  /**
    * @inheritdoc
    */
   getSubscribedEvents() {
     return [
-      { name: Portal.CREATE_ACCOUNT, callback: () => this.emitChange('CreateAccount.Success') },
+      { name: Portal.CREATE_ACCOUNT, callback: this.onSuccess.bind(this) },
       { name: Portal.ACCOUNT_VALIDATION_ERROR, callback: this.addErrors.bind(this), params: ['errors', 'nameSuggestions'] }
     ];
   }

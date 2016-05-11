@@ -14,7 +14,7 @@ import React from 'react';
 import Component from './Component';
 import Translate from 'react-translate-component';
 import { portal, network } from '../../config/menu';
-import { ApiKey } from '../../util/http/facade/HttpServices';
+import ApiKey from '../../util/http/ApiKeyService';
 
 /**
  * React component for 404 pages.

@@ -10,5 +10,8 @@
 
 'use strict';
 
-import HashbangRedirect from '../HashbangRedirect';
-export default new HashbangRedirect('undefined' === typeof window ? null : window);
+import { jsdom } from 'jsdom';
+
+global.window    = jsdom('<html><head></head><body></body></html>').defaultView;
+global.document  = window.document;
+global.navigator = window.navigator;

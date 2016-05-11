@@ -13,8 +13,7 @@
 import React from 'react';
 import Menu from './Menu';
 import MenuWrapper from './MenuWrapper';
-import { ApiKey } from '../../util/http/facade/HttpServices';
-import Url from '../../util/http/facade/Url';
+import ApiKey from '../../util/http/ApiKeyService';
 
 /**
  * Enhanced base class for react components requiring a menu
@@ -82,11 +81,18 @@ export default class Component extends React.Component {
       );
     }
 
-    Url.redirect('');
+    this.context.router.replace('/');
 
-    // when returning false, a noscript tag will be rendered, but no content.
+    // when returning false, an empty tag will be rendered, but no content.
     // until the redirect and re-render is complete (which won't take much time), nothing should be rendered.
     // Actually nothing can be seen, but an invariant violation must be avoided.
     return false;
   }
 }
+
+Component.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
+};

@@ -12,7 +12,7 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import Menu from '../constants/Menu';
-import { ApiKey } from '../util/http/facade/HttpServices';
+import ApiKey from '../util/http/ApiKeyService';
 
 /**
  * Action creator that executes menu lifecycle actions such as menu creation.

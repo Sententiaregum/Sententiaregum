@@ -13,9 +13,8 @@
 import React from 'react';
 import Component from '../../../components/app/Component';
 import { expect } from 'chai';
-import Url from '../../../util/http/facade/Url';
-import { stub } from 'sinon';
-import { ApiKey } from '../../../util/http/facade/HttpServices';
+import { stub, spy } from 'sinon';
+import ApiKey from '../../../util/http/ApiKeyService';
 import { shallow } from 'enzyme';
 
 describe('Component', () => {
@@ -29,13 +28,16 @@ describe('Component', () => {
   });
 
   it('handles insufficient credentials', () => {
-    stub(Url, 'redirect');
     stub(ApiKey, 'isLoggedIn', () => false);
+    const testRouter = {
+      router: {
+        replace: spy()
+      }
+    };
 
-    expect(shallow(<ProtectedTest />).contains('h1')).to.equal(false);
-    expect(Url.redirect.calledOnce).to.equal(true);
+    expect(shallow(<ProtectedTest />, { context: testRouter }).contains('h1')).to.equal(false);
+    expect(testRouter.router.replace.calledOnce).to.equal(true);
 
-    Url.redirect.restore();
     ApiKey.isLoggedIn.restore();
   });
 });
