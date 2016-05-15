@@ -19,12 +19,12 @@ use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterf
 use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;
 use AppBundle\Model\User\Registration\TwoStepRegistrationApproach;
 use AppBundle\Model\User\Role;
+use AppBundle\Model\User\RoleRepository;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
 use AppBundle\Model\User\Value\RegistrationResult as Result;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -184,7 +184,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->with('Ma27', $key)
             ->willReturn($user);
 
-        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(RoleRepository::class);
         $roleRepo
             ->expects($this->at(0))
             ->method('findOneBy')
@@ -201,8 +201,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
 
         $entityManager
             ->expects($this->once())
-            ->method('flush')
-            ->with($readyUser);
+            ->method('flush');
 
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
@@ -285,13 +284,12 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
 
         $entityManager
             ->expects($this->once())
-            ->method('flush')
-            ->with($user);
+            ->method('flush');
 
         $provider = $this->getMock(ExpiredActivationProviderInterface::class);
         $provider
             ->expects($this->any())
-            ->method('checkApprovalByActivationKey')
+            ->method('checkApprovalByUser')
             ->willReturn(false);
 
         $registration = new TwoStepRegistrationApproach(
@@ -325,7 +323,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->with('Ma27', $key)
             ->willReturn($user);
 
-        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $roleRepo = $this->getMockWithoutInvokingTheOriginalConstructor(RoleRepository::class);
         $roleRepo
             ->expects($this->at(0))
             ->method('findOneBy')
@@ -341,8 +339,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
 
         $entityManager
             ->expects($this->never())
-            ->method('flush')
-            ->with($readyUser);
+            ->method('flush');
 
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
@@ -394,10 +391,10 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return EntityRepository
+     * @return RoleRepository
      */
     private function getRoleRepository()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        return $this->getMockWithoutInvokingTheOriginalConstructor(RoleRepository::class);
     }
 }

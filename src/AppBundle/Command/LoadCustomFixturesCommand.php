@@ -93,34 +93,35 @@ EOF
         /** @var \Symfony\Component\HttpKernel\KernelInterface $kernel */
         $kernel = $container->get('kernel');
 
-        $classNames = array_map(
-            function ($bundle) use ($loader, $kernel) {
-                $absoluteBundlePath = $kernel->getBundle($bundle)->getPath();
-                $fixturesPath = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
+        $fixtures = array_reduce(
+            array_map(
+                function ($bundle) use ($loader, $kernel) {
+                    $absoluteBundlePath = $kernel->getBundle($bundle)->getPath();
+                    $fixturesPath       = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
 
-                if (!is_dir($fixturesPath)) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Data fixtures directory "%s" does not exist!',
-                        $fixturesPath
-                    ));
-                }
+                    if (!is_dir($fixturesPath)) {
+                        throw new \InvalidArgumentException(sprintf(
+                            'Data fixtures directory "%s" does not exist!',
+                            $fixturesPath
+                        ));
+                    }
 
-                $instanceList = $loader->loadProductionFixturesFromDirectory($fixturesPath);
+                    $instanceList = $loader->loadProductionFixturesFromDirectory($fixturesPath);
 
-                return array_map(
-                    function (ProductionFixtureInterface $fixture) {
-                        return get_class($fixture);
-                    },
-                    $instanceList
-                );
+                    return array_map(
+                        function (ProductionFixtureInterface $fixture) {
+                            return get_class($fixture);
+                        },
+                        $instanceList
+                    );
+                },
+                $bundles
+            ),
+            function ($carry, $item) {
+                return array_merge($carry, $item);
             },
-            $bundles
+            []
         );
-
-        $fixtures = [];
-        foreach ($classNames as $fixturesByBundle) {
-            $fixtures = array_merge($fixtures, $fixturesByBundle);
-        }
 
         $loader->applyFixtures($fixtures, function ($message) use ($output) {
             $output->writeln(sprintf('  <comment>></comment> <info>%s</info>', $message));

@@ -41,10 +41,10 @@ class OnlineUsersController extends BaseController
     public function onlineFollowingListAction()
     {
         /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
-        $cluster        = $this->get('app.redis.cluster.online_users');
-        $userRepository = $this->getDoctrine()->getRepository('Account:User');
-        $currentUser    = $this->getCurrentUser();
+        $cluster = $this->get('app.redis.cluster.online_users');
+        /** @var \AppBundle\Model\User\UserRepository $userRepository */
+        $userRepository = $this->get('app.repository.user');
 
-        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
+        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($this->getCurrentUser()));
     }
 }

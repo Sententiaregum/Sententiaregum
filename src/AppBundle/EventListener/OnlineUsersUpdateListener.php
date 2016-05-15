@@ -73,6 +73,6 @@ class OnlineUsersUpdateListener
         );
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush($user);
+        $this->entityManager->flush();
     }
 }

@@ -122,7 +122,7 @@ class LanguageCookieFixerListener
     {
         $basicMessage = 'Cannot extract api key from response!';
 
-        if ('No error' !== $message = json_last_error_msg()) {
+        if (JSON_ERROR_NONE !== $message = json_last_error()) {
             $basicMessage = substr($basicMessage, 0, -1);
 
             $basicMessage .= sprintf(

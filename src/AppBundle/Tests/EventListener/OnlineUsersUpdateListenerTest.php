@@ -49,8 +49,7 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
 
         $entityManager
             ->expects($this->once())
-            ->method('flush')
-            ->with($user);
+            ->method('flush');
 
         $token = $this->getMockWithoutInvokingTheOriginalConstructor(PreAuthenticatedToken::class);
         $token
