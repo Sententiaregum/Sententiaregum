@@ -97,18 +97,17 @@ class UniqueDTOParamsValidator extends ConstraintValidator
                 $options['manager'] = $item['manager'];
             }
 
-            $options['propertyPath'] =
-            $propertyPath            = !isset($item['propertyPath']) ? $item['field'] : $item['propertyPath'];
+            $options['propertyPath'] = !isset($item['propertyPath']) ? $item['field'] : $item['propertyPath'];
 
-            if (!$this->propertyAccess->isReadable($value, $propertyPath)) {
+            if (!$this->propertyAccess->isReadable($value, $options['propertyPath'])) {
                 throw new ConstraintDefinitionException(sprintf(
                     'The property path "%s" on object "%s" is not readable!',
-                    $propertyPath,
+                    $options['propertyPath'],
                     get_class($value)
                 ));
             }
 
-            $propertyValue = $this->propertyAccess->getValue($value, $propertyPath);
+            $propertyValue = $this->propertyAccess->getValue($value, $options['propertyPath']);
             $constraint    = new UniqueProperty($options);
 
             $contextualValidator->validate($propertyValue, $constraint);

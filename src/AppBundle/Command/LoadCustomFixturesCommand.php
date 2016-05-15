@@ -97,7 +97,7 @@ EOF
             array_map(
                 function ($bundle) use ($loader, $kernel) {
                     $absoluteBundlePath = $kernel->getBundle($bundle)->getPath();
-                    $fixturesPath = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
+                    $fixturesPath       = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
 
                     if (!is_dir($fixturesPath)) {
                         throw new \InvalidArgumentException(sprintf(
