@@ -73,9 +73,9 @@ class MailListener
 
         $locale  = null === $event->getLanguage() ? $this->translator->getLocale() : $event->getLanguage();
         $message = \Swift_Message::newInstance($this->translator->trans('NOTIFICATIONS_SUBJECT', [], 'notifications', $locale));
+
         $message->setTo($targets);
         $message->setFrom([$this->emailAddress => 'Sententiaregum']);
-
         $message->addPart($this->renderMailPart($event, 'txt.twig', $locale), 'text/plain');
         $message->addPart($this->renderMailPart($event, 'html.twig', $locale), 'text/html');
 

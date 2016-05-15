@@ -7,7 +7,7 @@ services:
     arguments:
       - "Account:User"
   app.repository.role:
-    class: Doctrine\ORM\EntityRepository
+    class: AppBundle\Model\User\RoleRepository
     public: false
     lazy: true
     factory: ["@doctrine.orm.default_entity_manager", 'getRepository']

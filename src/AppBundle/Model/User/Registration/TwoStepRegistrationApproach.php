@@ -18,12 +18,12 @@ use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
+use AppBundle\Model\User\RoleRepository;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
 use AppBundle\Model\User\Value\RegistrationResult;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -90,7 +90,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private $userRepository;
 
     /**
-     * @var EntityRepository
+     * @var RoleRepository
      */
     private $roleRepository;
 
@@ -105,7 +105,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @param SuggestorInterface                  $nameSuggestor
      * @param ExpiredActivationProviderInterface  $expiredActivationProvider
      * @param UserRepository                      $userRepository
-     * @param EntityRepository                    $roleRepository
+     * @param RoleRepository                      $roleRepository
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -116,7 +116,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         SuggestorInterface $nameSuggestor,
         ExpiredActivationProviderInterface $expiredActivationProvider,
         UserRepository $userRepository,
-        EntityRepository $roleRepository
+        RoleRepository $roleRepository
     ) {
         $this->entityManager              = $entityManager;
         $this->activationKeyCodeGenerator = $activationKeyCodeGenerator;
@@ -155,7 +155,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user->addRole($defaultRole);
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush($user);
+        $this->entityManager->flush();
     }
 
     /**
@@ -177,7 +177,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user = $result['user'];
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush($user);
+        $this->entityManager->flush();
 
         $this->sendActivationEmail($user);
         $this->expiredActivationProvider->attachNewApproval($user->getActivationKey());
@@ -318,7 +318,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
             throw $this->createActivationException();
         } elseif ($this->isActivationExpired($user)) {
             $this->entityManager->remove($user);
-            $this->entityManager->flush($user);
+            $this->entityManager->flush();
 
             throw $this->createActivationException();
         }

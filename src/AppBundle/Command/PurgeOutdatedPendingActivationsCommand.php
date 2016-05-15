@@ -49,10 +49,8 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dateTimeRule = new DateTime('-2 hours');
-        /** @var \Doctrine\Common\Persistence\ManagerRegistry $doctrine */
-        $doctrine = $this->getContainer()->get('doctrine');
         /** @var \AppBundle\Model\User\UserRepository $userRepository */
-        $userRepository = $doctrine->getRepository('Account:User');
+        $userRepository = $this->getContainer()->get('app.repository.user');
 
         $amount = $userRepository->deletePendingActivationsByDate($dateTimeRule);
         $output->writeln(sprintf(

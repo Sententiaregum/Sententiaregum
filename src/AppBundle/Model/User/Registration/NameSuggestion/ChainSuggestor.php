@@ -52,13 +52,17 @@ class ChainSuggestor implements ChainSuggestorInterface
      */
     public function getPossibleSuggestions($name)
     {
-        $suggestions = [];
-        foreach ($this->suggestors as $suggestor) {
-            $suggestions = array_merge($suggestions, $suggestor->getPossibleSuggestions($name));
+        $suggestions = array_merge(
+            ...array_map(function (SuggestorInterface $suggestor) use ($name) {
+                return $suggestor->getPossibleSuggestions($name);
+            }, $this->suggestors)
+        );
+
+        if (count($suggestions) === 0) {
+            return [];
         }
 
         $result = $this->queryExistingUsersBySuggestedNames($suggestions);
-
         return array_values(// re-index array after filter process
             array_filter(
                 $suggestions,

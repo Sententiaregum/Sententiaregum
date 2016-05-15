@@ -85,7 +85,7 @@ class MailerEvent extends Event
     public function addParameter($name, $value)
     {
         if ('locale' === $name) {
-            throw new \InvalidArgumentException('Cannot apply parameter locale!');
+            throw new \InvalidArgumentException('Cannot apply parameter locale since this parameter is reserved!');
         }
         $this->parameters[$name] = $value;
 

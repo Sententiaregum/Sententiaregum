@@ -52,10 +52,7 @@ class LocaleCookieMatchingListener
                 $request->setLocale($locale);
             }
 
-            $localeAttribute = '_locale';
-            if ($request->attributes->get($localeAttribute) !== $locale) {
-                $request->attributes->set($localeAttribute, $locale);
-            }
+            $request->attributes->set('_locale', $locale);
         }
     }
 }

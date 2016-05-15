@@ -32,18 +32,16 @@ abstract class BaseController extends Controller
      */
     protected function sortViolationMessagesByPropertyPath(ConstraintViolationListInterface $constraintViolations)
     {
-        $result = [];
-
-        /** @var \Symfony\Component\Validator\ConstraintViolationInterface $violation */
-        foreach ($constraintViolations as $violation) {
-            if (!isset($result[$violation->getPropertyPath()])) {
-                $result[$violation->getPropertyPath()] = [];
+        return array_reduce(iterator_to_array($constraintViolations), function ($carry, $item) {
+            /** @var \Symfony\Component\Validator\ConstraintViolationInterface $item */
+            $property = $item->getPropertyPath();
+            if (!array_key_exists($property, $carry)) {
+                $carry[$property] = [];
             }
+            $carry[$property][] = $item->getMessage();
 
-            $result[$violation->getPropertyPath()][] = $violation->getMessage();
-        }
-
-        return $result;
+            return $carry;
+        }, []);
     }
 
     /**
