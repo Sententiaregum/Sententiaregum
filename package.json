@@ -36,6 +36,7 @@
     "counterpart": "^0.17",
     "cross-spawn": "^2.0.0",
     "css-loader": "^0.23",
+    "deep-assign": "^2.0.0",
     "extract-text-webpack-plugin": "^1.0",
     "fbjs": "^0.8.2",
     "file-loader": "^0.8.4",

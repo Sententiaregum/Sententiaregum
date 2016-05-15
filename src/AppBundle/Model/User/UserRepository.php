@@ -51,19 +51,18 @@ class UserRepository extends EntityRepository
             $query->setHydrationMode(Query::HYDRATE_ARRAY);
             $paginator = new Paginator($query);
 
-            $qb    = $this->_em->createQueryBuilder();
-            $count = count($paginator); // paginator count must be executed before the deletion statement
+            $qb = $this->_em->createQueryBuilder();
 
             $qb
                 ->delete('Account:User', 'user')
                 ->where($qb->expr()->in('user.id', ':ids'))
                 ->setParameter(':ids', iterator_to_array($paginator));
 
-            $qb->getQuery()->execute();
+            $affected = $qb->getQuery()->execute();
 
             $connection->commit();
 
-            return $count;
+            return $affected;
         } catch (DBALException $ex) {
             $connection->rollBack();
 

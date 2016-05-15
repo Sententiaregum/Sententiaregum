@@ -16,7 +16,7 @@ function createConfig() {
 
   var plugins      = [new ExtractTextPlugin('[name].css')],
     cssQueryString = 'css-loader',
-    env            = process.env.NODE_ENV,
+    env            = process.env.NODE_ENV || 'development',
     lessQueryString;
 
   if ('production' === env) {
@@ -27,13 +27,12 @@ function createConfig() {
     cssQueryString += '?minimize&keepSpecialComments=0';
   } else {
     cssQueryString += '?sourceMap';
-    plugins.push(new webpack.OldWatchingPlugin());
   }
 
   lessQueryString = cssQueryString + '!less';
 
   return {
-    devtool: env === 'production' ? 'eval' : 'source-map',
+    devtool: 'eval',
     cache: true,
     entry: {
       bundle: [

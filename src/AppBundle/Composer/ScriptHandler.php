@@ -150,6 +150,7 @@ class ScriptHandler extends AbstractScriptHandler
         };
 
         (new Process($fullCommand, null, null, null, $timeout))
-            ->run($showOutput ? $handler : function () {});
+            ->run($showOutput ? $handler : function () {
+            });
     }
 }

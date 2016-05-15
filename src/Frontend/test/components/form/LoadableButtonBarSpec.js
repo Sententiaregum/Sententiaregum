@@ -10,13 +10,17 @@
 
 'use strict';
 
-import LoadableButtonBar from '../../../../components/app/markup/LoadableButtonBar';
+import LoadableButtonBar from '../../../components/form/LoadableButtonBar';
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
+import counterpart from 'counterpart';
+import { stub } from 'sinon';
 
 describe('LoadableButtonBar', () => {
   it('renders a button bar', () => {
+    stub(counterpart, 'translate', (arg) => arg);
+
     const markup = shallow(<LoadableButtonBar progress={false} btnLabel="Label" />);
     expect(markup.hasClass('form-group'));
 
@@ -24,6 +28,8 @@ describe('LoadableButtonBar', () => {
     expect(btn.prop('type')).to.equal('submit');
     expect(btn.hasClass('btn btn-primary spinner-btn')).to.equal(true);
     expect(btn.contains('Label')).to.equal(true);
+
+    counterpart.translate.restore();
   });
 
   it('changes the progress state', () => {

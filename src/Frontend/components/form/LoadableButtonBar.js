@@ -12,6 +12,7 @@
 
 import React from 'react';
 import Spinner from 'react-spinkit';
+import counterpart from 'counterpart';
 
 /**
  * Component which combines a button bar with a component.
@@ -29,9 +30,29 @@ export default class LoadableButtonBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.handler = () => this.forceUpdate();
+    this.state   = {
       progress: this.props.progress
     };
+  }
+
+  /**
+   * Lifecycle hook which establishes a connection between the event manager of the translator
+   * and the form wrapper component.
+   *
+   * @returns {void}
+   */
+  componentDidMount() {
+    counterpart.onLocaleChange(this.handler);
+  }
+
+  /**
+   * Lifecycle hook which closes the connection between the event manager of the translator and the wrapper.
+   *
+   * @returns {void}
+   */
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.handler);
   }
 
   /**
@@ -60,7 +81,9 @@ export default class LoadableButtonBar extends React.Component {
 
     return (
       <div className="form-group">
-        <button type="submit" className="btn btn-primary spinner-btn" {...props}>{this.props.btnLabel}</button>
+        <button type="submit" className="btn btn-primary spinner-btn" {...props}>
+          {counterpart.translate(this.props.btnLabel)}
+        </button>
         {spinner}
       </div>
     );

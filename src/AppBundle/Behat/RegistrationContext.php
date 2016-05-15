@@ -137,7 +137,7 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
     public function iShouldSee($arg1, $arg2)
     {
         Assertion::keyIsset($this->response['errors'], $arg2);
-        Assertion::inArray($arg1, $this->response['errors'][$arg2]);
+        Assertion::inArray($arg1, $this->response['errors'][$arg2]['en']);
     }
 
     /**

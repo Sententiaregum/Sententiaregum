@@ -26,7 +26,8 @@ class RegistrationStore extends FluxEventHubStore {
    */
   constructor() {
     super();
-    this.errors = this.suggestions = [];
+    this.errors      = {};
+    this.suggestions = [];
   }
 
   /**

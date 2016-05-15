@@ -78,3 +78,6 @@ npm-debug.log
 
 # Capistrano Configuration
 /deploy/config/deploy.yaml
+
+# LocalStorage Emulation
+/node-emulator/*
