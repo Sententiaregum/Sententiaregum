@@ -126,7 +126,7 @@ class LanguageCookieFixerListener
             $basicMessage = substr($basicMessage, 0, -1);
 
             $basicMessage .= sprintf(
-                ' Extraction failed due to the following error: "%s"!',
+                ' due to the following error: "%s"!',
                 $message
             );
         }

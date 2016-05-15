@@ -33,7 +33,7 @@ abstract class BaseController extends Controller
     protected function sortViolationMessagesByPropertyPath(ConstraintViolationListInterface $constraintViolations)
     {
         return array_reduce(iterator_to_array($constraintViolations), function ($carry, $item) {
-            /** @var \Symfony\Component\Validator\ConstraintViolationInterface $item */
+            /* @var \Symfony\Component\Validator\ConstraintViolationInterface $item */
             $property = $item->getPropertyPath();
             if (!array_key_exists($property, $carry)) {
                 $carry[$property] = [];
