@@ -88,6 +88,7 @@ sententiaregum::frontend::npm::packages:
   - node-gyp
   - eslint
   - eslint-plugin-react
+  - eslint-plugin-varspacing
   - less
 
 # timezone
