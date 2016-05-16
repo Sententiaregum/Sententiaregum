@@ -135,11 +135,11 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Method which executes npm commands.
      *
-     * @param string       $command
-     * @param Event        $event
-     * @param bool|true    $showOutput
-     * @param int          $timeout
-     * @param string       $nodeEnv
+     * @param string    $command
+     * @param Event     $event
+     * @param bool|true $showOutput
+     * @param int       $timeout
+     * @param string    $nodeEnv
      */
     private static function executeNpmCommand($command, Event $event, $showOutput = true, $timeout = 500, $nodeEnv = null)
     {
