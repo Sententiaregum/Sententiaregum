@@ -34,11 +34,10 @@ function createConfig() {
   return {
     cache: true,
     entry: {
-      js: './src/Frontend/App.js',
-      bundle: './src/Frontend/styles/custom.less',
-      bootstrap: [
-        './node_modules/bootstrap/dist/css/bootstrap.min.css',
-        './node_modules/react-spinkit/css/double-bounce.css'
+      bundle: [
+        './src/Frontend/App.js',
+        './src/Frontend/styles/custom.less',
+        './node_modules/bootstrap/dist/css/bootstrap.min.css'
       ]
     },
     module: {
