@@ -118,8 +118,8 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Drops the doctrine schema.
      *
-     * @param Event $event
-     * @param string[]     $envs
+     * @param Event    $event
+     * @param string[] $envs
      */
     private static function dropDoctrineSchema(Event $event, array $envs = [])
     {
@@ -136,7 +136,7 @@ class ScriptHandler extends AbstractScriptHandler
      * Method which executes npm commands.
      *
      * @param string       $command
-     * @param Event $event
+     * @param Event        $event
      * @param bool|true    $showOutput
      * @param int          $timeout
      * @param string       $nodeEnv
