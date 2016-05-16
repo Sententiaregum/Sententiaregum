@@ -120,7 +120,7 @@ export default class LanguageSwitcher extends React.Component {
    */
   _buildDropDown(key) {
     const displayName = this.state.locales[key],
-        isActive        = Locale.getLocale() === key;
+        isActive      = Locale.getLocale() === key;
 
     return <DropDownItem
       key={key}
