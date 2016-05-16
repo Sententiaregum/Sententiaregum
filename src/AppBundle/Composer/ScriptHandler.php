@@ -12,7 +12,7 @@
 
 namespace AppBundle\Composer;
 
-use Composer\Script\CommandEvent;
+use Composer\Script\Event;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as AbstractScriptHandler;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -27,9 +27,9 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Installs the npm dependencies.
      *
-     * @param CommandEvent $event
+     * @param Event $event
      */
-    public static function installNpmDependencies(CommandEvent $event)
+    public static function installNpmDependencies(Event $event)
     {
         $cmd = 'install';
         if (!$event->isDevMode()) {
@@ -42,9 +42,9 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Runs the frontend build.
      *
-     * @param CommandEvent $event
+     * @param Event $event
      */
-    public static function buildFrontendData(CommandEvent $event)
+    public static function buildFrontendData(Event $event)
     {
         $devMode = $event->isDevMode();
         self::executeNpmCommand(
@@ -59,9 +59,9 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Loads the doctrine data fixtures (disabled when using the "--no-dev" flag).
      *
-     * @param CommandEvent $event
+     * @param Event $event
      */
-    public static function loadDoctrineDataFixtures(CommandEvent $event)
+    public static function loadDoctrineDataFixtures(Event $event)
     {
         if (PreInstallHandler::$firstInstall) {
             if ($event->isDevMode()) {
@@ -83,9 +83,9 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Creates the doctrine schema.
      *
-     * @param CommandEvent $event
+     * @param Event $event
      */
-    public static function createDoctrineSchema(CommandEvent $event)
+    public static function createDoctrineSchema(Event $event)
     {
         if (PreInstallHandler::$firstInstall) {
             $envs = $event->isDevMode() ? ['dev', 'test'] : ['prod'];
@@ -104,9 +104,9 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Updates the doctrine schema.
      *
-     * @param CommandEvent $event
+     * @param Event $event
      */
-    public static function updateDoctrineSchema(CommandEvent $event)
+    public static function updateDoctrineSchema(Event $event)
     {
         static::executeCommand(
             $event,
@@ -118,10 +118,10 @@ class ScriptHandler extends AbstractScriptHandler
     /**
      * Drops the doctrine schema.
      *
-     * @param CommandEvent $event
+     * @param Event $event
      * @param string[]     $envs
      */
-    private static function dropDoctrineSchema(CommandEvent $event, array $envs = [])
+    private static function dropDoctrineSchema(Event $event, array $envs = [])
     {
         foreach ($envs as $env) {
             static::executeCommand(
@@ -136,12 +136,12 @@ class ScriptHandler extends AbstractScriptHandler
      * Method which executes npm commands.
      *
      * @param string       $command
-     * @param CommandEvent $event
+     * @param Event $event
      * @param bool|true    $showOutput
      * @param int          $timeout
      * @param string       $nodeEnv
      */
-    private static function executeNpmCommand($command, CommandEvent $event, $showOutput = true, $timeout = 500, $nodeEnv = null)
+    private static function executeNpmCommand($command, Event $event, $showOutput = true, $timeout = 500, $nodeEnv = null)
     {
         $npm         = (new ExecutableFinder())->find('npm');
         $fullCommand = sprintf('%s %s %s', $nodeEnv ? sprintf('NODE_ENV=%s', $nodeEnv) : null, $npm, $command);
