@@ -38,7 +38,7 @@ export default class FluxEventHubStore extends ListenableStore {
 
           config.forEach(event => {
             if (payload.event === event.name) {
-              const params = event.params;
+              const params           = event.params;
               let callbackParameters = [];
               if ('undefined' !== typeof params) {
                 callbackParameters = params.map(name => {

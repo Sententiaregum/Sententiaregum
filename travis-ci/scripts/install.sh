@@ -12,6 +12,7 @@ echo "FLUSH PRIVILEGES;" | mysql -u root
 # install global npm dependencies
 npm update -g npm
 npm install -g mocha webpack eslint eslint-plugin-react less node-pre-gyp
+npm install -g eslint-plugin-varspacing
 
 # copy custom travis configuration
 cp travis-ci/config/travis_parameters.yml app/config/parameters.yml
