@@ -11,10 +11,10 @@
 'use strict';
 
 import Nav from 'react-bootstrap/lib/Nav';
-import MenuStore from '../../store/MenuStore';
-import MenuActions from '../../actions/MenuActions';
+import MenuStore from '../../../../store/MenuStore';
+import MenuActions from '../../../../actions/MenuActions';
 import React from 'react';
-import MenuItem from './markup/MenuItem';
+import MenuItem from '../../markup/MenuItem';
 
 /**
  * Configurable menu rendering component.
@@ -67,7 +67,12 @@ export default class Menu extends React.Component {
    */
   render() {
     const items = this.state.items.map((item, i) => {
-      return <MenuItem label={item.label} url={item.url} key={i} isActive={this.context.router.isActive(item.url.slice(2))} />;
+      const urlWithoutPrefix = item.url.slice(2);
+      return <MenuItem
+        label={item.label}
+        url={item.url}
+        key={i}
+        isActive={this.context.router.isActive(urlWithoutPrefix, '/' === urlWithoutPrefix)} />;
     });
 
     let nav = false;

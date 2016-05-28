@@ -10,16 +10,15 @@
 
 'use strict';
 
-export const portal = [
+export default [
   {
-    label: 'menu.start',
-    url:   '/#/'
+    label:  'menu.start',
+    url:    '/#/',
+    portal: true
   },
   {
-    label: 'pages.portal.head',
-    url:   '/#/sign-up'
+    label:  'pages.portal.head',
+    url:    '/#/sign-up',
+    portal: true
   }
-];
-
-export const network = [
 ];

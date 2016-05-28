@@ -17,38 +17,68 @@ import { expect } from 'chai';
 import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
 import { shallow } from 'enzyme';
 import Locale from '../../../../util/http/LocaleService';
-import mockDOMEventObject from '../../../fixtures/mockDOMEventObject';
 
 describe('Form', () => {
   it('handles invalid data and renders its errors into the markup', () => {
     const errors =  {
-      username: ['Username in use!']
+      username: {
+        en: ['Username in use!']
+      }
     };
     const suggestions = ['Ma27_2016'];
 
     stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
       error({
         name_suggestions: suggestions,
-        errors:           errors
+        errors
       });
     });
 
     stub(Locale, 'getLocale', () => 'en');
     const cmp = shallow(<Form />);
 
-    const username = cmp.find('[controlId="username"] > FormControl');
-    const password = cmp.find('[controlId="password"] > FormControl');
-    const email    = cmp.find('[controlId="email"] > FormControl');
-
-    username.simulate('change', mockDOMEventObject({ username: 'Ma27' }));
-    password.simulate('change', mockDOMEventObject({ password: '123456' }));
-    email.simulate('change', mockDOMEventObject({ email: 'foo@bar.de' }));
+    cmp.setState({
+      data: {
+        username: 'Ma27',
+        password: '123456',
+        email:    'foo@bar.de',
+        locale:   'de'
+      }
+    });
 
     cmp.find('form').simulate('submit', { preventDefault: () => {} });
 
     setTimeout(() => {
       expect(cmp.find('form').contains('Success')).to.equal(false);
-      expect(cmp.find('[controlId="username"] > HelpBlock').prop('validationState')).to.equal('error');
+      expect(cmp.find('Suggestions').prop('suggestions')).to.equal(suggestions);
+      expect(cmp.find('form > [name="username"]').prop('errors')).to.equal(errors);
+    });
+
+    AccountWebAPIUtils.createAccount.restore();
+    Locale.getLocale.restore();
+  });
+
+  it('shows success', () => {
+    stub(AccountWebAPIUtils, 'createAccount', (data, success) => {
+      success();
+    });
+
+    stub(Locale, 'getLocale', () => 'en');
+    const cmp = shallow(<Form />);
+
+    cmp.setState({
+      data: {
+        username: 'Ma27',
+        password: '123456',
+        email:    'foo@bar.de',
+        locale:   'de'
+      }
+    });
+
+    cmp.find('form').simulate('submit', { preventDefault: () => {} });
+
+    setTimeout(() => {
+      expect(cmp.find('form').contains('Success')).to.equal(true);
     });
 
     AccountWebAPIUtils.createAccount.restore();

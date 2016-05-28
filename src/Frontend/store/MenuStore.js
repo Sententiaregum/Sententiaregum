@@ -54,7 +54,7 @@ class MenuStore extends FluxEventHubStore {
    * @returns {Array.<Object>} All visible menu items.
    */
   getVisibleItems(items, authData) {
-    return items.filter((item) => !('ROLE_ADMIN' === item.role && !authData.is_admin || item.logged_in && !authData.logged_in));
+    return items.filter((item) => !('ROLE_ADMIN' === item.role && !authData.is_admin || item.logged_in && !authData.logged_in || !item.logged_in && authData.portal));
   }
 
   /**

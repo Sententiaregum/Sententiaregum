@@ -161,7 +161,7 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
                             []
                         );
                         break;
-                    case !$useAllLanguages:
+                    default:
                         // If the default language is in use and nothing more, the structure looks like this:
                         //
                         // ['Message in the currently selected language']

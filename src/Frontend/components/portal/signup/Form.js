@@ -86,27 +86,27 @@ export default class Form extends Component {
         <FormField
           name="username"
           type="text"
-          value={this.state.data.username}
+          value={this.helper.getValue(this.state.data.username, 'username')}
           autoFocus={true}
           errors={this.state.validation.errors}
           helper={this.helper} />
         <FormField
           name="password"
           type="password"
-          value={this.state.data.password}
+          value={this.helper.getValue(this.state.data.password, 'password')}
           errors={this.state.validation.errors}
           helper={this.helper} />
         <FormField
           name="email"
           type="email"
-          value={this.state.data.email}
+          value={this.helper.getValue(this.state.data.email, 'email')}
           errors={this.state.validation.errors}
           helper={this.helper} />
         <SelectableField
           name="locale"
           errors={this.state.validation.errors}
           helper={this.helper}
-          value={this.state.data.locale}
+          value={this.helper.getValue(this.state.data.locale, 'locale')}
           options={{ de: 'Deutsch (Deutschland)', en: 'English (USA)' }} />
         <LoadableButtonBar btnLabel={this.helper.getFormFieldAlias('button')} progress={this.state.progress} />
       </form>

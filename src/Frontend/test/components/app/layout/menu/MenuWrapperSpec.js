@@ -10,8 +10,8 @@
 
 'use strict';
 
-import MenuWrapper from '../../../components/app/MenuWrapper';
-import Menu from '../../../components/app/Menu';
+import MenuWrapper from '../../../../../components/app/layout/menu/MenuWrapper';
+import Menu from '../../../../../components/app/layout/menu/Menu';
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';

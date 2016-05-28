@@ -11,10 +11,9 @@
 'use strict';
 
 import React from 'react';
-import Menu from '../../../components/app/Menu';
+import Menu from '../../../../../components/app/layout/menu/Menu';
 import { expect } from 'chai';
 import { stub } from 'sinon';
-import MenuStore from '../../../store/MenuStore';
 import { shallow } from 'enzyme';
 
 describe('Menu', () => {
@@ -23,14 +22,11 @@ describe('Menu', () => {
   });
 
   it('renders menu items', () => {
-    stub(MenuStore, 'getItems', () => [{ url: '/#/', label: 'menu.start' }]);
     const markup = shallow(<Menu items={[]} />);
     setTimeout(() => {
       const item = markup.find('MenuItem');
       expect(item.prop('url')).to.equal('/#/');
       expect(item.prop('label')).to.equal('menu.start');
     });
-
-    MenuStore.getItems.restore();
   });
 });

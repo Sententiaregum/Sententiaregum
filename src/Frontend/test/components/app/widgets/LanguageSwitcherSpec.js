@@ -11,18 +11,17 @@
 'use strict';
 
 import LanguageSwitcher from '../../../../components/app/widgets/LanguageSwitcher';
-import LocaleStore from '../../../../store/LocaleStore';
 import { stub } from 'sinon';
 import { expect } from 'chai';
 import Locale from '../../../../util/http/LocaleService';
 import React from 'react';
 import { shallow } from 'enzyme';
+import LocaleWebAPIUtils from '../../../../util/api/LocaleWebAPIUtils';
 
 describe('LanguageSwitcher', () => {
   it('renders the locales received from flux', () => {
     stub(Locale, 'getLocale', () => 'de');
-    stub(LocaleStore, 'getAllLocales', () => ({ de: 'Deutsch' }));
-    stub(LocaleStore, 'isInitialized', () => true);
+    stub(LocaleWebAPIUtils, 'getLocales', (handler) => handler.apply({ de: 'Deutsch', en: 'English' }));
 
     const markup = shallow(<LanguageSwitcher />);
     setTimeout(() => {
@@ -34,8 +33,7 @@ describe('LanguageSwitcher', () => {
     });
 
     Locale.getLocale.restore();
-    LocaleStore.getAllLocales.restore();
-    LocaleStore.isInitialized.restore();
+    LocaleWebAPIUtils.getLocales.restore();
   });
 
   it('shows loading bar', () => {

@@ -12,7 +12,7 @@
 
 import Navbar from 'react-bootstrap/lib/Navbar';
 import React from 'react';
-import LanguageSwitcher from './widgets/LanguageSwitcher';
+import LanguageSwitcher from '../../widgets/LanguageSwitcher';
 import Nav from 'react-bootstrap/lib/Nav';
 
 /**

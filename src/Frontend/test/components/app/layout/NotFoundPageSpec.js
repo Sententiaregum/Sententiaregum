@@ -11,11 +11,11 @@
 'use strict';
 
 import React from 'react';
-import NotFoundPage from '../../../components/app/NotFoundPage';
+import NotFoundPage from '../../../../components/app/layout/NotFoundPage';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
-import ApiKey from '../../../util/http/ApiKeyService';
+import ApiKey from '../../../../util/http/ApiKeyService';
 
 describe('NotFoundPage', () => {
   it('renders a 404 page', () => {

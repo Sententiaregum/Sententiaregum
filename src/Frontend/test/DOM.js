@@ -11,7 +11,9 @@
 'use strict';
 
 import { jsdom } from 'jsdom';
+import { LocalStorage } from 'node-localstorage';
 
-global.window    = jsdom('<html><head></head><body></body></html>').defaultView;
-global.document  = window.document;
-global.navigator = window.navigator;
+global.window       = jsdom('<html><head></head><body></body></html>').defaultView;
+global.document     = window.document;
+global.navigator    = window.navigator;
+global.localStorage = new LocalStorage('./node-emulator');

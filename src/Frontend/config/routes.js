@@ -14,20 +14,17 @@ import React from 'react';
 import HelloWorld from '../components/HelloWorld';
 import CreateAccount from '../components/portal/CreateAccount';
 import ActivateAccount from '../components/portal/ActivateAccount';
-import NotFoundPage from '../components/app/NotFoundPage';
-import { Router, Route, hashHistory } from 'react-router';
-import { portal, network } from './menu';
-import ComponentBuilder from '../util/react/ComponentBuilder';
-
-const HelloWorldPage      = ComponentBuilder.buildGenericComponentForPage(HelloWorld, portal, {});
-const CreateAccountPage   = ComponentBuilder.buildGenericComponentForPage(CreateAccount, portal, {});
-const ActivateAccountPage = ComponentBuilder.buildGenericComponentForPage(ActivateAccount, portal, {});
+import NotFoundPage from '../components/app/layout/NotFoundPage';
+import Application from '../components/app/layout/Application';
+import { IndexRoute, Router, Route, hashHistory } from 'react-router';
 
 export default (
   <Router history={hashHistory}>
-    <Route component={HelloWorldPage} path="/" />
-    <Route component={CreateAccountPage} path="/sign-up" />
-    <Route component={ActivateAccountPage} path="/activate/:name/:key" />
-    <Route component={NotFoundPage} path="*" />
+    <Route component={Application} path="/">
+      <IndexRoute component={HelloWorld} />
+      <Route component={CreateAccount} path="sign-up" />
+      <Route component={ActivateAccount} path="activate/:name/:key" />
+      <Route component={NotFoundPage} path="*" />
+    </Route>
   </Router>
 );
