@@ -12,9 +12,10 @@
 
 import Nav from 'react-bootstrap/lib/Nav';
 import MenuStore from '../../../../store/MenuStore';
-import MenuActions from '../../../../actions/MenuActions';
+import { buildMenuItems } from '../../../../actions/MenuActions';
 import React from 'react';
 import MenuItem from '../../markup/MenuItem';
+import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
  * Configurable menu rendering component.
@@ -33,7 +34,6 @@ export default class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.cls   = 'Menu';
     this.state = {
       items: []
     };
@@ -47,8 +47,8 @@ export default class Menu extends React.Component {
    * @returns {void}
    */
   componentDidMount() {
-    MenuStore.addChangeListener(this.handle, this.cls);
-    MenuActions.buildMenuItems(this.props.items);
+    connector(MenuStore).useWith(this.handle);
+    runAction(buildMenuItems, [this.props.items]);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class Menu extends React.Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    MenuStore.removeChangeListener(this.handle, this.cls);
+    connector(MenuStore).unsubscribe(this.handle);
   }
 
   /**
@@ -90,7 +90,7 @@ export default class Menu extends React.Component {
    */
   _storeMenuItems() {
     this.setState({
-      items: MenuStore.getItems()
+      items: MenuStore.getState()
     });
   }
 }

@@ -10,33 +10,23 @@
 
 'use strict';
 
-import AppDispatcher from '../../dispatcher/AppDispatcher';
-import sinon from 'sinon';
-import chai from 'chai';
+import { runAction } from 'sententiaregum-flux-container';
+import { expect } from 'chai';
 import ActivationStore from '../../store/ActivationStore';
-import Portal from '../../constants/Portal';
+import { ACTIVATE_ACCOUNT, ACTIVATION_FAILURE } from '../../constants/Portal';
 
 describe('ActivationStore', () => {
   it('triggers reactjs changes for dispatching handlings', () => {
-    sinon.stub(ActivationStore, 'emitChange', (name) => {
-      chai.expect(name).to.equal('Activation.Success')
-    });
-
-    AppDispatcher.dispatch({
-      event: Portal.ACTIVATE_ACCOUNT
-    });
-
-    ActivationStore.emitChange.restore();
+    runAction(() => {
+      return dispatch => dispatch(ACTIVATE_ACCOUNT, {});
+    }, []);
+    expect(ActivationStore.getState().success).to.equal(true);
   });
 
   it('triggers error handling', () => {
-    sinon.stub(ActivationStore, 'emitChange', (name) => {
-      chai.expect(name).to.equal('Activation.Failure')
-    });
-
-    AppDispatcher.dispatch({
-      event: Portal.ACTIVATION_FAILURE
-    });
-    ActivationStore.emitChange.restore();
+    runAction(() => {
+      return dispatch => dispatch(ACTIVATION_FAILURE, {});
+    }, []);
+    expect(ActivationStore.getState().success).to.equal(false);
   });
 });

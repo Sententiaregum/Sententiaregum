@@ -61,7 +61,6 @@ export default class FormHelper {
         copy[index] = persistedValue;
       }
     });
-
     return {
       progress:   false,
       data:       copy,

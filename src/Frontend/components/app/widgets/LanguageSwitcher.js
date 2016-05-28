@@ -12,12 +12,13 @@
 
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
-import LocaleActions from '../../../actions/LocaleActions';
+import { loadLanguages, changeLocale } from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
 import Locale from '../../../util/http/LocaleService';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import LoadingDropDown from '../markup/LoadingDropDown';
 import DropDownItem from '../markup/DropDownItem';
+import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
  * Widget which changes the user locale.
@@ -48,8 +49,8 @@ export default class LanguageSwitcher extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    LocaleStore.addChangeListener(this.handle, 'Locale');
-    LocaleActions.loadLanguages();
+    connector(LocaleStore).useWith(this.handle);
+    runAction(loadLanguages, []);
   }
 
   /**
@@ -58,7 +59,7 @@ export default class LanguageSwitcher extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    LocaleStore.removeChangeListener(this.handle, 'Locale');
+    connector(LocaleStore).unsubscribe(this.handle);
   }
 
   /**
@@ -91,7 +92,7 @@ export default class LanguageSwitcher extends Component {
    */
   _refreshLocales() {
     this.setState({
-      locales: LocaleStore.getAllLocales()
+      locales: LocaleStore.getState()
     });
   }
 
@@ -104,7 +105,7 @@ export default class LanguageSwitcher extends Component {
    */
   _changeLocale(e) {
     if (-1 === e.target.parentNode.className.indexOf('active')) {
-      LocaleActions.changeLocale(e.target.id);
+      runAction(changeLocale, [e.target.id]);
       this.forceUpdate();
     }
 

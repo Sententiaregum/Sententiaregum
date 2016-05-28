@@ -10,33 +10,24 @@
 
 'use strict';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import Menu from '../constants/Menu';
+import { TRANSFORM_ITEMS } from '../constants/Menu';
 import ApiKey from '../util/http/ApiKeyService';
 
 /**
- * Action creator that executes menu lifecycle actions such as menu creation.
+ * Action creator to build the menu items.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @param {Array} items The items.
+ *
+ * @returns {Function} The actual action.
  */
-class MenuActions {
-  /**
-   * Publishes all pre-configured menu items to a store.
-   *
-   * @param {Array.<string>} items List of items to be processed.
-   *
-   * @returns {void}
-   */
-  buildMenuItems(items) {
-    AppDispatcher.dispatch({
-      event:    Menu.TRANSFORM_ITEMS,
+export function buildMenuItems(items) {
+  return dispatch => {
+    dispatch(TRANSFORM_ITEMS, {
       items,
       authData: {
         logged_in: ApiKey.isLoggedIn(),
         is_admin:  ApiKey.isAdmin()
       }
     });
-  }
+  };
 }
-
-export default new MenuActions();

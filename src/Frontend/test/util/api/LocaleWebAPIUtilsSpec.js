@@ -10,8 +10,9 @@
 
 'use strict';
 
-import sinon from 'sinon';
-import chai from 'chai';
+import { spy, assert, stub } from 'sinon';
+import { expect } from 'chai';
+import moxios from 'moxios';
 import LocaleWebAPIUtils from '../../../util/api/LocaleWebAPIUtils';
 import axios from 'axios';
 import ApiKey from '../../../util/http/ApiKeyService';
@@ -23,41 +24,35 @@ describe('LocaleWebAPIUtils', () => {
         de: 'Deutsch',
         en: 'English'
       }
-    };
+    }, handler = spy();
 
-    const handler = sinon.spy();
-    const promise = {
-      then: function (handler) {
-        handler.apply(this, [response]);
-      }
-    };
-
-    sinon.stub(axios, 'get', (url) => {
-      chai.expect(url).to.equal('/api/locale.json');
-      return promise;
+    moxios.stubRequest('/api/locale.json', {
+      status: 200,
+      data:   response
     });
 
     LocaleWebAPIUtils.getLocales(handler);
 
-    sinon.assert.calledOnce(handler);
-
-    axios.get.restore();
+    moxios.wait(() => {
+      assert.calledOnce(handler);
+      expect(handler.calledWith(response));
+    });
   });
 
   it('changes user locale', () => {
     const key = Math.random();
 
-    sinon.stub(ApiKey, 'getApiKey', () => key);
-    sinon.stub(axios, 'patch', (url, data, config) => {
-      chai.expect(url).to.equal('/api/protected/locale.json');
-      chai.expect(data.locale).to.equal('en');
-      chai.expect(config.headers['X-API-KEY']).to.equal(key);
+    stub(ApiKey, 'getApiKey', () => key);
+    stub(axios, 'patch', (url, data, config) => {
+      expect(url).to.equal('/api/protected/locale.json');
+      expect(data.locale).to.equal('en');
+      expect(config.headers['X-API-KEY']).to.equal(key);
     });
 
     LocaleWebAPIUtils.changeUserLocale('en');
 
-    sinon.assert.calledOnce(axios.patch);
-    sinon.assert.calledOnce(ApiKey.getApiKey);
+    assert.calledOnce(axios.patch);
+    assert.calledOnce(ApiKey.getApiKey);
 
     ApiKey.getApiKey.restore();
     axios.patch.restore();

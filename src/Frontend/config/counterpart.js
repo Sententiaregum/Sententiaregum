@@ -23,4 +23,3 @@ Locale.setLocale(null);
 // register translation files
 counterpart.registerTranslations('de', de);
 counterpart.registerTranslations('en', en);
-

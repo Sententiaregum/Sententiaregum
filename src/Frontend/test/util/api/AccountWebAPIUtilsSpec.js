@@ -10,64 +10,59 @@
 
 'use strict';
 
-import chai from 'chai';
-import sinon from 'sinon';
-import axios from 'axios';
+import { expect } from 'chai';
+import { spy, assert } from 'sinon';
 import AccountWebAPIUtils from '../../../util/api/AccountWebAPIUtils';
+import moxios from 'moxios';
 
 describe('AccountWebAPIUtils', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
   it('creates account', () => {
-    const response = {
-      id: Math.random()
-    };
-
-    const handler = sinon.spy();
-    const promise = {
-      then: function (handler) {
-        handler.apply(this, [response]);
-        return this;
-      },
-      catch: function () {
-        return this;
-      }
-    };
-
-    sinon.stub(axios, 'post', (url, data) => {
-      chai.expect(data.username).to.equal('Ma27');
-      chai.expect(url).to.equal('/api/users.json');
-      return promise;
+    const handler = spy(), testId  = Math.random(), response = { id: testId };
+    moxios.stubRequest('/api/users.json', {
+      status: 201,
+      data:   response
     });
 
     AccountWebAPIUtils.createAccount({ username: 'Ma27' }, handler, function () {});
-    sinon.assert.calledOnce(handler);
+    moxios.wait(() => {
+      assert.calledOnce(handler);
+      expect(handler.calledWith(response)).to.equal(true);
+    });
+  });
 
-    axios.post.restore();
+  it('handles account errors', () => {
+    const handler = spy(), response = { errors: { en: { property: ['Error'] } } };
+    moxios.stubRequest('/api/users.json', {
+      status: 201,
+      data:   response
+    });
+
+    AccountWebAPIUtils.createAccount({ username: 'Ma27' }, function () {}, handler);
+    moxios.wait(() => {
+      expect(handler.called).to.equal(true);
+      expect(handler.calledWith(response)).to.equal(true);
+    })
   });
 
   it('activates user', () => {
-    const response = {
-      id: Math.random()
-    };
-
-    const handler = sinon.spy();
-    const promise = {
-      then: function (handler) {
-        handler.apply(this, [response]);
-        return this;
-      },
-      catch: function () {
-        return this;
-      }
-    };
-
-    sinon.stub(axios, 'patch', (url) => {
-      chai.expect(url).to.equal('/api/users/activate.json?username=Ma27&activation_key=foo_key');
-      return promise;
+    const response = { id: Math.random() }, handler = spy();
+    moxios.stubRequest('/api/users/activate.json?username=Ma27&activation_key=foo_key', {
+      status: 204,
+      data:   response
     });
 
     AccountWebAPIUtils.activate('Ma27', 'foo_key', handler, function () {});
-    sinon.assert.calledOnce(handler);
-
-    axios.patch.restore();
+    moxios.wait(() => {
+      assert.calledOnce(handler);
+      expect(handler.calledWith());
+    });
   });
 });

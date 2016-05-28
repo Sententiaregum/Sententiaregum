@@ -12,16 +12,16 @@
 
 import React, { Component } from 'react';
 import LoadableButtonBar from '../../form/LoadableButtonBar';
-import PortalActions from '../../../actions/PortalActions';
+import { registration } from '../../../actions/PortalActions';
 import RegistrationStore from '../../../store/RegistrationStore';
 import Suggestions from './Suggestions';
 import Success from './Success';
 import Locale from '../../../util/http/LocaleService';
 import FormHelper from '../../../util/react/FormHelper';
-import translator from 'counterpart';
 import FormField from '../../form/FormField';
 import SelectableField from '../../form/SelectableField';
 import deepAssign from 'deep-assign';
+import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
  * Form component for the signup page.
@@ -39,18 +39,18 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
 
-    this.errorHandler   = this._handleErrors.bind(this);
-    this.successHandler = this._renderSuccessBox.bind(this);
+    this.handler = this._handleChange.bind(this);
 
-    this.helper = new FormHelper(
+    const currentState = RegistrationStore.getState(), hasState = currentState ? true : false;
+    this.helper        = new FormHelper(
       { username: '', email: '', locale: Locale.getLocale() },
       { password: '' },
-      { suggestions: RegistrationStore.getSuggestions() },
+      { suggestions: hasState ? currentState.suggestions : [] },
       nextState => this.setState(deepAssign({ data: this.state.data }, nextState)),
       'pages.portal.create_account.form'
     );
 
-    this.state = this.helper.getInitialState(RegistrationStore.getErrors());
+    this.state = this.helper.getInitialState(hasState ? currentState.errors : {});
   }
 
   /**
@@ -59,8 +59,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    RegistrationStore.addChangeListener(this.errorHandler, 'CreateAccount.Error');
-    RegistrationStore.addChangeListener(this.successHandler, 'CreateAccount.Success');
+    connector(RegistrationStore).useWith(this.handler);
   }
 
   /**
@@ -69,8 +68,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    RegistrationStore.removeChangeListener(this.errorHandler, 'CreateAccount.Error');
-    RegistrationStore.removeChangeListener(this.successHandler, 'CreateAccount.Success');
+    connector(RegistrationStore).unsubscribe(this.handler);
   }
 
   /**
@@ -125,31 +123,26 @@ export default class Form extends Component {
     e.preventDefault();
     this.setState(this.helper.startProgress());
 
-    PortalActions.registration({
+    runAction(registration, [{
       username: this.state.data.username,
       password: this.state.data.password,
       email:    this.state.data.email,
       locale:   this.state.data.locale
-    });
+    }]);
   }
 
   /**
-   * Handles the errors from the registration store.
+   * Handles store changes.
    *
    * @returns {void}
    * @private
    */
-  _handleErrors() {
-    this.setState(this.helper.getErrorState(this.state.data, RegistrationStore.getErrors(), { suggestions: RegistrationStore.getSuggestions() }));
-  }
-
-  /**
-   * Handles a registration success.
-   *
-   * @returns {void}
-   * @private
-   */
-  _renderSuccessBox() {
-    this.setState(this.helper.getSuccessState(this.state.data));
+  _handleChange() {
+    const state = RegistrationStore.getState();
+    if (!state) {
+      this.setState(this.helper.getSuccessState(this.state.data));
+    } else {
+      this.setState(this.helper.getErrorState(this.state.data, state.errors, { suggestions: state.suggestions }));
+    }
   }
 }

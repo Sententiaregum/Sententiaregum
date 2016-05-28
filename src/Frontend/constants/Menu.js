@@ -12,6 +12,6 @@
 
 const TRANSFORM_ITEMS = 'TRANSFORM_ITEMS';
 
-export default {
+export {
   TRANSFORM_ITEMS
 };
