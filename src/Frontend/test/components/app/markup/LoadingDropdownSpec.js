@@ -10,29 +10,18 @@
 
 'use strict';
 
-import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
-import chai from 'chai';
+import { expect } from 'chai';
 import LoadingDropDown from '../../../../components/app/markup/LoadingDropDown';
 import React from 'react';
-import NavDropdown from 'react-bootstrap/lib/NavDropdown';
+import { shallow } from 'enzyme';
 
 describe('LoadingDropDown', () => {
   it('renders a loading dropdown', () => {
-    const result = TestUtils.renderIntoDocument((
-      <NavDropdown id="test-dropdown" title="Test">
-        <LoadingDropDown translationContent="menu.l10n_loading" />
-      </NavDropdown>
-    ));
+    const markup = shallow(<LoadingDropDown translationContent="menu.l10n_loading" />);
+    expect(markup.hasClass('languageLoader')).to.equal(true);
 
-    const component = ReactDOM.findDOMNode(result);
-    const dropdown  = component._childNodes[1]._childNodes[0];
-
-    chai.expect(dropdown._childNodes[0]._childNodes[0]._childNodes[0]._childNodes[0]._nodeValue).to.equal('Loading languages...');
-
-    const span = dropdown._childNodes[0]._childNodes[0];
-    chai.expect(span._tagName).to.equal('span');
-    chai.expect(span._attributes.class._nodeValue).to.equal('loading');
+    const span = markup.find('span');
+    expect(span.hasClass('loading')).to.equal(true);
+    expect(span.find('Translate').prop('content')).to.equal('menu.l10n_loading');
   });
 });
- 

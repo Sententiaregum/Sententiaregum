@@ -10,49 +10,38 @@
 
 'use strict';
 
-import AppDispatcher from '../../dispatcher/AppDispatcher';
 import RegistrationStore from '../../store/RegistrationStore';
-import Portal from '../../constants/Portal';
-import sinon from 'sinon';
-import chai from 'chai';
+import { CREATE_ACCOUNT, ACCOUNT_VALIDATION_ERROR } from '../../constants/Portal';
+import { expect } from 'chai';
+import { runAction } from 'sententiaregum-flux-container';
 
 describe('RegistrationStore', () => {
   it('handles success', () => {
-    sinon.stub(RegistrationStore, 'emitChange', (eventName) => {
-      chai.expect(eventName).to.equal('CreateAccount.Success');
-    });
+    runAction(() => {
+      return dispatch => {
+        dispatch(CREATE_ACCOUNT, {});
+      }
+    }, []);
 
-    AppDispatcher.dispatch({
-      event: Portal.CREATE_ACCOUNT
-    });
-
-    sinon.assert.calledOnce(RegistrationStore.emitChange);
-    chai.expect(Object.keys(RegistrationStore.getErrors()).length).to.equal(0);
-
-    RegistrationStore.emitChange.restore();
+    expect(RegistrationStore.getState()).to.equal(null);
   });
 
   it('stores validation errors', () => {
-    sinon.stub(RegistrationStore, 'emitChange', (eventName) => {
-      chai.expect(eventName).to.equal('CreateAccount.Error');
-    });
-
     const errors = [
       { username: ['Username already in use!'] },
       { password: ['Password cannot be empty!'] }
     ];
 
-    AppDispatcher.dispatch({
-      event:  Portal.ACCOUNT_VALIDATION_ERROR,
-      errors,
-      nameSuggestions: ['Ma27_2016']
-    });
+    runAction(() => {
+      return dispatch => {
+        dispatch(ACCOUNT_VALIDATION_ERROR, {
+          errors,
+          nameSuggestions: ['Ma27_2016']
+        });
+      }
+    }, []);
 
-    sinon.assert.calledOnce(RegistrationStore.emitChange);
-    chai.expect(Object.keys(RegistrationStore.getErrors()).length).to.equal(2);
-    chai.expect(RegistrationStore.getErrors()).to.equal(errors);
-    chai.expect(RegistrationStore.getSuggestions()[0]).to.equal('Ma27_2016');
-
-    RegistrationStore.emitChange.restore();
-  });
+    expect(RegistrationStore.getState().errors).to.equal(errors);
+    expect(RegistrationStore.getState().suggestions[0]).to.equal('Ma27_2016');
+  })
 });

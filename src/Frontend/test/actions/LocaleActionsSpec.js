@@ -10,32 +10,31 @@
 
 'use strict';
 
-import sinon from 'sinon';
-import LocaleActions from '../../actions/LocaleActions';
-import chai from 'chai';
-import AppDispatcher from '../../dispatcher/AppDispatcher';
-import LocaleConstants from '../../constants/Locale';
-import {ApiKey, Locale} from '../../util/http/facade/HttpServices';
+import { stub, assert, createStubInstance } from 'sinon';
+import { changeLocale, loadLanguages } from '../../actions/LocaleActions';
+import { expect } from 'chai';
+import ApiKey from '../../util/http/ApiKeyService';
+import Locale from '../../util/http/LocaleService';
 import Cookies from 'cookies-js';
-import LocaleStore from '../../store/LocaleStore';
 import LocaleWebAPIUtils from '../../util/api/LocaleWebAPIUtils';
+import { runAction } from 'sententiaregum-flux-container';
 
 describe('LocaleActions', () => {
   it('changes the locale', () => {
     let apiKey = Math.random();
 
-    sinon.createStubInstance(Cookies);
-    sinon.stub(ApiKey, 'isLoggedIn', () => true);
-    sinon.stub(ApiKey, 'getApiKey', () => apiKey);
-    sinon.stub(Locale, 'setLocale', (locale) => chai.expect(locale).to.equal('en'));
+    createStubInstance(Cookies);
+    stub(ApiKey, 'isLoggedIn', () => true);
+    stub(ApiKey, 'getApiKey', () => apiKey);
+    stub(Locale, 'setLocale', (locale) => expect(locale).to.equal('en'));
 
-    sinon.stub(LocaleWebAPIUtils, 'changeUserLocale', (locale) => {
-      chai.expect(locale).to.equal('en');
+    stub(LocaleWebAPIUtils, 'changeUserLocale', (locale) => {
+      expect(locale).to.equal('en');
     });
 
-    LocaleActions.changeLocale('en');
+    runAction(changeLocale, ['en']);
 
-    sinon.assert.calledOnce(LocaleWebAPIUtils.changeUserLocale);
+    assert.calledOnce(LocaleWebAPIUtils.changeUserLocale);
 
     ApiKey.isLoggedIn.restore();
     ApiKey.getApiKey.restore();
@@ -43,35 +42,15 @@ describe('LocaleActions', () => {
     LocaleWebAPIUtils.changeUserLocale.restore();
   });
 
-  it('avoids locale change if store is already initialized', () => {
-    sinon.stub(LocaleStore, 'isInitialized', () => true);
-    sinon.stub(LocaleStore, 'triggerLocaleChange');
-    sinon.stub(LocaleWebAPIUtils, 'getLocales');
-
-    LocaleActions.loadLanguages();
-    sinon.assert.calledOnce(LocaleStore.triggerLocaleChange);
-    sinon.assert.notCalled(LocaleWebAPIUtils.getLocales);
-
-    LocaleStore.isInitialized.restore();
-    LocaleStore.triggerLocaleChange.restore();
-    LocaleWebAPIUtils.getLocales.restore();
-  });
-
   it('loads available locales', () => {
-    let response = {de:'Deutsch',en:'English'};
+    let response = { de: 'Deutsch', en: 'English' };
 
-    sinon.stub(AppDispatcher, 'dispatch', (payload) => {
-      chai.expect(payload.event).to.equal(LocaleConstants.GET_LOCALES);
-      chai.expect(payload.result).to.equal(response);
-    });
-
-    sinon.stub(LocaleWebAPIUtils, 'getLocales', (callable) => {
+    stub(LocaleWebAPIUtils, 'getLocales', (callable) => {
       callable.apply(this, [response]);
     });
 
-    LocaleActions.loadLanguages();
+    runAction(loadLanguages, []);
 
-    AppDispatcher.dispatch.restore();
     LocaleWebAPIUtils.getLocales.restore();
   });
 });

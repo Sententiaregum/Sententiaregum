@@ -13,6 +13,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Model\User\User;
+use AppBundle\View\I18nResponseFormatBuilderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -27,21 +28,48 @@ abstract class BaseController extends Controller
      * Converts all validation errors to a flat array that can be serialized by the jms serializer.
      *
      * @param ConstraintViolationListInterface $constraintViolations
+     * @param string                           $domain
+     *
+     * @return string[][]
+     */
+    protected function sortViolationMessagesByPropertyPath(
+        ConstraintViolationListInterface $constraintViolations,
+        $domain = 'validators'
+    ) {
+        /** @var I18nResponseFormatBuilderInterface $i18nResponseBuilder */
+        $i18nResponseBuilder = $this->get('app.view.i18n_error_response_builder');
+
+        return $i18nResponseBuilder->formatTranslatableViolationList(
+            $constraintViolations,
+            true,
+            true,
+            $this->getLocaleShortNames(),
+            $domain
+        );
+    }
+
+    /**
+     * Converts all violations to a flat, translatable list which can be serialized easily.
+     *
+     * @param ConstraintViolationListInterface $constraintViolations
+     * @param string                           $domain
      *
      * @return string[]
      */
-    protected function sortViolationMessagesByPropertyPath(ConstraintViolationListInterface $constraintViolations)
-    {
-        return array_reduce(iterator_to_array($constraintViolations), function ($carry, $item) {
-            /* @var \Symfony\Component\Validator\ConstraintViolationInterface $item */
-            $property = $item->getPropertyPath();
-            if (!array_key_exists($property, $carry)) {
-                $carry[$property] = [];
-            }
-            $carry[$property][] = $item->getMessage();
+    protected function getI18nErrorResponseWithoutSort(
+        ConstraintViolationListInterface $constraintViolations,
+        $domain = 'validators'
+    ) {
+        /** @var I18nResponseFormatBuilderInterface $i18nResponseBuilder */
+        $i18nResponseBuilder = $this->get('app.view.i18n_error_response_builder');
 
-            return $carry;
-        }, []);
+        return $i18nResponseBuilder->formatTranslatableViolationList(
+            $constraintViolations,
+            false,
+            true,
+            $this->getLocaleShortNames(),
+            $domain
+        );
     }
 
     /**
@@ -52,7 +80,7 @@ abstract class BaseController extends Controller
     protected function getCurrentUser()
     {
         $user = $this->getUser();
-        if ($user && !$user instanceof User) {
+        if (!$user instanceof User) {
             throw new \RuntimeException(sprintf(
                 'Expect user object of instance "%s", but found "%s"!',
                 User::class,
@@ -61,5 +89,25 @@ abstract class BaseController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Getter for all available locales.
+     *
+     * @return string[]
+     */
+    protected function getLocales()
+    {
+        return $this->getParameter('app.locales');
+    }
+
+    /**
+     * Getter for the locale keys.
+     *
+     * @return string[]
+     */
+    protected function getLocaleShortNames()
+    {
+        return array_keys($this->getLocales());
     }
 }

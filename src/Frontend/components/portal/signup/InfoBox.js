@@ -15,21 +15,16 @@ import Translate from 'react-translate-component';
 import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
 
 /**
- * InfoBox component that is shown at the top of the registration form.
+ * Infobox which renders the information alert box in the create account page.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @returns {React.Element} The markup.
  */
-export default class InfoBox extends React.Component {
-  /**
-   * Renders the info box.
-   *
-   * @returns {React.Element} The react dom markup.
-   */
-  render() {
-    return (
-      <DismissableAlertBox bsStyle="info">
-        <Translate ref="textbox" content="pages.portal.create_account.info_box" />
-      </DismissableAlertBox>
-    );
-  }
-}
+const InfoBox = () => {
+  return (
+    <DismissableAlertBox bsStyle="info">
+      <Translate content="pages.portal.create_account.info_box" />
+    </DismissableAlertBox>
+  );
+};
+
+export default InfoBox;

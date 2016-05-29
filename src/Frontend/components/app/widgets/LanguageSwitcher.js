@@ -10,21 +10,22 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import Translate from 'react-translate-component';
-import LocaleActions from '../../../actions/LocaleActions';
+import { loadLanguages, changeLocale } from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
-import { Locale } from '../../../util/http/facade/HttpServices';
+import Locale from '../../../util/http/LocaleService';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import LoadingDropDown from '../markup/LoadingDropDown';
 import DropDownItem from '../markup/DropDownItem';
+import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
  * Widget which changes the user locale.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class LanguageSwitcher extends React.Component {
+export default class LanguageSwitcher extends Component {
   /**
    * Constructor.
    *
@@ -48,8 +49,8 @@ export default class LanguageSwitcher extends React.Component {
    * @returns {void}
    */
   componentDidMount() {
-    LocaleStore.addChangeListener(this.handle, 'Locale');
-    LocaleActions.loadLanguages();
+    connector(LocaleStore).useWith(this.handle);
+    runAction(loadLanguages, []);
   }
 
   /**
@@ -58,7 +59,7 @@ export default class LanguageSwitcher extends React.Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    LocaleStore.removeChangeListener(this.handle, 'Locale');
+    connector(LocaleStore).unsubscribe(this.handle);
   }
 
   /**
@@ -71,7 +72,7 @@ export default class LanguageSwitcher extends React.Component {
         localeKeys           = Object.keys(this.state.locales),
         languageItems        = 0 === localeKeys.length
           ? <LoadingDropDown translationContent="menu.l10n_loading" />
-          : localeKeys.map(key => this._buildDropDown(key));
+          : localeKeys.map((key, i) => this._buildDropDown(key, i));
 
     return (
       <NavDropdown
@@ -91,20 +92,20 @@ export default class LanguageSwitcher extends React.Component {
    */
   _refreshLocales() {
     this.setState({
-      locales: LocaleStore.getAllLocales()
+      locales: LocaleStore.getState()
     });
   }
 
   /**
    * Change handler for the locale.
    *
-   * @param {Object} e Event object
+   * @param {Object} e Event object.
    *
    * @returns {void}
    */
   _changeLocale(e) {
     if (-1 === e.target.parentNode.className.indexOf('active')) {
-      LocaleActions.changeLocale(e.target.id);
+      runAction(changeLocale, [e.target.id]);
       this.forceUpdate();
     }
 
@@ -115,17 +116,18 @@ export default class LanguageSwitcher extends React.Component {
    * Builds a dropdown item by its locale key.
    *
    * @param {string} key Locale key.
+   * @param {number} i   The counter.
    *
    * @returns {React.Element} The markup.
    */
-  _buildDropDown(key) {
+  _buildDropDown(key, i) {
     const displayName = this.state.locales[key],
         isActive      = Locale.getLocale() === key;
 
     return <DropDownItem
-      key={key}
+      key={i}
       isActive={isActive}
-      onSelect={(e) => this._changeLocale(e)}
+      onSelect={(k, e) => this._changeLocale(e)}
       displayName={displayName}
       id={key}
     />;

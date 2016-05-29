@@ -11,7 +11,7 @@
 'use strict';
 
 import axios from 'axios';
-import { ApiKey } from '../http/facade/HttpServices';
+import ApiKey from '../http/ApiKeyService';
 
 /**
  * API utils for the locale api.

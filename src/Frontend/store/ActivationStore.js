@@ -10,29 +10,15 @@
 
 'use strict';
 
-import FluxEventHubStore from './FluxEventHubStore';
-import Portal from '../constants/Portal';
+import { store } from 'sententiaregum-flux-container';
 
-/**
- * Store for the activation process.
- * As the activation api doesn't have any internal data, this is just a wrapper
- * for the dispatch<>component flow.
- *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- */
-class ActivationStore extends FluxEventHubStore {
-  /**
-   * @inheritdoc
-   */
-  getSubscribedEvents() {
-    return [
-      { name: Portal.ACTIVATE_ACCOUNT, callback: () => this.emitChange('Activation.Success') },
-      { name: Portal.ACTIVATION_FAILURE, callback: () => this.emitChange('Activation.Failure') }
-    ];
+export default store({
+  ACTIVATE_ACCOUNT: {
+    params:   [],
+    function: () => ({ success: true })
+  },
+  ACTIVATION_FAILURE: {
+    params:   [],
+    function: () => ({ success: false })
   }
-}
-
-const store = new ActivationStore();
-store.init();
-
-export default store;
+});

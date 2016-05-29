@@ -16,7 +16,7 @@ function createConfig() {
 
   var plugins      = [new ExtractTextPlugin('[name].css')],
     cssQueryString = 'css-loader',
-    env            = process.env.NODE_ENV,
+    env            = process.env.NODE_ENV || 'development',
     lessQueryString;
 
   if ('production' === env) {
@@ -32,6 +32,7 @@ function createConfig() {
   lessQueryString = cssQueryString + '!less';
 
   return {
+    devtool: 'eval',
     cache: true,
     entry: {
       bundle: [
@@ -44,7 +45,8 @@ function createConfig() {
       loaders: [
         {
           test: /\.js$/,
-          loaders: ['babel-loader']
+          loaders: ['babel-loader'],
+          exclude:  /(node_modules)/
         },
         {
           test: /\.less/,

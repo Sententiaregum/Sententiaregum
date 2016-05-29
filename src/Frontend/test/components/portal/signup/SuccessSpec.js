@@ -12,16 +12,13 @@
 
 import React from 'react';
 import Success from '../../../../components/portal/signup/Success';
-import TestUtils from 'react/lib/ReactTestUtils';
-import ReactDOM from 'react-dom';
-import chai from 'chai';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
 
 describe('Success', () => {
   it('renders success box', () => {
-    const cmp  = TestUtils.renderIntoDocument(<Success />);
-    const node = ReactDOM.findDOMNode(cmp.refs.textbox);
-
-    chai.expect(node._childNodes[0]._nodeValue).to.equal('The account has been created successfully. You can now activate your account using the activation email.');
-    chai.expect(ReactDOM.findDOMNode(cmp)._attributes.class._nodeValue).to.equal('alert alert-success alert-dismissable');
+    const markup = shallow(<Success />);
+    expect(markup.find('Translate').prop('content')).to.equal('pages.portal.create_account.success');
+    expect(markup.prop('bsStyle')).to.equal('success');
   });
 });

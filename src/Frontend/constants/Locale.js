@@ -12,6 +12,6 @@
 
 const GET_LOCALES = 'GET_LOCALES';
 
-export default {
+export {
   GET_LOCALES
 };

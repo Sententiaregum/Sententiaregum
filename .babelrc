@@ -5,10 +5,11 @@
     "stage-0"
   ],
   "plugins": [
-    [
-      "transform-react-jsx"
-    ]
+    "transform-react-jsx"
   ],
   "retainLines": true,
-  "sourceMaps": true
+  "sourceMaps": "both",
+  "ignore": [
+    "*.css"
+  ]
 }

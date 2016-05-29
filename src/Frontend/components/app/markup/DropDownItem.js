@@ -24,8 +24,7 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 const DropDownItem = props => {
   return (
     <MenuItem
-      eventKey={props.key}
-      key={props.key}
+      eventKey={props.id}
       className={props.isActive ? 'active' : null}
       onSelect={props.onSelect}
       id={props.id}
@@ -36,7 +35,6 @@ const DropDownItem = props => {
 };
 
 DropDownItem.propTypes = {
-  key:         React.PropTypes.string,
   isActive:    React.PropTypes.bool,
   displayName: React.PropTypes.string,
   onSelect:    React.PropTypes.func,

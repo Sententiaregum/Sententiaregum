@@ -31,3 +31,7 @@ services:
     class: AppBundle\Model\Ip\Tracer\FreeGeoIpTracingService
     arguments:
       - "@guzzle.client.freegeoip"
+  app.view.i18n_error_response_builder:
+    class: AppBundle\View\I18nResponseFormatBuilder
+    arguments:
+      - "@translator"

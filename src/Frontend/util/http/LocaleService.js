@@ -12,30 +12,24 @@
 
 import counterpart from 'counterpart';
 import invariant from 'invariant';
+import Cookies from 'cookies-js';
 
 /**
  * Simple helper class which utilizes locale management and
  * connects the counterpart library with a http cookie library.
  *
- * NOTE: when testing this class, a jsdom instance will be created in order to
- * gather cookies through a faked window object.
- *
- * INTERNAL NOTE: this is just meant to be used inside the i18n system.
- *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class LocaleService {
+class LocaleService {
   /**
    * Constructor.
    *
    * @param {string} defaultLanguage Language whether to use if the language cookie is empty.
-   * @param {Object} cookieFactory   Instance of a factory for the cookie handling.
    *
    * @returns {void}
    */
-  constructor(defaultLanguage, cookieFactory) {
+  constructor(defaultLanguage) {
     this.defaultLanguage = defaultLanguage || 'en';
-    this.cookieFactory   = cookieFactory;
   }
 
   /**
@@ -44,7 +38,7 @@ export default class LocaleService {
    * @returns {string} Language value.
    */
   getLocale() {
-    return this.cookieFactory.getCookies().get('language') || this.defaultLanguage;
+    return Cookies.get('language') || this.defaultLanguage;
   }
 
   /**
@@ -71,7 +65,9 @@ export default class LocaleService {
       newLocale = locale;
     }
 
-    this.cookieFactory.getCookies().set('language', newLocale);
+    Cookies.set('language', newLocale);
     counterpart.setLocale(newLocale);
   }
 }
+
+export default new LocaleService('en');

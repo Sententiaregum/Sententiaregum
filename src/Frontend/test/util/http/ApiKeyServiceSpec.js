@@ -11,24 +11,13 @@
 'use strict';
 
 import ApiKeyService from '../../../util/http/ApiKeyService';
-import CookieFactory from '../../../util/http/CookieFactory';
-import sinon from 'sinon';
 import chai from 'chai';
-import jsdom from 'jsdom';
 
 describe('ApiKeyService', () => {
+  beforeEach(() => {
+    localStorage.setItem('api_key', Math.random());
+  });
   it('checks whether the user is logged in', () => {
-    let window          = jsdom.jsdom().parentWindow;
-    let factoryInstance = new CookieFactory(window);
-    let mock            = {
-      get: () => Math.random()
-    };
-
-    sinon.stub(factoryInstance, 'getCookies', () => mock);
-    let instance = new ApiKeyService(factoryInstance);
-
-    chai.expect(instance.isLoggedIn()).to.equal(true);
-
-    factoryInstance.getCookies.restore();
+    chai.expect(ApiKeyService.isLoggedIn()).to.equal(true);
   });
 });

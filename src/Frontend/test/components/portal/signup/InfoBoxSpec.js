@@ -12,16 +12,13 @@
 
 import React from 'react';
 import InfoBox from '../../../../components/portal/signup/InfoBox';
-import TestUtils from 'react/lib/ReactTestUtils';
-import ReactDOM from 'react-dom';
-import chai from 'chai';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
 
 describe('InfoBox', () => {
   it('renders information for registration page', () => {
-    const cmp  = TestUtils.renderIntoDocument(<InfoBox />);
-    const node = ReactDOM.findDOMNode(cmp.refs.textbox);
-
-    chai.expect(node._childNodes[0]._nodeValue).to.equal('Please fill all these fields. After that you\'ll get an activation email in order to activate your account.');
-    chai.expect(ReactDOM.findDOMNode(cmp)._attributes.class._nodeValue).to.equal('alert alert-info alert-dismissable');
+    const markup = shallow(<InfoBox />);
+    expect(markup.find('Translate').prop('content')).to.equal('pages.portal.create_account.info_box');
+    expect(markup.prop('bsStyle')).to.equal('info');
   });
 });

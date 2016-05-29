@@ -11,18 +11,19 @@
 'use strict';
 
 import CreateAccount from '../../../components/portal/CreateAccount';
-import TestUtils from 'react/lib/ReactTestUtils';
 import React from 'react';
-import chai from 'chai';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
+import Form from '../../../components/portal/signup/Form';
+import InfoBox from '../../../components/portal/signup/InfoBox';
 
 describe('CreateAccount', () => {
   it('renders registration page', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(<CreateAccount />);
-    const output = renderer.getRenderOutput();
+    const markup = shallow(<CreateAccount />);
+    expect(markup.find('h1 Translate').prop('content')).to.equal('pages.portal.head');
 
-    chai.expect(output.props.children[0].props.children.props.content).to.equal('pages.portal.head');
-    chai.expect(output.props.children[1].props.children[0].type.name).to.equal('InfoBox');
-    chai.expect(output.props.children[1].props.children[1].type.name).to.equal('Form');
+    const body = markup.find('div');
+    expect(body.contains(<Form />)).to.equal(true);
+    expect(body.contains(<InfoBox />)).to.equal(true);
   });
 });

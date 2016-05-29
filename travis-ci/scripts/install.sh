@@ -2,17 +2,26 @@
 
 set -e
 
+# setup for node 6
+sudo rm -rf ~/.nvm
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
 # basic database setup
-mysql -e "CREATE DATABASE IF NOT EXISTS sententiaregum;"
-mysql -e "CREATE DATABASE IF NOT EXISTS behat;"
-echo "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';" | mysql -u root
-echo "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';" | mysql -u root
-echo "FLUSH PRIVILEGES;" | mysql -u root
+commands=(
+  "CREATE DATABASE IF NOT EXISTS sententiaregum;"
+  "CREATE DATABASE IF NOT EXISTS behat;"
+  "CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';"
+  "GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';"
+  "FLUSH PRIVILEGES;"
+)
+for i in "${commands[@]}"
+do
+  echo "${i}" | mysql -u root
+done
 
 # install global npm dependencies
-npm update -g npm
-npm install -g mocha webpack eslint eslint-plugin-react less node-pre-gyp
-npm install -g eslint-plugin-varspacing
+sudo npm install -g mocha webpack eslint eslint-plugin-react eslint-plugin-varspacing less node-pre-gyp
 
 # copy custom travis configuration
 cp travis-ci/config/travis_parameters.yml app/config/parameters.yml

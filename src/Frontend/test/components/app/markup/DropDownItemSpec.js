@@ -10,30 +10,23 @@
 
 'use strict';
 
-import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
-import chai from 'chai';
+import { expect } from 'chai';
 import DropDownItem from '../../../../components/app/markup/DropDownItem';
 import React from 'react';
-import NavDropdown from 'react-bootstrap/lib/NavDropdown';
+import { shallow } from 'enzyme';
 
 describe('DropDownItem', () => {
-  it('renders a dropdown item including properties', () => {
-    const result = TestUtils.renderIntoDocument((
-      <NavDropdown id="test-dropdown" title="Test">
-        <DropDownItem
-          key="test"
-          isActive={true}
-          id="test"
-          displayName="Test"
-        />
-      </NavDropdown>
+  it('renders a dropdown item including the given properties', () => {
+    const markup = shallow((
+      <DropDownItem
+        isActive={true}
+        id="test"
+        displayName="Test"
+      />
     ));
 
-    const component = ReactDOM.findDOMNode(result);
-    const dropdown  = component._childNodes[1]._childNodes[0];
-
-    chai.expect(dropdown._attributes.class._nodeValue).to.equal('active');
-    chai.expect(dropdown._childNodes[0]._childNodes[0]._nodeValue).to.equal('Test');
+    expect(markup.hasClass('active')).to.equal(true);
+    expect(markup.prop('id')).to.equal('test');
+    expect(markup.contains('Test')).to.equal(true);
   });
 });

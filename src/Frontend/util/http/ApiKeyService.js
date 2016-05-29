@@ -15,18 +15,7 @@
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class ApiKeyService {
-  /**
-   * Constructor.
-   *
-   * @param {Object} cookieFactory Cookie factory instance.
-   *
-   * @returns {void}
-   */
-  constructor(cookieFactory) {
-    this.cookieFactory = cookieFactory;
-  }
-
+class ApiKeyService {
   /**
    * Checks if a user is logged in.
    *
@@ -51,6 +40,8 @@ export default class ApiKeyService {
    * @returns {string} Api key of the current logged in user.
    */
   getApiKey() {
-    return this.cookieFactory.getCookies().get('api_key');
+    return localStorage.getItem('api_key'); // todo refactor this in #35
   }
 }
+
+export default new ApiKeyService();

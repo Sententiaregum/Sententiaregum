@@ -11,57 +11,43 @@
 'use strict';
 
 import AccountWebAPIUtils from '../util/api/AccountWebAPIUtils';
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import Portal from '../constants/Portal';
+import { CREATE_ACCOUNT, ACCOUNT_VALIDATION_ERROR, ACTIVATE_ACCOUNT, ACTIVATION_FAILURE } from '../constants/Portal';
 
 /**
- * Action creator for portal logic.
+ * Processor for the registration.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @param {Object} formData The form data.
+ *
+ * @returns {Function} The action creator.
  */
-class PortalActions {
-  /**
-   * Processor for the registration.
-   *
-   * @param {Object.<string>} formData Data to submit.
-   *
-   * @returns {void}
-   */
-  registration(formData) {
+export function registration(formData) {
+  return dispatch => {
     AccountWebAPIUtils.createAccount(
       formData,
-      result => {
-        AppDispatcher.dispatch({
-          event: Portal.CREATE_ACCOUNT,
-          result
-        });
-      },
-      result => {
-        AppDispatcher.dispatch({
-          event:           Portal.ACCOUNT_VALIDATION_ERROR,
-          errors:          result.errors,
-          nameSuggestions: result['name_suggestions'] ? result['name_suggestions'] : []
-        });
-      }
+      result => dispatch(CREATE_ACCOUNT, result),
+      result => dispatch(
+        ACCOUNT_VALIDATION_ERROR,
+        { errors: result.errors, nameSuggestions: result['name_suggestions'] ? result['name_suggestions'] : [] }
+      )
     );
-  }
+  };
+}
 
-  /**
-   * Activation facade for the user.
-   *
-   * @param {string} username Username.
-   * @param {string} key Activation key.
-   *
-   * @returns {void}
-   */
-  activate(username, key) {
+/**
+ * Activation handler.
+ *
+ * @param {String} username The user to activate.
+ * @param {String} key      The activation key.
+ *
+ * @returns {Function} The action creator.
+ */
+export function activate(username, key) {
+  return dispatch => {
     AccountWebAPIUtils.activate(
       username,
       key,
-      () => AppDispatcher.dispatch({ event: Portal.ACTIVATE_ACCOUNT }),
-      () => AppDispatcher.dispatch({ event: Portal.ACTIVATION_FAILURE })
+      () => dispatch(ACTIVATE_ACCOUNT, {}),
+      () => dispatch(ACTIVATION_FAILURE, {})
     );
-  }
+  };
 }
-
-export default new PortalActions();

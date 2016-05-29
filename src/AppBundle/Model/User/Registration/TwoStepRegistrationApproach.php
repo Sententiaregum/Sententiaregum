@@ -140,19 +140,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
         $user->setState(User::STATE_APPROVED);
 
-        // if the purger runs a bulk delete on users
-        // there occur foreign key constraint issues with the
-        // roles. Therefore roles are only allowed for
-        // approved users.
-        $defaultRole = $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
-        if (!$defaultRole) {
-            throw new \RuntimeException(sprintf(
-                'Role "%s" is not present!',
-                self::DEFAULT_USER_ROLE
-            ));
-        }
-
-        $user->addRole($defaultRole);
+        $user->addRole($this->determineDefaultRole());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -363,5 +351,28 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private function createActivationException()
     {
         return new UserActivationException();
+    }
+
+    /**
+     * Determines the default role which should get every newly activated user.
+     *
+     * @return \AppBundle\Model\User\Role
+     */
+    private function determineDefaultRole()
+    {
+        // if the purger runs a bulk delete on users
+        // there occur foreign key constraint issues with the
+        // roles. Therefore roles are only allowed for
+        // approved users.
+        /** @var \AppBundle\Model\User\Role $defaultRole */
+        $defaultRole = $this->roleRepository->findOneBy(['role' => self::DEFAULT_USER_ROLE]);
+        if (!$defaultRole) {
+            throw new \RuntimeException(sprintf(
+                'Role "%s" is not present!',
+                self::DEFAULT_USER_ROLE
+            ));
+        }
+
+        return $defaultRole;
     }
 }

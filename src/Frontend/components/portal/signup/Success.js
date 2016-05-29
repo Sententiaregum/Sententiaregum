@@ -15,21 +15,16 @@ import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
 
 /**
- * Success component.
+ * Rendering component of the success box.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @returns {React.Element} The markup.
  */
-export default class Success extends React.Component {
-  /**
-   * Render.
-   *
-   * @returns {React.Element} The markup.
-   */
-  render() {
-    return (
-      <DismissableAlertBox bsStyle="success">
-        <p><Translate ref="textbox" content="pages.portal.create_account.success" /></p>
-      </DismissableAlertBox>
-    );
-  }
-}
+const Success = () => {
+  return (
+    <DismissableAlertBox bsStyle="success">
+      <p><Translate content="pages.portal.create_account.success" /></p>
+    </DismissableAlertBox>
+  );
+};
+
+export default Success;

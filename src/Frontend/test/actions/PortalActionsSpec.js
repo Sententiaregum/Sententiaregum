@@ -10,57 +10,62 @@
 
 'use strict';
 
-import PortalActions from '../../actions/PortalActions';
-import sinon from 'sinon';
-import AppDispatcher from '../../dispatcher/AppDispatcher';
-import chai from 'chai'
+import { registration, activate } from '../../actions/PortalActions';
+import { stub, assert } from 'sinon';
+import { expect } from 'chai'
 import AccountWebAPIUtils from '../../util/api/AccountWebAPIUtils';
-import Portal  from '../../constants/Portal';
+import RegistrationStore from '../../store/RegistrationStore';
+import { runAction } from 'sententiaregum-flux-container';
+import ActivationStore from '../../store/ActivationStore';
 
 describe('PortalActions', () => {
   it('triggers the registration process', () => {
-    sinon.stub(AccountWebAPIUtils, 'createAccount', (data, success) => {
-      chai.expect(data.username).to.equal('Ma27');
+    stub(AccountWebAPIUtils, 'createAccount', (data, success) => {
+      expect(data.username).to.equal('Ma27');
       success.apply(null, [{ id: Math.random() }]);
     });
 
-    sinon.stub(AppDispatcher, 'dispatch');
-    PortalActions.registration({ username: 'Ma27' });
+    runAction(registration, [{ username: 'Ma27' }]);
 
-    sinon.assert.calledOnce(AppDispatcher.dispatch);
-    AppDispatcher.dispatch.restore();
     AccountWebAPIUtils.createAccount.restore();
+    expect(RegistrationStore.getState()).to.equal(null); // when the state is null, the registration was successful
   });
 
   it('handles registration errors', () => {
-    sinon.stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
-      error.apply(null, [{ errors: [], name_suggestoins: [] }]);
+    stub(AccountWebAPIUtils, 'createAccount', (data, success, error) => {
+      error.apply(null, [{ errors: { username: ['Error!'] }, name_suggestions: [] }]);
     });
 
-    sinon.stub(AppDispatcher, 'dispatch', (payload) => {
-      chai.expect(payload.event).to.equal(Portal.ACCOUNT_VALIDATION_ERROR);
-      chai.expect(typeof payload.errors).to.not.equal('undefined');
-      chai.expect(typeof payload.nameSuggestions).to.not.equal('undefined');
-    });
-    PortalActions.registration({ username: 'Ma27' });
+    runAction(registration, [{ username: 'Ma27' }]);
+    expect(RegistrationStore.getState().errors['username'].length).to.equal(1);
+    expect(RegistrationStore.getState().suggestions.length).to.equal(0);
 
-    sinon.assert.calledOnce(AppDispatcher.dispatch);
-    AppDispatcher.dispatch.restore();
     AccountWebAPIUtils.createAccount.restore();
   });
 
   it('activates users', () => {
-    sinon.stub(AccountWebAPIUtils, 'activate', (name, key, success) => {
-      chai.expect(name).to.equal('Ma27');
-      chai.expect(key).to.equal('foo');
+    stub(AccountWebAPIUtils, 'activate', (name, key, success) => {
+      expect(name).to.equal('Ma27');
+      expect(key).to.equal('foo');
       success();
     });
 
-    sinon.stub(AppDispatcher, 'dispatch');
-    PortalActions.activate('Ma27', 'foo');
+    runAction(activate, ['Ma27', 'foo']);
+    expect(ActivationStore.getState().success).to.equal(true);
 
-    sinon.assert.calledOnce(AppDispatcher.dispatch);
-    AppDispatcher.dispatch.restore();
+    AccountWebAPIUtils.activate.restore();
+  });
+
+  it('causes an invalid state if the activation fails', () => {
+    stub(AccountWebAPIUtils, 'activate', (name, key, success, error) => {
+      expect(name).to.equal('Ma27');
+      expect(key).to.equal('foo');
+      error();
+    });
+
+    runAction(activate, ['Ma27', 'foo']);
+    expect(ActivationStore.getState().success).to.equal(false);
+
     AccountWebAPIUtils.activate.restore();
   });
 });

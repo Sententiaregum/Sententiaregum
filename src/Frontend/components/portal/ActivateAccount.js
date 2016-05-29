@@ -13,9 +13,9 @@
 import React from 'react';
 import DismissableAlertBox from '../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
-import PortalActions from '../../actions/PortalActions';
+import { activate } from '../../actions/PortalActions';
 import ActivationStore from '../../store/ActivationStore';
-import Url from '../../util/http/facade/Url';
+import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
  * Activation component to be used when activating a account.
@@ -38,8 +38,7 @@ export default class ActivateAccount extends React.Component {
       failure:  false
     };
 
-    this.successHandler = this._success.bind(this);
-    this.errorHandler   = this._failure.bind(this);
+    this.handle = this._handleChange.bind(this);
   }
 
   /**
@@ -48,10 +47,8 @@ export default class ActivateAccount extends React.Component {
    * @returns {void}
    */
   componentDidMount() {
-    ActivationStore.addChangeListener(this.successHandler, 'Activation.Success');
-    ActivationStore.addChangeListener(this.errorHandler, 'Activation.Failure');
-
-    PortalActions.activate(this.props.params.name, this.props.params.key);
+    connector(ActivationStore).useWith(this.handle);
+    runAction(activate, [this.props.params.name, this.props.params.key]);
   }
 
   /**
@@ -60,8 +57,7 @@ export default class ActivateAccount extends React.Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    ActivationStore.removeChangeListener(this.successHandler, 'Activation.Success');
-    ActivationStore.removeChangeListener(this.errorHandler, 'Activation.Failure');
+    connector(ActivationStore).unsubscribe(this.handle);
   }
 
   /**
@@ -70,14 +66,10 @@ export default class ActivateAccount extends React.Component {
    * @returns {React.Element} The markup.
    */
   render() {
-    const content = this.state.progress
-      ? <span><Translate content="pages.portal.activate.progress" /> {this.props.params.name}...</span>
-      : this.state.success
-        ? <span><Translate content="pages.portal.activate.success" /></span>
-        : <span><Translate content="pages.portal.activate.error" /></span>;
+    const content = this._getState();
 
     if (this.state.success) {
-      Url.redirect('');
+      this.context.router.replace('/');
     }
     return (
       <div>
@@ -104,28 +96,43 @@ export default class ActivateAccount extends React.Component {
   }
 
   /**
-   * Success handler.
+   * Change handler.
    *
    * @returns {void}
    * @private
    */
-  _success() {
-    this.setState({
-      progress: false,
-      success:  true
-    });
+  _handleChange() {
+    const state = ActivationStore.getState();
+    if (state.success) {
+      this.setState({
+        progress: false,
+        success:  true
+      });
+    } else {
+      this.setState({
+        progress: false,
+        failure:  true
+      });
+    }
   }
 
   /**
-   * Error handler.
+   * Provider which renders the appropriate translation result.
    *
-   * @returns {void}
+   * @returns {React.Element} The markup for the state.
    * @private
    */
-  _failure() {
-    this.setState({
-      progress: false,
-      failure:  true
-    });
+  _getState() {
+    if (this.state.progress) {
+      return <span><Translate content="pages.portal.activate.progress" /> {this.props.params.name}...</span>;
+    }
+    return <Translate content={this.state.success ? 'pages.portal.activate.success' : 'pages.portal.activate.error'} />;
   }
 }
+
+ActivateAccount.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
+};

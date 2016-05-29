@@ -11,43 +11,38 @@
 'use strict';
 
 import ActivateAccount from '../../../components/portal/ActivateAccount';
-import TestUtils from 'react/lib/ReactTestUtils';
 import React from 'react';
-import chai from 'chai';
-import sinon from 'sinon';
+import { expect } from 'chai';
+import { stub } from 'sinon';
 import AccountWebAPIUtils from '../../../util/api/AccountWebAPIUtils';
-import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 
 describe('ActivateAccount', () => {
   it('activates user accounts', () => {
-    sinon.stub(AccountWebAPIUtils, 'activate', (name, key, success, error) => {
+    stub(AccountWebAPIUtils, 'activate', (name, key, success, error) => {
       error();
     });
 
-    let timer = sinon.useFakeTimers();
-    const cmp  = TestUtils.renderIntoDocument(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
+    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
 
-    timer.tick(1000);
-    const node = ReactDOM.findDOMNode(cmp);
-    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('alert alert-danger alert-dismissable');
+    setTimeout(() => {
+      expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('danger');
+    });
 
-    timer.restore();
     AccountWebAPIUtils.activate.restore();
   });
 
   it('handles activation failures', () => {
-    sinon.stub(AccountWebAPIUtils, 'activate', (name, key, success, error) => {
+    stub(AccountWebAPIUtils, 'activate', (name, key, success) => {
       success();
     });
 
-    let timer = sinon.useFakeTimers();
-    const cmp  = TestUtils.renderIntoDocument(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
+    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
 
-    timer.tick(1000);
-    const node = ReactDOM.findDOMNode(cmp);
-    chai.expect(node._childNodes[1]._attributes.class._nodeValue).to.equal('alert alert-success alert-dismissable');
+    setTimeout(() => {
+      expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('success');
+    });
 
-    timer.restore();
     AccountWebAPIUtils.activate.restore();
   });
 });

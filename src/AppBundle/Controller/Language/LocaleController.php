@@ -47,7 +47,7 @@ class LocaleController extends BaseController
      */
     public function getSupportedLocalesAction()
     {
-        return $this->container->getParameter('app.locales');
+        return $this->getLocales();
     }
 
     /**

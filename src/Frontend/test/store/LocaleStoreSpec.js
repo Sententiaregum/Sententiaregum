@@ -10,30 +10,18 @@
 
 'use strict';
 
-import AppDispatcher from '../../dispatcher/AppDispatcher';
 import LocaleStore from '../../store/LocaleStore';
-import Locale from '../../constants/Locale';
-import sinon from 'sinon';
-import chai from 'chai';
+import { GET_LOCALES } from '../../constants/Locale';
+import { expect } from 'chai';
+import { runAction } from 'sententiaregum-flux-container';
 
 describe('LocaleStore', () => {
   it('stores available locales', () => {
-    const spy = sinon.spy();
-    LocaleStore.addChangeListener(spy, 'Locale');
+    runAction(() => {
+      return dispatch => dispatch(GET_LOCALES, { locales: { de: 'Deutsch', en: 'English' } })
+    }, []);
 
-    const data = {
-      de: 'Deutsch',
-      en: 'English'
-    };
-
-    chai.expect(LocaleStore.isInitialized()).to.equal(false);
-    AppDispatcher.dispatch({
-      event:  Locale.GET_LOCALES,
-      result: data
-    });
-
-    chai.expect(LocaleStore.isInitialized()).to.equal(true);
-    chai.expect(spy.called);
-    chai.expect(LocaleStore.getAllLocales(), data);
+    expect(LocaleStore.getState().de).to.equal('Deutsch');
+    expect(LocaleStore.getState().en).to.equal('English');
   });
 });
