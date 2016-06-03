@@ -15,6 +15,7 @@ namespace AppBundle\EventListener;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\Ip\Tracer\IpTracingServiceInterface;
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\Util\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\AbstractUserEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
@@ -52,6 +53,11 @@ class CredentialNotifyListener implements EventSubscriberInterface
     private $requestStack;
 
     /**
+     * @var DateTimeComparison
+     */
+    private $comparison;
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -69,17 +75,20 @@ class CredentialNotifyListener implements EventSubscriberInterface
      * @param EventDispatcherInterface  $eventDispatcher
      * @param RequestStack              $requestStack
      * @param IpTracingServiceInterface $ipTracer
+     * @param DateTimeComparison        $comparison
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack,
-        IpTracingServiceInterface $ipTracer
+        IpTracingServiceInterface $ipTracer,
+        DateTimeComparison $comparison
     ) {
         $this->entityManager   = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->requestStack    = $requestStack;
         $this->ipTracer        = $ipTracer;
+        $this->comparison      = $comparison;
     }
 
     /**
@@ -93,8 +102,9 @@ class CredentialNotifyListener implements EventSubscriberInterface
             return;
         }
 
-        $user->addFailedAuthenticationWithIp($this->requestStack->getMasterRequest()->getClientIp());
-        if ($user->exceedsIpFailedAuthAttemptMaximum($this->requestStack->getMasterRequest()->getClientIp())) {
+        $masterRequest = $this->requestStack->getMasterRequest();
+        $user->addFailedAuthenticationWithIp($masterRequest->getClientIp());
+        if ($user->exceedsIpFailedAuthAttemptMaximum($masterRequest->getClientIp(), $this->comparison)) {
             $this->dispatchNotificationEvent(
                 $user,
                 'failed_authentication',
@@ -115,7 +125,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
     {
         $user = $this->getUser($event);
 
-        if ($user->isNewUserIp($this->requestStack->getMasterRequest()->getClientIp())) {
+        if ($user->addAndValidateNewUserIp($this->requestStack->getMasterRequest()->getClientIp(), $this->comparison)) {
             $this->dispatchNotificationEvent(
                 $user,
                 'new_login',

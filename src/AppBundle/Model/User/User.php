@@ -12,6 +12,7 @@
 
 namespace AppBundle\Model\User;
 
+use AppBundle\Model\User\Util\DateTimeComparison;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -397,7 +398,7 @@ class User implements UserInterface, Serializable
     public function setState($state)
     {
         if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED], true)) {
-            throw new \InvalidArgumentException(sprintf('Invalid state!'));
+            throw new \InvalidArgumentException('Invalid state!');
         }
 
         $this->state = (string) $state;
@@ -547,7 +548,7 @@ class User implements UserInterface, Serializable
 
         if ($this->hasRole($role)) {
             throw new \LogicException(sprintf(
-                'Role "%s" already in user by user "%s"!',
+                'Role "%s" already attached at user "%s"!',
                 $role->getRole(),
                 $this->getUsername()
             ));
@@ -715,11 +716,12 @@ class User implements UserInterface, Serializable
     /**
      * Checks whether the user ip is new and if true it will be persisted.
      *
-     * @param string $ip
+     * @param string             $ip
+     * @param DateTimeComparison $comparison
      *
      * @return bool
      */
-    public function isNewUserIp($ip)
+    public function addAndValidateNewUserIp($ip, DateTimeComparison $comparison)
     {
         if (!($isKnown = $this->isKnownIp($ip))) {
             $attempt = new AuthenticationAttempt();
@@ -728,13 +730,15 @@ class User implements UserInterface, Serializable
                 ->increaseAttemptCount();
 
             $this->authentications->add($attempt);
+            $this->eraseKnownIpFromBadIPList($ip, $comparison);
         }
 
         return !$isKnown;
     }
 
     /**
-     * Adds one ip of a failed authentication unless its authentication succeeded previously (users may mistype some times).
+     * Adds one ip of a failed authentication unless its authentication succeeded previously (users may mistype some
+     * times).
      *
      * @param string $ip
      *
@@ -743,15 +747,14 @@ class User implements UserInterface, Serializable
     public function addFailedAuthenticationWithIp($ip)
     {
         if (!$this->isKnownIp($ip)) {
-            if ($attempt = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL)) {
-                $attempt->increaseAttemptCount();
-            } else {
+            if (!($attempt = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL))) {
                 $attempt = new AuthenticationAttempt();
                 $attempt->setIp($ip);
-                $attempt->increaseAttemptCount();
 
                 $this->failedAuthentications->add($attempt);
             }
+
+            $attempt->increaseAttemptCount();
         }
 
         return $this;
@@ -760,23 +763,18 @@ class User implements UserInterface, Serializable
     /**
      * Checks if one ip exceeds the attempt count.
      *
-     * @param string $ip
+     * @param string             $ip
+     * @param DateTimeComparison $comparison
      *
      * @return bool
      */
-    public function exceedsIpFailedAuthAttemptMaximum($ip)
+    public function exceedsIpFailedAuthAttemptMaximum($ip, DateTimeComparison $comparison)
     {
         if (!$this->isKnownIp($ip, self::FAILED_AUTH_POOL)) {
             return false;
         }
 
-        $model  = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL);
-        $result = self::MAX_FAILED_ATTEMPTS_FROM_IP <= $model->getAttemptCount();
-        if ($result) {
-            $this->failedAuthentications->removeElement($model);
-        }
-
-        return $result;
+        return $this->needsAuthWarning($this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL), $comparison);
     }
 
     /**
@@ -882,5 +880,75 @@ class User implements UserInterface, Serializable
         }
 
         return $authAttempt;
+    }
+
+    /**
+     * Checks if enough failed authentications are done in the past to rise an auth warning.
+     *
+     * @param AuthenticationAttempt $attempt
+     * @param DateTimeComparison    $comparison
+     *
+     * @return bool
+     */
+    private function needsAuthWarning(AuthenticationAttempt $attempt, DateTimeComparison $comparison)
+    {
+        $count = $attempt->getAttemptCount();
+        if (self::MAX_FAILED_ATTEMPTS_FROM_IP <= $count) {
+            if (($count - 3) === 0) {
+                return true;
+            }
+
+            return !$this->isPreviouslyLoginFailed('-6 hours', $comparison, true, $attempt->getIp());
+        }
+
+        return false;
+    }
+
+    /**
+     * Erases user IPs from the blacklist.
+     *
+     * @param string             $ip
+     * @param DateTimeComparison $comparison
+     */
+    private function eraseKnownIpFromBadIPList($ip, DateTimeComparison $comparison)
+    {
+        if ($this->isPreviouslyLoginFailed('-10 minutes', $comparison)) {
+            // if it failed before the login, the login may be corrupted,
+            // there the information should be kept. The next login won't erase it although there may
+            // be a corruption since this will be called at the first login with a new IP only
+            return;
+        }
+
+        /** @var AuthenticationAttempt $model */
+        foreach ($this->failedAuthentications->toArray() as $model) {
+            if ($ip === $model->getIp()) {
+                $this->failedAuthentications->removeElement($model);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Checks if the auth failed previously.
+     *
+     * @param string             $diff
+     * @param bool               $ignoreLastAttempts
+     * @param DateTimeComparison $comparison
+     * @param string             $ip
+     *
+     * @return bool
+     */
+    private function isPreviouslyLoginFailed($diff, DateTimeComparison $comparison, $ignoreLastAttempts = false, $ip = null)
+    {
+        return $this->failedAuthentications->exists(
+            function ($index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $ip, $comparison) {
+                $ipRange = $failedAttempt->getLastFailedAttemptTimesInRange();
+
+                return $comparison(
+                    $diff,
+                    $failedAttempt->getIp() && $ignoreLastAttempts ? end($ipRange) : $failedAttempt->getLatestFailedAttemptTime()
+                );
+            }
+        );
     }
 }

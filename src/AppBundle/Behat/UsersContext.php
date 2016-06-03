@@ -13,8 +13,10 @@
 namespace AppBundle\Behat;
 
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\Util\DateTimeComparison;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\TableNode;
 
 /**
  * Feature context for user repository.
@@ -103,5 +105,52 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
     public function iShouldSeeTheUserWithId($arg1)
     {
         Assertion::eq((int) $arg1, $this->user->getId());
+    }
+
+    /**
+     * @Given the following auth data exist:
+     */
+    public function theFollowingAuthDataExist(TableNode $table)
+    {
+        foreach ($table->getHash() as $row) {
+            $user   = $row['affected'];
+            $entity = $this->getEntityManager()->getRepository('Account:User')->findOneBy(['username' => $user]);
+            $entity->addFailedAuthenticationWithIp($row['ip']);
+
+            $this->getEntityManager()->persist($entity);
+            $this->getEntityManager()->flush();
+
+            $uid  = $entity->getId();
+            $conn = $this->getEntityManager()->getConnection();
+
+            $query = $conn
+                ->prepare('SELECT `attemptId` FROM `FailedAuthAttempt2User` WHERE `userId` = :id');
+
+            $query->execute([':id' => $uid]);
+            $attemptId = $query->fetch()['attemptId'];
+
+            $query = $conn->prepare('UPDATE `authentication_attempt` SET `latest_date_time` = :latest WHERE `id` = :id');
+            $query->execute([':latest' => $row['latest'], ':id' => $attemptId]);
+        }
+    }
+
+    /**
+     * @When I delete ancient auth data
+     */
+    public function iDeleteAncientAuthData()
+    {
+        /** @var \AppBundle\Model\User\UserRepository $userRepository */
+        $userRepository = $this->getRepository('Account:User');
+        $userRepository->deleteAncientAttemptData(new \DateTime('-6 months'));
+    }
+
+    /**
+     * @Then no log about :arg1 should exist on user :arg2 should exist
+     */
+    public function noLogAboutShouldExist($arg1, $arg2)
+    {
+        Assertion::false(
+            $this->getRepository('Account:User')->findOneBy(['username' => $arg2])->exceedsIpFailedAuthAttemptMaximum($arg1, new DateTimeComparison())
+        );
     }
 }

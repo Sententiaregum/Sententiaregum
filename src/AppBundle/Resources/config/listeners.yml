@@ -45,5 +45,6 @@ services:
       - "@event_dispatcher"
       - "@request_stack"
       - "@app.ip.tracer"
+      - "@app.user.service.date_time_comparator"
     tags:
       - { name: kernel.event_subscriber }

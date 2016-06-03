@@ -51,6 +51,20 @@ class AuthenticationAttempt
     private $attemptCount = 0;
 
     /**
+     * @var \DateTime[]
+     *
+     * @ORM\Column(name="last_date_time_range", type="date_time_array")
+     */
+    private $lastDateTimeRange = [];
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="latest_date_time", type="datetime")
+     */
+    private $latestDateTime;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -111,6 +125,35 @@ class AuthenticationAttempt
     {
         ++$this->attemptCount;
 
+        $now                  = new \DateTime();
+        $this->latestDateTime = $now;
+
+        if (count($this->lastDateTimeRange) === (User::MAX_FAILED_ATTEMPTS_FROM_IP + 1)) {
+            array_pop($this->lastDateTimeRange);
+        }
+
+        array_unshift($this->lastDateTimeRange, $now);
+
         return $this;
+    }
+
+    /**
+     * Getter for the last datetime of a failed auth attempt.
+     *
+     * @return \DateTime
+     */
+    public function getLatestFailedAttemptTime()
+    {
+        return $this->latestDateTime;
+    }
+
+    /**
+     * Getter for the last datetime items.
+     *
+     * @return \DateTime[]
+     */
+    public function getLastFailedAttemptTimesInRange()
+    {
+        return $this->lastDateTimeRange;
     }
 }

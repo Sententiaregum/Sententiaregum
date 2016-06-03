@@ -18,7 +18,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Repository that contains custom dql calls for the user model.
@@ -47,18 +46,20 @@ class UserRepository extends EntityRepository
             // The activation must be done before that.
             $connection->beginTransaction();
 
-            $query = $this->queryUserIdsWithPendingActivation($dateTime);
+            $query = $this->buildQueryForUserIdsWithOldPendingActivations($dateTime);
             $query->setHydrationMode(Query::HYDRATE_ARRAY);
-            $paginator = new Paginator($query);
 
-            $qb = $this->_em->createQueryBuilder();
+            $qb       = $this->_em->createQueryBuilder();
+            $affected = 0;
 
-            $qb
-                ->delete('Account:User', 'user')
-                ->where($qb->expr()->in('user.id', ':ids'))
-                ->setParameter(':ids', iterator_to_array($paginator));
+            if ($ids = $query->getResult()) {
+                $qb
+                    ->delete('Account:User', 'user')
+                    ->where($qb->expr()->in('user.id', ':ids'))
+                    ->setParameter(':ids', $ids);
 
-            $affected = $qb->getQuery()->execute();
+                $affected = $qb->getQuery()->execute();
+            }
 
             $connection->commit();
 
@@ -68,6 +69,61 @@ class UserRepository extends EntityRepository
 
             throw $ex;
         }
+    }
+
+    /**
+     * Deletes all attempt models containing failed attempts which are too old.
+     *
+     * @param DateTime $dateTime
+     *
+     * @return int
+     */
+    public function deleteAncientAttemptData(DateTime $dateTime)
+    {
+        $qb     = $this->_em->createQueryBuilder();
+        $search = clone $qb;
+        $expr   = $qb->expr();
+
+        // unfortunately DQL can't do joins on DELETE queries
+        $idQuery = $search
+            ->select('authentication_attempt.id')
+            ->distinct()
+            ->from('Account:AuthenticationAttempt', 'authentication_attempt')
+            ->join('Account:User', 'user', Join::WITH, $expr->isMemberOf(
+                'authentication_attempt',
+                'user.failedAuthentications'
+            ))
+            ->where($expr->lt(
+                'authentication_attempt.latestDateTime',
+                ':date_time'
+            ))
+            ->setParameter(':date_time', $dateTime, Type::DATETIME)
+            ->getQuery()
+            ->setHydrationMode(Query::HYDRATE_ARRAY);
+
+        $ids = array_column($idQuery->getResult(), 'id');
+
+        if (!empty($ids)) {
+            $connection    = $this->_em->getConnection();
+            $list          = implode(',', array_fill(0, count($ids), '?'));
+            $relationQuery = $connection->prepare("DELETE FROM `FailedAuthAttempt2User` WHERE `attemptId` IN ({$list})");
+
+            // drop relations manually before removing the models
+            $result = $relationQuery->execute($ids);
+
+            if ($result) {
+                $affected = $qb
+                    ->delete('Account:AuthenticationAttempt', 'attempt')
+                    ->where($expr->in('attempt.id', ':ids'))
+                    ->setParameter(':ids', $ids)
+                    ->getQuery()
+                    ->execute();
+
+                return $affected + $result;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -114,7 +170,7 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    private function queryUserIdsWithPendingActivation(DateTime $dateTime)
+    private function buildQueryForUserIdsWithOldPendingActivations(DateTime $dateTime)
     {
         $qb = $this->_em->createQueryBuilder();
 

@@ -1,0 +1,7 @@
+services:
+  app.command.purge_ancient_auth_attempt:
+    class: AppBundle\Command\PurgeAncientAuthAttemptDataCommand
+    arguments:
+      - "@app.repository.user"
+    tags:
+      - { name: console.command }

@@ -38,7 +38,7 @@ The <info>%command.name%</info> purges all pending activations that are older th
 It loads all pending activations and deletes them in one big transaction.
 When this command runs, it is not possible to activate a user that is scheduled for deletion inside doctrine.
 
-It is recommended to run that as a cron job.k
+It is recommended to run that as a cron job.
 EOF
             );
     }
@@ -54,7 +54,7 @@ EOF
 
         $amount = $userRepository->deletePendingActivationsByDate($dateTimeRule);
         $output->writeln(sprintf(
-            '<fg=green;bg=black>Successfully purged <comment>%d</comment> pending activations</fg=green;bg=black>',
+            '<fg=green;bg=black>Successfully purged <comment>%d</comment> pending activations.</fg=green;bg=black>',
             $amount
         ));
 
