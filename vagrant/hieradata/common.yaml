@@ -73,6 +73,10 @@ sententiaregum::infrastructure::jobs::schedules:
     command: "php /var/www/sententiaregum/app/console sententiaregum:purge:pending-activations"
     user: vagrant
     hour: 5
+  cleanup_auth_attempt_data:
+    command: "php /var/www/sententiaregum/app/console sententiaregum:purge:ancient-auth-attempt-log-data"
+    user: vagrant
+    hour: 5
 
 # mailcatcher
 sententiaregum::infrastructure::mailcatcher::dest_ip: '0.0.0.0'

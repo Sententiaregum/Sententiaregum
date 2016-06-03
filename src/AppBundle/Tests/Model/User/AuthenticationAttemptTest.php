@@ -21,8 +21,28 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
         $attempt = new AuthenticationAttempt();
         $this->assertSame(0, $attempt->getAttemptCount());
 
-        $attempt->increaseAttemptCount()->increaseAttemptCount();
+        $attempt
+            ->increaseAttemptCount()
+            ->increaseAttemptCount();
 
         $this->assertSame(2, $attempt->getAttemptCount());
+        $this->assertCount(2, $attempt->getLastFailedAttemptTimesInRange());
+
+        $this->assertSame($attempt->getLatestFailedAttemptTime(), $attempt->getLastFailedAttemptTimesInRange()[0]);
+    }
+
+    /**
+     * @depends testIncreaseCount
+     */
+    public function testPopLatest()
+    {
+        $model = new AuthenticationAttempt();
+        for ($fixtureData = [], $i = 0; $i < 5; $i++) {
+            $model->increaseAttemptCount();
+            $fixtureData[] = $model->getLatestFailedAttemptTime();
+        }
+
+        $this->assertNotSame($fixtureData[0], end($model->getLastFailedAttemptTimesInRange()));
+        $this->assertSame($fixtureData[1], end($model->getLastFailedAttemptTimesInRange()));
     }
 }

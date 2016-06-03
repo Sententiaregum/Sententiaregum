@@ -35,3 +35,5 @@ services:
     class: AppBundle\View\I18nResponseFormatBuilder
     arguments:
       - "@translator"
+  app.user.service.date_time_comparator:
+    class: AppBundle\Model\User\Util\DateTimeComparison

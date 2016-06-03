@@ -30,7 +30,7 @@ class AppBundle extends Bundle
         // will be executed right after the extension will be loaded if available.
         $fileLoader = new YamlFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
 
-        foreach (['services', 'validators', 'redis', 'listeners', 'repositories'] as $baseName) {
+        foreach (['services', 'validators', 'redis', 'listeners', 'repositories', 'commands'] as $baseName) {
             $fileLoader->load(sprintf('%s.yml', $baseName));
         }
     }

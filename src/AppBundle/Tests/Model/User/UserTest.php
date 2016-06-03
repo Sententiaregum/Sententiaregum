@@ -14,6 +14,7 @@ namespace AppBundle\Tests\Model\User;
 
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\Util\DateTimeComparison;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,8 +133,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de');
 
-        $this->assertTrue($user->isNewUserIp($ip));
-        $this->assertFalse($user->isNewUserIp($ip));
+        $this->assertTrue($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
+        $this->assertFalse($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
     }
 
     public function testFailedAuthIp()
@@ -142,13 +143,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'foo@bar.de');
 
         $user->addFailedAuthenticationWithIp($ip);
-        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip));
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
 
-        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip));
-        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip));
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
     public function testFailedAuthWithKnownIp()
@@ -156,13 +156,89 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de');
 
-        $this->assertTrue($user->isNewUserIp($ip));
+        $this->assertTrue($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
 
-        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip));
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
+    }
+
+    public function testFailedAuthInRange()
+    {
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
+    }
+
+    public function testNewUserIpWithFailedAuthenticationsLeadToCorruptionWarning()
+    {
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addAndValidateNewUserIp($ip, new DateTimeComparison());
+
+        // nothing will be deleted
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
+    }
+
+    public function testNewUserIpCauseRemovalOfOlderLoginIssues()
+    {
+        $mock = $this->getMock(DateTimeComparison::class);
+        $mock
+            ->expects($this->any())
+            ->method('__invoke')
+            ->willReturn(false);
+
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addAndValidateNewUserIp($ip, $mock);
+
+        // nothing will be deleted
+        $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
+    }
+
+    public function testFailedAuthOutOfRange()
+    {
+        $mock = $this->getMock(DateTimeComparison::class);
+        $mock
+            ->expects($this->any())
+            ->method('__invoke')
+            ->willReturn(false);
+
+        $ip   = '127.0.0.1';
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, $mock));
+
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+        $user->addFailedAuthenticationWithIp($ip);
+
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, $mock));
     }
 
     public function testSerialization()
@@ -170,7 +246,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', 'foo', 'foo@bar.de');
         $user->setState(User::STATE_APPROVED);
         $user->addRole(new Role('ROLE_USER'));
-        $user->isNewUserIp('33.33.33.33');
+        $user->addAndValidateNewUserIp('33.33.33.33', new DateTimeComparison());
 
         $user->addFailedAuthenticationWithIp('127.0.0.1');
         $user->addFailedAuthenticationWithIp('127.0.0.1');
@@ -187,7 +263,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\DateTime::class, $newUser->getRegistrationDate());
         $this->assertSame(User::STATE_APPROVED, $newUser->getState());
         $this->assertCount(1, $newUser->getRoles());
-        $this->assertFalse($user->isNewUserIp('33.33.33.33'));
-        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1'));
+        $this->assertFalse($user->addAndValidateNewUserIp('33.33.33.33', new DateTimeComparison()));
+        $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', new DateTimeComparison()));
     }
 }

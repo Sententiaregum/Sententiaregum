@@ -41,6 +41,8 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
+        types:
+            date_time_array: "AppBundle\\Type\\DateTimeArrayType"
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
@@ -49,7 +51,7 @@ doctrine:
                     User:
                         type:      annotation
                         is_bundle: false
-                        dir:       %kernel.root_dir%/../src/AppBundle/Model/User
+                        dir:       "%kernel.root_dir%/../src/AppBundle/Model/User"
                         alias:     Account
                         prefix:    AppBundle\Model\User
 
@@ -127,6 +129,6 @@ guzzle:
 # DoctrineMigrations Configuration
 doctrine_migrations:
     dir_name:   "%kernel.root_dir%/migrations"
-    namespace:  "Sententiaregum\Migrations"
+    namespace:  "Sententiaregum\\Migrations"
     table_name: "sententiaregum_migrations"
     name:       "Sententiaregum Migrations"
