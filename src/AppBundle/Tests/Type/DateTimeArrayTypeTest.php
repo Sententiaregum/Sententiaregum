@@ -43,7 +43,7 @@ class DateTimeArrayTypeTest extends \PHPUnit_Framework_TestCase
 
         $type = TypeTester::getType(DateTimeArrayType::DATE_TIME_ARRAY);
 
-        $this->assertEquals(
+        $this->assertSame(
             $type->convertToPHPValue($input, $this->getMockForAbstractClass(AbstractPlatform::class)),
             [$expected]
         );

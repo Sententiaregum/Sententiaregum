@@ -124,12 +124,12 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
             $conn = $this->getEntityManager()->getConnection();
 
             $query = $conn
-                ->prepare("SELECT `attemptId` FROM `FailedAuthAttempt2User` WHERE `userId` = :id");
+                ->prepare('SELECT `attemptId` FROM `FailedAuthAttempt2User` WHERE `userId` = :id');
 
             $query->execute([':id' => $uid]);
             $attemptId = $query->fetch()['attemptId'];
 
-            $query = $conn->prepare("UPDATE `authentication_attempt` SET `latest_date_time` = :latest WHERE `id` = :id");
+            $query = $conn->prepare('UPDATE `authentication_attempt` SET `latest_date_time` = :latest WHERE `id` = :id');
             $query->execute([':latest' => $row['latest'], ':id' => $attemptId]);
         }
     }

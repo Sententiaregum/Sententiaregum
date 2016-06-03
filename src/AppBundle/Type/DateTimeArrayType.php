@@ -76,6 +76,7 @@ final class DateTimeArrayType extends Type
         }
 
         $dbFormat = $platform->getDateTimeFormatString();
+
         return array_map(
             function ($format) use ($dbFormat) {
                 return \DateTime::createFromFormat($dbFormat, $format);
