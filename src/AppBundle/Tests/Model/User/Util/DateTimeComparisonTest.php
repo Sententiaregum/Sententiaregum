@@ -45,7 +45,7 @@ class DateTimeComparisonTest extends \PHPUnit_Framework_TestCase
             [
                 '-12 hours',
                 new \DateTime('-12 hours'),
-                true,
+                false,
             ],
         ];
     }

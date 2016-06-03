@@ -41,12 +41,11 @@ class DateTimeArrayTypeTest extends \PHPUnit_Framework_TestCase
         $expected = new \DateTime($string);
         $input    = json_encode([$string]);
 
-        $type = TypeTester::getType(DateTimeArrayType::DATE_TIME_ARRAY);
+        $type   = TypeTester::getType(DateTimeArrayType::DATE_TIME_ARRAY);
+        $result = $type->convertToPHPValue($input, $this->getMockForAbstractClass(AbstractPlatform::class));
 
-        $this->assertSame(
-            $type->convertToPHPValue($input, $this->getMockForAbstractClass(AbstractPlatform::class)),
-            [$expected]
-        );
+        $this->assertCount(1, $result);
+        $this->assertEquals($result[0], $expected);
     }
 
     /**
