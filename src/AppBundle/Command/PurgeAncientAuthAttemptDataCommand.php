@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Purger command which removes ancient auth attempt logs.
  *
  * Every attempt log item which hasn't been modified for at least ~6 months will be seen
- * as not relevant anymore and ancient and will be removed therefore.
+ * as not relevant anymore and will be removed therefore.
  *
  * The attempt models are lightweight items counting failed authentications of a certain IP against
  * a user account, but if no failed authentications from an API do happen anymore or due to a false-positive

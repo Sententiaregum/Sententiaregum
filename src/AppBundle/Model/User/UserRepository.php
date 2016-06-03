@@ -103,7 +103,7 @@ class UserRepository extends EntityRepository
 
         $ids = array_column($idQuery->getResult(), 'id');
 
-        if ($ids) {
+        if (!empty($ids)) {
             $connection    = $this->_em->getConnection();
             $list          = implode(',', array_fill(0, count($ids), '?'));
             $relationQuery = $connection->prepare("DELETE FROM `FailedAuthAttempt2User` WHERE `attemptId` IN ({$list})");

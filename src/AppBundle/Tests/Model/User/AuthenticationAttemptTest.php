@@ -42,7 +42,8 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
             $fixtureData[] = $model->getLatestFailedAttemptTime();
         }
 
-        $this->assertNotSame($fixtureData[0], end($model->getLastFailedAttemptTimesInRange()));
-        $this->assertSame($fixtureData[1], end($model->getLastFailedAttemptTimesInRange()));
+        $range = $model->getLastFailedAttemptTimesInRange();
+        $this->assertNotSame($fixtureData[0], end($range));
+        $this->assertSame($fixtureData[1], end($range));
     }
 }

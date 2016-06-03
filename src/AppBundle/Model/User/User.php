@@ -942,11 +942,11 @@ class User implements UserInterface, Serializable
     {
         return $this->failedAuthentications->exists(
             function ($index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $ip, $comparison) {
+                $ipRange = $failedAttempt->getLastFailedAttemptTimesInRange();
+
                 return $comparison(
                     $diff,
-                    $failedAttempt->getIp() && $ignoreLastAttempts
-                        ? end($failedAttempt->getLastFailedAttemptTimesInRange())
-                        : $failedAttempt->getLatestFailedAttemptTime()
+                    $failedAttempt->getIp() && $ignoreLastAttempts ? end($ipRange) : $failedAttempt->getLatestFailedAttemptTime()
                 );
             }
         );

@@ -241,6 +241,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, $mock));
     }
 
+    public function testAuthCheckForNonRegisteredIP()
+    {
+        $user = User::create('Ma27', '123456', 'foo@bar.de');
+
+        $this->assertFalse(
+            $user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', $this->getMock(DateTimeComparison::class))
+        );
+    }
+
     public function testSerialization()
     {
         $user = User::create('Ma27', 'foo', 'foo@bar.de');
