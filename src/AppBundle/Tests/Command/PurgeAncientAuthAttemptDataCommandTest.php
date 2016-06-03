@@ -24,7 +24,6 @@ class PurgeAncientAuthAttemptDataCommandTest extends \PHPUnit_Framework_TestCase
         $repoMock = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
         $repoMock->expects($this->once())
             ->method('deleteAncientAttemptData')
-            ->with(new \DateTime('-6 months'))
             ->willReturn(5);
 
         $application = new Application();
