@@ -84,4 +84,12 @@ final class DateTimeArrayType extends Type
             $raw
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
+    }
 }
