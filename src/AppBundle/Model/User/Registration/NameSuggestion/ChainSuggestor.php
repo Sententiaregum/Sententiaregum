@@ -15,7 +15,7 @@ namespace AppBundle\Model\User\Registration\NameSuggestion;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\DotReplacementSuggestor;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\YearPostfixSuggestor;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Model\User\UserRepository;
 
 /**
  * Class that builds suggestions for usernames.
@@ -25,23 +25,23 @@ use Doctrine\ORM\EntityManagerInterface;
 class ChainSuggestor implements ChainSuggestorInterface
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var SuggestorInterface[]
      */
     private $suggestors = [];
 
     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
      * Constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param UserRepository $userRepository
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
 
         $this->register(new YearPostfixSuggestor());
         $this->register(new DotReplacementSuggestor());
@@ -62,16 +62,7 @@ class ChainSuggestor implements ChainSuggestorInterface
             return [];
         }
 
-        $result = $this->queryExistingUsersBySuggestedNames($suggestions);
-
-        return array_values(// re-index array after filter process
-            array_filter(
-                $suggestions,
-                function ($username) use ($result) {
-                    return !in_array($username, $result, true);
-                }
-            )
-        );
+        return $this->userRepository->filterUniqueUsernames($suggestions);
     }
 
     /**
@@ -82,23 +73,5 @@ class ChainSuggestor implements ChainSuggestorInterface
         $this->suggestors[] = $suggestor;
 
         return $this;
-    }
-
-    /**
-     * Queries for existing users.
-     *
-     * @param string[] $suggestions
-     *
-     * @return string[]
-     */
-    private function queryExistingUsersBySuggestedNames(array $suggestions)
-    {
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('user.username')
-            ->from('Account:User', 'user')
-            ->where($qb->expr()->in('user.username', ':nameList'))
-            ->setParameter(':nameList', $suggestions);
-
-        return array_column($qb->getQuery()->getResult(), 'username');
     }
 }

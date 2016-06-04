@@ -1,57 +1,32 @@
 default:
   suites:
-    registration:
+    user:
+      filters: { tags: "@user" }
+      type:    symfony_bundle
+      bundle:  AppBundle
       contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\RegistrationContext
-        - AppBundle\Behat\PendingActivationsClusterContext
-        - AppBundle\Behat\UsernameSuggestionsContext
-      filters:
-        tags: "@registration"
-      type:   symfony_bundle
-      bundle: AppBundle
-    online_users:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\OnlineUsersRedisClusterContext
-        - AppBundle\Behat\OnlineUsersContext
-      filters:
-        tags: "@online_users"
-      type:   symfony_bundle
-      bundle: AppBundle
-    fixtures:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\DoctrineFixtureContext
-        - AppBundle\Behat\FixtureBasicsContext
-      filters:
-        tags: "@fixtures"
-      type:   symfony_bundle
-      bundle: AppBundle
-    user-basics:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\UsersContext
-      filters:
-        tags: "@users"
-      type:   symfony_bundle
-      bundle: AppBundle
-    purger:
-      contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\UserPurgerContext
-      filters:
-        tags: "@purger"
-      type:   symfony_bundle
-      bundle: AppBundle
+        - AppBundle\Tests\Functional\AppContext
+        - AppBundle\Tests\Functional\API\User\RegistrationContext
+        - AppBundle\Tests\Functional\API\User\OnlineUsersContext
+        - AppBundle\Tests\Functional\Redis\PendingActivationsClusterContext
+        - AppBundle\Tests\Functional\Redis\OnlineUsersRedisClusterContext
+        - AppBundle\Tests\Functional\Doctrine\DQL\UsersContext
     locale:
+      filters: { tags: "@locale" }
+      type:    symfony_bundle
+      bundle:  AppBundle
       contexts:
-        - AppBundle\Behat\AppContext
-        - AppBundle\Behat\LocaleContext
-      filters:
-        tags: "@locale"
-      type:   symfony_bundle
-      bundle: AppBundle
+        - AppBundle\Tests\Functional\AppContext
+        - AppBundle\Tests\Functional\API\Locale\SwitcherContext
+        - AppBundle\Tests\Functional\API\Locale\ProviderContext
+    fixtures:
+      filters: { tags: "@fixtures" }
+      type:    symfony_bundle
+      bundle:  AppBundle
+      contexts:
+        - AppBundle\Tests\Functional\AppContext
+        - AppBundle\Tests\Functional\Doctrine\DataFixtures\FixtureContext
+        - AppBundle\Tests\Functional\Doctrine\DataFixtures\ProductionFixtureContext
   formatters:
     pretty:
       paths:    false
@@ -59,3 +34,4 @@ default:
       verbose:  true
   extensions:
     Behat\Symfony2Extension: ~
+c

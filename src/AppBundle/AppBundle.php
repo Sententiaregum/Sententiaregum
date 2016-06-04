@@ -12,26 +12,8 @@
 
 namespace AppBundle;
 
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AppBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        // the extension classes of symfony2 were made in order to provide a flexible
-        // and complex solution in order to process complex configuration and create a flexible service layer.
-        // In this case we simply need to apply config files and this can be done in the build() method, too, as it
-        // will be executed right after the extension will be loaded if available.
-        $fileLoader = new YamlFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
-
-        foreach (['services', 'validators', 'redis', 'listeners', 'repositories', 'commands'] as $baseName) {
-            $fileLoader->load(sprintf('%s.yml', $baseName));
-        }
-    }
 }

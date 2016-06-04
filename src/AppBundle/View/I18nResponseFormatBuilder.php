@@ -64,6 +64,8 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException If the target locales parameter is used improperly.
      */
     public function formatTranslatableViolationList(
         ConstraintViolationListInterface $violations,
@@ -75,9 +77,15 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
         $violationList = iterator_to_array($violations, false);
         $hasLocales    = count($targetLocales) > 0;
 
-        if (!$useAllLanguages && $hasLocales || $useAllLanguages && !$hasLocales) {
+        if (!$useAllLanguages && $hasLocales) {
             throw new \InvalidArgumentException(
-                'Wrong usage of $targetLocales: If all languages should be rendered, $targetLocales should be set, if not, $targetLocales should be an empty array!'
+                'Wrong usage of $targetLocales: If the default locale is the only target, $targetLocales must not have any values!'
+            );
+        }
+
+        if ($useAllLanguages && !$hasLocales) {
+            throw new \InvalidArgumentException(
+                'Wrong usage of $targetLocales: If the all locales should be rendered, $targetLocales must be given!'
             );
         }
 
