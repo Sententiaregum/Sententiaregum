@@ -36,9 +36,11 @@ class TestCommand extends Command
     {
         $this->setName('foo:bar');
     }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Something happened');
+
         return 0;
     }
 }

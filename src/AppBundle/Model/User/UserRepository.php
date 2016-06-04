@@ -184,7 +184,7 @@ class UserRepository extends EntityRepository
             'username'
         );
 
-        return array_values( // re-index array after filter process
+        return array_values(// re-index array after filter process
             array_filter(
                 $names,
                 function ($username) use ($nonUnique) {

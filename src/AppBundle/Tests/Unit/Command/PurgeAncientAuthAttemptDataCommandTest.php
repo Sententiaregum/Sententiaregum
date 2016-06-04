@@ -15,8 +15,6 @@ namespace AppBundle\Tests\Command;
 use AppBundle\Command\PurgeAncientAuthAttemptDataCommand;
 use AppBundle\Model\User\UserRepository;
 use AppBundle\Test\CommandTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class PurgeAncientAuthAttemptDataCommandTest extends CommandTestCase
 {

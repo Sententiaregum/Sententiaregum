@@ -12,8 +12,8 @@
 
 namespace AppBundle\Tests\Functional\Doctrine\DataFixtures;
 
-use AppBundle\Tests\Functional\FixtureLoadingContext;
 use AppBundle\Command\LoadCustomFixturesCommand;
+use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Symfony\Bundle\FrameworkBundle\Console\Application;

@@ -15,7 +15,6 @@ namespace AppBundle\Tests\Functional\API\Locale;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\TableNode;
 
 /**
  * Context for the locale API.

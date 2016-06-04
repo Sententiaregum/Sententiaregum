@@ -29,6 +29,7 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
 
         $names = array_map(function (FileResource $resource) {
             $split = explode('/', $resource->getResource());
+
             return end($split);
         }, $resources);
 
