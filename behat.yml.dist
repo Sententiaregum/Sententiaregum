@@ -34,4 +34,3 @@ default:
       verbose:  true
   extensions:
     Behat\Symfony2Extension: ~
-c
