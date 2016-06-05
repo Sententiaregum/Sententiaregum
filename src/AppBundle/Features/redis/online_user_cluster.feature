@@ -1,5 +1,4 @@
-@user
-@online_users_cluster
+@user @online_users_cluster
 Feature: cluster for online users
     In order to store users a cluster containing all user ids is necessary
 

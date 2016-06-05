@@ -1,5 +1,4 @@
-@fixtures
-@appliance
+@fixtures @appliance
 Feature: fixture loading basics
     Implementation for applying a special list of fixtures
 

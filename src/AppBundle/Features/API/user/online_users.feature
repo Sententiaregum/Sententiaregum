@@ -1,5 +1,4 @@
-@user
-@online_users
+@user @online_users
 Feature: online users
     As a user I'd like to see who of the people I follow are online
 

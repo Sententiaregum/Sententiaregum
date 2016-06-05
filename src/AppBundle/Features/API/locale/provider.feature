@@ -1,5 +1,4 @@
-@locale
-@provider
+@locale @provider
 Feature: locale provider
     In order to provide information about the
     locale system, an API which gives information about the locales is necessary.

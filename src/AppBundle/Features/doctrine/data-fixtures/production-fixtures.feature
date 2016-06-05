@@ -1,5 +1,4 @@
-@fixtures
-@loader
+@fixtures @loader
 Feature: production fixtures loader
     Some fixtures should be loaded on production such as the role fixture or the admin fixture.
 
