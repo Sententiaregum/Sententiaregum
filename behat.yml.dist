@@ -8,7 +8,6 @@ default:
         - AppBundle\Tests\Functional\AppContext
         - AppBundle\Tests\Functional\API\User\RegistrationContext
         - AppBundle\Tests\Functional\API\User\OnlineUsersContext
-        - AppBundle\Tests\Functional\Redis\PendingActivationsClusterContext
         - AppBundle\Tests\Functional\Redis\OnlineUsersRedisClusterContext
         - AppBundle\Tests\Functional\Doctrine\DQL\UsersContext
     locale:

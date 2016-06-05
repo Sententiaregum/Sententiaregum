@@ -18,27 +18,25 @@ class PendingActivationTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsOutdatedRegistration()
     {
-        $model = new PendingActivation();
-        $model->setActivationDate(new \DateTime('-3 hours'));
+        $model = new PendingActivation(new \DateTime('-3 hours'), 'key');
 
         $this->assertTrue($model->isActivationExpired());
     }
 
     public function testIsNonExpiredRegistration()
     {
-        $model = new PendingActivation();
-        $model->setActivationDate(new \DateTime());
+        $model = new PendingActivation(new \DateTime());
 
         $this->assertFalse($model->isActivationExpired());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Missing activation date!
-     */
-    public function testNoActivationDateIsGiven()
+    public function testSerialize()
     {
-        $model = new PendingActivation();
-        $model->isActivationExpired();
+        $model      = new PendingActivation(new \DateTime('-3 hours'), 'key');
+        $serialized = serialize($model);
+
+        $new = unserialize($serialized);
+        $this->assertSame('key', $new->getKey());
+        $this->assertTrue($new->isActivationExpired());
     }
 }

@@ -25,7 +25,7 @@ use Ramsey\Uuid\Uuid;
  *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"})
  * })
  */
-class AuthenticationAttempt
+class AuthenticationAttempt implements \Serializable
 {
     /**
      * @var string
@@ -155,5 +155,27 @@ class AuthenticationAttempt
     public function getLastFailedAttemptTimesInRange()
     {
         return $this->lastDateTimeRange;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->ip,
+            $this->attemptCount,
+            $this->lastDateTimeRange,
+            $this->latestDateTime,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->ip, $this->attemptCount, $this->lastDateTimeRange, $this->latestDateTime) = unserialize($serialized);
     }
 }

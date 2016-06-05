@@ -36,7 +36,7 @@ class IncompleteUserCheckListener
         $user = $event->getUser();
 
         $isLocked      = $user->isLocked();
-        $isNonApproved = $user->getState() !== User::STATE_APPROVED;
+        $isNonApproved = $user->getActivationStatus() !== User::STATE_APPROVED;
 
         if ($isLocked || $isNonApproved) {
             $message = $isNonApproved ? 'BACKEND_AUTH_NON_APPROVED' : 'BACKEND_AUTH_LOCKED';

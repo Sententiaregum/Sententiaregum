@@ -160,7 +160,7 @@ class UserRepository extends EntityRepository
      */
     public function findUserByUsernameAndActivationKey($username, $activationKey)
     {
-        return $this->findOneBy(['username' => $username, 'activationKey' => $activationKey]);
+        return $this->findOneBy(['username' => $username, 'pendingActivation.key' => $activationKey]);
     }
 
     /**
@@ -209,8 +209,7 @@ class UserRepository extends EntityRepository
             ->select('partial user.{id}')
             ->distinct()
             ->from('Account:User', 'user')
-            ->join('user.pendingActivation', 'pending_activation')
-            ->where($qb->expr()->lt('pending_activation.activationDate', ':date_time'))
+            ->where($qb->expr()->lt('user.pendingActivation.activationDate', ':date_time'))
             ->setParameter(':date_time', $dateTime, Type::DATETIME);
 
         return $qb->getQuery();

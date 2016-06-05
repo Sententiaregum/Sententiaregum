@@ -46,4 +46,24 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($fixtureData[0], end($range));
         $this->assertSame($fixtureData[1], end($range));
     }
+
+    public function testSerialize()
+    {
+        $model = new AuthenticationAttempt();
+        $model->setIp('127.0.0.1');
+        $model->increaseAttemptCount();
+
+        list($id, $latest, $range) = [
+            $model->getId(),
+            $model->getLatestFailedAttemptTime(),
+            $model->getLastFailedAttemptTimesInRange(),
+        ];
+
+        $serialized = serialize($model);
+        $new        = unserialize($serialized);
+
+        $this->assertSame($id, $new->getId());
+        $this->assertSame('127.0.0.1', $new->getIp());
+        $this->assertEquals($latest, $new->getLatestFailedAttemptTime());
+    }
 }

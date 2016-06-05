@@ -36,7 +36,7 @@ class AdminFixture implements ProductionFixtureInterface, DependentFixtureInterf
         $adminRole      = $roleRepository->findOneBy(['role' => 'ROLE_ADMIN']);
 
         $admin = new User();
-        $admin->setState(User::STATE_APPROVED);
+        $admin->modifyActivationStatus(User::STATE_APPROVED);
         $admin->setUsername('admin');
         $admin->setPassword($passwordHasher->generateHash('123456'));
         $admin->setEmail('admin@sententiaregum.dev');

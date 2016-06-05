@@ -82,8 +82,8 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
         $repository = $this->getRepository('Account:User');
         $user       = $repository->findOneBy(['username' => $this->username]);
 
-        Assertion::notEmpty($user->getActivationKey());
-        Assertion::notEq(User::STATE_APPROVED, $user->getState());
+        Assertion::notEmpty($user->getPendingActivation()->getKey());
+        Assertion::notEq(User::STATE_APPROVED, $user->getActivationStatus());
     }
 
     /**
@@ -91,9 +91,7 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
      */
     public function iShouldHaveAnActivationEmail()
     {
-        $client = $this->getRecentClient();
-        /** @var \Symfony\Bundle\SwiftMailerBundle\DataCollector\MessageDataCollector $mailCollector */
-        $mailCollector = $client->getProfile()->getCollector('swiftmailer');
+        $mailCollector = $this->getEmailProfiler();
 
         Assertion::eq(1, $mailCollector->getMessageCount());
 
@@ -117,8 +115,8 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
     {
         $user = $this->getRegisteredUser();
 
-        $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getActivationKey()]);
-        Assertion::false(empty($user->getActivationKey()));
+        $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getPendingActivation()->getKey()]);
+        Assertion::false(empty($user->getPendingActivation()->getKey()));
         $this->response = $this->performRequest(
             'PATCH',
             sprintf('/api/users/activate.json?%s', $query),
@@ -163,14 +161,18 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
         $user = $this->getRegisteredUser();
 
         $redis = $this->getContainer()->get('snc_redis.pending_activations');
-        $redis->del(sprintf('activation:%s', $user->getActivationKey()));
+        $redis->del(sprintf('activation:%s', $user->getPendingActivation()->getKey()));
 
-        $pending       = $user->getPendingActivation();
-        $entityManager = $this->getEntityManager();
+        $connection = $this->getEntityManager()->getConnection();
 
-        $pending->setActivationDate(new \DateTime('-3 hours'));
-        $entityManager->persist($pending);
-        $entityManager->flush();
+        $bind  = (new \DateTime('-3 hours'))->format('Y-m-d H:i:s');
+        $id    = $user->getId();
+        $query = $connection->prepare('UPDATE `User` SET `pendingActivation_activation_date` = :date WHERE `id` = :id');
+        $query->bindParam(':date', $bind);
+        $query->bindParam(':id', $id);
+        $query->execute();
+
+        $this->getEntityManager()->clear();
     }
 
     /**
@@ -180,8 +182,8 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
     {
         $user = $this->getRegisteredUser();
 
-        $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getActivationKey()]);
-        Assertion::notEmpty($user->getActivationKey());
+        $query = http_build_query(['username' => $user->getUsername(), 'activation_key' => $user->getPendingActivation()->getKey()]);
+        Assertion::notEmpty($user->getPendingActivation()->getKey());
         $this->response = $this->performRequest(
             'PATCH',
             sprintf('/api/users/activate.json?%s', $query),

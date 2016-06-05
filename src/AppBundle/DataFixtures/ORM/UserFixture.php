@@ -34,7 +34,7 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
         $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
         $user1 = new User();
-        $user1->setState(User::STATE_APPROVED);
+        $user1->modifyActivationStatus(User::STATE_APPROVED);
         $user1->setUsername('Ma27');
         $user1->setPassword($passwordHasher->generateHash('72aM'));
         $user1->setEmail('Ma27@sententiaregum.dev');
@@ -43,7 +43,7 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
         $user1->setLocale('de');
 
         $user2 = new User();
-        $user2->setState(User::STATE_APPROVED);
+        $user2->modifyActivationStatus(User::STATE_APPROVED);
         $user2->setUsername('benbieler');
         $user2->setPassword($passwordHasher->generateHash('releibneb'));
         $user2->setEmail('benbieler@sententiaregum.dev');
@@ -51,7 +51,7 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
         $user2->setLastAction(new \DateTime());
 
         $locked = new User();
-        $locked->setState(User::STATE_APPROVED);
+        $locked->modifyActivationStatus(User::STATE_APPROVED);
         $locked->setUsername('anonymus');
         $locked->setPassword($passwordHasher->generateHash('sumynona'));
         $locked->setEmail('anonymus@example.org');
