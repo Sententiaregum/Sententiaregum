@@ -51,6 +51,12 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
      */
     private $filterResult;
 
+    /** @BeforeScenario @user&&@repository */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @When I try to delete all users with pending activation
      */

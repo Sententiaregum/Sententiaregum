@@ -1,4 +1,5 @@
 @user
+@pending_activations_cluster
 Feature: pending activations cluster
     In order to increase the speed of pending approval requests, a lightweight key checker implementation
     using a redis cluster is necessary

@@ -35,6 +35,12 @@ class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements Sn
      */
     private $result;
 
+    /** @BeforeScenario @user&&@online_users_cluster */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @Given the user with id :arg1 will be marked as online
      */

@@ -1,4 +1,5 @@
 @user
+@registration
 Feature: registration
     As a poster I'd like to create an account in order to share content with other users
 

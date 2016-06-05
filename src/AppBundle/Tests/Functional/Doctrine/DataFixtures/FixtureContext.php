@@ -54,6 +54,12 @@ class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     private $directoryResult;
 
+    /** @BeforeScenario @fixtures&&@appliance */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @When I apply fixtures
      */

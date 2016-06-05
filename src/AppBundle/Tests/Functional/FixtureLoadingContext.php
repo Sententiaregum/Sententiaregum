@@ -36,7 +36,10 @@ abstract class FixtureLoadingContext implements KernelAwareContext
      */
     protected static $applyFixtures = true;
 
-    /** @BeforeScenario */
+    /**
+     * Loader for the data fixtures.
+     * Every context should implement this and tag it against their features to avoid duplicated appliances and conflicts due to that.
+     */
     public function loadDataFixtures()
     {
         if (static::$applyFixtures) {

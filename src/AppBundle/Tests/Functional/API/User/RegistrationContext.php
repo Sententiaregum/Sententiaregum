@@ -36,6 +36,12 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
      */
     private $username;
 
+    /** @BeforeScenario @user&&@registration */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @When I send a registration request with the following credentials:
      *

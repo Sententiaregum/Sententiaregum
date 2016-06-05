@@ -28,6 +28,12 @@ class SwitcherContext extends FixtureLoadingContext implements SnippetAcceptingC
      */
     private $result;
 
+    /** @BeforeScenario @locale&&@switcher */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @When I try to change my locale to :arg1
      */

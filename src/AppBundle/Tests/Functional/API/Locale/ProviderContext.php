@@ -16,13 +16,14 @@ use AppBundle\Tests\Functional\BaseTrait;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
 
 /**
  * Context for the locale provider.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class ProviderContext implements SnippetAcceptingContext
+class ProviderContext implements SnippetAcceptingContext, KernelAwareContext
 {
     use BaseTrait;
 

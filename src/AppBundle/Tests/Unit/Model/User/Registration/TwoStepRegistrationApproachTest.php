@@ -121,15 +121,16 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('attachNewApproval');
 
-        $registration = new TwoStepRegistrationApproach(
+        $userRepository = $this->getUserRepository();
+        $registration   = new TwoStepRegistrationApproach(
             $entityManager,
             $generator,
             $this->getMock(ValidatorInterface::class),
             $dispatcher,
             $hasher,
-            new ChainSuggestor($entityManager),
+            new ChainSuggestor($userRepository),
             $provider,
-            $this->getUserRepository(),
+            $userRepository,
             $this->getRoleRepository()
         );
 
@@ -163,7 +164,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
-            new ChainSuggestor($entityManager),
+            new ChainSuggestor($repository),
             $this->getActivationProvider(),
             $repository,
             $this->getRoleRepository()
@@ -209,7 +210,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
-            new ChainSuggestor($entityManager),
+            new ChainSuggestor($repository),
             $this->getActivationProvider(),
             $repository,
             $roleRepo
@@ -246,15 +247,16 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
 
         $em = $this->getMock(EntityManagerInterface::class);
 
+        $repository   = $this->getUserRepository();
         $registration = new TwoStepRegistrationApproach(
             $em,
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
             $validatorMock,
             $this->getMock(EventDispatcherInterface::class),
             $this->getMock(PasswordHasherInterface::class),
-            new ChainSuggestor($em),
+            new ChainSuggestor($repository),
             $this->getActivationProvider(),
-            $this->getUserRepository(),
+            $repository,
             $this->getRoleRepository()
         );
 
@@ -298,7 +300,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
-            new ChainSuggestor($entityManager),
+            new ChainSuggestor($repository),
             $provider,
             $repository,
             $this->getRoleRepository()
@@ -347,7 +349,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(ValidatorInterface::class),
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
-            new ChainSuggestor($entityManager),
+            new ChainSuggestor($repository),
             $this->getActivationProvider(),
             $repository,
             $roleRepo

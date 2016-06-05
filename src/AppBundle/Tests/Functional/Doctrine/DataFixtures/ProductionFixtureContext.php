@@ -36,6 +36,12 @@ class ProductionFixtureContext extends FixtureLoadingContext implements SnippetA
      */
     private $display;
 
+    /** @BeforeScenario @fixtures&&@loader */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @When I run the production fixtures loader
      */

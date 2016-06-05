@@ -29,6 +29,12 @@ class OnlineUsersContext extends FixtureLoadingContext implements SnippetAccepti
      */
     private $response;
 
+    /** @BeforeScenario @user&&@online_users */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @Given this user follows the following users:
      *

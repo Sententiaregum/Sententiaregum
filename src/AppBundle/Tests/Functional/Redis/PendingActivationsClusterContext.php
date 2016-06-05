@@ -40,6 +40,12 @@ class PendingActivationsClusterContext extends FixtureLoadingContext implements 
      */
     private $key;
 
+    /** @BeforeScenario @user&&@pending_activations_cluster */
+    public function loadDataFixtures()
+    {
+        parent::loadDataFixtures();
+    }
+
     /**
      * @Given there's an activation key stored in redis
      */

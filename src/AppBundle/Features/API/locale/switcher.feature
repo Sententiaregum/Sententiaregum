@@ -1,4 +1,5 @@
 @locale
+@switcher
 Feature: locale switcher
     A locale switcher is necessary to control the language
     of a logged in user.

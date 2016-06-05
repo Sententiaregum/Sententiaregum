@@ -1,4 +1,5 @@
 @user
+@repository
 Feature: user repository
     All extended database query operations using doctrine should be
     abstracted in a repository
