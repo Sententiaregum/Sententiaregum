@@ -160,7 +160,7 @@ class UserRepository extends EntityRepository
      */
     public function findUserByUsernameAndActivationKey($username, $activationKey)
     {
-        return $this->findOneBy(['username' => $username, 'activationKey' => $activationKey]);
+        return $this->findOneBy(['username' => $username, 'pendingActivation.key' => $activationKey]);
     }
 
     /**

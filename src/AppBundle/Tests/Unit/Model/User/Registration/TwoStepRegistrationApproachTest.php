@@ -14,7 +14,7 @@ namespace AppBundle\Tests\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\DTO\CreateUserDTO;
-use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
+use AppBundle\Model\User\PendingActivation;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;
 use AppBundle\Model\User\Registration\TwoStepRegistrationApproach;
@@ -68,7 +68,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getMock(PasswordHasherInterface::class),
             $suggestor,
-            $this->getActivationProvider(),
             $this->getUserRepository(),
             $this->getRoleRepository()
         );
@@ -116,11 +115,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->method('generateHash')
             ->willReturnArgument(0);
 
-        $provider = $this->getActivationProvider();
-        $provider
-            ->expects($this->once())
-            ->method('attachNewApproval');
-
         $userRepository = $this->getUserRepository();
         $registration   = new TwoStepRegistrationApproach(
             $entityManager,
@@ -129,7 +123,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $dispatcher,
             $hasher,
             new ChainSuggestor($userRepository),
-            $provider,
             $userRepository,
             $this->getRoleRepository()
         );
@@ -165,7 +158,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($repository),
-            $this->getActivationProvider(),
             $repository,
             $this->getRoleRepository()
         );
@@ -210,7 +202,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($repository),
-            $this->getActivationProvider(),
             $repository,
             $roleRepo
         );
@@ -254,7 +245,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getMock(PasswordHasherInterface::class),
             new ChainSuggestor($repository),
-            $this->getActivationProvider(),
             $repository,
             $this->getRoleRepository()
         );
@@ -269,6 +259,20 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     {
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+
+        // hack into the activation model
+        // and modify the activation date in order to
+        // test scenarios with expired activations
+        $r = new \ReflectionClass($user);
+        $p = $r->getProperty('pendingActivation');
+        $p->setAccessible(true);
+        /** @var PendingActivation $v */
+        $v  = $p->getValue($user);
+        $r2 = new \ReflectionClass($v);
+        $p2 = $r2->getProperty('activationDate');
+        $p2->setAccessible(true);
+        $p2->setValue($v, new \DateTime('-5 hours'));
+        $p->setValue($user, $v);
 
         $repository = $this->getUserRepository();
         $repository
@@ -287,12 +291,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $provider = $this->getMock(ExpiredActivationProviderInterface::class);
-        $provider
-            ->expects($this->any())
-            ->method('checkApprovalByUser')
-            ->willReturn(false);
-
         $registration = new TwoStepRegistrationApproach(
             $entityManager,
             $this->getMock(ActivationKeyCodeGeneratorInterface::class),
@@ -300,7 +298,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($repository),
-            $provider,
             $repository,
             $this->getRoleRepository()
         );
@@ -316,6 +313,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     {
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+        $user->setActivationKey($key);
 
         $repository = $this->getUserRepository();
         $repository
@@ -331,12 +329,9 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->with(['role' => 'ROLE_USER']);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $readyUser     = $user->modifyActivationStatus(User::STATE_APPROVED);
-
         $entityManager
             ->expects($this->never())
-            ->method('persist')
-            ->with($readyUser);
+            ->method('persist');
 
         $entityManager
             ->expects($this->never())
@@ -349,7 +344,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             $this->getMock(EventDispatcherInterface::class),
             $this->getPasswordHasher(),
             new ChainSuggestor($repository),
-            $this->getActivationProvider(),
             $repository,
             $roleRepo
         );
@@ -365,22 +359,6 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     private function getPasswordHasher()
     {
         return $this->getMock(PasswordHasherInterface::class);
-    }
-
-    /**
-     * Creates the provider mock.
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getActivationProvider()
-    {
-        $provider = $this->getMock(ExpiredActivationProviderInterface::class);
-        $provider
-            ->expects($this->any())
-            ->method('checkApprovalByUser')
-            ->willReturn(true);
-
-        return $provider;
     }
 
     /**

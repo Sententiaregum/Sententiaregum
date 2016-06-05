@@ -91,9 +91,7 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
      */
     public function iShouldHaveAnActivationEmail()
     {
-        $client = $this->getRecentClient();
-        /** @var \Symfony\Bundle\SwiftMailerBundle\DataCollector\MessageDataCollector $mailCollector */
-        $mailCollector = $client->getProfile()->getCollector('swiftmailer');
+        $mailCollector = $this->getEmailProfiler();
 
         Assertion::eq(1, $mailCollector->getMessageCount());
 
@@ -165,12 +163,12 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
         $redis = $this->getContainer()->get('snc_redis.pending_activations');
         $redis->del(sprintf('activation:%s', $user->getPendingActivation()->getKey()));
 
-        $pending       = $user->getPendingActivation();
-        $entityManager = $this->getEntityManager();
+        $connection = $this->getEntityManager()->getConnection();
 
-        $pending->setActivationDate(new \DateTime('-3 hours'));
-        $entityManager->persist($pending);
-        $entityManager->flush();
+        $query = $connection->prepare("UPDATE `User` SET `pendingActivation_activation_date` = :date WHERE `id` = :id");
+        $query->bindParam(':date', new \DateTime('-3 hours'));
+        $query->bindParam(':id', $user->getId());
+        $query->execute();
     }
 
     /**

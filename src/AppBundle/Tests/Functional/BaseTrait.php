@@ -168,4 +168,14 @@ trait BaseTrait
     {
         return $this->recentClient;
     }
+
+    /**
+     * @return \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector
+     */
+    public function getEmailProfiler()
+    {
+        $client = $this->getRecentClient();
+        /** @var \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector $mailCollector */
+        return $client->getProfile()->getCollector('swiftmailer');
+    }
 }

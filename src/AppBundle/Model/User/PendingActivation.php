@@ -26,14 +26,14 @@ class PendingActivation implements \Serializable
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="activation_date", type="datetime")
+     * @ORM\Column(name="activation_date", type="datetime", nullable=true)
      */
     private $activationDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string")
+     * @ORM\Column(name="key", type="string", nullable=true)
      */
     private $key;
 

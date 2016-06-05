@@ -4,8 +4,3 @@ services:
     arguments:
       - "@snc_redis.online_users"
     lazy: true
-  app.redis.cluster.approval:
-    class: AppBundle\Redis\PendingActivationsCluster
-    arguments:
-      - "@snc_redis.pending_activations"
-    lazy: true

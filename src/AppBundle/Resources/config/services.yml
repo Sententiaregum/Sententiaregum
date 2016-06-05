@@ -24,7 +24,6 @@ services:
       - "@event_dispatcher"
       - "@ma27_api_key_authentication.password.strategy"
       - "@app.user.registration.name_suggestor"
-      - "@app.redis.cluster.approval"
       - "@app.repository.user"
       - "@app.repository.role"
   app.ip.tracer:

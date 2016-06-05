@@ -15,7 +15,6 @@ namespace AppBundle\Model\User\Registration;
 use AppBundle\Event\MailerEvent;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\DTO\CreateUserDTO;
-use AppBundle\Model\User\Registration\Activation\ExpiredActivationProviderInterface;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\RoleRepository;
@@ -40,8 +39,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * These two steps are necessary in order to prevent spam bots from creating
  * an account as the activation must be processed when having a valid email account.
- *
- * NOTE: the email validator checks the host, too, so accounts with not-existing hosts are impossible now.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
@@ -80,11 +77,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private $suggestor;
 
     /**
-     * @var ExpiredActivationProviderInterface
-     */
-    private $expiredActivationProvider;
-
-    /**
      * @var UserRepository
      */
     private $userRepository;
@@ -103,7 +95,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @param EventDispatcherInterface            $eventDispatcher
      * @param PasswordHasherInterface             $passwordHasher
      * @param SuggestorInterface                  $nameSuggestor
-     * @param ExpiredActivationProviderInterface  $expiredActivationProvider
      * @param UserRepository                      $userRepository
      * @param RoleRepository                      $roleRepository
      */
@@ -114,7 +105,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         EventDispatcherInterface $eventDispatcher,
         PasswordHasherInterface $passwordHasher,
         SuggestorInterface $nameSuggestor,
-        ExpiredActivationProviderInterface $expiredActivationProvider,
         UserRepository $userRepository,
         RoleRepository $roleRepository
     ) {
@@ -124,7 +114,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->eventDispatcher            = $eventDispatcher;
         $this->hasher                     = $passwordHasher;
         $this->suggestor                  = $nameSuggestor;
-        $this->expiredActivationProvider  = $expiredActivationProvider;
         $this->userRepository             = $userRepository;
         $this->roleRepository             = $roleRepository;
     }
@@ -168,7 +157,6 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->entityManager->flush();
 
         $this->sendActivationEmail($user);
-        $this->expiredActivationProvider->attachNewApproval($user->getPendingActivation()->getKey());
 
         return new RegistrationResult(null, [], $user);
     }
@@ -192,12 +180,12 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
 
         $newUser = User::create(
             $userParameters->getUsername(),
-            $this->hasher->generateHash($userParameters->getPassword()),
+            $this->hashPassword($userParameters->getPassword()),
             $userParameters->getEmail()
         );
 
         $newUser->setLocale($userParameters->getLocale());
-        $newUser->setActivationKey($this->getUniqueActivationKey());
+        $this->buildNotActivatedUser($newUser);
 
         return [
             'valid' => true,
@@ -235,11 +223,11 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         do {
             ++$rounds;
 
-            if ($rounds === 200) {
+            if ($this->tooManyGenerationAttempts($rounds)) {
                 throw new \OverflowException('Cannot generate activation key!');
             }
 
-            $activationKey = $this->activationKeyCodeGenerator->generate(255);
+            $activationKey = $this->get255ByteLongValidationKey();
             $isUnique      = $this->isActivationKeyUnique($activationKey);
         } while (!$isUnique);
 
@@ -257,7 +245,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         $options = [
             'entity' => 'Account:User',
-            'field'  => 'activationKey',
+            'field'  => 'pendingActivation.key',
         ];
 
         $violations = $this->validator->validate(
@@ -304,7 +292,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     {
         if (!$user = $this->userRepository->findUserByUsernameAndActivationKey($username, $activationKey)) {
             throw $this->createActivationException();
-        } elseif ($this->isActivationExpired($user)) {
+        }
+
+        if ($this->isActivationExpired($user)) {
             $this->entityManager->remove($user);
             $this->entityManager->flush();
 
@@ -323,7 +313,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function isActivationExpired(User $user)
     {
-        return !$this->expiredActivationProvider->checkApprovalByUser($user);
+        return $user->getPendingActivation()->isActivationExpired();
     }
 
     /**
@@ -374,5 +364,49 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         }
 
         return $defaultRole;
+    }
+
+    /**
+     * Configures internal state data for the non-activated user.
+     *
+     * @param User $user
+     */
+    private function buildNotActivatedUser(User $user)
+    {
+        $user->setActivationKey($this->getUniqueActivationKey());
+    }
+
+    /**
+     * Generates a 255 byte long activation key.
+     *
+     * @return int
+     */
+    private function get255ByteLongValidationKey()
+    {
+        return $this->activationKeyCodeGenerator->generate(255);
+    }
+
+    /**
+     * Method which checks whether the generator experienced too many generation attempts.
+     *
+     * @param bool $currentAmount
+     *
+     * @return bool
+     */
+    private function tooManyGenerationAttempts($currentAmount)
+    {
+        return $currentAmount >= 200;
+    }
+
+    /**
+     * Builds a password hash.
+     *
+     * @param string $password
+     *
+     * @return string
+     */
+    private function hashPassword($password)
+    {
+        return $this->hasher->generateHash($password);
     }
 }
