@@ -22,7 +22,6 @@ addons:
 matrix:
   allow_failures:
     - php: hhvm
-    - php: 7
 
 # composer cache for faster install process and less issues with github api
 cache:

@@ -165,8 +165,9 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
 
         $connection = $this->getEntityManager()->getConnection();
 
+        $bind  = (new \DateTime('-3 hours'))->format('Y-m-d H:i:s');
         $query = $connection->prepare('UPDATE `User` SET `pendingActivation_activation_date` = :date WHERE `id` = :id');
-        $query->bindParam(':date', (new \DateTime('-3 hours'))->format('Y-m-d H:i:s'));
+        $query->bindParam(':date', $bind);
         $query->bindParam(':id', $user->getId());
         $query->execute();
 
