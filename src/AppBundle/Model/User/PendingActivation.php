@@ -14,32 +14,15 @@ namespace AppBundle\Model\User;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 
 /**
  * Model that represents the internal activation life cycle during the user approval.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(
- *     name="pending_activation",
- *     indexes={
- *         @ORM\Index(name="pendingActivation_activationDate", columns={"activation_date"})
- *     }
- * )
+ * @ORM\Embeddable
  */
-class PendingActivation
+class PendingActivation implements \Serializable
 {
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="id", type="guid")
-     */
-    private $id;
-
     /**
      * @var DateTime
      *
@@ -48,35 +31,22 @@ class PendingActivation
     private $activationDate;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="key", type="string")
+     */
+    private $key;
+
+    /**
      * Constructor.
-     */
-    public function __construct()
-    {
-        $this->id = Uuid::uuid4()->toString();
-    }
-
-    /**
-     * Getter for the id.
      *
-     * @return string
+     * @param DateTime $activationDate
+     * @param string   $key
      */
-    public function getId()
+    public function __construct(DateTime $activationDate, $key = null)
     {
-        return $this->id;
-    }
-
-    /**
-     * Sets the activation date.
-     *
-     * @param DateTime $dateTime
-     *
-     * @return $this
-     */
-    public function setActivationDate(DateTime $dateTime)
-    {
-        $this->activationDate = $dateTime;
-
-        return $this;
+        $this->activationDate = $activationDate;
+        $this->key            = $key;
     }
 
     /**
@@ -88,10 +58,48 @@ class PendingActivation
      */
     public function isActivationExpired()
     {
-        if (!$this->activationDate) {
-            throw new \LogicException('Missing activation date!');
-        }
-
         return time() - $this->activationDate->getTimestamp() >= 3600 * 2;
+    }
+
+    /**
+     * Set key.
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        $this->key = (string) $key;
+        return $this;
+    }
+
+    /**
+     * Get key.
+     *
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->key,
+            $this->activationDate,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list($this->key, $this->activationDate) = unserialize($serialized);
     }
 }

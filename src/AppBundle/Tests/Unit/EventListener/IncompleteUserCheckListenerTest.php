@@ -25,7 +25,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
     public function testUserIsLocked()
     {
         $user = new User();
-        $user->setState(User::STATE_APPROVED);
+        $user->modifyActivationStatus(User::STATE_APPROVED);
         $user->lock();
 
         $hook = new IncompleteUserCheckListener();

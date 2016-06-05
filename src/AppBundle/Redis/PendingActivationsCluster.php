@@ -43,7 +43,7 @@ class PendingActivationsCluster implements ExpiredActivationProviderInterface
      */
     public function checkApprovalByUser(User $user)
     {
-        if (!$this->lookupKeyInRedisDatabase($user->getActivationKey())) {
+        if (!$this->lookupKeyInRedisDatabase($user->getPendingActivation()->getKey())) {
             // the associated model will be loaded through lazy loading (doctrine sends a call to the db using a proxy for the model).
             // this is because the model representing parts of the approval process must be hydrated through
             // doctrine's complex hydration algorithm. In case of issues with redis, this data can be used

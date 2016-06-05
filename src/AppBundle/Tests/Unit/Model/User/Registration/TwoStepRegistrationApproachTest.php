@@ -177,6 +177,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     {
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+        $user->setActivationKey($key);
 
         $repository = $this->getUserRepository();
         $repository
@@ -193,12 +194,10 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new Role('ROLE_USER'));
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $readyUser     = $user->setState(User::STATE_APPROVED);
 
         $entityManager
             ->expects($this->once())
-            ->method('persist')
-            ->with($readyUser);
+            ->method('persist');
 
         $entityManager
             ->expects($this->once())
@@ -332,7 +331,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
             ->with(['role' => 'ROLE_USER']);
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
-        $readyUser     = $user->setState(User::STATE_APPROVED);
+        $readyUser     = $user->modifyActivationStatus(User::STATE_APPROVED);
 
         $entityManager
             ->expects($this->never())

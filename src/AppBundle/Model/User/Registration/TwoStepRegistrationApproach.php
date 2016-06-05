@@ -138,7 +138,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     public function approveByActivationKey($activationKey, $username)
     {
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
-        $user->setState(User::STATE_APPROVED);
+        $user->modifyActivationStatus(User::STATE_APPROVED, $activationKey);
 
         $user->addRole($this->determineDefaultRole());
 
@@ -168,7 +168,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $this->entityManager->flush();
 
         $this->sendActivationEmail($user);
-        $this->expiredActivationProvider->attachNewApproval($user->getActivationKey());
+        $this->expiredActivationProvider->attachNewApproval($user->getPendingActivation()->getKey());
 
         return new RegistrationResult(null, [], $user);
     }
@@ -216,7 +216,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $mailerEvent
             ->setTemplateSource('AppBundle:Email/Activation:activation')
             ->addUser($persistentUser)
-            ->addParameter('activation_key', $persistentUser->getActivationKey())
+            ->addParameter('activation_key', $persistentUser->getPendingActivation()->getKey())
             ->addParameter('username', $persistentUser->getUsername())
             ->setLanguage($persistentUser->getLocale());
 

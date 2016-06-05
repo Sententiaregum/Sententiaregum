@@ -129,13 +129,6 @@ class User implements UserInterface, Serializable
     private $roles;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="activation_key", type="string", nullable=true, unique=true, length=255)
-     */
-    private $activationKey;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Model\User\User", indexBy="username", fetch="EXTRA_LAZY")
@@ -157,13 +150,7 @@ class User implements UserInterface, Serializable
     /**
      * @var PendingActivation
      *
-     * @ORM\OneToOne(
-     *     targetEntity="AppBundle\Model\User\PendingActivation",
-     *     fetch="EXTRA_LAZY",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="pending_activation", nullable=true)
+     * @ORM\Embedded(class="AppBundle\Model\User\PendingActivation")
      */
     private $pendingActivation;
 
@@ -235,7 +222,7 @@ class User implements UserInterface, Serializable
         $this->registrationDate      = new DateTime();
         $this->lastAction            = new DateTime();
 
-        $this->setState(self::STATE_NEW);
+        $this->modifyActivationStatus(self::STATE_NEW);
     }
 
     /**
@@ -392,10 +379,13 @@ class User implements UserInterface, Serializable
      * Set state.
      *
      * @param string $state
+     * @param string $key
      *
      * @return User
+     *
+     * @throws \InvalidArgumentException If no activation key is given.
      */
-    public function setState($state)
+    public function modifyActivationStatus($state, $key = null)
     {
         if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED], true)) {
             throw new \InvalidArgumentException('Invalid state!');
@@ -404,10 +394,13 @@ class User implements UserInterface, Serializable
         $this->state = (string) $state;
 
         if (self::STATE_APPROVED === $this->state) {
+            if (($activationInfo = $this->pendingActivation) && $key !== $activationInfo->getKey()) {
+                throw new \InvalidArgumentException('Invalid activation key given!');
+            }
+
             $this->removeActivationKey();
         } else {
-            $this->pendingActivation = new PendingActivation();
-            $this->pendingActivation->setActivationDate($this->getRegistrationDate());
+            $this->pendingActivation = new PendingActivation($this->getRegistrationDate());
         }
 
         return $this;
@@ -418,7 +411,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getState()
+    public function getActivationStatus()
     {
         return $this->state;
     }
@@ -482,14 +475,6 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @return string
-     */
-    public function getActivationKey()
-    {
-        return $this->activationKey;
-    }
-
-    /**
      * Set activationKey.
      *
      * @param string $activationKey
@@ -498,7 +483,7 @@ class User implements UserInterface, Serializable
      */
     public function setActivationKey($activationKey)
     {
-        if (self::STATE_APPROVED === $this->getState()) {
+        if (self::STATE_APPROVED === $this->getActivationStatus()) {
             throw new \LogicException('Approved users cannot have an activation key!');
         }
 
@@ -508,7 +493,7 @@ class User implements UserInterface, Serializable
             throw new \LogicException($problem);
         }
 
-        $this->activationKey = (string) $activationKey;
+        $this->pendingActivation->setKey($activationKey);
 
         return $this;
     }
@@ -520,11 +505,10 @@ class User implements UserInterface, Serializable
      */
     public function removeActivationKey()
     {
-        if (self::STATE_APPROVED !== $this->getState()) {
+        if (self::STATE_APPROVED !== $this->getActivationStatus()) {
             throw new \LogicException('Only approved users can remove activation keys!');
         }
 
-        $this->activationKey     = null;
         $this->pendingActivation = null;
 
         return $this;
@@ -542,7 +526,7 @@ class User implements UserInterface, Serializable
      */
     public function addRole(Role $role)
     {
-        if ($this->getState() === static::STATE_NEW) {
+        if ($this->getActivationStatus() === static::STATE_NEW) {
             throw new \InvalidArgumentException('Cannot attach role on non-approved user!');
         }
 
@@ -792,7 +776,6 @@ class User implements UserInterface, Serializable
             $this->lastAction->getTimestamp(),
             $this->registrationDate->getTimestamp(),
             $this->apiKey,
-            $this->activationKey,
             $this->state,
             $this->locked,
             $this->aboutText,
@@ -819,14 +802,13 @@ class User implements UserInterface, Serializable
         $this->lastAction            = new DateTime(sprintf('@%s', $data[4]));
         $this->registrationDate      = new DateTime(sprintf('@%s', $data[5]));
         $this->apiKey                = $data[6];
-        $this->activationKey         = $data[7];
-        $this->state                 = $data[8];
-        $this->locked                = $data[9];
-        $this->aboutText             = $data[10];
-        $this->roles                 = new ArrayCollection($data[11]);
-        $this->following             = new ArrayCollection($data[12]);
-        $this->authentications       = new ArrayCollection($data[13]);
-        $this->failedAuthentications = new ArrayCollection($data[14]);
+        $this->state                 = $data[7];
+        $this->locked                = $data[8];
+        $this->aboutText             = $data[9];
+        $this->roles                 = new ArrayCollection($data[10]);
+        $this->following             = new ArrayCollection($data[11]);
+        $this->authentications       = new ArrayCollection($data[12]);
+        $this->failedAuthentications = new ArrayCollection($data[13]);
     }
 
     /**

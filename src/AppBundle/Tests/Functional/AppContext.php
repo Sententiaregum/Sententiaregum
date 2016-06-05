@@ -70,7 +70,7 @@ class AppContext implements SnippetAcceptingContext, KernelAwareContext
             }
 
             if (!(isset($row['is_non_activated']) && $row['is_non_activated'] === 'true')) {
-                $user->setState(User::STATE_APPROVED);
+                $user->modifyActivationStatus(User::STATE_APPROVED);
 
                 // roles only allowed for approved users
                 $user->addRole($userRole);
