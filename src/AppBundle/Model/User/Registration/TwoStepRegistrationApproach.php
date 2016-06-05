@@ -389,7 +389,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Method which checks whether the generator experienced too many generation attempts.
      *
-     * @param bool $currentAmount
+     * @param int $currentAmount
      *
      * @return bool
      */
