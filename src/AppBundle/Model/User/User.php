@@ -381,9 +381,9 @@ class User implements UserInterface, Serializable
      * @param string $state
      * @param string $key
      *
-     * @return User
-     *
      * @throws \InvalidArgumentException If no activation key is given.
+     *
+     * @return User
      */
     public function modifyActivationStatus($state, $key = null)
     {

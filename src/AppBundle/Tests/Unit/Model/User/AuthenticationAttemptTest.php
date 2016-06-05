@@ -56,7 +56,7 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
         list($id, $latest, $range) = [
             $model->getId(),
             $model->getLatestFailedAttemptTime(),
-            $model->getLastFailedAttemptTimesInRange()
+            $model->getLastFailedAttemptTimesInRange(),
         ];
 
         $serialized = serialize($model);
