@@ -14,7 +14,7 @@ services:
   app.user.registration.name_suggestor:
     class: AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor
     arguments:
-      - "@doctrine.orm.default_entity_manager"
+      - "@app.repository.user"
   app.user.registration:
     class: AppBundle\Model\User\Registration\TwoStepRegistrationApproach
     arguments:

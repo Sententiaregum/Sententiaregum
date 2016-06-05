@@ -164,6 +164,37 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Filters all usernames that aren't unique.
+     *
+     * @param string[] $names
+     *
+     * @return string[]
+     */
+    public function filterUniqueUsernames(array $names)
+    {
+        $qb        = $this->_em->createQueryBuilder();
+        $nonUnique = array_column(
+            $qb
+                ->select('user.username')
+                ->from('Account:User', 'user')
+                ->where($qb->expr()->in('user.username', ':names'))
+                ->setParameter(':names', $names)
+                ->getQuery()
+                ->getResult(Query::HYDRATE_ARRAY),
+            'username'
+        );
+
+        return array_values(// re-index array after filter process
+            array_filter(
+                $names,
+                function ($username) use ($nonUnique) {
+                    return !in_array($username, $nonUnique, true);
+                }
+            )
+        );
+    }
+
+    /**
      * Creates a list of old entity ids that should be removed.
      *
      * @param DateTime $dateTime

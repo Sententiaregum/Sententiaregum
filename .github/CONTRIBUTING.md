@@ -83,3 +83,32 @@ __Note__: if you have fixed a bug that is not reported in the issue tracker, ple
 
 If a line note is added, you should fix that. If there's a reason why that should not be fixed, please comment on the diff, too.
 If the review is ready and at least one collaborator or owner gave thumbs up, you should squash all of your commit into a big one.
+
+4) Tests
+--------
+
+Every change requires a testcase. The following sections will explain how to implement those:
+
+### 4.1) Backend
+
+The backend contains two test suites: the unit tests based on PHPUnit and functional tests based on Behat.
+
+When changing behavior in a low level component such as the business logic, a validator or doctrine extensions (e.g. DBAL types or DQL functions)
+the change requires a test case in the PHPUnit testsuite.
+Furthermore commands should also have a UnitTest since commands are wrappers to give the ability of executing certain things from the CLI
+such as administrative action (e.g. apply fixture data for production, run migration actions) or jobs for a queue or crontab (e.g. the purge jobs),
+so the test should cover the I/O behavior of the command the way how the command communicates with the business logic.
+More complex commands (e.g. the fixture appliance workflow) should have a functional test in order to verify the whole behavior properly.
+
+Infrastructural services (e.g. doctrine repositories or wrappers for redis functionality) should have a functional test since
+the inclusion of external services (such as a database) needs its own test case and especially the behavior of doctrine needs integrative
+tests.
+
+The REST API represents the whole features of this application being used by the frontend. In order to ensure the appropriate behavior
+of the whole feature, the controller also need custom test cases.
+
+### 4.2) Frontend
+
+The frontend has a test suite based on Mocha with the BDD style API.
+Every module requires its own testcase to ensure the behavior of the module.
+Components should also mock the whole app lifecycle to test the communication.

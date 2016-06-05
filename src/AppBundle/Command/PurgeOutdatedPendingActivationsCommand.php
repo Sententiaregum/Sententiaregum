@@ -12,8 +12,9 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Model\User\UserRepository;
 use DateTime;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,8 +23,25 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class PurgeOutdatedPendingActivationsCommand extends ContainerAwareCommand
+class PurgeOutdatedPendingActivationsCommand extends Command
 {
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * Constructor.
+     *
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
+    {
+        parent::__construct();
+
+        $this->userRepository = $repository;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,10 +67,8 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dateTimeRule = new DateTime('-2 hours');
-        /** @var \AppBundle\Model\User\UserRepository $userRepository */
-        $userRepository = $this->getContainer()->get('app.repository.user');
 
-        $amount = $userRepository->deletePendingActivationsByDate($dateTimeRule);
+        $amount = $this->userRepository->deletePendingActivationsByDate($dateTimeRule);
         $output->writeln(sprintf(
             '<fg=green;bg=black>Successfully purged <comment>%d</comment> pending activations.</fg=green;bg=black>',
             $amount
