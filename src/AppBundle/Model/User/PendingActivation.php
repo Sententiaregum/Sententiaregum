@@ -71,6 +71,7 @@ class PendingActivation implements \Serializable
     public function setKey($key)
     {
         $this->key = (string) $key;
+
         return $this;
     }
 
