@@ -17,6 +17,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ma27\ApiKeyAuthenticationBundle\Annotation as Auth;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
 use Ramsey\Uuid\Uuid;
 use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,7 +30,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="AppBundle\Model\User\UserRepository")
  * @ORM\Table(name="User", indexes={
  *     @ORM\Index(name="user_lastAction", columns={"last_action"}),
- *     @ORM\Index(name="user_locale", columns={"locale"})
+ *     @ORM\Index(name="user_locale", columns={"locale"}),
+ *     @ORM\Index(name="user_activation", columns={"username", "pendingActivation_activation_date"})
  * })
  */
 class User implements UserInterface, Serializable
@@ -191,18 +193,20 @@ class User implements UserInterface, Serializable
     /**
      * Factory that fills the required fields of the user.
      *
-     * @param string $username
-     * @param string $password
-     * @param string $email
+     * @param string                  $username
+     * @param string                  $password
+     * @param string                  $email
+     * @param PasswordHasherInterface $passwordHasher
      *
      * @return User
      */
-    public static function create($username, $password, $email)
+    public static function create($username, $password, $email, PasswordHasherInterface $passwordHasher)
     {
         $user = new self();
-        $user->setUsername($username);
-        $user->setPassword($password);
-        $user->setEmail($email);
+        $user->setOrUpdatePassword($password, $passwordHasher);
+
+        $user->username = $username;
+        $user->email    = $email;
 
         return $user;
     }
@@ -210,7 +214,7 @@ class User implements UserInterface, Serializable
     /**
      * Constructor.
      */
-    public function __construct()
+    private function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
 
@@ -236,20 +240,6 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * Set username.
-     *
-     * @param string $username
-     *
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = (string) $username;
-
-        return $this;
-    }
-
-    /**
      * Get username.
      *
      * @return string
@@ -262,13 +252,21 @@ class User implements UserInterface, Serializable
     /**
      * Set password.
      *
-     * @param string $password
+     * @param string                  $password
+     * @param PasswordHasherInterface $passwordHasher
+     * @param string|null             $old
+     *
+     * @throws \InvalidArgumentException If the update fails.
      *
      * @return User
      */
-    public function setPassword($password)
+    public function setOrUpdatePassword($password, PasswordHasherInterface $passwordHasher, $old = null)
     {
-        $this->password = (string) $password;
+        if ($this->password && !$passwordHasher->compareWith($this->password, $old)) {
+            throw new \InvalidArgumentException('Old password is invalid, but must be given to change it!');
+        }
+
+        $this->password = $passwordHasher->generateHash($password);
 
         return $this;
     }
@@ -284,20 +282,6 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = (string) $email;
-
-        return $this;
-    }
-
-    /**
      * Get email.
      *
      * @return string
@@ -305,20 +289,6 @@ class User implements UserInterface, Serializable
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set apiKey.
-     *
-     * @param string $apiKey
-     *
-     * @return User
-     */
-    public function setApiKey($apiKey)
-    {
-        $this->apiKey = (string) $apiKey;
-
-        return $this;
     }
 
     /**
@@ -332,25 +302,13 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function removeApiKey()
-    {
-        $this->apiKey = null;
-
-        return $this;
-    }
-
-    /**
      * Set lastAction.
-     *
-     * @param DateTime $lastAction
      *
      * @return User
      */
-    public function setLastAction(DateTime $lastAction)
+    public function updateLastAction()
     {
-        $this->lastAction = $lastAction;
+        $this->lastAction = new DateTime();
 
         return $this;
     }
@@ -481,7 +439,7 @@ class User implements UserInterface, Serializable
      *
      * @return $this
      */
-    public function setActivationKey($activationKey)
+    public function storeUniqueActivationKeyForNonApprovedUser($activationKey)
     {
         if (self::STATE_APPROVED === $this->getActivationStatus()) {
             throw new \LogicException('Approved users cannot have an activation key!');
@@ -570,13 +528,9 @@ class User implements UserInterface, Serializable
      */
     public function hasRole(Role $role)
     {
-        foreach ($this->getRoles() as $storedRole) {
-            if ($storedRole->getRole() === $role->getRole()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->roles->exists(function ($index, Role $userRole) use ($role) {
+            return $role->getRole() === $userRole->getRole();
+        });
     }
 
     /**
@@ -630,13 +584,9 @@ class User implements UserInterface, Serializable
      */
     public function follows(User $user)
     {
-        foreach ($this->following as $following) {
-            if ($following->getUsername() === $user->getUsername()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->following->exists(function ($index, User $following) use ($user) {
+            return $following->getId() === $user->getId();
+        });
     }
 
     /**
@@ -664,10 +614,16 @@ class User implements UserInterface, Serializable
      *
      * @param string $locale
      *
+     * @throws \InvalidArgumentException If the locale is invalid.
+     *
      * @return $this
      */
-    public function setLocale($locale)
+    public function modifyUserLocale($locale)
     {
+        if (!(bool) preg_match('/^([a-z]{2})$/', $locale)) {
+            throw new \InvalidArgumentException('Invalid locale!');
+        }
+
         $this->locale = (string) $locale;
 
         return $this;
@@ -681,20 +637,6 @@ class User implements UserInterface, Serializable
     public function getPendingActivation()
     {
         return $this->pendingActivation;
-    }
-
-    /**
-     * Set pendingActivation.
-     *
-     * @param PendingActivation $pendingActivation
-     *
-     * @return $this
-     */
-    public function setPendingActivation(PendingActivation $pendingActivation)
-    {
-        $this->pendingActivation = $pendingActivation;
-
-        return $this;
     }
 
     /**
@@ -880,7 +822,7 @@ class User implements UserInterface, Serializable
                 return true;
             }
 
-            return !$this->isPreviouslyLoginFailed('-6 hours', $comparison, true, $attempt->getIp());
+            return !$this->isPreviouslyLoginFailed('-6 hours', $comparison, true);
         }
 
         return false;
@@ -916,14 +858,13 @@ class User implements UserInterface, Serializable
      * @param string             $diff
      * @param bool               $ignoreLastAttempts
      * @param DateTimeComparison $comparison
-     * @param string             $ip
      *
      * @return bool
      */
-    private function isPreviouslyLoginFailed($diff, DateTimeComparison $comparison, $ignoreLastAttempts = false, $ip = null)
+    private function isPreviouslyLoginFailed($diff, DateTimeComparison $comparison, $ignoreLastAttempts = false)
     {
         return $this->failedAuthentications->exists(
-            function ($index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $ip, $comparison) {
+            function ($index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $comparison) {
                 $ipRange = $failedAttempt->getLastFailedAttemptTimesInRange();
 
                 return $comparison(

@@ -27,7 +27,7 @@ class Credentials
     private $username;
 
     /**
-     * @var \AppBundle\Model\User\User[]
+     * @var \AppBundle\Model\User\Role[]
      */
     private $roles = [];
 

@@ -15,6 +15,7 @@ namespace AppBundle\Tests\Unit\EventListener;
 use AppBundle\EventListener\IncompleteUserCheckListener;
 use AppBundle\Model\User\User;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUserIsLocked()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->modifyActivationStatus(User::STATE_APPROVED);
         $user->lock();
 
@@ -38,7 +39,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUserIsNonApproved()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
         $hook = new IncompleteUserCheckListener();
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
@@ -50,7 +51,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUserIsNonApprovedAndLocked()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->lock();
 
         $hook = new IncompleteUserCheckListener();

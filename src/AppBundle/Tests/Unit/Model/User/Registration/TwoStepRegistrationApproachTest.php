@@ -26,6 +26,7 @@ use AppBundle\Model\User\Value\RegistrationResult as Result;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -168,8 +169,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     public function testApproveUser()
     {
         $key  = md5(uniqid());
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
-        $user->setActivationKey($key);
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->storeUniqueActivationKeyForNonApprovedUser($key);
 
         $repository = $this->getUserRepository();
         $repository
@@ -258,7 +259,7 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     public function testExpiredActivation()
     {
         $key  = md5(uniqid());
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
         // hack into the activation model
         // and modify the activation date in order to
@@ -312,8 +313,8 @@ class TwoStepRegistrationApproachTest extends \PHPUnit_Framework_TestCase
     public function testNoDefaultRole()
     {
         $key  = md5(uniqid());
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
-        $user->setActivationKey($key);
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->storeUniqueActivationKeyForNonApprovedUser($key);
 
         $repository = $this->getUserRepository();
         $repository

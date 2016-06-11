@@ -20,6 +20,7 @@ use AppBundle\Model\User\Util\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnInvalidCredentialsEvent;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -28,7 +29,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNotifyNewIpOnLogin()
     {
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
@@ -62,7 +63,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testNotifyOnMultipleAuthAttempts()
     {
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
         $user->addFailedAuthenticationWithIp('127.0.0.1');
         $user->addFailedAuthenticationWithIp('127.0.0.1');
 

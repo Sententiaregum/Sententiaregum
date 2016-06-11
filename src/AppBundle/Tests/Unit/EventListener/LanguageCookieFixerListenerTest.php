@@ -15,6 +15,7 @@ namespace AppBundle\Tests\Unit\EventListener;
 use AppBundle\EventListener\LanguageCookieFixerListener;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -89,7 +90,7 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $request1 = Request::create('/', 'GET', [], ['language' => 'en']);
         $request1->attributes->set('_route', 'ma27_api_key_authentication.request');
 
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('{"apiKey":"12345"}'));
         $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
@@ -109,8 +110,8 @@ class LanguageCookieFixerListenerTest extends \PHPUnit_Framework_TestCase
         $request1 = Request::create('/', 'GET', [], ['language' => 'en']);
         $request1->attributes->set('_route', 'ma27_api_key_authentication.request');
 
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
-        $user->setLocale('de');
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->modifyUserLocale('de');
 
         $event = new FilterResponseEvent($this->getKernel(), $request1, KernelInterface::MASTER_REQUEST, Response::create('{"apiKey":"12345"}'));
         $repo  = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);

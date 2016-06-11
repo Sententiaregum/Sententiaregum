@@ -22,7 +22,8 @@ use Ramsey\Uuid\Uuid;
  *
  * @ORM\Entity
  * @ORM\Table(name="authentication_attempt", indexes={
- *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"})
+ *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"}),
+ *     @ORM\Index(name="auth_last_datetime_range", columns={"latest_date_time"})
  * })
  */
 class AuthenticationAttempt implements \Serializable

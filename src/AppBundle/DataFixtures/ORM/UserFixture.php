@@ -33,31 +33,22 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
         $passwordHasher = new PhpPasswordHasher();
         $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
-        $user1 = new User();
+        $user1 = User::create('Ma27', '72aM', 'Ma27@sententiaregum.dev', $passwordHasher);
         $user1->modifyActivationStatus(User::STATE_APPROVED);
-        $user1->setUsername('Ma27');
-        $user1->setPassword($passwordHasher->generateHash('72aM'));
-        $user1->setEmail('Ma27@sententiaregum.dev');
         $user1->addRole($userRole);
-        $user1->setLastAction(new \DateTime());
-        $user1->setLocale('de');
+        $user1->updateLastAction();
+        $user1->modifyUserLocale('de');
 
-        $user2 = new User();
+        $user2 = User::create('benbieler', 'releibneb', 'benbieler@sententiaregum.dev', $passwordHasher);
         $user2->modifyActivationStatus(User::STATE_APPROVED);
-        $user2->setUsername('benbieler');
-        $user2->setPassword($passwordHasher->generateHash('releibneb'));
-        $user2->setEmail('benbieler@sententiaregum.dev');
         $user2->addRole($userRole);
-        $user2->setLastAction(new \DateTime());
+        $user2->updateLastAction();
 
-        $locked = new User();
+        $locked = User::create('anonymus', 'sumynona', 'anonymus@example.org', $passwordHasher);
         $locked->modifyActivationStatus(User::STATE_APPROVED);
-        $locked->setUsername('anonymus');
-        $locked->setPassword($passwordHasher->generateHash('sumynona'));
-        $locked->setEmail('anonymus@example.org');
         $locked->addRole($userRole);
         $locked->lock();
-        $locked->setLastAction(new \DateTime());
+        $locked->updateLastAction();
 
         $user2->addFollowing($user1);
         $user1->addFollowing($user2);

@@ -13,10 +13,8 @@
 namespace AppBundle\EventListener;
 
 use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnFirewallAuthenticationEvent;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Listener that marks users authenticated to the firewall as online.
@@ -31,11 +29,6 @@ class OnlineUsersUpdateListener
     private $userIdProvider;
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -44,16 +37,13 @@ class OnlineUsersUpdateListener
      * Constructor.
      *
      * @param OnlineUserIdDataProviderInterface $provider
-     * @param RequestStack                      $requestStack
      * @param EntityManagerInterface            $entityManager
      */
     public function __construct(
         OnlineUserIdDataProviderInterface $provider,
-        RequestStack $requestStack,
         EntityManagerInterface $entityManager
     ) {
         $this->userIdProvider = $provider;
-        $this->requestStack   = $requestStack;
         $this->entityManager  = $entityManager;
     }
 
@@ -68,9 +58,7 @@ class OnlineUsersUpdateListener
         $user = $event->getToken()->getUser();
         $this->userIdProvider->addUserId($user->getId());
 
-        $user->setLastAction(
-            new DateTime(sprintf('@%s', $this->requestStack->getMasterRequest()->server->get('REQUEST_TIME')))
-        );
+        $user->updateLastAction();
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

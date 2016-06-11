@@ -84,7 +84,7 @@ class LocaleController extends BaseController
         if ($user->getLocale() !== $newLocale = $localeSwitcherDTO->getLocale()) {
             $em = $this->getDoctrine()->getManager();
 
-            $user->setLocale($newLocale);
+            $user->modifyUserLocale($newLocale);
 
             $em->persist($user);
             $em->flush();

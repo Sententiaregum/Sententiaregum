@@ -1,5 +1,4 @@
-@users
-@details
+@users @details
 Feature: user profile
     In order to gather information about users, a API providing data about his profile is necessary.
     A profile can be a simple overview about permissions for the security system or more detailed information

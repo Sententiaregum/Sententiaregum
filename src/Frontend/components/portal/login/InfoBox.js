@@ -18,7 +18,7 @@ import Translate from 'react-translate-component';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-const InfoBox = () => {
+export default () => {
   return (
     <div>
       <div className="info-div-text">
@@ -27,5 +27,3 @@ const InfoBox = () => {
     </div>
   );
 };
-
-export default InfoBox;
