@@ -13,19 +13,20 @@
 import { stub, assert, createStubInstance } from 'sinon';
 import { changeLocale, loadLanguages } from '../../actions/LocaleActions';
 import { expect } from 'chai';
-import ApiKey from '../../util/http/ApiKeyService';
 import Locale from '../../util/http/LocaleService';
-import Cookies from 'cookies-js';
 import LocaleWebAPIUtils from '../../util/api/LocaleWebAPIUtils';
 import { runAction } from 'sententiaregum-flux-container';
+import UserStore from '../../store/UserStore';
+import LanguageStore from '../../store/LanguageStore';
 
 describe('LocaleActions', () => {
   it('changes the locale', () => {
     let apiKey = Math.random();
 
-    createStubInstance(Cookies);
-    stub(ApiKey, 'isLoggedIn', () => true);
-    stub(ApiKey, 'getApiKey', () => apiKey);
+    stub(UserStore, 'getState', () => ({
+      is_logged_in: true,
+      api_key:      apiKey
+    }));
     stub(Locale, 'setLocale', (locale) => expect(locale).to.equal('en'));
 
     stub(LocaleWebAPIUtils, 'changeUserLocale', (locale) => {
@@ -34,12 +35,11 @@ describe('LocaleActions', () => {
 
     runAction(changeLocale, ['en']);
 
+    expect(LanguageStore.getState().locale).to.equal('en');
     assert.calledOnce(LocaleWebAPIUtils.changeUserLocale);
-
-    ApiKey.isLoggedIn.restore();
-    ApiKey.getApiKey.restore();
     Locale.setLocale.restore();
     LocaleWebAPIUtils.changeUserLocale.restore();
+    UserStore.getState.restore();
   });
 
   it('loads available locales', () => {

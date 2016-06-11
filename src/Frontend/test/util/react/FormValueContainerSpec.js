@@ -18,15 +18,11 @@ describe('FormValueContainer', () => {
   beforeEach(() => {
     instance = new FormValueContainer();
   });
-  afterEach(() => {
-    localStorage.removeItem('prefix.value1');
-    localStorage.removeItem('prefix.value2');
-    localStorage.removeItem('prefix.value');
-  });
 
   it('can set/get form values', () => {
     instance.persistFormValue('prefix.value', 'blah');
     expect(instance.getFormValueForAlias('prefix.value')).to.equal('blah');
+    localStorage.removeItem('prefix.value');
   });
 
   it('can purge form values', () => {
@@ -41,6 +37,9 @@ describe('FormValueContainer', () => {
     setTimeout(() => {
       expect(typeof instance.getFormValueForAlias('prefix.value1')).to.equal('undefined');
       expect(typeof instance.getFormValueForAlias('prefix.value2')).to.equal('undefined');
+
+      localStorage.removeItem('prefix.value1');
+      localStorage.removeItem('prefix.value2');
     }, 100);
   });
 });

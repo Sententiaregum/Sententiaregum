@@ -11,13 +11,10 @@
 'use strict';
 
 import { store } from 'sententiaregum-flux-container';
-import initializeCredentials from './initializer/initializeCredentials';
+import Locale from '../util/http/LocaleService';
 
 export default store({
-  'REQUEST_API_KEY': {
-    // in this case the initializer can be used for state changes since
-    // the procedure of fetching data from the `ApiKey` service
-    // is alwasy the same.
-    function: initializeCredentials
+  'CHANGE_LOCALE': {
+    params: ['locale']
   }
-}, initializeCredentials);
+}, { locale: Locale.getLocale() });

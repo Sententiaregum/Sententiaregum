@@ -19,8 +19,9 @@ import FormHelper from '../../../util/react/FormHelper';
 import { runAction, connector } from 'sententiaregum-flux-container';
 import deepAssign from 'deep-assign';
 import FormField from '../../form/FormField';
-import Locale from '../../../util/http/LocaleService';
 import counterpart from 'counterpart';
+import getStateValue from '../../../store/provider/getStateValue';
+import LanguageStore from '../../../store/LanguageStore';
 
 /**
  * Form component for the login form.
@@ -134,7 +135,7 @@ export default class Form extends Component {
   _getError() {
     const errors = this.state.validation.errors;
     if (errors) {
-      return errors[Locale.getLocale()];
+      return errors[getStateValue(LanguageStore, 'locale', 'en')];
     }
 
     return null;

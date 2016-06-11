@@ -11,7 +11,8 @@
 'use strict';
 
 import { TRANSFORM_ITEMS } from '../constants/Menu';
-import ApiKey from '../util/http/ApiKeyService';
+import UserStore from '../store/UserStore';
+import getStateValue from '../store/provider/getStateValue';
 
 /**
  * Action creator to build the menu items.
@@ -25,8 +26,8 @@ export function buildMenuItems(items) {
     dispatch(TRANSFORM_ITEMS, {
       items,
       authData: {
-        logged_in: ApiKey.isLoggedIn(),
-        is_admin:  ApiKey.isAdmin()
+        logged_in: getStateValue(UserStore, 'is_logged_in', false),
+        is_admin:  getStateValue(UserStore, 'is_admin', false)
       }
     });
   };

@@ -16,7 +16,7 @@ import Translate from 'react-translate-component';
 /**
  * InfoBox that will be rendered on the left to the login box.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @returns {React.Element} The markup for the infobox.
  */
 export default () => {
   return (

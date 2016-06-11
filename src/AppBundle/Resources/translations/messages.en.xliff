@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="BACKEND_AUTH_LOCKED">
                 <source>BACKEND_AUTH_LOCKED</source>
-                <target>You cannot authenticate since you were locked!</target>
+                <target>You cannot authenticate since your account is locked!</target>
             </trans-unit>
 
             <trans-unit id="BACKEND_AUTH_NON_APPROVED">

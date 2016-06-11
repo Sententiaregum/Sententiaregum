@@ -10,10 +10,11 @@
 
 'use strict';
 
-import { GET_LOCALES } from '../constants/Locale';
+import { GET_LOCALES, CHANGE_LOCALE } from '../constants/Locale';
 import Locale from '../util/http/LocaleService';
-import ApiKey from '../util/http/ApiKeyService';
 import LocaleWebAPIUtils from '../util/api/LocaleWebAPIUtils';
+import UserStore from '../store/UserStore';
+import getStateValue from '../store/provider/getStateValue';
 
 /**
  * Action creator for the language loader.
@@ -36,10 +37,12 @@ export function loadLanguages() {
  * @returns {Function} The action.
  */
 export function changeLocale(locale) {
-  return () => {
+  return dispatch => {
     Locale.setLocale(locale);
-    if (ApiKey.isLoggedIn()) {
+    if (getStateValue(UserStore, 'is_logged_in', false)) {
       LocaleWebAPIUtils.changeUserLocale(locale);
     }
+
+    dispatch(CHANGE_LOCALE, { locale });
   };
 }

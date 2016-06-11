@@ -80,4 +80,4 @@ npm-debug.log
 /deploy/config/deploy.yaml
 
 # LocalStorage Emulation
-/node-emulator/*
+/node-emulator/

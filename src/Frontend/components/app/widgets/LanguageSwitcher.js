@@ -14,11 +14,12 @@ import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import { loadLanguages, changeLocale } from '../../../actions/LocaleActions';
 import LocaleStore from '../../../store/LocaleStore';
-import Locale from '../../../util/http/LocaleService';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import LoadingDropDown from '../markup/LoadingDropDown';
 import DropDownItem from '../markup/DropDownItem';
 import { connector, runAction } from 'sententiaregum-flux-container';
+import getStateValue from '../../../store/provider/getStateValue';
+import LanguageStore from '../../../store/LanguageStore';
 
 /**
  * Widget which changes the user locale.
@@ -122,7 +123,7 @@ export default class LanguageSwitcher extends Component {
    */
   _buildDropDown(key, i) {
     const displayName = this.state.locales[key],
-        isActive      = Locale.getLocale() === key;
+        isActive      = getStateValue(LanguageStore, 'locale', 'en') === key;
 
     return <DropDownItem
       key={i}

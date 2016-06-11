@@ -115,6 +115,7 @@ export default class FormHelper {
     this._submitted = true;
     this._hasErrors = false;
 
+    this._container.purge(this._namespace);
     return {
       data:       this._eraseFields(fields),
       success:    true,

@@ -54,7 +54,7 @@
     "react-spinkit": "^1.1.6",
     "react-translate-component": "^0.11",
     "rewire": "^2.5.0",
-    "sententiaregum-flux-container": "^1.0.4",
+    "sententiaregum-flux-container": "^1.0.5",
     "style-loader": "^0.13",
     "uglify-js": "^2.6",
     "url-loader": "^0.5.6",

@@ -17,6 +17,10 @@ import { stub, spy } from 'sinon';
 import mockDOMEventObject from '../../fixtures/mockDOMEventObject';
 
 describe('FormHelper', () => {
+  afterEach(() => {
+    localStorage.removeItem('namespace.test');
+  });
+
   it('builds field alias', () => {
     const helper = new FormHelper({}, {}, {}, () => {}, 'namespace');
     expect(helper.getFormFieldAlias('test')).to.equal('namespace.test');

@@ -14,11 +14,13 @@ import ApiKeyService from '../../../util/http/ApiKeyService';
 import { expect } from 'chai';
 
 describe('ApiKeyService', () => {
-  it('checks against empty data', () => {
+  afterEach(() => {
     localStorage.removeItem('api_key');
     localStorage.removeItem('username');
     localStorage.removeItem('user_roles');
+  });
 
+  it('checks against empty data', () => {
     expect(ApiKeyService.isLoggedIn()).to.equal(false);
     expect(ApiKeyService.getApiKey()).to.equal(null);
     expect(ApiKeyService.isAdmin()).to.equal(false);
