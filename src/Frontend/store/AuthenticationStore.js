@@ -11,6 +11,7 @@
 'use strict';
 
 import { store } from 'sententiaregum-flux-container';
+import UserStore from './UserStore';
 
 /**
  * State builder.
@@ -26,8 +27,9 @@ function state(message = null) {
 
 export default store({
   'REQUEST_API_KEY': {
-    params:   [],
-    function: state
+    params:       [],
+    function:     state,
+    dependencies: [UserStore.getToken('REQUEST_API_KEY')]
   },
   'LOGIN_ERROR': {
     params:   ['message'],

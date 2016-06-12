@@ -95,4 +95,21 @@ describe('AccountWebAPIUtils', () => {
     });
     ApiKey.addCredentials.restore();
   });
+
+  it('runs the logout request', () => {
+    moxios.stubRequest('/api/api-key.json', {
+      status: 200
+    });
+
+    const handler = spy();
+    stub(ApiKey, 'purgeCredentials');
+
+    AccountWebAPIUtils.logout(handler);
+
+    moxios.wait(() => {
+      expect(spy.calledOnce).to.equal(true);
+      expect(ApiKey.purgeCredentials.calledOnce).to.equal(true);
+      ApiKey.purgeCredentials.restore();
+    });
+  });
 });

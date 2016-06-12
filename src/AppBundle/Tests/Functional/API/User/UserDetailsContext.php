@@ -69,5 +69,6 @@ class UserDetailsContext extends FixtureLoadingContext implements SnippetAccepti
     public function theProperApiKeyShouldBeAdjusted()
     {
         Assertion::eq($this->response['api_key'], AppContext::$apiKey);
+        Assertion::eq($this->response['locale'], 'en');
     }
 }

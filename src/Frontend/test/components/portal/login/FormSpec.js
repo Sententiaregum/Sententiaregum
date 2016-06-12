@@ -13,17 +13,61 @@
 import Form from '../../../../components/portal/login/Form';
 import React from 'react';
 import { expect } from 'chai';
+import { stub, spy } from 'sinon';
 import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
-import { stub } from 'sinon';
 import { shallow } from 'enzyme';
+import AuthenticationStore from '../../../../store/AuthenticationStore';
+import FormHelper from '../../../../util/react/FormHelper';
 
 describe('Form', () => {
   it('handles errors', () => {
-    stub(AccountWebAPIUtils, 'requestApiKey', (username, login, error) => {
-      error({
-        message: 'Credentials refused!'
-      });
+    stub(AuthenticationStore, 'getState', () => ({
+      message: {
+        de: 'Ungültige Zugangsdaten',
+        en: 'Invalid credentials'
+      }
+    }));
+
+    stub(FormHelper.prototype, 'isSubmitted', () => true);
+    const cmp = shallow(<Form />);
+    cmp.instance()._change();
+    cmp.update();
+
+    expect(cmp.find('SimpleErrorAlert').prop('error').en).to.equal('Invalid credentials');
+
+    FormHelper.prototype.isSubmitted.restore();
+    AuthenticationStore.getState.restore();
+  });
+
+  it('handles success', () => {
+    stub(AuthenticationStore, 'getState', () => ({}));
+
+    const replacer = spy();
+    const cmp      = shallow(<Form />, {
+      context: {
+        router: {
+          replace: replacer
+        }
+      }
     });
+
+    cmp.setState({
+      data: {
+        username: 'Ma27',
+        password: '123456'
+      }
+    });
+
+    cmp.instance()._change();
+    expect(replacer.calledOnce).to.equal(true);
+    expect(replacer.calledWith('/dashboard')).to.equal(true);
+
+    AuthenticationStore.getState.restore();
+  });
+
+  it('handles submit', () => {
+    stub(AuthenticationStore, 'getState', () => ({}));
+    stub(AccountWebAPIUtils, 'requestApiKey');
 
     const cmp = shallow(<Form />);
     cmp.setState({
@@ -33,13 +77,14 @@ describe('Form', () => {
       }
     });
 
-    cmp.find('form').simulate('submit', { preventDefault: () => {} });
+    cmp.simulate('submit', { preventDefault: () => {} });
 
-    setTimeout(() => {
-      expect(cmp.find('form > DismissableAlertBox > p').contains('Credentials refused!'));
-    });
+    expect(AccountWebAPIUtils.requestApiKey.calledOnce);
 
-    expect(AccountWebAPIUtils.requestApiKey.calledOnce).to.equal(true);
+    expect(AccountWebAPIUtils.requestApiKey.args[0][0]).to.equal('Ma27');
+    expect(AccountWebAPIUtils.requestApiKey.args[0][1]).to.equal('123456');
+
     AccountWebAPIUtils.requestApiKey.restore();
+    AuthenticationStore.getState.restore();
   });
 });

@@ -56,6 +56,14 @@ export default {
           info:  'Über Sententiaregum'
         }
       }
+    },
+    network: {
+      logout:    'Logout',
+      dashboard: {
+        index: {
+          title: 'Neueste Nachrichten'
+        }
+      }
     }
   }
 };

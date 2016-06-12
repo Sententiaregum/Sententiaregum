@@ -12,9 +12,13 @@
 
 import { store } from 'sententiaregum-flux-container';
 import Locale from '../util/http/LocaleService';
+import handleLogin from './handler/handleLogin';
 
 export default store({
   'CHANGE_LOCALE': {
     params: ['locale']
+  },
+  'REQUEST_API_KEY': {
+    function: handleLogin
   }
 }, { locale: Locale.getLocale() });

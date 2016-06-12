@@ -10,7 +10,7 @@
 
 'use strict';
 
-import { registration, activate, authenticate } from '../../actions/PortalActions';
+import { registration, activate, authenticate, logout } from '../../actions/PortalActions';
 import { stub, assert } from 'sinon';
 import { expect } from 'chai'
 import AccountWebAPIUtils from '../../util/api/AccountWebAPIUtils';
@@ -18,6 +18,7 @@ import RegistrationStore from '../../store/RegistrationStore';
 import { runAction } from 'sententiaregum-flux-container';
 import ActivationStore from '../../store/ActivationStore';
 import AuthenticationStore from '../../store/AuthenticationStore';
+import UserStore from '../../store/UserStore';
 
 describe('PortalActions', () => {
   it('triggers the registration process', () => {
@@ -79,5 +80,14 @@ describe('PortalActions', () => {
     expect(AuthenticationStore.getState().message).to.equal('Credential error!');
 
     AccountWebAPIUtils.requestApiKey.restore();
+  });
+
+  it('runs the logout process', () => {
+    stub(AccountWebAPIUtils, 'logout', handler => handler());
+
+    runAction(logout, []);
+    expect(UserStore.getState().is_logged_in).to.equal(false);
+
+    AccountWebAPIUtils.logout.restore();
   });
 });

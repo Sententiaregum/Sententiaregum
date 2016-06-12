@@ -17,7 +17,7 @@ import Locale from '../../util/http/LocaleService';
 import LocaleWebAPIUtils from '../../util/api/LocaleWebAPIUtils';
 import { runAction } from 'sententiaregum-flux-container';
 import UserStore from '../../store/UserStore';
-import LanguageStore from '../../store/LanguageStore';
+import CurrentLocaleStore from '../../store/CurrentLocaleStore';
 
 describe('LocaleActions', () => {
   it('changes the locale', () => {
@@ -35,7 +35,7 @@ describe('LocaleActions', () => {
 
     runAction(changeLocale, ['en']);
 
-    expect(LanguageStore.getState().locale).to.equal('en');
+    expect(CurrentLocaleStore.getState().locale).to.equal('en');
     assert.calledOnce(LocaleWebAPIUtils.changeUserLocale);
     Locale.setLocale.restore();
     LocaleWebAPIUtils.changeUserLocale.restore();

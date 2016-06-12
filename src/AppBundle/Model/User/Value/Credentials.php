@@ -37,6 +37,11 @@ class Credentials
     private $apiKey;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * Factory to create a credentials object from a user entity.
      *
      * @param User $user
@@ -48,7 +53,8 @@ class Credentials
         return new static(
             $user->getUsername(),
             $user->getRoles(),
-            $user->getApiKey()
+            $user->getApiKey(),
+            $user->getLocale()
         );
     }
 
@@ -58,12 +64,14 @@ class Credentials
      * @param string                       $username
      * @param \AppBundle\Model\User\Role[] $roles
      * @param string                       $apiKey
+     * @param string                       $locale
      */
-    public function __construct($username, array $roles, $apiKey)
+    public function __construct($username, array $roles, $apiKey, $locale)
     {
         $this->username = $username;
         $this->roles    = $roles;
         $this->apiKey   = $apiKey;
+        $this->locale   = $locale;
     }
 
     /**
@@ -94,5 +102,13 @@ class Credentials
     public function getApiKey()
     {
         return $this->apiKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 }

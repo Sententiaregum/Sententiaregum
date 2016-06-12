@@ -71,6 +71,26 @@ class AccountWebAPIUtils {
       })
       .catch(response => errorHandler(response.data));
   }
+
+  /**
+   * Handles the logout.
+   *
+   * @param {Function} handler The success handler.
+   *
+   * @returns {void}
+   */
+  logout(handler) {
+    // NOTE: in #240 it is planned to build a hook which handles failed HTTP requests.
+    axios.delete('/api/api-key.json', {
+      headers: {
+        'X-API-KEY': ApiKey.getApiKey()
+      }
+    })
+      .then(() => {
+        ApiKey.purgeCredentials();
+        handler();
+      });
+  }
 }
 
 export default new AccountWebAPIUtils();

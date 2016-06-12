@@ -12,6 +12,7 @@
 
 import { expect } from 'chai';
 import FormHelper from '../../../util/react/FormHelper';
+import FormValueContainer from '../../../util/react/FormValueContainer';
 import counterpart from 'counterpart';
 import { stub, spy } from 'sinon';
 import mockDOMEventObject from '../../fixtures/mockDOMEventObject';
@@ -188,5 +189,14 @@ describe('FormHelper', () => {
 
     expect(helper.associateFieldsWithStyle(['blah'])).to.equal('error');
     expect(helper.hasErrors()).to.equal(true);
+  });
+
+  it('purges form data', () => {
+    const helper            = new FormHelper({}, {}, {}, () => {}, 'namespace', false);
+    helper._container.purge = spy();
+
+    helper.purge();
+    expect(helper._container.purge.calledOnce).to.equal(true);
+    expect(helper._container.purge.calledWith('namespace')).to.equal(true);
   });
 });

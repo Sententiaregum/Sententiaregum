@@ -114,8 +114,8 @@ export default class FormHelper {
   getSuccessState(fields) {
     this._submitted = true;
     this._hasErrors = false;
+    this.purge();
 
-    this._container.purge(this._namespace);
     return {
       data:       this._eraseFields(fields),
       success:    true,
@@ -224,6 +224,15 @@ export default class FormHelper {
    */
   isSubmitted() {
     return this._submitted || false;
+  }
+
+  /**
+   * Purges the form data.
+   *
+   * @returns {void}
+   */
+  purge() {
+    this._container.purge(this._namespace);
   }
 
   /**

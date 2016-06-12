@@ -22,7 +22,7 @@ import SelectableField from '../../form/SelectableField';
 import deepAssign from 'deep-assign';
 import { connector, runAction } from 'sententiaregum-flux-container';
 import getStateValue from '../../../store/provider/getStateValue';
-import LanguageStore from '../../../store/LanguageStore';
+import CurrentLocaleStore from '../../../store/CurrentLocaleStore';
 
 /**
  * Form component for the signup page.
@@ -44,7 +44,7 @@ export default class Form extends Component {
 
     const currentState = RegistrationStore.getState(), hasState = currentState ? true : false;
     this.helper        = new FormHelper(
-      { username: '', email: '', locale: getStateValue(LanguageStore, 'locale', 'en') },
+      { username: '', email: '', locale: getStateValue(CurrentLocaleStore, 'locale', 'en') },
       { password: '' },
       { suggestions: hasState ? currentState.suggestions : [] },
       nextState => this.setState(deepAssign({ data: this.state.data }, nextState)),

@@ -56,6 +56,14 @@ export default {
           info:  'About Sententiaregum'
         }
       }
+    },
+    network: {
+      logout:    'Logout',
+      dashboard: {
+        index: {
+          title: 'Recent activity'
+        }
+      }
     }
   }
 };

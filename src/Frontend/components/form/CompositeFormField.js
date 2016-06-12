@@ -17,7 +17,7 @@ import FormHelper from '../../util/react/FormHelper';
 import counterpart from 'counterpart';
 import invariant from 'invariant';
 import getStateValue from '../../store/provider/getStateValue';
-import LanguageStore from '../../store/LanguageStore';
+import CurrentLocaleStore from '../../store/CurrentLocaleStore';
 
 /**
  * Abstract ReactJS component which behaves as wrapper for form fields.
@@ -93,7 +93,7 @@ export default class CompositeFormField extends Component {
       return [];
     }
 
-    const errorsForProperty = errorList[getStateValue(LanguageStore, 'locale', 'en')];
+    const errorsForProperty = errorList[getStateValue(CurrentLocaleStore, 'locale', 'en')];
     invariant(
       'undefined' !== typeof errorsForProperty,
       'Cannot extract errors from state!'

@@ -21,7 +21,7 @@
  */
 export default (store, value, defaultValue = null) => {
   const state = store.getState();
-  if (typeof state[value] === 'undefined') {
+  if ('undefined' === typeof state[value]) {
     return defaultValue;
   }
 

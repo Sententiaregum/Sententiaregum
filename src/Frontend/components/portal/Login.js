@@ -12,38 +12,28 @@
 
 import Translate from 'react-translate-component';
 import React from 'react';
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 import InfoBox from './login/InfoBox';
 import Form from './login/Form';
 import Panel from 'react-bootstrap/lib/Panel';
+import InversedGrid from '../app/markup/InversedGrid';
 
 /**
  * Login component.
  *
  * @returns {React.Element} The landing page markup.
  */
-const Login = () => {
+export default () => {
   return (
     <div>
       <h1><Translate content="pages.portal.login.headline" /></h1>
-      <Grid className="container-without-padding">
-        <Row className="inversed-column-container">
-          <Col md={6} className="grid-item-1">
-            <Panel bsStyle="success" header={<Translate content="pages.portal.login.panels.login" />}>
-              <Form />
-            </Panel>
-          </Col>
-          <Col md={6} className="grid-item-2">
-            <Panel bsStyle="info" header={<Translate content="pages.portal.login.panels.info" />}>
-              <InfoBox />
-            </Panel>
-          </Col>
-        </Row>
-      </Grid>
+      <InversedGrid>
+        <Panel bsStyle="success" header={<Translate content="pages.portal.login.panels.login" />}>
+          <Form />
+        </Panel>
+        <Panel bsStyle="info" header={<Translate content="pages.portal.login.panels.info" />}>
+          <InfoBox />
+        </Panel>
+      </InversedGrid>
     </div>
   );
 };
-
-export default Login;

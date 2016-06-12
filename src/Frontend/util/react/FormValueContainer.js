@@ -48,13 +48,10 @@ export default class FormValueContainer {
    * @returns {void}
    */
   purge(aliasPrefix) {
-    // it's better to do the job asynchronously
-    setTimeout(() => {
-      Object.keys(localStorage).forEach(index => {
-        if (-1 !== index.indexOf(aliasPrefix)) {
-          localStorage.removeItem(index);
-        }
-      });
+    Object.keys(localStorage).forEach(index => {
+      if (-1 !== index.indexOf(aliasPrefix)) {
+        localStorage.removeItem(index);
+      }
     });
   }
 }

@@ -16,6 +16,7 @@ const ACTIVATE_ACCOUNT         = 'ACTIVATE_ACCOUNT';
 const ACTIVATION_FAILURE       = 'ACTIVATION_FAILURE';
 const REQUEST_API_KEY          = 'REQUEST_API_KEY';
 const LOGIN_ERROR              = 'LOGIN_ERROR';
+const LOGOUT                   = 'LOGOUT';
 
 export {
   CREATE_ACCOUNT,
@@ -23,5 +24,6 @@ export {
   ACTIVATE_ACCOUNT,
   ACTIVATION_FAILURE,
   REQUEST_API_KEY,
-  LOGIN_ERROR
+  LOGIN_ERROR,
+  LOGOUT
 };

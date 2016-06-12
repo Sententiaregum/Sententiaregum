@@ -14,14 +14,11 @@ import React, { Component } from 'react';
 import LoadableButtonBar from '../../form/LoadableButtonBar';
 import { authenticate } from '../../../actions/PortalActions';
 import AuthenticationStore from '../../../store/AuthenticationStore';
-import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
 import FormHelper from '../../../util/react/FormHelper';
 import { runAction, connector } from 'sententiaregum-flux-container';
 import deepAssign from 'deep-assign';
 import FormField from '../../form/FormField';
-import counterpart from 'counterpart';
-import getStateValue from '../../../store/provider/getStateValue';
-import LanguageStore from '../../../store/LanguageStore';
+import SimpleErrorAlert from '../../app/markup/SimpleErrorAlert';
 
 /**
  * Form component for the login form.
@@ -38,8 +35,7 @@ export default class Form extends Component {
    */
   constructor(props) {
     super(props);
-    this.handler     = this._change.bind(this);
-    this.i18nHandler = () => this.forceUpdate();
+    this.handler = this._change.bind(this);
 
     const state = AuthenticationStore.getState().message;
     this.helper = new FormHelper(
@@ -60,7 +56,6 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    counterpart.onLocaleChange(this.i18nHandler);
     connector(AuthenticationStore).useWith(this.handler);
   }
 
@@ -70,7 +65,6 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    counterpart.offLocaleChange(this.i18nHandler);
     connector(AuthenticationStore).unsubscribe(this.handler);
   }
 
@@ -82,11 +76,7 @@ export default class Form extends Component {
   render() {
     let errorBox;
     if (!this.state.success && this.helper.isSubmitted()) {
-      errorBox = (
-        <DismissableAlertBox bsStyle="danger">
-          <p>{this._getError()}</p>
-        </DismissableAlertBox>
-      );
+      errorBox = <SimpleErrorAlert error={this.state.validation.errors} />;
     }
 
     return (
@@ -121,24 +111,14 @@ export default class Form extends Component {
     const state = AuthenticationStore.getState();
     if (state.message) {
       this.setState(this.helper.getErrorState(this.state.data, state.message));
-    } else {
-      // todo
-    }
-  }
 
-  /**
-   * Getter for the form error.
-   *
-   * @returns {String} The error.
-   * @private
-   */
-  _getError() {
-    const errors = this.state.validation.errors;
-    if (errors) {
-      return errors[getStateValue(LanguageStore, 'locale', 'en')];
+      return;
     }
 
-    return null;
+    this.helper.purge();
+
+    // redirect to the internal page
+    this.context.router.replace('/dashboard');
   }
 
   /**
@@ -156,3 +136,10 @@ export default class Form extends Component {
     e.preventDefault();
   }
 }
+
+Form.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
+};

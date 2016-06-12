@@ -19,7 +19,7 @@ import LoadingDropDown from '../markup/LoadingDropDown';
 import DropDownItem from '../markup/DropDownItem';
 import { connector, runAction } from 'sententiaregum-flux-container';
 import getStateValue from '../../../store/provider/getStateValue';
-import LanguageStore from '../../../store/LanguageStore';
+import CurrentLocaleStore from '../../../store/CurrentLocaleStore';
 
 /**
  * Widget which changes the user locale.
@@ -123,7 +123,7 @@ export default class LanguageSwitcher extends Component {
    */
   _buildDropDown(key, i) {
     const displayName = this.state.locales[key],
-        isActive      = getStateValue(LanguageStore, 'locale', 'en') === key;
+        isActive      = getStateValue(CurrentLocaleStore, 'locale', 'en') === key;
 
     return <DropDownItem
       key={i}

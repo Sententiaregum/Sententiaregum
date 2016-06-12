@@ -11,7 +11,7 @@
 'use strict';
 
 import AccountWebAPIUtils from '../util/api/AccountWebAPIUtils';
-import { CREATE_ACCOUNT, ACCOUNT_VALIDATION_ERROR, ACTIVATE_ACCOUNT, ACTIVATION_FAILURE, REQUEST_API_KEY, LOGIN_ERROR } from '../constants/Portal';
+import { CREATE_ACCOUNT, ACCOUNT_VALIDATION_ERROR, ACTIVATE_ACCOUNT, ACTIVATION_FAILURE, REQUEST_API_KEY, LOGIN_ERROR, LOGOUT } from '../constants/Portal';
 
 /**
  * Processor for the registration.
@@ -68,5 +68,18 @@ export function authenticate(username, password) {
       data => dispatch(LOGIN_ERROR, { message: data.message }),
       data => dispatch(REQUEST_API_KEY, { apiKey: data.apiKey, roles: data.roles, username: data.username })
     );
+  };
+}
+
+/**
+ * Triggers the logout process.
+ *
+ * @returns {Function} The action creator.
+ */
+export function logout() {
+  return dispatch => {
+    AccountWebAPIUtils.logout(() => {
+      dispatch(LOGOUT);
+    });
   };
 }

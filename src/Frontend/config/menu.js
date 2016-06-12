@@ -15,10 +15,17 @@ export default [
     label:  'menu.start',
     url:    '/#/',
     portal: true
-  },
-  {
+  }, {
     label:  'pages.portal.head',
     url:    '/#/sign-up',
     portal: true
+  }, {
+    label:     'pages.network.dashboard.index.title',
+    url:       '/#/dashboard',
+    logged_in: true
+  }, {
+    label:     'pages.network.logout',
+    url:       '/#/logout',
+    logged_in: true
   }
 ];

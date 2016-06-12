@@ -15,6 +15,7 @@ import Menu from '../../../../../components/app/layout/menu/Menu';
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import { shallow } from 'enzyme';
+import MenuStore from '../../../../../store/MenuStore';
 
 describe('Menu', () => {
   it('renders empty menu bar into document', () => {
@@ -22,11 +23,28 @@ describe('Menu', () => {
   });
 
   it('renders menu items', () => {
-    const markup = shallow(<Menu items={[]} />);
-    setTimeout(() => {
-      const item = markup.find('MenuItem');
-      expect(item.prop('url')).to.equal('/#/');
-      expect(item.prop('label')).to.equal('menu.start');
+    stub(MenuStore, 'getState', () => ([
+      {
+        label: 'menu.start',
+        url:   '/#/'
+      }
+    ]));
+
+    const markup = shallow(<Menu items={[]} />, {
+      context: {
+        router: {
+          isActive: () => false
+        }
+      }
     });
+
+    markup.instance()._storeMenuItems();
+    markup.update();
+
+    const item = markup.find('MenuItem');
+    expect(item.prop('url')).to.equal('/#/');
+    expect(item.prop('label')).to.equal('menu.start');
+
+    MenuStore.getState.restore();
   });
 });

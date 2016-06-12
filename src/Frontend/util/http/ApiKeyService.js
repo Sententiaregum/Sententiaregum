@@ -10,6 +10,8 @@
 
 'use strict';
 
+import Locale from './LocaleService';
+
 /**
  * Service which is responsible for handling the interaction with api keys.
  *
@@ -66,14 +68,28 @@ class ApiKeyService {
    */
   addCredentials(data) {
     const {
-      apiKey,
+      api_key,
       roles,
-      username
+      username,
+      locale
     } = data;
 
-    localStorage.setItem('api_key', apiKey);
-    localStorage.setItem('user_roles', JSON.stringify(roles.map(entity => entity.role)));
+    localStorage.setItem('api_key', api_key);
+    localStorage.setItem('user_roles', JSON.stringify(Object.keys(roles)));
     localStorage.setItem('username', username);
+
+    Locale.setLocale(locale);
+  }
+
+  /**
+   * Purges the credentials from the localstorage.
+   *
+   * @returns {void}
+   */
+  purgeCredentials() {
+    localStorage.removeItem('api_key');
+    localStorage.removeItem('user_roles');
+    localStorage.removeItem('username');
   }
 }
 

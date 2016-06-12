@@ -23,16 +23,18 @@ describe('UserStore', () => {
     stub(ApiKey, 'isAdmin', () => true);
     stub(ApiKey, 'getApiKey', () => 'key');
 
-    runAction(() => {
-      return dispatch => dispatch('REQUEST_API_KEY', {});
-    }, []);
+    ['REQUEST_API_KEY', 'LOGOUT'].forEach(event => {
+      runAction(() => {
+        return dispatch => dispatch(event, {});
+      }, []);
 
-    const state = UserStore.getState();
+      const state = UserStore.getState();
 
-    expect(state.is_admin).to.equal(true);
-    expect(state.is_logged_in).to.equal(true);
-    expect(state.username).to.equal('Ma27');
-    expect(state.key).to.equal('key');
+      expect(state.is_admin).to.equal(true);
+      expect(state.is_logged_in).to.equal(true);
+      expect(state.username).to.equal('Ma27');
+      expect(state.key).to.equal('key');
+    });
 
     ApiKey.getUsername.restore();
     ApiKey.isLoggedIn.restore();
