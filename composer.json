@@ -29,7 +29,8 @@
         "ramsey/uuid": "^3.4",
         "eightpoints/guzzle-bundle": "^4.5",
         "ocramius/proxy-manager": "^1.0",
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "doctrine/data-fixtures": "^1.1,<1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "5.3.*",

@@ -23,7 +23,6 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\ExecutionContextInterface as LegacyExecutionContextInterface;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
 use Symfony\Component\Validator\Validation;
 
@@ -85,18 +84,6 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
     {
         $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
         $propertyMock->validate('value', $this->getMock(Constraint::class));
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /Expected argument of type "Symfony\\Component\\Validator\\Context\\ExecutionContextInterface", ".*" given/
-     */
-    public function testLegacyExecutionContext()
-    {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
-        $propertyMock->initialize($this->getMock(LegacyExecutionContextInterface::class));
-
-        $propertyMock->validate('value', new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username']));
     }
 
     /**

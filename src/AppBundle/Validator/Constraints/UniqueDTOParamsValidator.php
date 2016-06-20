@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
@@ -51,12 +50,6 @@ class UniqueDTOParamsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, UniqueDTOParams::class);
         }
 
-        /** @var ExecutionContextInterface $context */
-        $context = $this->context;
-        if (!$context instanceof ExecutionContextInterface) {
-            throw new UnexpectedTypeException($context, ExecutionContextInterface::class);
-        }
-
         if (!is_object($value)) {
             throw new UnexpectedTypeException($value, 'object');
         }
@@ -82,7 +75,7 @@ class UniqueDTOParamsValidator extends ConstraintValidator
             ));
         }
 
-        $contextualValidator = $context->getValidator()->inContext($context);
+        $contextualValidator = $this->context->getValidator()->inContext($this->context);
         foreach ($constraint->fieldConfig as $configItem) {
             $item    = $resolver->resolve($configItem);
             $options = [];

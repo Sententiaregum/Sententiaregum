@@ -15,7 +15,6 @@ namespace AppBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
@@ -50,13 +49,7 @@ class LocaleValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, Locale::class);
         }
 
-        /** @var ExecutionContextInterface $context */
-        $context = $this->context;
-        if (!$context instanceof ExecutionContextInterface) {
-            throw new UnexpectedTypeException($context, ExecutionContextInterface::class);
-        }
-
-        $validator     = $context->getValidator();
+        $validator     = $this->context->getValidator();
         $choiceOptions = [
             'strict'  => true,
             'choices' => $this->allowedLocales,
@@ -64,7 +57,7 @@ class LocaleValidator extends ConstraintValidator
         ];
 
         $validator
-            ->inContext($context)
+            ->inContext($this->context)
             ->validate($value, new Choice($choiceOptions));
     }
 }

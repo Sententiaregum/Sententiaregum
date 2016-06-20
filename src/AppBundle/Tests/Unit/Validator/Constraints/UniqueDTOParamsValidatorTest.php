@@ -17,7 +17,6 @@ use AppBundle\Validator\Constraints\UniqueDTOParamsValidator;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ExecutionContextInterface as LegacyContext;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
 
 class UniqueDTOParamsValidatorTest extends AbstractConstraintValidatorTest
@@ -59,18 +58,6 @@ class UniqueDTOParamsValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidConstraint()
     {
         $this->validator->validate(new \stdClass(), $this->getMock(Constraint::class));
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /Expected argument of type "Symfony\\Component\\Validator\\Context\\ExecutionContextInterface", ".*" given/
-     */
-    public function testInvalidContext()
-    {
-        $localeValidator = new UniqueDTOParamsValidator(new PropertyAccessor());
-        $localeValidator->initialize($this->getMock(LegacyContext::class));
-
-        $localeValidator->validate('de', new UniqueDTOParams(['fieldConfig' => []]));
     }
 
     /**

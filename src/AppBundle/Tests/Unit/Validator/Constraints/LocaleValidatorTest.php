@@ -16,7 +16,6 @@ use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\LocaleValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\ExecutionContextInterface as LegacyContext;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
 
 class LocaleValidatorTest extends AbstractConstraintValidatorTest
@@ -65,18 +64,6 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
             ->setParameter('{{ value }}', 'fr')
             ->setCode(Choice::NO_SUCH_CHOICE_ERROR)
             ->assertRaised();
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /Expected argument of type "Symfony\\Component\\Validator\\Context\\ExecutionContextInterface", ".*" given/
-     */
-    public function testInvalidContext()
-    {
-        $localeValidator = new LocaleValidator([]);
-        $localeValidator->initialize($this->getMock(LegacyContext::class));
-
-        $localeValidator->validate('de', new Locale());
     }
 
     /**

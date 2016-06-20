@@ -15,7 +15,6 @@ namespace AppBundle\Validator\Constraints;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
@@ -59,12 +58,6 @@ class UniquePropertyValidator extends ConstraintValidator
         /** @var UniqueProperty $constraint */
         if (!$constraint instanceof UniqueProperty) {
             throw new UnexpectedTypeException($constraint, UniqueProperty::class);
-        }
-
-        /** @var ExecutionContextInterface $context */
-        $context = $this->context;
-        if (!$context instanceof ExecutionContextInterface) {
-            throw new UnexpectedTypeException($context, ExecutionContextInterface::class);
         }
 
         if (!is_scalar($value) && (!is_object($value) && !method_exists($value, '__toString'))) {
@@ -122,7 +115,8 @@ class UniquePropertyValidator extends ConstraintValidator
         $search     = $repository->findOneBy($query);
 
         if (!empty($search)) {
-            $context
+            $this
+                ->context
                 ->buildViolation($constraint->message)
                 ->setParameter('%property%', $field)
                 ->setParameter('%entity%', $entityAlias)
