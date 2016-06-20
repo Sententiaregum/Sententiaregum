@@ -154,9 +154,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
         $user = $result['user'];
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
 
         $this->sendActivationEmail($user);
+        $this->entityManager->flush();
 
         return new RegistrationResult(null, [], $user);
     }
@@ -180,11 +180,12 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
 
         $newUser = User::create(
             $userParameters->getUsername(),
-            $this->hashPassword($userParameters->getPassword()),
-            $userParameters->getEmail()
+            $userParameters->getPassword(),
+            $userParameters->getEmail(),
+            $this->hasher
         );
 
-        $newUser->setLocale($userParameters->getLocale());
+        $newUser->modifyUserLocale($userParameters->getLocale());
         $this->buildNotActivatedUser($newUser);
 
         return [
@@ -373,7 +374,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function buildNotActivatedUser(User $user)
     {
-        $user->setActivationKey($this->getUniqueActivationKey());
+        $user->storeUniqueActivationKeyForNonApprovedUser($this->getUniqueActivationKey());
     }
 
     /**
@@ -396,17 +397,5 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     private function tooManyGenerationAttempts($currentAmount)
     {
         return $currentAmount >= 200;
-    }
-
-    /**
-     * Builds a password hash.
-     *
-     * @param string $password
-     *
-     * @return string
-     */
-    private function hashPassword($password)
-    {
-        return $this->hasher->generateHash($password);
     }
 }

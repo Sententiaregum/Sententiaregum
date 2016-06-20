@@ -20,6 +20,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\ExecutionContextInterface as LegacyExecutionContextInterface;
@@ -35,7 +36,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->expects($this->any())
             ->method('findOneBy')
             ->with(['username' => 'Ma27'])
-            ->willReturn($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev')));
+            ->willReturn($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher())));
 
         $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
         $classMetadata

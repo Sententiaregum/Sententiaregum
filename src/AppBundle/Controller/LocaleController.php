@@ -10,14 +10,12 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller\Language;
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\BaseController;
 use AppBundle\Model\User\DTO\LocaleSwitcherDTO;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -67,10 +65,10 @@ class LocaleController extends BaseController
      *
      * @param LocaleSwitcherDTO $localeSwitcherDTO
      *
-     * @return Response
-     *
      * @Rest\Patch("/protected/locale.{_format}", name="app.language.switch_locale", requirements={"_format"="^(json|xml)$"})
      * @ParamConverter(name="localeSwitcherDTO", class="AppBundle\Model\User\DTO\LocaleSwitcherDTO")
+     *
+     * @Rest\View(statusCode=204)
      */
     public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO)
     {
@@ -81,23 +79,15 @@ class LocaleController extends BaseController
             throw new HttpException(Response::HTTP_BAD_REQUEST);
         }
 
-        $user     = $this->getCurrentUser();
-        $response = new Response(null, Response::HTTP_NO_CONTENT);
+        $user = $this->getCurrentUser();
 
         if ($user->getLocale() !== $newLocale = $localeSwitcherDTO->getLocale()) {
             $em = $this->getDoctrine()->getManager();
 
-            $user->setLocale($newLocale);
+            $user->modifyUserLocale($newLocale);
 
             $em->persist($user);
             $em->flush();
-
-            $response->headers->setCookie(new Cookie('language', $newLocale));
         }
-
-        // for changing the value of the "language" cookie,
-        // a response is necessary, so the ViewResponseListener of FOSRest cannot
-        // be used.
-        return $response;
     }
 }

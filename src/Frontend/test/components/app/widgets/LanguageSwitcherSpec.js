@@ -13,27 +13,28 @@
 import LanguageSwitcher from '../../../../components/app/widgets/LanguageSwitcher';
 import { stub } from 'sinon';
 import { expect } from 'chai';
-import Locale from '../../../../util/http/LocaleService';
 import React from 'react';
 import { shallow } from 'enzyme';
-import LocaleWebAPIUtils from '../../../../util/api/LocaleWebAPIUtils';
+import LocaleStore from '../../../../store/LocaleStore';
+import CurrentLocaleStore from '../../../../store/CurrentLocaleStore';
 
 describe('LanguageSwitcher', () => {
   it('renders the locales received from flux', () => {
-    stub(Locale, 'getLocale', () => 'de');
-    stub(LocaleWebAPIUtils, 'getLocales', (handler) => handler.apply({ de: 'Deutsch', en: 'English' }));
+    stub(CurrentLocaleStore, 'getState', () => ({ locale: 'de' }));
+    stub(LocaleStore, 'getState', () => ({ de: 'Deutsch' }));
 
     const markup = shallow(<LanguageSwitcher />);
-    setTimeout(() => {
-      expect(markup.find('LoadingDropDown')).to.have.length(0);
+    markup.instance()._refreshLocales();
+    markup.update();
 
-      const item = markup.find('DropDownItem');
-      expect(item.prop('isActive')).to.equal(true);
-      expect(item.prop('displayName')).to.equal('Deutsch');
-    });
+    expect(markup.find('LoadingDropDown')).to.have.length(0);
 
-    Locale.getLocale.restore();
-    LocaleWebAPIUtils.getLocales.restore();
+    const item = markup.find('DropDownItem');
+    expect(item.prop('isActive')).to.equal(true);
+    expect(item.prop('displayName')).to.equal('Deutsch');
+
+    LocaleStore.getState.restore();
+    CurrentLocaleStore.getState.restore();
   });
 
   it('shows loading bar', () => {

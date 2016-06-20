@@ -12,6 +12,7 @@
 
 import { expect } from 'chai';
 import FormValueContainer from '../../../util/react/FormValueContainer';
+import { stub } from 'sinon';
 
 describe('FormValueContainer', () => {
   let instance;
@@ -22,20 +23,16 @@ describe('FormValueContainer', () => {
   it('can set/get form values', () => {
     instance.persistFormValue('prefix.value', 'blah');
     expect(instance.getFormValueForAlias('prefix.value')).to.equal('blah');
+    localStorage.removeItem('prefix.value');
   });
 
-  it('can purge form values', () => {
-    instance.persistFormValue('prefix.value1', 'blah');
-    instance.persistFormValue('prefix.value2', 'blah');
-
-    expect(typeof instance.getFormValueForAlias('prefix.value1')).to.not.equal('undefined');
-    expect(typeof instance.getFormValueForAlias('prefix.value2')).to.not.equal('undefined');
+  it('purges multiple form items', () => {
+    stub(localStorage, 'removeItem');
+    localStorage['prefix.bar'] = 'foo';
 
     instance.purge('prefix');
-
-    setTimeout(() => {
-      expect(typeof instance.getFormValueForAlias('prefix.value1')).to.equal('undefined');
-      expect(typeof instance.getFormValueForAlias('prefix.value2')).to.equal('undefined');
-    }, 100);
+    expect(localStorage.removeItem.calledWith('prefix.bar'));
+    localStorage.removeItem.restore();
+    delete localStorage['prefix.bar'];
   });
 });

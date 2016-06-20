@@ -28,10 +28,11 @@ export default class FormHelper {
    * @param {Object}          extra                List of extra properties.
    * @param {Function}        stateReceiver        A hook in the associated component to ship state changes.
    * @param {String}          translationNamespace The translation prefix.
+   * @param {boolean}         multiFieldValidation Whether to do multifield validation or not.
    *
    * @returns {void}
    */
-  constructor(formFields, securedFormFields, extra, stateReceiver, translationNamespace) {
+  constructor(formFields, securedFormFields, extra, stateReceiver, translationNamespace, multiFieldValidation = true) {
     this._container  = new FormValueContainer();
     this._formFields = Object.assign({}, formFields, securedFormFields);
     this._secured    = securedFormFields;
@@ -39,6 +40,8 @@ export default class FormHelper {
     this._receiver   = stateReceiver;
     this._namespace  = translationNamespace;
     this._submitted  = false;
+    this._multiField = multiFieldValidation;
+    this._hasErrors  = false;
   }
 
   /**
@@ -52,6 +55,7 @@ export default class FormHelper {
     const hasErrors = 0 < Object.keys(errors).length;
     if (hasErrors) {
       this._submitted = true;
+      this._hasErrors = true;
     }
 
     const copy = this._formFields;
@@ -83,6 +87,7 @@ export default class FormHelper {
    */
   getErrorState(fields, errors, extra = {}) {
     this._submitted = true;
+    this._hasErrors = true;
 
     invariant(
       Object.keys(fields).length === Object.keys(this._formFields).length,
@@ -108,6 +113,8 @@ export default class FormHelper {
    */
   getSuccessState(fields) {
     this._submitted = true;
+    this._hasErrors = false;
+    this.purge();
 
     return {
       data:       this._eraseFields(fields),
@@ -158,7 +165,19 @@ export default class FormHelper {
    * @returns {String} The styles.
    */
   associateFieldsWithStyle(errors) {
+    if (!this._multiField && this.hasErrors()) {
+      return 'error';
+    }
     return this._submitted ? (0 === errors.length ? 'success' : 'error') : null;
+  }
+
+  /**
+   * Checks whether the managed form contains errors.
+   *
+   * @returns {boolean} The flag.
+   */
+  hasErrors() {
+    return this._hasErrors;
   }
 
   /**
@@ -196,6 +215,24 @@ export default class FormHelper {
       return value ? value : '';
     }
     return state;
+  }
+
+  /**
+   * Checks whether the managed for is submitted.
+   *
+   * @returns {boolean} The submitted flag.
+   */
+  isSubmitted() {
+    return this._submitted || false;
+  }
+
+  /**
+   * Purges the form data.
+   *
+   * @returns {void}
+   */
+  purge() {
+    this._container.purge(this._namespace);
   }
 
   /**

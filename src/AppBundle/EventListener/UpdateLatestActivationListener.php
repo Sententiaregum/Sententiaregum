@@ -49,19 +49,6 @@ class UpdateLatestActivationListener
 
         // saving is not necessary since the user will be updated after triggering
         // this event during the login
-        $user->setLastAction($this->getLastActionDateTimeInstance());
-    }
-
-    /**
-     * Gets the last action time.
-     *
-     * @return \DateTime
-     */
-    private function getLastActionDateTimeInstance()
-    {
-        $dateTime = new \DateTime();
-        $dateTime->setTimestamp($this->requestStack->getMasterRequest()->server->get('REQUEST_TIME'));
-
-        return $dateTime;
+        $user->updateLastAction();
     }
 }

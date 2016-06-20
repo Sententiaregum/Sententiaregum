@@ -26,7 +26,7 @@ const FormField = props => {
 
   return (
     <CompositeFormField name={name} errors={errors} helper={helper}>
-      <FormControl name={name} type={type} onChange={helper.getChangeListener()} value={value} placeholder={helper.getTranslatedFormField(name)} {...settings} main={true} />
+      <FormControl name={name} type={type} onChange={helper.getChangeListener()} value={value} placeholder={name} {...settings} main={true} />
       <FormControl.Feedback />
     </CompositeFormField>
   );

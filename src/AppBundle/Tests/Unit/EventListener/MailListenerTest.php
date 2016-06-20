@@ -15,6 +15,7 @@ namespace AppBundle\Tests\Unit\EventListener;
 use AppBundle\Event\MailerEvent;
 use AppBundle\EventListener\MailListener;
 use AppBundle\Model\User\User;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -25,8 +26,8 @@ class MailListenerTest extends \PHPUnit_Framework_TestCase
         $defaultEmail = 'info@sententiaregum.dev';
 
         $event = new MailerEvent();
-        $event->addUser(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev'));
-        $event->addUser(User::create('benbieler', '123456', 'benbieler@sententiaregum.dev'));
+        $event->addUser(User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher()));
+        $event->addUser(User::create('benbieler', '123456', 'benbieler@sententiaregum.dev', new PhpPasswordHasher()));
         $event->setTemplateSource('AppBundle:emails:test');
 
         $mailer = $this->getMockWithoutInvokingTheOriginalConstructor(\Swift_Mailer::class);

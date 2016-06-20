@@ -46,7 +46,7 @@ class SwitcherContext extends FixtureLoadingContext implements SnippetAcceptingC
             null,
             [],
             [],
-            null,
+            204,
             false,
             null,
             true
@@ -68,16 +68,5 @@ class SwitcherContext extends FixtureLoadingContext implements SnippetAcceptingC
     {
         $user = $this->getEntityManager()->getRepository('Account:User')->findOneBy(['username' => 'Ma27']);
         Assertion::eq('en', $user->getLocale());
-    }
-
-    /**
-     * @Then a cookie should be set
-     */
-    public function aCookieShouldBeSet()
-    {
-        $cookie = $this->result->headers->getCookies()[0];
-
-        Assertion::eq('en', $cookie->getValue());
-        Assertion::eq('language', $cookie->getName());
     }
 }

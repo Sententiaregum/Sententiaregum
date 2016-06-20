@@ -1,0 +1,31 @@
+/*
+ * This file is part of the Sententiaregum project.
+ *
+ * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * (c) Ben Bieler <benjaminbieler2014@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/* Feature to show the container at the right side on top when using smaller devices */
+.inversed-column-container {
+  @media (min-width: 992px) {
+    .grid-item-1 {
+      float:   right;
+      clear:   right;
+      display: inline-block;
+    }
+
+    .grid-item-2 {
+      float:   left;
+      clear:   left;
+      display: inline-block;
+    }
+  }
+}
+
+.container-without-padding {
+  padding-left:  0 !important;
+  padding-right: 0 !important;
+}

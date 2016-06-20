@@ -8,11 +8,22 @@
  * file that was distributed with this source code.
  */
 
+'use strict';
+
 import React from 'react';
 import Translate from 'react-translate-component';
 
-export default class HelloWorld extends React.Component {
-  render() {
-    return <Translate content="pages.hello.head" component="h1" />;
-  }
-}
+/**
+ * InfoBox that will be rendered on the left to the login box.
+ *
+ * @returns {React.Element} The markup for the infobox.
+ */
+export default () => {
+  return (
+    <div>
+      <div className="info-div-text">
+        <Translate content="pages.portal.login.info_text" />
+      </div>
+    </div>
+  );
+};

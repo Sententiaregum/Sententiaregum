@@ -13,36 +13,51 @@
 import ActivateAccount from '../../../components/portal/ActivateAccount';
 import React from 'react';
 import { expect } from 'chai';
-import { stub } from 'sinon';
-import AccountWebAPIUtils from '../../../util/api/AccountWebAPIUtils';
+import { stub, spy } from 'sinon';
 import { shallow } from 'enzyme';
+import ActivationStore from '../../../store/ActivationStore';
 
 describe('ActivateAccount', () => {
-  it('activates user accounts', () => {
-    stub(AccountWebAPIUtils, 'activate', (name, key, success, error) => {
-      error();
+  it('handles activation failure', () => {
+    const replace = spy();
+    stub(ActivationStore, 'getState', () => ({ success: false }));
+
+    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />, {
+      context: {
+        router: {
+          replace
+        }
+      }
     });
 
-    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
+    cmp.instance()._handleChange();
+    cmp.update();
 
-    setTimeout(() => {
-      expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('danger');
-    });
+    expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('danger');
+    expect(replace.called).to.equal(false);
 
-    AccountWebAPIUtils.activate.restore();
+    ActivationStore.getState.restore();
   });
 
-  it('handles activation failures', () => {
-    stub(AccountWebAPIUtils, 'activate', (name, key, success) => {
-      success();
+  it('activates user accounts', () => {
+    const replace = spy();
+    stub(ActivationStore, 'getState', () => ({ success: true }));
+
+    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />, {
+      context: {
+        router: {
+          replace
+        }
+      }
     });
 
-    const cmp = shallow(<ActivateAccount params={{ name: 'Ma27', key: Math.random() }} />);
+    cmp.instance()._handleChange();
+    cmp.update();
+    expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('success');
 
-    setTimeout(() => {
-      expect(cmp.find('DismissableAlertBox').prop('bsStyle')).to.equal('success');
-    });
+    expect(replace.calledOnce).to.equal(true);
+    expect(replace.calledWith('/')).to.equal(true);
 
-    AccountWebAPIUtils.activate.restore();
+    ActivationStore.getState.restore();
   });
 });

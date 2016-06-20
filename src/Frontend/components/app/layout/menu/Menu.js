@@ -16,6 +16,7 @@ import { buildMenuItems } from '../../../../actions/MenuActions';
 import React from 'react';
 import MenuItem from '../../markup/MenuItem';
 import { connector, runAction } from 'sententiaregum-flux-container';
+import UserStore from '../../../../store/UserStore';
 
 /**
  * Configurable menu rendering component.
@@ -38,7 +39,8 @@ export default class Menu extends React.Component {
       items: []
     };
 
-    this.handle = this._storeMenuItems.bind(this);
+    this.handle       = this._storeMenuItems.bind(this);
+    this.authReloader = this._reEvaluateMenuItems.bind(this);
   }
 
   /**
@@ -48,7 +50,9 @@ export default class Menu extends React.Component {
    */
   componentDidMount() {
     connector(MenuStore).useWith(this.handle);
-    runAction(buildMenuItems, [this.props.items]);
+    connector(UserStore).useWith(this.authReloader);
+
+    this._reEvaluateMenuItems();
   }
 
   /**
@@ -58,6 +62,7 @@ export default class Menu extends React.Component {
    */
   componentWillUnmount() {
     connector(MenuStore).unsubscribe(this.handle);
+    connector(UserStore).unsubscribe(this.authReloader);
   }
 
   /**
@@ -92,6 +97,16 @@ export default class Menu extends React.Component {
     this.setState({
       items: MenuStore.getState()
     });
+  }
+
+  /**
+   * Reevaluates the menu items.
+   *
+   * @returns {void}
+   * @private
+   */
+  _reEvaluateMenuItems() {
+    runAction(buildMenuItems, [this.props.items]);
   }
 }
 

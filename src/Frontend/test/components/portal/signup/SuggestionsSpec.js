@@ -15,7 +15,7 @@ import Suggestions from '../../../../components/portal/signup/Suggestions';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-describe('Sugestions', () => {
+describe('Suggestions', () => {
   it('renders suggestions', () => {
     const markup = shallow(<Suggestions suggestions={['Ma27_2016']} />);
     expect(markup.prop('bsStyle')).to.equal('warning');

@@ -15,12 +15,13 @@ namespace AppBundle\Tests\Model\User;
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\Util\DateTimeComparison;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     public function testLockUnlock()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertFalse($user->isLocked());
 
         $user->lock();
@@ -36,16 +37,16 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetActivationKeyOnApprovedUser()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->modifyActivationStatus(User::STATE_APPROVED);
 
-        $user->setActivationKey('any long activation key');
+        $user->storeUniqueActivationKeyForNonApprovedUser('any long activation key');
     }
 
     public function testRemoveActivationKey()
     {
-        $user = new User();
-        $user->setActivationKey('any long api key');
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->storeUniqueActivationKeyForNonApprovedUser('any long api key');
         $user->modifyActivationStatus(User::STATE_APPROVED, 'any long api key');
 
         $this->assertSame(User::STATE_APPROVED, $user->getActivationStatus());
@@ -57,36 +58,37 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyActivationKey()
     {
-        $user = new User();
-        $user->setActivationKey(null);
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->storeUniqueActivationKeyForNonApprovedUser(null);
     }
 
     public function testFactory()
     {
-        $user = User::create('Ma27', 'test', 'Ma27@sententiaregum.dev');
+        $hasher = new PhpPasswordHasher();
+        $user   = User::create('Ma27', 'test', 'Ma27@sententiaregum.dev', $hasher);
+
         $this->assertSame('Ma27', $user->getUsername());
-        $this->assertSame('test', $user->getPassword());
+        $this->assertTrue($hasher->compareWith($user->getPassword(), 'test'));
         $this->assertSame('Ma27@sententiaregum.dev', $user->getEmail());
     }
 
     public function testRemoveApiKey()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
+        $p = new \ReflectionProperty($user, 'apiKey');
+        $p->setAccessible(true);
         $this->assertEmpty($user->getApiKey());
-        $user->setApiKey('foo');
+        $p->setValue($user, 'key');
         $this->assertNotEmpty($user->getApiKey());
-        $user->removeApiKey();
+        $p->setValue($user, null);
         $this->assertEmpty($user->getApiKey());
     }
 
     public function testFollower()
     {
-        $user = new User();
-        $user->setUsername('Ma27');
-
-        $following = new User();
-        $following->setUsername('benbieler');
+        $user      = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $following = User::create('benbieler', '123456', 'bebieler@sententiaregum.dev', new PhpPasswordHasher());
 
         $user->addFollowing($following);
         $this->assertTrue($user->follows($following));
@@ -100,7 +102,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testRoles()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
 
         $user->modifyActivationStatus(User::STATE_APPROVED);
@@ -121,7 +123,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testRolesOnNonApprovedUser()
     {
-        $user = new User();
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
 
         $user->addRole($role);
@@ -130,7 +132,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testNewUserIp()
     {
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $this->assertTrue($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
         $this->assertFalse($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
@@ -139,7 +141,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testFailedAuthIp()
     {
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $user->addFailedAuthenticationWithIp($ip);
         $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
@@ -153,7 +155,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testFailedAuthWithKnownIp()
     {
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $this->assertTrue($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
 
@@ -167,7 +169,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testFailedAuthInRange()
     {
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
@@ -185,7 +187,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testNewUserIpWithFailedAuthenticationsLeadToCorruptionWarning()
     {
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
@@ -205,7 +207,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
@@ -225,7 +227,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $ip   = '127.0.0.1';
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $user->addFailedAuthenticationWithIp($ip);
         $user->addFailedAuthenticationWithIp($ip);
@@ -242,7 +244,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testAuthCheckForNonRegisteredIP()
     {
-        $user = User::create('Ma27', '123456', 'foo@bar.de');
+        $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $this->assertFalse(
             $user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', $this->getMock(DateTimeComparison::class))
@@ -251,7 +253,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialization()
     {
-        $user = User::create('Ma27', 'foo', 'foo@bar.de');
+        $hasher = new PhpPasswordHasher();
+        $user   = User::create('Ma27', 'foo', 'foo@bar.de', $hasher);
+
         $user->modifyActivationStatus(User::STATE_APPROVED);
         $user->addRole(new Role('ROLE_USER'));
         $user->addAndValidateNewUserIp('33.33.33.33', new DateTimeComparison());
@@ -265,7 +269,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $newUser = unserialize($serialized);
 
         $this->assertSame('Ma27', $newUser->getUsername());
-        $this->assertSame('foo', $newUser->getPassword());
+        $this->assertTrue($hasher->compareWith($user->getPassword(), 'foo'));
         $this->assertSame('foo@bar.de', $newUser->getEmail());
         $this->assertInstanceOf(\DateTime::class, $newUser->getLastAction());
         $this->assertInstanceOf(\DateTime::class, $newUser->getRegistrationDate());
@@ -281,8 +285,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testStateChangeWithoutActivationKey()
     {
-        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev');
-        $user->setActivationKey(uniqid());
+        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->storeUniqueActivationKeyForNonApprovedUser(uniqid());
         $user->modifyActivationStatus(User::STATE_APPROVED);
     }
 
@@ -292,21 +296,52 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidState()
     {
-        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev');
+        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->modifyActivationStatus('any random state');
     }
 
     public function testActivationLifecycle()
     {
-        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev');
+        $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertSame(User::STATE_NEW, $user->getActivationStatus());
 
         $activationKey = 'a long activation key'; // to be generated by a domain service
-        $user->setActivationKey($activationKey);
+        $user->storeUniqueActivationKeyForNonApprovedUser($activationKey);
         $this->assertSame($activationKey, $user->getPendingActivation()->getKey());
 
         $user->modifyActivationStatus(User::STATE_APPROVED, $activationKey);
         $this->assertSame(User::STATE_APPROVED, $user->getActivationStatus());
         $this->assertNull($user->getPendingActivation());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Old password is invalid, but must be given to change it!
+     */
+    public function testUpdatePasswordWithInvalidOldOne()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->setOrUpdatePassword('123456', new PhpPasswordHasher());
+        $user->setOrUpdatePassword('1234567', new PhpPasswordHasher(), 'invalid old one');
+    }
+
+    public function testUpdatePassword()
+    {
+        $hasher = new PhpPasswordHasher();
+        $user   = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+
+        $user->setOrUpdatePassword('1234567', $hasher, '123456');
+
+        $this->assertTrue($hasher->compareWith($user->getPassword(), '1234567'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid locale!
+     */
+    public function testInvalidLocale()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->modifyUserLocale('DE');
     }
 }

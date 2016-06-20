@@ -11,6 +11,7 @@
 'use strict';
 
 import axios from 'axios';
+import ApiKey from '../http/ApiKeyService';
 
 /**
  * API utils for account interactions.
@@ -44,9 +45,51 @@ class AccountWebAPIUtils {
    * @returns {void}
    */
   activate(username, key, handler, errorHandler) {
-    axios.patch(`/api/users/activate.json?username=${username}&activation_key=${key}`)
+    axios.patch(`/api/users/activate.json?username=${username}&activation_key=${key}`, {})
       .then(() => handler())
       .catch(() => errorHandler());
+  }
+
+  /**
+   * Requests an api key.
+   *
+   * @param {string} username Name of the user.
+   * @param {string} password Password.
+   * @param {Function} errorHandler Error handler.
+   * @param {Function} handler Handler.
+   *
+   * @returns {void}
+   */
+  requestApiKey(username, password, errorHandler, handler) {
+    axios.post('/api/api-key.json', { login: username, password })
+      .then(response => {
+        axios.get('/api/protected/users/credentials.json', { headers: { 'X-API-KEY': response.data.apiKey } } )
+          .then(result => {
+            ApiKey.addCredentials(result.data);
+            handler(result.data);
+          });
+      })
+      .catch(response => errorHandler(response.data));
+  }
+
+  /**
+   * Handles the logout.
+   *
+   * @param {Function} handler The success handler.
+   *
+   * @returns {void}
+   */
+  logout(handler) {
+    // NOTE: in #240 it is planned to build a hook which handles failed HTTP requests.
+    axios.delete('/api/api-key.json', {
+      headers: {
+        'X-API-KEY': ApiKey.getApiKey()
+      }
+    })
+      .then(() => {
+        ApiKey.purgeCredentials();
+        handler();
+      });
   }
 }
 

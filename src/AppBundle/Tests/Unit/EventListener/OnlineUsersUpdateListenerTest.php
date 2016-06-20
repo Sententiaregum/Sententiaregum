@@ -17,8 +17,6 @@ use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
 use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnFirewallAuthenticationEvent;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
@@ -30,22 +28,14 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('addUserId');
 
-        $now     = time();
-        $request = Request::create('/');
-        $request->server->set('REQUEST_TIME', $now);
-
-        $requestStack = $this->getMock(RequestStack::class, ['getMasterRequest']);
-        $requestStack
-            ->expects($this->once())
-            ->method('getMasterRequest')
-            ->willReturn($request);
-
-        $user          = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev');
+        $user          = $this->getMockWithoutInvokingTheOriginalConstructor(User::class);
         $entityManager = $this->getMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->once())
             ->method('persist')
             ->with($user);
+
+        $user->expects($this->once())->method('updateLastAction');
 
         $entityManager
             ->expects($this->once())
@@ -57,11 +47,9 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getUser')
             ->willReturn($user);
 
-        $listener = new OnlineUsersUpdateListener($provider, $requestStack, $entityManager);
+        $listener = new OnlineUsersUpdateListener($provider, $entityManager);
         $event    = new OnFirewallAuthenticationEvent();
         $event->setToken($token);
         $listener->onFirewallLogin($event);
-
-        $this->assertSame($now, $user->getLastAction()->getTimestamp());
     }
 }

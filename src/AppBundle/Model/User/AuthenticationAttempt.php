@@ -22,7 +22,9 @@ use Ramsey\Uuid\Uuid;
  *
  * @ORM\Entity
  * @ORM\Table(name="authentication_attempt", indexes={
- *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"})
+ *     @ORM\Index(name="auth_attempt_count", columns={"attempt_count"}),
+ *     @ORM\Index(name="auth_last_datetime_range", columns={"latest_date_time"}),
+ *     @ORM\Index(name="auth_ip", columns={"ip"})
  * })
  */
 class AuthenticationAttempt implements \Serializable
@@ -39,7 +41,8 @@ class AuthenticationAttempt implements \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="ip", type="string", length=255, unique=true)
+     * NOTE: ip can't be unique as IPs from failed requests and IPs from successful request are stored in this table.
+     * @ORM\Column(name="ip", type="string", length=255)
      */
     private $ip;
 
