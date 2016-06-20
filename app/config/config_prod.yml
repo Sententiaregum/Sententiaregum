@@ -3,9 +3,7 @@ imports:
 
 framework:
     validation:
-        cache: validator.mapping.cache.apc
-    serializer:
-        cache: serializer.mapping.cache.apc
+        cache: apc
 
 snc_redis:
     doctrine:

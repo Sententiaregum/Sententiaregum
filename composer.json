@@ -2,7 +2,7 @@
     "name": "sententiaregum/sententiaregum",
     "license": "GPL-2.0",
     "type": "project",
-    "description": "A social network based on Symfony2 and ReactJS",
+    "description": "A social network based on Symfony and ReactJS",
     "autoload": {
         "psr-4": { "AppBundle\\": "src/AppBundle/" }
     },

@@ -1,10 +1,10 @@
-# Cache and logs (Symfony2)
+# Cache and logs (Symfony)
 /var/cache/*
 /var/logs/*
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 
-# Symfony2 Requirements
+# Symfony Requirements
 /var/SymfonyRequirements.php
 
 # Parameters

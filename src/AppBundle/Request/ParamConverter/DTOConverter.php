@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * Symfony2 param converter that transforms request attributes to data transfer objects.
+ * Symfony param converter that transforms request attributes to data transfer objects.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
