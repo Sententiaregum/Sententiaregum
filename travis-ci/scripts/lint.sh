@@ -10,15 +10,15 @@ if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
     npm run lint
 
     # symfony
-    php app/console security:check
-    php app/console lint:yaml app/config
-    php app/console lint:yaml .scrutinizer.yml
-    php app/console lint:yaml .travis.yml
-    php app/console lint:yaml .sensiolabs.yml
-    php app/console lint:yaml behat.yml.dist
-    php app/console lint:twig src
-    php app/console lint:twig app
-    php app/console doctrine:schema:validate
+    php bin/console security:check
+    php bin/console lint:yaml app/config
+    php bin/console lint:yaml .scrutinizer.yml
+    php bin/console lint:yaml .travis.yml
+    php bin/console lint:yaml .sensiolabs.yml
+    php bin/console lint:yaml behat.yml.dist
+    php bin/console lint:twig src
+    php bin/console lint:twig app
+    php bin/console doctrine:schema:validate
     php app/check.php
     bin/kawaii gherkin:check src/AppBundle/Features
 

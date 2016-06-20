@@ -66,15 +66,15 @@ sententiaregum::infrastructure::redis::instances:
 # cronjobs
 sententiaregum::infrastructure::jobs::schedules:
   cleanup_sessions:
-    command: "php /var/www/sententiaregum/app/console ma27:auth:session-cleanup"
+    command: "php /var/www/sententiaregum/bin/console ma27:auth:session-cleanup"
     user: vagrant
     hour: 5
   cleanup_registrations:
-    command: "php /var/www/sententiaregum/app/console sententiaregum:purge:pending-activations"
+    command: "php /var/www/sententiaregum/bin/console sententiaregum:purge:pending-activations"
     user: vagrant
     hour: 5
   cleanup_auth_attempt_data:
-    command: "php /var/www/sententiaregum/app/console sententiaregum:purge:ancient-auth-attempt-log-data"
+    command: "php /var/www/sententiaregum/bin/console sententiaregum:purge:ancient-auth-attempt-log-data"
     user: vagrant
     hour: 5
 
