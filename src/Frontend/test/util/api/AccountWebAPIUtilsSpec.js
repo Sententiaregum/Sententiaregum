@@ -11,9 +11,10 @@
 'use strict';
 
 import { expect } from 'chai';
-import { spy, assert } from 'sinon';
+import { spy, assert, stub } from 'sinon';
 import AccountWebAPIUtils from '../../../util/api/AccountWebAPIUtils';
 import moxios from 'moxios';
+import ApiKey from '../../../util/http/ApiKeyService';
 
 describe('AccountWebAPIUtils', () => {
   beforeEach(() => {
@@ -63,6 +64,52 @@ describe('AccountWebAPIUtils', () => {
     moxios.wait(() => {
       assert.calledOnce(handler);
       expect(handler.calledWith());
+    });
+  });
+
+  it('requests api keys', () => {
+    moxios.stubRequest('/api/api-key.json', {
+      status: 200,
+      data:   {
+        apiKey: 'key'
+      }
+    });
+
+    const handler  = spy();
+    const response = {
+      apiKey:   'key',
+      username: 'Ma27',
+      roles:    [{ role: 'ROLE_USER' }]
+    };
+    moxios.stubRequest('/api/protected/users/credentials.json', {
+      status: 200,
+      data:   response
+    });
+
+    stub(ApiKey, 'addCredentials');
+
+    AccountWebAPIUtils.requestApiKey('Ma27', '123456', handler, () => {});
+
+    moxios.wait(() => {
+      expect(spy.calledWith(response)).to.equal(true);
+    });
+    ApiKey.addCredentials.restore();
+  });
+
+  it('runs the logout request', () => {
+    moxios.stubRequest('/api/api-key.json', {
+      status: 200
+    });
+
+    const handler = spy();
+    stub(ApiKey, 'purgeCredentials');
+
+    AccountWebAPIUtils.logout(handler);
+
+    moxios.wait(() => {
+      expect(spy.calledOnce).to.equal(true);
+      expect(ApiKey.purgeCredentials.calledOnce).to.equal(true);
+      ApiKey.purgeCredentials.restore();
     });
   });
 });

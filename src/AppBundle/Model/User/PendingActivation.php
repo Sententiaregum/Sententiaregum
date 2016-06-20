@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Model that represents the internal activation life cycle during the user approval.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ *
  * @ORM\Embeddable
  */
 class PendingActivation implements \Serializable

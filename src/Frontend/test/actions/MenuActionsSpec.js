@@ -10,19 +10,17 @@
 
 'use strict';
 
-import { buildMenuItems } from '../../actions/MenuActions';
-import { stub, assert, createStubInstance } from 'sinon';
+import { stub } from 'sinon';
 import { expect } from 'chai';
-import ApiKey from '../../util/http/ApiKeyService';
-import Cookies from 'cookies-js';
 import MenuStore from '../../store/MenuStore';
+import UserStore from '../../store/UserStore';
 import { runAction } from 'sententiaregum-flux-container';
+import { buildMenuItems } from '../../actions/MenuActions';
 
 describe('MenuActions', () => {
-  it('publishes menu items in order to transform them', () => {
-    createStubInstance(Cookies);
-    stub(ApiKey, 'isLoggedIn', () => false);
 
+  it('publishes menu items in order to transform them', () => {
+    stub(UserStore, 'getState', () => ({ is_logged_in: false }));
     runAction(buildMenuItems, [[
       {
         url: '/#/',
@@ -36,7 +34,7 @@ describe('MenuActions', () => {
       }
     ]]);
 
-    ApiKey.isLoggedIn.restore();
     expect(MenuStore.getState().length).to.equal(1);
+    UserStore.getState.restore();
   });
 });

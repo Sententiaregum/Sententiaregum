@@ -26,7 +26,7 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
      */
     protected function createValidator()
     {
-        return new LocaleValidator(['de' => 'Deutsch', 'en' => 'English']);
+        return new LocaleValidator(['de', 'en']);
     }
 
     /**

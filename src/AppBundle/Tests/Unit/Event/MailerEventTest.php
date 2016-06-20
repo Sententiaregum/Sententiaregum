@@ -14,6 +14,7 @@ namespace AppBundle\Tests\Unit\Event;
 
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\User\User;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class MailerEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class MailerEventTest extends \PHPUnit_Framework_TestCase
     public function testAddUser()
     {
         $event = new MailerEvent();
-        $user  = User::create('Ma27', '123456', 'foo@bar.baz');
+        $user  = User::create('Ma27', '123456', 'foo@bar.baz', new PhpPasswordHasher());
         $event->addUser($user);
 
         $this->assertCount(1, $event->getUsers());

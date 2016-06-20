@@ -2,13 +2,7 @@ services:
   app.listener.incomplete_user:
     class: AppBundle\EventListener\IncompleteUserCheckListener
     tags:
-      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: -255, method: validateUserOnAuthentication }
-  app.listener.language_cookie:
-    class: AppBundle\EventListener\LanguageCookieFixerListener
-    arguments:
-      - "@app.repository.user"
-    tags:
-      - { name: kernel.event_listener, event: kernel.response, method: onResponseFilter }
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: 255, method: validateUserOnAuthentication }
   app.listener.email:
     class: AppBundle\EventListener\MailListener
     arguments:
@@ -22,7 +16,6 @@ services:
     class: AppBundle\EventListener\OnlineUsersUpdateListener
     arguments:
       - "@app.redis.cluster.online_users"
-      - "@request_stack"
       - "@doctrine.orm.default_entity_manager"
     tags:
       - { name: kernel.event_listener, event: ma27_api_key_authentication.authorization.firewall.login, method: onFirewallLogin }
@@ -31,7 +24,7 @@ services:
     arguments:
       - "@request_stack"
     tags:
-      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: -255, method: updateOnLogin }
+      - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: 255, method: updateOnLogin }
   app.listener.match_locale_cookie:
     class: AppBundle\EventListener\LocaleCookieMatchingListener
     arguments:
@@ -46,5 +39,12 @@ services:
       - "@request_stack"
       - "@app.ip.tracer"
       - "@app.user.service.date_time_comparator"
+    tags:
+      - { name: kernel.event_subscriber }
+  app.listener.i18n_security_response:
+    class: AppBundle\EventListener\I18nSecurityResponseListener
+    arguments:
+      - "%app.locale_keys%"
+      - "@translator"
     tags:
       - { name: kernel.event_subscriber }

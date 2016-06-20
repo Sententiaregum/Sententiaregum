@@ -12,4 +12,3 @@ Feature: locale switcher
         Given I'm logged in as "Ma27" with password "72aM"
         When I try to change my locale to "en"
         Then the locale should be changed
-        And a cookie should be set

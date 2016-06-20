@@ -2,7 +2,7 @@ services:
   app.validator.locale:
     class: AppBundle\Validator\Constraints\LocaleValidator
     arguments:
-      - "%app.locales%"
+      - "%app.locale_keys%"
     tags:
       - { name: validator.constraint_validator, alias: "app.validator.locale" }
   app.validator.unique_property:

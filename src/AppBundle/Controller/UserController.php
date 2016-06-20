@@ -10,11 +10,11 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Controller\User;
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\BaseController;
 use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\DTO\CreateUserDTO;
+use AppBundle\Model\User\Value\Credentials;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
@@ -23,11 +23,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * API for the registration implementation.
+ * API for the user resource.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RegistrationController extends BaseController
+class UserController extends BaseController
 {
     /**
      * @ApiDoc(
@@ -104,5 +104,54 @@ class RegistrationController extends BaseController
         } catch (UserActivationException $ex) {
             return View::create(null, Response::HTTP_FORBIDDEN);
         }
+    }
+
+    /**
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Provides information about the currently logged-in user",
+     *     statusCodes={401="Unauthorized", 200="Successful request for credential details"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     },
+     * )
+     *
+     * Renders details of the user credentials.
+     *
+     * @return Credentials
+     *
+     * @Rest\Get("/protected/users/credentials.{_format}", name="app.user.credentials", requirements={"_format"="^(json|xml)$"})
+     * @Rest\View(statusCode=200)
+     */
+    public function getCredentialInformationAction()
+    {
+        return Credentials::fromEntity($this->getCurrentUser());
+    }
+
+    /**
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Creates a list of followers that contains a list showing which followers are online",
+     *     statusCodes={200="Successful generation","401"="Unauthorized"},
+     *     requirements={
+     *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
+     *     }
+     * )
+     *
+     * Controller action that creates a list of users the current user follows that shows which users are online.
+     *
+     * @return bool[]
+     *
+     * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
+     * @Rest\View
+     */
+    public function onlineFollowingListAction()
+    {
+        /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
+        $cluster        = $this->get('app.redis.cluster.online_users');
+        $userRepository = $this->getDoctrine()->getRepository('Account:User');
+        $currentUser    = $this->getCurrentUser();
+
+        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
     }
 }

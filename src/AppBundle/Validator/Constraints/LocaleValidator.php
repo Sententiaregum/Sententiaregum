@@ -59,7 +59,7 @@ class LocaleValidator extends ConstraintValidator
         $validator     = $context->getValidator();
         $choiceOptions = [
             'strict'  => true,
-            'choices' => array_keys($this->allowedLocales),
+            'choices' => $this->allowedLocales,
             'message' => $constraint->message,
         ];
 

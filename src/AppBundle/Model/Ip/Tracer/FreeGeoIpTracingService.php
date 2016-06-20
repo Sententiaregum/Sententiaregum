@@ -58,7 +58,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
                 ['headers' => ['Accept-Language' => $userLocale ?: 'en']]
             );
 
-            $result = $this->hydrateIpObject($ip, $this->decodePsr7Response($response->getBody()));
+            return $this->hydrateIpObject($ip, $this->decodePsr7Response($response->getBody()));
         } catch (ClientException $e) {
             if (!$this->isValidIp($ip)) {
                 throw new \InvalidArgumentException(sprintf(
@@ -66,11 +66,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
                     $ip
                 ));
             }
-
-            $result = null;
         }
-
-        return $result;
     }
 
     /**

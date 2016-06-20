@@ -13,7 +13,6 @@
 namespace AppBundle\View;
 
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
@@ -45,7 +44,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
+final class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
 {
     /**
      * @var TranslatorInterface
@@ -74,8 +73,7 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
         array $targetLocales = [],
         $domain = 'messages'
     ) {
-        $violationList = iterator_to_array($violations, false);
-        $hasLocales    = count($targetLocales) > 0;
+        $hasLocales = count($targetLocales) > 0;
 
         if (!$useAllLanguages && $hasLocales) {
             throw new \InvalidArgumentException(
@@ -90,69 +88,53 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
         }
 
         $fixtures = [];
-        array_walk(
-            $violationList,
-            function (ConstraintViolation $violation) use (
-                $targetLocales,
-                $domain,
-                $useAllLanguages,
-                $sortProperties,
-                &$fixtures
-            ) {
-                // Every translation entry (whether sorted by properties in deeper levels or as top level)
-                // should provide a basic structure.
-                switch (true) {
-                    // If sorted by $targetLanguages, it may look like this:
-                    //
-                    // [
-                    //   'de' => ['Deutscher Text'],
-                    //   'en' => ['English text'],
-                    // ]
-                    //
-                    // When sorting by property, the structure will be merged recursively into the property list:
-                    //
-                    // [
-                    //   'property' => [
-                    //     // this is the structure merged into the property.
-                    //     'de' => ['Deutscher Text'],
-                    //     'en' => ['English text'],
-                    //   ]
-                    // ]
-                    case $useAllLanguages:
-                        $structure = array_reduce(
-                            $targetLocales,
-                            function ($carry, $locale) use ($violation, $domain) {
-                                if (!isset($carry[$locale])) {
-                                    $carry[$locale] = [];
-                                }
+        foreach ($violations as $violation) {
+            // Every translation entry (whether sorted by properties in deeper levels or as top level)
+            // should provide a basic structure.
+            switch (true) {
+                // If sorted by $targetLanguages, it may look like this:
+                //
+                // [
+                //   'de' => ['Deutscher Text'],
+                //   'en' => ['English text'],
+                // ]
+                //
+                // When sorting by property, the structure will be merged recursively into the property list:
+                //
+                // [
+                //   'property' => [
+                //     // this is the structure merged into the property.
+                //     'de' => ['Deutscher Text'],
+                //     'en' => ['English text'],
+                //   ]
+                // ]
+                case $useAllLanguages:
+                    $structure = array_reduce(
+                        $targetLocales,
+                        function ($carry, $locale) use ($violation, $domain) {
+                            if (!isset($carry[$locale])) {
+                                $carry[$locale] = [];
+                            }
 
-                                if ($locale === $this->translator->getLocale()) {
-                                    $carry[$locale][] = $violation->getMessage();
-                                } else {
-                                    $messageTemplate = $violation->getMessageTemplate();
-                                    $parameters      = $violation->getParameters();
+                            if ($locale === $this->translator->getLocale()) {
+                                $carry[$locale][] = $violation->getMessage();
+                            } else {
+                                $messageTemplate = $violation->getMessageTemplate();
+                                $parameters      = $violation->getParameters();
 
-                                    if ($plural = $violation->getPlural()) {
-                                        try {
-                                            $message = $this->translator->transChoice(
-                                                $messageTemplate,
-                                                $plural,
-                                                $parameters,
-                                                $domain,
-                                                $locale
-                                            );
-                                        } catch (\InvalidArgumentException $ex) {
-                                            // we do nothing here.
-                                            // If the pluralization fails, the default translation method will be used.
+                                if ($plural = $violation->getPlural()) {
+                                    try {
+                                        $message = $this->translator->transChoice(
+                                            $messageTemplate,
+                                            $plural,
+                                            $parameters,
+                                            $domain,
+                                            $locale
+                                        );
+                                    } catch (\InvalidArgumentException $ex) {
+                                        // we do nothing here.
+                                        // If the pluralization fails, the default translation method will be used.
 
-                                            $message = $this->translator->trans(
-                                                $messageTemplate,
-                                                $parameters,
-                                                $domain,
-                                                $locale
-                                            );
-                                        }
-                                    } else {
                                         $message = $this->translator->trans(
                                             $messageTemplate,
                                             $parameters,
@@ -160,37 +142,41 @@ class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterface
                                             $locale
                                         );
                                     }
-
-                                    $carry[$locale][] = $message;
+                                } else {
+                                    $message = $this->translator->trans(
+                                        $messageTemplate,
+                                        $parameters,
+                                        $domain,
+                                        $locale
+                                    );
                                 }
 
-                                return $carry;
-                            },
-                            []
-                        );
-                        break;
-                    default:
-                        // If the default language is in use and nothing more, the structure looks like this:
-                        //
-                        // ['Message in the currently selected language']
-                        $structure = [$violation->getMessage()];
-                }
+                                $carry[$locale][] = $message;
+                            }
 
-                if (!$sortProperties) {
-                    $fixtures = array_merge_recursive($fixtures, $structure);
+                            return $carry;
+                        },
+                        []
+                    );
+                    break;
+                default:
+                    // If the default language is in use and nothing more, the structure looks like this:
+                    //
+                    // ['Message in the currently selected language']
+                    $structure = [$violation->getMessage()];
+            }
 
-                    return;
-                }
-
+            if (!$sortProperties) {
+                $fixtures = array_merge_recursive($fixtures, $structure);
+            } else {
                 $propertyPath = $violation->getPropertyPath();
                 if (!isset($fixtures[$violation->getPropertyPath()])) {
                     $fixtures[$violation->getPropertyPath()] = [];
                 }
 
                 $fixtures[$propertyPath] = array_merge_recursive($fixtures[$propertyPath], $structure);
-            },
-            []
-        );
+            }
+        }
 
         return $fixtures;
     }

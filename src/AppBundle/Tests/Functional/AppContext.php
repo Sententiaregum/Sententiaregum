@@ -57,7 +57,7 @@ class AppContext implements SnippetAcceptingContext, KernelAwareContext
         $adminRole = $em->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_ADMIN']);
 
         foreach ($table->getHash() as $row) {
-            $user = User::create($row['username'], $hasher->generateHash($row['password']), $row['email']);
+            $user = User::create($row['username'], $row['password'], $row['email'], $hasher);
 
             if (isset($row['user_id'])) {
                 // there are cases where the user id should be known
@@ -83,7 +83,7 @@ class AppContext implements SnippetAcceptingContext, KernelAwareContext
                 }
             } else {
                 if (isset($row['activation_key'])) {
-                    $user->setActivationKey($row['activation_key']);
+                    $user->storeUniqueActivationKeyForNonApprovedUser($row['activation_key']);
                 }
             }
 
