@@ -3,8 +3,16 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+/**
+ * Class AppKernel.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ */
 class AppKernel extends Kernel
 {
+    /**
+     * {@inheritdoc}
+     */
     public function registerBundles()
     {
         $bundles = [
@@ -37,12 +45,14 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
         return $bundles;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
@@ -51,5 +61,29 @@ class AppKernel extends Kernel
         if (file_exists($localConfig)) {
             $loader->load($localConfig);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/var/logs';
     }
 }

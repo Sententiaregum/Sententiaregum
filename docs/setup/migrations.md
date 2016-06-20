@@ -6,5 +6,5 @@ All migrations files are located in the directory *app/migrations* having the na
 In order to apply migrations run the following command:
 
 ``` shell
-app/console doctrine:migrations:migrate
+bin/console doctrine:migrations:migrate
 ```

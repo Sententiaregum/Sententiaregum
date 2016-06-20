@@ -24,7 +24,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 abstract class CommandTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Executes a symfony2 command and returns the testing instance.
+     * Executes a symfony command and returns the testing instance.
      *
      * @param Command $command
      * @param array   $input

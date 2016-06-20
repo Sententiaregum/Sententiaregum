@@ -1,5 +1,6 @@
 # Sententiaregum
-A social network based on Symfony2 and ReactJS
+
+A social network based on Symfony and ReactJS
 
 ### Build
 [![Build Status](https://travis-ci.org/Sententiaregum/Sententiaregum.svg?branch=master)](https://travis-ci.org/Sententiaregum/Sententiaregum)
@@ -15,7 +16,7 @@ A social network based on Symfony2 and ReactJS
 
 ## What is it?
 
-Sententiaregum is a social network based on a REST api written with Symfony2 and a frontend in ECMAScript6 using React and [a custom flux implementation](https://github.com/Sententiaregum/flux-container).
+Sententiaregum is a social network based on a REST api written with Symfony3 and a frontend in ECMAScript6 using React and [a custom flux implementation](https://github.com/Sententiaregum/flux-container).
 
 ## Docs
 

@@ -4,7 +4,7 @@ set -e
 
 echo 'PHP Test Suite'
 bin/behat --strict -f progress --no-snippets --strict
-bin/phpunit -c app
+bin/phpunit
 
 # install global npm dependencies
 # the javascript suite will be executed at the php 5.6 build

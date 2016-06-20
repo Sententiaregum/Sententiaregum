@@ -6,6 +6,7 @@ global_exclude_dirs:
   - Behat
   - travis-ci
   - vagrant
+  - app
 
 rules:
   symfony.configuration.error_pages_should_be_customised: # we use FOSRest, so a custom "error" template is not necessary

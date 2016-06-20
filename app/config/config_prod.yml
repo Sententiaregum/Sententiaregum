@@ -1,12 +1,6 @@
 imports:
     - { resource: config.yml }
 
-framework:
-    validation:
-        cache: validator.mapping.cache.apc
-    serializer:
-        cache: serializer.mapping.cache.apc
-
 snc_redis:
     doctrine:
         metadata_cache:
@@ -17,6 +11,9 @@ snc_redis:
             entity_manager: default
         query_cache:
             client: doctrine_cache
+            entity_manager: default
+        second_level_cache:
+            client: cache
             entity_manager: default
 
 monolog:
