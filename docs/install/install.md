@@ -7,7 +7,7 @@
 Before running an installation, some packages must be present:
 
 - ``mysql`` (two databases, one development and one dev database, database names can be configured in the ``parameters.yml`` during ``composer install``)
-- ``PHP`` (at least ``5.6``)
+- ``PHP`` (at least ``7.0``)
 - ``NodeJS`` (at least ``5.0``, ``6.0`` is recommended)
 - ``Composer`` (recommended ``1.0``)
 - ``Redis`` (multiple ports recommended, can be configured in the ``parameters.yml`` during ``composer install``)
