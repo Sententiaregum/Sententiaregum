@@ -22,10 +22,10 @@ cache:
     - $HOME/.composer/cache/files
 
 # prepare travis ci for the build process
-install: ./travis-ci/scripts/install.sh
+install: ./travis-ci/install.sh
 
 # linters
-before_script: ./travis-ci/scripts/lint.sh
+before_script: ./travis-ci/lint.sh
 
 # execute tests
-script: ./travis-ci/scripts/tests.sh
+script: ./travis-ci/tests.sh

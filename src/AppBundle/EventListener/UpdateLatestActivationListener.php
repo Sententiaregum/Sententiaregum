@@ -23,21 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class UpdateLatestActivationListener
 {
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * Constructor.
-     *
-     * @param RequestStack $requestStack
-     */
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
-
-    /**
      * Hook that updates the last action after the authentication.
      *
      * @param OnAuthenticationEvent $event

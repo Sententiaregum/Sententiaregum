@@ -3,7 +3,6 @@ classes:
   - sententiaregum::installs
   - sententiaregum::backend::php
   - sententiaregum::backend::php::composer
-  - sententiaregum::backend::ruby
   - sententiaregum::backend::server
   - sententiaregum::infrastructure::mailcatcher
   - sententiaregum::infrastructure::mysql
@@ -12,5 +11,3 @@ classes:
   - sententiaregum::frontend::npm
   - timezone
   - nodejs
-  - composer
-  - php

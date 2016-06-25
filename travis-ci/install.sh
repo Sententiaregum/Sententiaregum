@@ -23,8 +23,5 @@ done
 # install global npm dependencies
 sudo npm install -g mocha webpack eslint eslint-plugin-react eslint-plugin-varspacing less node-pre-gyp
 
-# copy custom travis configuration
-cp travis-ci/config/travis_parameters.yml app/config/parameters.yml
-
 # composer install
 composer install

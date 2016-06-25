@@ -8,6 +8,7 @@ sententiaregum::installs::packages:
   - python-software-properties
   - libsqlite3-dev
   - curl
+  - ruby-dev
 
 # SSH config
 sententiaregum::ssh::entry_point: /var/www/sententiaregum
@@ -18,24 +19,32 @@ sententiaregum::ssh::env:
 composer::command_name: composer
 composer::target_dir: '/usr/local/bin'
 
-# php extensions
-php::service: apache
+# php
+php::globals::config_root: "/etc/php/7.0"
+php::globals::php_version: '7.0'
 
+sententiaregum::backend::php::fpm: false
 sententiaregum::backend::php::extensions:
   gd:     {}
-  cli:    {}
   mysql:  {}
   curl:   {}
   intl:   {}
   mcrypt: {}
   xdebug: {}
-  apc:
-    module_prefix: 'php-'
+  apcu:
+    package_prefix: 'php-'
+  mbstring:
+    package_prefix: 'php7.0-'
 
-# apache config
-sententiaregum::backend::server::server_aliases: '192.168.66.211'
-sententiaregum::backend::server::modules:
-  rewrite: {}
+sententiaregum::backend::php::settings:
+  Date/date.timezone: 'UTC'
+
+# apache
+apache::mpm_module: prefork
+
+sententiaregum::backend::server::host_name: sententiaregum.dev
+sententiaregum::backend::server::doc_root: /var/www/sententiaregum/web
+sententiaregum::backend::server::front_controller: app_dev.php
 
 # mysql configurations
 sententiaregum::infrastructure::mysql::databases:
@@ -50,18 +59,7 @@ sententiaregum::infrastructure::mysql::databases:
     host: localhost
     grant: ['ALL']
 
-# redis instances
-sententiaregum::infrastructure::redis::instances:
-  doctrine-cache:
-    redis_port: 6900
-  social-post-queue:
-    redis_port: 6901
-  dashboard-cache:
-    redis_port: 6902
-  pending-activations:
-    redis_port: 6903
-  online-users:
-    redis_port: 6904
+mysql::server::root_password: root
 
 # cronjobs
 sententiaregum::infrastructure::jobs::schedules:

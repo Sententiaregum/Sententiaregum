@@ -12,7 +12,7 @@ class sententiaregum::ssh(
 
   if !empty($env) {
     file { '/etc/profile.d/env_exporter.sh':
-      mode    => 755,
+      mode    => '755',
       content => template('sententiaregum/env_exporter.sh.erb'),
     }
   }

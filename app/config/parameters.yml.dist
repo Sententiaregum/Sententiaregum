@@ -22,9 +22,9 @@ parameters:
     mailer_from_address:            info@sententiaregum.dev
 
     # Redis ports
-    pending_activations_redis_port: 6903
-    doctrine_redis_port:            6900
-    online_users_port:              6904
+    pending_activations_redis_port: 6379
+    doctrine_redis_port:            6379
+    online_users_port:              6379
 
     # Functional testing
     test_db:                        behat
