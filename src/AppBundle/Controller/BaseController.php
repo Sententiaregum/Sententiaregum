@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Model\User\User;
@@ -34,8 +36,8 @@ abstract class BaseController extends Controller
      */
     protected function sortViolationMessagesByPropertyPath(
         ConstraintViolationListInterface $constraintViolations,
-        $domain = 'validators'
-    ) {
+        string $domain = 'validators'
+    ): array {
         /** @var I18nResponseFormatBuilderInterface $i18nResponseBuilder */
         $i18nResponseBuilder = $this->get('app.view.i18n_error_response_builder');
 
@@ -58,8 +60,8 @@ abstract class BaseController extends Controller
      */
     protected function getI18nErrorResponseWithoutSort(
         ConstraintViolationListInterface $constraintViolations,
-        $domain = 'validators'
-    ) {
+        string $domain = 'validators'
+    ): array {
         /** @var I18nResponseFormatBuilderInterface $i18nResponseBuilder */
         $i18nResponseBuilder = $this->get('app.view.i18n_error_response_builder');
 
@@ -77,7 +79,7 @@ abstract class BaseController extends Controller
      *
      * @return User
      */
-    protected function getCurrentUser()
+    protected function getCurrentUser(): User
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -96,7 +98,7 @@ abstract class BaseController extends Controller
      *
      * @return string[]
      */
-    protected function getLocales()
+    protected function getLocales(): array
     {
         return $this->getParameter('app.locales');
     }
@@ -106,7 +108,7 @@ abstract class BaseController extends Controller
      *
      * @return string[]
      */
-    protected function getLocaleShortNames()
+    protected function getLocaleShortNames(): array
     {
         return $this->getParameter('app.locale_keys');
     }

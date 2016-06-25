@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration;
 
 /**
@@ -25,5 +27,5 @@ interface AccountApprovalInterface
      * @param string $activationKey
      * @param string $username
      */
-    public function approveByActivationKey($activationKey, $username);
+    public function approveByActivationKey(string $activationKey, string $username);
 }

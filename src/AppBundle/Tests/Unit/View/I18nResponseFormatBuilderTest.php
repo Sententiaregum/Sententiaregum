@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\View;
 
 use AppBundle\View\I18nResponseFormatBuilder;
@@ -33,8 +35,8 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBehavior(
         ConstraintViolationList $violationList,
         TranslatorInterface $translator,
-        $sortFlag,
-        $languageFlag,
+        bool $sortFlag,
+        bool $languageFlag,
         array $expected,
         array $target = []
     ) {
@@ -52,7 +54,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideErrorCases
      */
-    public function testExceptionThrownWithInvalidTargetLocales($allLanguages, array $target, $expectedMessage)
+    public function testExceptionThrownWithInvalidTargetLocales(bool $allLanguages, array $target, string $expectedMessage)
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);

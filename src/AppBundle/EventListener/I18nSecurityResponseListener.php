@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventListener;
 
 use Ma27\ApiKeyAuthenticationBundle\Event\AssembleResponseEvent;
@@ -58,7 +60,7 @@ class I18nSecurityResponseListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Ma27ApiKeyAuthenticationEvents::ASSEMBLE_RESPONSE => ['onResponseCreation'],
@@ -96,7 +98,7 @@ class I18nSecurityResponseListener implements EventSubscriberInterface
      *
      * @return JsonResponse
      */
-    private function createJSONResponseFromTranslationList(array $data)
+    private function createJSONResponseFromTranslationList(array $data): JsonResponse
     {
         return new JsonResponse(
             ['message' => $data],

@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\EventListener;
 
 use AppBundle\EventListener\UpdateLatestActivationListener;
 use AppBundle\Model\User\User;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
 {

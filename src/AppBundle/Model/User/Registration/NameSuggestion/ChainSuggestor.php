@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\NameSuggestion;
 
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\DotReplacementSuggestor;
@@ -50,7 +52,7 @@ class ChainSuggestor implements ChainSuggestorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPossibleSuggestions($name)
+    public function getPossibleSuggestions(string $name): array
     {
         $suggestions = array_merge(
             ...array_map(function (SuggestorInterface $suggestor) use ($name) {
@@ -68,7 +70,7 @@ class ChainSuggestor implements ChainSuggestorInterface
     /**
      * {@inheritdoc}
      */
-    public function register(SuggestorInterface $suggestor)
+    public function register(SuggestorInterface $suggestor): self
     {
         $this->suggestors[] = $suggestor;
 

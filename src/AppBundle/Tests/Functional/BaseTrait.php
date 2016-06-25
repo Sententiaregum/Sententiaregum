@@ -10,10 +10,16 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Functional;
 
 use Assert\Assertion;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
 
 /**
  * Basic trait to separate the AppContext from the BaseContext.
@@ -32,9 +38,9 @@ trait BaseTrait
     /**
      * Gets an entity manager.
      *
-     * @return \Doctrine\ORM\EntityManagerInterface
+     * @return EntityManagerInterface
      */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine')->getManager();
     }
@@ -44,9 +50,9 @@ trait BaseTrait
      *
      * @param string $entity
      *
-     * @return \Doctrine\ORM\EntityRepository
+     * @return EntityRepository
      */
-    public function getRepository($entity)
+    public function getRepository(string $entity): EntityRepository
     {
         return $this->getEntityManager()->getRepository($entity);
     }
@@ -70,14 +76,14 @@ trait BaseTrait
      * @return string[]
      */
     public function performRequest(
-        $method,
-        $uri,
+        string $method,
+        string $uri,
         array $parameters = [],
         $expectSuccess = true,
         array $headers = [],
         array $files = [],
-        $expectedStatus = 200,
-        $toJson = true,
+        int $expectedStatus = 200,
+        bool $toJson = true,
         $apiKey = null,
         $disableAssertions = false
     ) {
@@ -140,7 +146,7 @@ trait BaseTrait
      *
      * @return string
      */
-    public function authenticate($username, $password, $expectSuccess = true)
+    public function authenticate(string $username, string $password, bool $expectSuccess = true)
     {
         $response = $this->performRequest(
             'POST',
@@ -162,17 +168,17 @@ trait BaseTrait
     }
 
     /**
-     * @return \Symfony\Bundle\FrameworkBundle\Client
+     * @return Client
      */
-    public function getRecentClient()
+    public function getRecentClient(): Client
     {
         return $this->recentClient;
     }
 
     /**
-     * @return \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector
+     * @return MessageDataCollector
      */
-    public function getEmailProfiler()
+    public function getEmailProfiler(): MessageDataCollector
     {
         $client = $this->getRecentClient();
 

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\View;
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -34,9 +36,9 @@ interface I18nResponseFormatBuilderInterface
      */
     public function formatTranslatableViolationList(
         ConstraintViolationListInterface $violations,
-        $sortProperties = true,
+        bool $sortProperties = true,
         $useAllLanguages = true,
         array $targetLocales = [],
-        $domain = 'messages'
-    );
+        string $domain = 'messages'
+    ): array;
 }

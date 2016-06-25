@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Exception\UserActivationException;
@@ -49,7 +51,7 @@ class UserController extends BaseController
      *
      * @param CreateUserDTO $dto
      *
-     * @return mixed[]
+     * @return mixed[]|View
      *
      * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=201)
@@ -123,7 +125,7 @@ class UserController extends BaseController
      * @Rest\Get("/protected/users/credentials.{_format}", name="app.user.credentials", requirements={"_format"="^(json|xml)$"})
      * @Rest\View(statusCode=200)
      */
-    public function getCredentialInformationAction()
+    public function getCredentialInformationAction(): Credentials
     {
         return Credentials::fromEntity($this->getCurrentUser());
     }
@@ -145,7 +147,7 @@ class UserController extends BaseController
      * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
      */
-    public function onlineFollowingListAction()
+    public function onlineFollowingListAction(): array
     {
         /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
         $cluster        = $this->get('app.redis.cluster.online_users');

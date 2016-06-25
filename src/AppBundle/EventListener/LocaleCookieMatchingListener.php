@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -32,9 +34,9 @@ class LocaleCookieMatchingListener
      *
      * @param string $defaultLocale
      */
-    public function __construct($defaultLocale)
+    public function __construct(string $defaultLocale)
     {
-        $this->defaultLocale = (string) $defaultLocale;
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**

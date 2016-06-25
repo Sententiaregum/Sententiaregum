@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Test;
 
 use Symfony\Component\Console\Application;
@@ -31,7 +33,7 @@ abstract class CommandTestCase extends \PHPUnit_Framework_TestCase
      *
      * @return CommandTester
      */
-    public function executeCommand(Command $command, array $input = [])
+    public function executeCommand(Command $command, array $input = []): CommandTester
     {
         $name = $command->getName();
 

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Request\ParamConverter;
 
 use Doctrine\Instantiator\Instantiator;
@@ -44,7 +46,7 @@ class DTOConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         $instance = $this->getDTOInstance($configuration->getClass());
         foreach ($this->getDTOParametersByClass($configuration->getClass()) as $property) {
@@ -68,7 +70,7 @@ class DTOConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(ParamConverter $configuration)
+    public function supports(ParamConverter $configuration): bool
     {
         return $this->getClassSuffix($configuration->getClass()) === 'DTO';
     }
@@ -80,7 +82,7 @@ class DTOConverter implements ParamConverterInterface
      *
      * @return \ReflectionProperty[]
      */
-    private function getDTOParametersByClass($class)
+    private function getDTOParametersByClass(string $class): array
     {
         return (new \ReflectionClass($class))->getProperties();
     }
@@ -92,7 +94,7 @@ class DTOConverter implements ParamConverterInterface
      *
      * @return object
      */
-    private function getDTOInstance($class)
+    private function getDTOInstance(string $class)
     {
         static $instantiator;
         if (!$instantiator) {
@@ -136,7 +138,7 @@ class DTOConverter implements ParamConverterInterface
      *
      * @return string
      */
-    private function getClassSuffix($className)
+    private function getClassSuffix(string $className): string
     {
         return substr($className, -3);
     }
@@ -149,7 +151,7 @@ class DTOConverter implements ParamConverterInterface
      *
      * @return string
      */
-    private function getInvalidPropertyExceptionMessage($class, $propertyName)
+    private function getInvalidPropertyExceptionMessage(string $class, string $propertyName): string
     {
         return sprintf('Cannot attach property "%s" on object instance "%s"!', $propertyName, $class);
     }

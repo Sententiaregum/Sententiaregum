@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\Model\User\Util;
 
 use AppBundle\Model\User\Util\DateTimeComparison;
@@ -23,7 +25,7 @@ class DateTimeComparisonTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideDateDiffComparison
      */
-    public function testDateDiffComparison($diff, \DateTime $dateTime, $expected)
+    public function testDateDiffComparison(string $diff, \DateTime $dateTime, bool $expected)
     {
         $service = new DateTimeComparison();
         $this->assertSame($service($diff, $dateTime), $expected);

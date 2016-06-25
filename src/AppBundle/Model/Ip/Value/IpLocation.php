@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\Ip\Value;
 
 /**
@@ -59,14 +61,14 @@ class IpLocation
      * @param float  $latitude
      * @param float  $longitude
      */
-    public function __construct($ip, $country, $region, $city, $latitude, $longitude)
+    public function __construct(string $ip, string $country, string $region, string $city, float $latitude, float $longitude)
     {
-        $this->ip        = (string) $ip;
-        $this->country   = (string) $country;
-        $this->region    = (string) $region;
-        $this->city      = (string) $city;
-        $this->latitude  = (float) $latitude;
-        $this->longitude = (float) $longitude;
+        $this->ip        = $ip;
+        $this->country   = $country;
+        $this->region    = $region;
+        $this->city      = $city;
+        $this->latitude  = $latitude;
+        $this->longitude = $longitude;
     }
 
     /**
@@ -74,7 +76,7 @@ class IpLocation
      *
      * @return string
      */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
@@ -84,7 +86,7 @@ class IpLocation
      *
      * @return string
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
@@ -94,7 +96,7 @@ class IpLocation
      *
      * @return string
      */
-    public function getRegion()
+    public function getRegion(): string
     {
         return $this->region;
     }
@@ -104,7 +106,7 @@ class IpLocation
      *
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -114,7 +116,7 @@ class IpLocation
      *
      * @return float
      */
-    public function getLatitude()
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
@@ -124,7 +126,7 @@ class IpLocation
      *
      * @return float
      */
-    public function getLongitude()
+    public function getLongitude(): float
     {
         return $this->longitude;
     }

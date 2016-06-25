@@ -10,10 +10,11 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventListener;
 
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Hook that updates the latest activation of a user.

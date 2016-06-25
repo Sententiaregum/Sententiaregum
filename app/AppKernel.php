@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -13,7 +15,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -66,7 +68,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return __DIR__;
     }
@@ -74,7 +76,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
     }
@@ -82,7 +84,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return dirname(__DIR__).'/var/logs';
     }

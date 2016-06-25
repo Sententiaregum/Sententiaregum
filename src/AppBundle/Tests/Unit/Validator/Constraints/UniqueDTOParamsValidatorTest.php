@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Validator\Constraints;
 
 use AppBundle\Validator\Constraints\UniqueDTOParams;

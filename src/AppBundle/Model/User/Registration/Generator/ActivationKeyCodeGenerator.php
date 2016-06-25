@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\Generator;
 
 /**
@@ -27,7 +29,7 @@ class ActivationKeyCodeGenerator implements ActivationKeyCodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($length = 10)
+    public function generate(int $length = 10): string
     {
         for ($i = 0, $maxKey = strlen($this->randomKeys) - 1, $string = ''; $i < $length; ++$i) {
             $string .= $this->randomKeys[mt_rand(0, $maxKey)];

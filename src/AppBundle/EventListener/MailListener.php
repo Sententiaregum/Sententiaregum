@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
@@ -51,7 +53,7 @@ class MailListener
      * @param TwigEngine          $engine
      * @param string              $defaultEmailAddress
      */
-    public function __construct(\Swift_Mailer $mailer, TranslatorInterface $translator, TwigEngine $engine, $defaultEmailAddress)
+    public function __construct(\Swift_Mailer $mailer, TranslatorInterface $translator, TwigEngine $engine, string $defaultEmailAddress)
     {
         $this->mailer       = $mailer;
         $this->translator   = $translator;
@@ -91,10 +93,10 @@ class MailListener
      *
      * @return string
      */
-    private function renderMailPart(MailerEvent $event, $extension, $locale)
+    private function renderMailPart(MailerEvent $event, string $extension, string $locale): string
     {
         return $this->engine->render(
-            sprintf('%s.%s', $event->getTemplateSource(), (string) $extension),
+            sprintf('%s.%s', $event->getTemplateSource(), $extension),
             array_merge(['locale' => $locale], $event->getParameters())
         );
     }

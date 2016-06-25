@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Validator\Constraints as Assert;
@@ -33,7 +35,7 @@ class LocaleSwitcherDTO
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -45,7 +47,7 @@ class LocaleSwitcherDTO
      *
      * @return $this
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale)
     {
         $this->locale = (string) $locale;
 

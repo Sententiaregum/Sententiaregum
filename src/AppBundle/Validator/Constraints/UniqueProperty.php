@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -64,7 +66,7 @@ class UniqueProperty extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getRequiredOptions()
+    public function getRequiredOptions(): array
     {
         return ['entity', 'field'];
     }
@@ -72,7 +74,7 @@ class UniqueProperty extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'app.validator.unique_property';
     }

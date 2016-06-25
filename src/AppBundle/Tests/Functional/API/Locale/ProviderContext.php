@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Functional\API\Locale;
 
 use AppBundle\Tests\Functional\BaseTrait;

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\Model\User\Registration\NameSuggestion;
 
 use AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor;

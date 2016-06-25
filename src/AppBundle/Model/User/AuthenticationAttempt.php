@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -80,7 +82,7 @@ class AuthenticationAttempt implements \Serializable
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -90,7 +92,7 @@ class AuthenticationAttempt implements \Serializable
      *
      * @return string
      */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
@@ -100,9 +102,9 @@ class AuthenticationAttempt implements \Serializable
      *
      * @param string $ip
      *
-     * @return $this
+     * @return AuthenticationAttempt
      */
-    public function setIp($ip)
+    public function setIp(string $ip): self
     {
         $this->ip = (string) $ip;
 
@@ -114,7 +116,7 @@ class AuthenticationAttempt implements \Serializable
      *
      * @return int
      */
-    public function getAttemptCount()
+    public function getAttemptCount(): int
     {
         return $this->attemptCount;
     }
@@ -122,9 +124,9 @@ class AuthenticationAttempt implements \Serializable
     /**
      * Increase attempt count.
      *
-     * @return $this
+     * @return AuthenticationAttempt
      */
-    public function increaseAttemptCount()
+    public function increaseAttemptCount(): self
     {
         ++$this->attemptCount;
 
@@ -145,7 +147,7 @@ class AuthenticationAttempt implements \Serializable
      *
      * @return \DateTime
      */
-    public function getLatestFailedAttemptTime()
+    public function getLatestFailedAttemptTime(): \DateTime
     {
         return $this->latestDateTime;
     }
@@ -155,7 +157,7 @@ class AuthenticationAttempt implements \Serializable
      *
      * @return \DateTime[]
      */
-    public function getLastFailedAttemptTimesInRange()
+    public function getLastFailedAttemptTimesInRange(): array
     {
         return $this->lastDateTimeRange;
     }

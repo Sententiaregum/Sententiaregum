@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Event;
 
 use AppBundle\Model\User\User;
@@ -49,9 +51,9 @@ class MailerEvent extends Event
      *
      * @param User $user
      *
-     * @return $this
+     * @return MailerEvent
      */
-    public function addUser(User $user)
+    public function addUser(User $user): self
     {
         $this->users[] = $user;
 
@@ -61,13 +63,13 @@ class MailerEvent extends Event
     /**
      * Sets the template source.
      *
-     * @param $templateSource
+     * @param string $templateSource
      *
-     * @return $this
+     * @return MailerEvent
      */
-    public function setTemplateSource($templateSource)
+    public function setTemplateSource(string $templateSource): self
     {
-        $this->templateSource = (string) $templateSource;
+        $this->templateSource = $templateSource;
 
         return $this;
     }
@@ -80,9 +82,9 @@ class MailerEvent extends Event
      *
      * @throws \InvalidArgumentException Cannot use paameter locale as it is reserved
      *
-     * @return $this
+     * @return MailerEvent
      */
-    public function addParameter($name, $value)
+    public function addParameter(string $name, $value): self
     {
         if ('locale' === $name) {
             throw new \InvalidArgumentException('Cannot apply parameter locale since this parameter is reserved!');
@@ -97,7 +99,7 @@ class MailerEvent extends Event
      *
      * @return User[]
      */
-    public function getUsers()
+    public function getUsers(): array
     {
         return $this->users;
     }
@@ -107,7 +109,7 @@ class MailerEvent extends Event
      *
      * @return string
      */
-    public function getTemplateSource()
+    public function getTemplateSource(): string
     {
         return $this->templateSource;
     }
@@ -117,7 +119,7 @@ class MailerEvent extends Event
      *
      * @return mixed[]
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -137,9 +139,9 @@ class MailerEvent extends Event
      *
      * @param string $language
      *
-     * @return $this
+     * @return MailerEvent
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
 

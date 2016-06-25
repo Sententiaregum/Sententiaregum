@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Model\User\DTO\LocaleSwitcherDTO;
@@ -43,7 +45,7 @@ class LocaleController extends BaseController
      * @Rest\Get("/locale.{_format}", name="app.language.supported_locales", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
      */
-    public function getSupportedLocalesAction()
+    public function getSupportedLocalesAction(): array
     {
         return $this->getLocales();
     }

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -48,7 +50,7 @@ class Role implements RoleInterface, Serializable
      *
      * @param string $role
      */
-    public function __construct($role)
+    public function __construct(string $role)
     {
         $this->role = (string) $role;
         $this->id   = Uuid::uuid4()->toString();
@@ -59,7 +61,7 @@ class Role implements RoleInterface, Serializable
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -77,7 +79,7 @@ class Role implements RoleInterface, Serializable
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([$this->id, $this->role]);
     }

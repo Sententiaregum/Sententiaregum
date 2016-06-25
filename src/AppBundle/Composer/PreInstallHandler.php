@@ -30,7 +30,7 @@ class PreInstallHandler
      */
     public static function determineFirstInstall()
     {
-        if (!is_dir(realpath(sprintf('%s/../../../vendor', __DIR__)))) {
+        if (!is_dir(sprintf('%s/../../../vendor', __DIR__))) {
             self::$firstInstall = true;
         }
     }

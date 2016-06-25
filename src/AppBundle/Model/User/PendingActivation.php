@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User;
 
 use DateTime;
@@ -44,7 +46,7 @@ class PendingActivation implements \Serializable
      * @param DateTime $activationDate
      * @param string   $key
      */
-    public function __construct(DateTime $activationDate, $key = null)
+    public function __construct(DateTime $activationDate, string $key = null)
     {
         $this->activationDate = $activationDate;
         $this->key            = $key;
@@ -57,7 +59,7 @@ class PendingActivation implements \Serializable
      *
      * @return bool
      */
-    public function isActivationExpired()
+    public function isActivationExpired(): bool
     {
         return time() - $this->activationDate->getTimestamp() >= 3600 * 2;
     }
@@ -67,9 +69,9 @@ class PendingActivation implements \Serializable
      *
      * @param string $key
      *
-     * @return $this
+     * @return PendingActivation
      */
-    public function setKey($key)
+    public function setKey($key): self
     {
         $this->key = (string) $key;
 

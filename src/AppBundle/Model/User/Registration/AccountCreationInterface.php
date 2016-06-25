@@ -10,9 +10,12 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration;
 
 use AppBundle\Model\User\DTO\CreateUserDTO;
+use AppBundle\Model\User\Value\RegistrationResult;
 
 /**
  * Interface which represents the account creation step.
@@ -26,7 +29,7 @@ interface AccountCreationInterface
      *
      * @param CreateUserDTO $userParameters
      *
-     * @return \AppBundle\Model\User\Value\RegistrationResult
+     * @return RegistrationResult
      */
-    public function registration(CreateUserDTO $userParameters);
+    public function registration(CreateUserDTO $userParameters): RegistrationResult;
 }

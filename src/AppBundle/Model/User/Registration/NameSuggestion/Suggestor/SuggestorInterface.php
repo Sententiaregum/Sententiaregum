@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\NameSuggestion\Suggestor;
 
 /**
@@ -26,5 +28,5 @@ interface SuggestorInterface
      *
      * @return string[]
      */
-    public function getPossibleSuggestions($username);
+    public function getPossibleSuggestions(string $username): array;
 }

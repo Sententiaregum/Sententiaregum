@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\Validator\Constraints;
 
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
