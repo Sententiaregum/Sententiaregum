@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Functional\Redis;
 
 use AppBundle\Tests\Functional\FixtureLoadingContext;
@@ -46,7 +48,7 @@ class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements Sn
      */
     public function theUserWithIdWillBeMarkedAsOnline($arg1)
     {
-        $this->getContainer()->get('app.redis.cluster.online_users')->addUserId((int) $arg1);
+        $this->getContainer()->get('app.redis.cluster.online_users')->addUserId($arg1);
     }
 
     /**
@@ -56,7 +58,7 @@ class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements Sn
     {
         $userIdList = array_map(
             function ($row) {
-                return (int) $row['user_id'];
+                return $row['user_id'];
             },
             $table->getHash()
         );
@@ -70,7 +72,7 @@ class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements Sn
     public function iShouldSeeTheFollowingResult(TableNode $table)
     {
         foreach ($table->getHash() as $row) {
-            $userId = (int) $row['user_id'];
+            $userId = $row['user_id'];
             $state  = $row['state'] === 'true';
 
             Assertion::keyExists($this->result, $userId);

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User;
 
 use DateTime;
@@ -35,7 +37,7 @@ class UserRepository extends EntityRepository
      *
      * @return int
      */
-    public function deletePendingActivationsByDate(DateTime $dateTime)
+    public function deletePendingActivationsByDate(DateTime $dateTime): int
     {
         $connection = $this->_em->getConnection();
         try {
@@ -78,7 +80,7 @@ class UserRepository extends EntityRepository
      *
      * @return int
      */
-    public function deleteAncientAttemptData(DateTime $dateTime)
+    public function deleteAncientAttemptData(DateTime $dateTime): int
     {
         $qb     = $this->_em->createQueryBuilder();
         $search = clone $qb;
@@ -133,7 +135,7 @@ class UserRepository extends EntityRepository
      *
      * @return int[]
      */
-    public function getFollowingIdsByUser(User $user)
+    public function getFollowingIdsByUser(User $user): array
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -156,9 +158,9 @@ class UserRepository extends EntityRepository
      * @param string $username
      * @param string $activationKey
      *
-     * @return User
+     * @return User|null
      */
-    public function findUserByUsernameAndActivationKey($username, $activationKey)
+    public function findUserByUsernameAndActivationKey(string $username, string $activationKey)
     {
         return $this->findOneBy(['username' => $username, 'pendingActivation.key' => $activationKey]);
     }
@@ -170,7 +172,7 @@ class UserRepository extends EntityRepository
      *
      * @return string[]
      */
-    public function filterUniqueUsernames(array $names)
+    public function filterUniqueUsernames(array $names): array
     {
         $qb        = $this->_em->createQueryBuilder();
         $nonUnique = array_column(
@@ -201,7 +203,7 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    private function buildQueryForUserIdsWithOldPendingActivations(DateTime $dateTime)
+    private function buildQueryForUserIdsWithOldPendingActivations(DateTime $dateTime): Query
     {
         $qb = $this->_em->createQueryBuilder();
 

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Online;
 
 /**
@@ -22,11 +24,11 @@ interface OnlineUserIdDataProviderInterface
     /**
      * Adds a new user id.
      *
-     * @param int $userId
+     * @param string $userId
      *
      * @return $this
      */
-    public function addUserId($userId);
+    public function addUserId(string $userId);
 
     /**
      * Validates all user ids in order to check which ids belong to online users.
@@ -35,5 +37,5 @@ interface OnlineUserIdDataProviderInterface
      *
      * @return bool[]
      */
-    public function validateUserIds(array $ids);
+    public function validateUserIds(array $ids): array;
 }

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\NameSuggestion\Suggestor;
 
 /**
@@ -24,7 +26,7 @@ final class DotReplacementSuggestor implements SuggestorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPossibleSuggestions($username)
+    public function getPossibleSuggestions(string $username): array
     {
         $result = [];
         if ($username !== $newName = $this->replaceSpecialCharsForUsername($username)) {
@@ -41,7 +43,7 @@ final class DotReplacementSuggestor implements SuggestorInterface
      *
      * @return string
      */
-    private function replaceSpecialCharsForUsername($username)
+    private function replaceSpecialCharsForUsername(string $username): string
     {
         return preg_replace_callback(
             self::SPECIAL_CHAR_MATCHING_REGEX,

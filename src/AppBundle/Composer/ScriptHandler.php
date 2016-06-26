@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Composer;
 
 use Composer\Script\Event;
@@ -141,7 +143,7 @@ class ScriptHandler extends AbstractScriptHandler
      * @param int       $timeout
      * @param string    $nodeEnv
      */
-    private static function executeNpmCommand($command, Event $event, $showOutput = true, $timeout = 500, $nodeEnv = null)
+    private static function executeNpmCommand(string $command, Event $event, bool $showOutput = true, int $timeout = 500, string $nodeEnv = null)
     {
         $npm         = (new ExecutableFinder())->find('npm');
         $fullCommand = sprintf('%s %s %s', $nodeEnv ? sprintf('NODE_ENV=%s', $nodeEnv) : null, $npm, $command);

@@ -43,7 +43,7 @@ Now you just need to boot vagrant:
 
     vagrant up
 
-Now a box with Ubuntu 14.04 (``ubuntu/trusty64``) and PHP 5.6 and NodeJS 6.x will be created automatically.
+Now a box with Ubuntu 16.04 (``puppetlabs/ubuntu-16.04-64-puppet``) and PHP 7.0 and NodeJS 6.x will be created automatically.
 
 The hiera config is stored in two files managed by GIT:
 

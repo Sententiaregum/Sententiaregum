@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Value;
 
 use AppBundle\Model\User\User;
@@ -66,7 +68,7 @@ class Credentials
      * @param string                       $apiKey
      * @param string                       $locale
      */
-    public function __construct($username, array $roles, $apiKey, $locale)
+    public function __construct(string $username, array $roles, string $apiKey, string $locale)
     {
         $this->username = $username;
         $this->roles    = $roles;
@@ -79,7 +81,7 @@ class Credentials
      *
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -87,9 +89,9 @@ class Credentials
     /**
      * Get roles.
      *
-     * @return \AppBundle\Model\User\User[]
+     * @return \AppBundle\Model\User\Role[]
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -99,7 +101,7 @@ class Credentials
      *
      * @return string
      */
-    public function getApiKey()
+    public function getApiKey(): string
     {
         return $this->apiKey;
     }
@@ -107,7 +109,7 @@ class Credentials
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }

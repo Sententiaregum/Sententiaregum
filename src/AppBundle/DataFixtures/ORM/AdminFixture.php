@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Doctrine\ProductionFixtureInterface;
@@ -48,7 +50,7 @@ class AdminFixture implements ProductionFixtureInterface, DependentFixtureInterf
     /**
      * {@inheritdoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             RoleFixture::class,

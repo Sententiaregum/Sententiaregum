@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Util;
 
 /**
@@ -27,7 +29,7 @@ class DateTimeComparison
      *
      * @return bool
      */
-    public function __invoke($maximumRange, \DateTime $attemptDate)
+    public function __invoke(string $maximumRange, \DateTime $attemptDate): bool
     {
         return (new \DateTime($maximumRange))->getTimestamp() <= $attemptDate->getTimestamp();
     }

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\Generator;
 
 /**
@@ -24,7 +26,7 @@ interface ActivationKeyCodeGeneratorInterface
      *
      * @param int $length
      *
-     * @return int
+     * @return string
      */
-    public function generate($length = 10);
+    public function generate(int $length = 10): string;
 }

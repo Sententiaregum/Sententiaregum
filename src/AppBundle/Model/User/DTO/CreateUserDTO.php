@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Validator\Constraints\Locale;
@@ -50,7 +52,7 @@ class CreateUserDTO
      * )
      * @Assert\Regex(
      *     message="VALIDATORS_REGISTRATION_USERNAME_PATTERN",
-     *     pattern="/^[A-z0-9\_\-\.]+$/i"
+     *     pattern="/^[A-z0-9_\-\.]+$/i"
      * )
      */
     private $username;

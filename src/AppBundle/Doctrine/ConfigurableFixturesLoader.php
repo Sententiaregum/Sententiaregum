@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Doctrine;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
@@ -46,7 +48,7 @@ class ConfigurableFixturesLoader
      *
      * @return ProductionFixtureInterface[]
      */
-    public function loadProductionFixturesFromDirectory($directory)
+    public function loadProductionFixturesFromDirectory(string $directory): array
     {
         $loader = new Loader();
 

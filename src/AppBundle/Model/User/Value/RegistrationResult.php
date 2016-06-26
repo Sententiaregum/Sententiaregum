@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Value;
 
 use AppBundle\Model\User\User;
@@ -58,7 +60,7 @@ class RegistrationResult
     }
 
     /**
-     * @return ConstraintViolationListInterface
+     * @return ConstraintViolationListInterface|null
      */
     public function getViolations()
     {
@@ -68,7 +70,7 @@ class RegistrationResult
     /**
      * @return string[]
      */
-    public function getSuggestions()
+    public function getSuggestions(): array
     {
         return $this->suggestions;
     }
@@ -76,7 +78,7 @@ class RegistrationResult
     /**
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -84,7 +86,7 @@ class RegistrationResult
     /**
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->valid;
     }

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -32,7 +34,7 @@ class Locale extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'app.validator.locale';
     }

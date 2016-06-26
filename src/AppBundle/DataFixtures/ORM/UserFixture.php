@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Model\User\User;
@@ -65,7 +67,7 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             AdminFixture::class,

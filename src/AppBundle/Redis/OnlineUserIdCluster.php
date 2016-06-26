@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Redis;
 
 use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
@@ -40,7 +42,7 @@ class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function addUserId($userId)
+    public function addUserId(string $userId)
     {
         $key = $this->createRedisStorageKeyByUserId($userId);
 
@@ -51,7 +53,7 @@ class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function validateUserIds(array $ids)
+    public function validateUserIds(array $ids): array
     {
         $that             = &$this;
         $onlineOfflineMap = array_map(
@@ -67,11 +69,11 @@ class OnlineUserIdCluster implements OnlineUserIdDataProviderInterface
     /**
      * Creates the id for persistent redis keys.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return string
      */
-    private function createRedisStorageKeyByUserId($id)
+    private function createRedisStorageKeyByUserId(string $id): string
     {
         return sprintf('online:%s', $id);
     }

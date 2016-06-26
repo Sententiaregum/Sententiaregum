@@ -21,8 +21,6 @@ services:
       - { name: kernel.event_listener, event: ma27_api_key_authentication.authorization.firewall.login, method: onFirewallLogin }
   app.listener.update_latest_activation:
     class: AppBundle\EventListener\UpdateLatestActivationListener
-    arguments:
-      - "@request_stack"
     tags:
       - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: 255, method: updateOnLogin }
   app.listener.match_locale_cookie:

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
@@ -60,7 +62,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Ma27ApiKeyAuthenticationEvents::AUTHENTICATION     => 'onAuthentication',
@@ -144,7 +146,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      * @param string $templateName
      * @param string $eventName
      */
-    private function dispatchNotificationEvent(User $user, $templateName, $eventName)
+    private function dispatchNotificationEvent(User $user, string $templateName, string $eventName)
     {
         $event = new MailerEvent();
         $event->addUser($user)
@@ -156,7 +158,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
                     $user->getLocale()
                 )
             )
-            ->setTemplateSource(sprintf('AppBundle:Email/AuthAttempt:%s', (string) $templateName));
+            ->setTemplateSource(sprintf('AppBundle:Email/AuthAttempt:%s', $templateName));
 
         $this->eventDispatcher->dispatch($eventName, $event);
     }

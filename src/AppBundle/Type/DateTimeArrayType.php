@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -32,7 +34,7 @@ final class DateTimeArrayType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         return $platform->getClobTypeDeclarationSQL($fieldDeclaration);
     }
@@ -40,7 +42,7 @@ final class DateTimeArrayType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return self::DATE_TIME_ARRAY;
     }
@@ -48,7 +50,7 @@ final class DateTimeArrayType extends Type
     /**
      * {@inheritdoc}
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         $format = $platform->getDateTimeFormatString();
 
@@ -64,7 +66,7 @@ final class DateTimeArrayType extends Type
      *
      * @throws \RuntimeException If the data decode fails.
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): array
     {
         $raw = json_decode($value, true);
         if (JSON_ERROR_NONE !== json_last_error()) {
@@ -88,7 +90,7 @@ final class DateTimeArrayType extends Type
     /**
      * {@inheritdoc}
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

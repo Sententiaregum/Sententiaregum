@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\NameSuggestion;
 
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
@@ -26,7 +28,7 @@ interface ChainSuggestorInterface extends SuggestorInterface
      *
      * @param SuggestorInterface $suggestor
      *
-     * @return $this
+     * @return ChainSuggestorInterface
      */
     public function register(SuggestorInterface $suggestor);
 }

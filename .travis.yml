@@ -1,8 +1,6 @@
 language: php
 php:
-  - 5.6
   - 7
-  - hhvm
 
 sudo: required
 dist: trusty
@@ -18,21 +16,16 @@ addons:
     - mysql-client-core-5.6
     - mysql-client-5.6
 
-# execution matrix
-matrix:
-  allow_failures:
-    - php: hhvm
-
 # composer cache for faster install process and less issues with github api
 cache:
   directories:
     - $HOME/.composer/cache/files
 
 # prepare travis ci for the build process
-install: ./travis-ci/scripts/install.sh
+install: ./travis-ci/install.sh
 
 # linters
-before_script: ./travis-ci/scripts/lint.sh
+before_script: ./travis-ci/lint.sh
 
 # execute tests
-script: ./travis-ci/scripts/tests.sh
+script: ./travis-ci/tests.sh

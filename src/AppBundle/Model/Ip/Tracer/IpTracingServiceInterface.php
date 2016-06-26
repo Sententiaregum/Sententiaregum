@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\Ip\Tracer;
 
 /**
@@ -27,5 +29,5 @@ interface IpTracingServiceInterface
      *
      * @return \AppBundle\Model\Ip\Value\IpLocation|null
      */
-    public function getIpLocationData($ip, $userLocale);
+    public function getIpLocationData(string $ip, string $userLocale);
 }

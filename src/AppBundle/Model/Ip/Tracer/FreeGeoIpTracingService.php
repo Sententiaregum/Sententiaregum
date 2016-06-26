@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\Ip\Tracer;
 
 use AppBundle\Model\Ip\Value\IpLocation;
@@ -24,6 +26,9 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FreeGeoIpTracingService implements IpTracingServiceInterface
 {
+    /**
+     * @var array
+     */
     private static $PRIVATE_IPS = ['::1', '127.0.0.1'];
 
     /**
@@ -46,7 +51,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      *
      * @throws \InvalidArgumentException If the ip is invalid.
      */
-    public function getIpLocationData($ip, $userLocale)
+    public function getIpLocationData(string $ip, string $userLocale)
     {
         if (in_array($ip, self::$PRIVATE_IPS, true)) {
             return;
@@ -77,7 +82,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      *
      * @return IpLocation
      */
-    private function hydrateIpObject($ip, array $data)
+    private function hydrateIpObject(string $ip, array $data): IpLocation
     {
         return new IpLocation(
             $ip,
@@ -98,7 +103,7 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      *
      * @return mixed[]
      */
-    private function decodePsr7Response(StreamInterface $stream)
+    private function decodePsr7Response(StreamInterface $stream): array
     {
         $body = (string) $stream;
         if (!($decoded = json_decode($body, true)) && JSON_ERROR_NONE !== json_last_error()) {
@@ -119,8 +124,8 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      *
      * @return bool
      */
-    private function isValidIp($address)
+    private function isValidIp(string $address): bool
     {
-        return filter_var($address, FILTER_VALIDATE_IP);
+        return (bool) filter_var($address, FILTER_VALIDATE_IP);
     }
 }

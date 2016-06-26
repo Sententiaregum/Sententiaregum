@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\OnlineUsersUpdateListener;
@@ -36,6 +38,7 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
             ->with($user);
 
         $user->expects($this->once())->method('updateLastAction');
+        $user->expects($this->once())->method('getId')->willReturn('1');
 
         $entityManager
             ->expects($this->once())

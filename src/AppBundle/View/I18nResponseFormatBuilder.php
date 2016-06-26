@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\View;
 
 use Symfony\Component\Translation\TranslatorInterface;
@@ -68,11 +70,11 @@ final class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterf
      */
     public function formatTranslatableViolationList(
         ConstraintViolationListInterface $violations,
-        $sortProperties = true,
+        bool $sortProperties = true,
         $useAllLanguages = true,
         array $targetLocales = [],
-        $domain = 'messages'
-    ) {
+        string $domain = 'messages'
+    ): array {
         $hasLocales = count($targetLocales) > 0;
 
         if (!$useAllLanguages && $hasLocales) {
@@ -111,7 +113,7 @@ final class I18nResponseFormatBuilder implements I18nResponseFormatBuilderInterf
                 case $useAllLanguages:
                     $structure = array_reduce(
                         $targetLocales,
-                        function ($carry, $locale) use ($violation, $domain) {
+                        function (array $carry, string $locale) use ($violation, $domain): array {
                             if (!isset($carry[$locale])) {
                                 $carry[$locale] = [];
                             }

@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Command;
 
 use AppBundle\Doctrine\ProductionFixtureInterface;
@@ -70,7 +72,7 @@ EOF
      *
      * @throws \InvalidArgumentException If one of the bundles doesn't have a DataFixtures/ORM directory
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->isInteractive()) {
             $question = new ConfirmationQuestion(
@@ -95,7 +97,7 @@ EOF
 
         $fixtures  = [];
         $instances = array_map(
-            function ($bundle) use ($loader, $kernel) {
+            function ($bundle) use ($loader, $kernel): array {
                 $absoluteBundlePath = $kernel->getBundle($bundle)->getPath();
                 $fixturesPath       = sprintf('%s/DataFixtures/ORM', $absoluteBundlePath);
 

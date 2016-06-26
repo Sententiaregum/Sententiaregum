@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration;
 
 use AppBundle\Event\MailerEvent;
@@ -17,6 +19,7 @@ use AppBundle\Exception\UserActivationException;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
+use AppBundle\Model\User\Role;
 use AppBundle\Model\User\RoleRepository;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserRepository;
@@ -124,7 +127,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      * @throws UserActivationException If the activation fails
      * @throws \RuntimeException       If the role is not present
      */
-    public function approveByActivationKey($activationKey, $username)
+    public function approveByActivationKey(string $activationKey, string $username)
     {
         $user = $this->findUserByActivationKeyAndUsername($activationKey, $username);
         $user->modifyActivationStatus(User::STATE_APPROVED, $activationKey);
@@ -138,7 +141,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * {@inheritdoc}
      */
-    public function registration(CreateUserDTO $userParameters)
+    public function registration(CreateUserDTO $userParameters): RegistrationResult
     {
         $result = $this->buildAndValidateUserModelByDTO($userParameters);
         if (!$result['valid']) {
@@ -168,7 +171,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      *
      * @return mixed[]
      */
-    private function buildAndValidateUserModelByDTO(CreateUserDTO $userParameters)
+    private function buildAndValidateUserModelByDTO(CreateUserDTO $userParameters): array
     {
         $violations = $this->validator->validate($userParameters);
         if (count($violations) > 0) {
@@ -215,9 +218,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Generates an unique activation key.
      *
-     * @return int
+     * @return string
      */
-    private function getUniqueActivationKey()
+    private function getUniqueActivationKey(): string
     {
         $rounds = 0;
 
@@ -238,11 +241,11 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Checks whether the activation key is unique.
      *
-     * @param int $activationKey
+     * @param string $activationKey
      *
      * @return bool
      */
-    private function isActivationKeyUnique($activationKey)
+    private function isActivationKeyUnique(string $activationKey): bool
     {
         $options = [
             'entity' => 'Account:User',
@@ -268,9 +271,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function hasViolation(
         ConstraintViolationListInterface $violations,
-        $property,
-        $code = UniqueProperty::NON_UNIQUE_PROPERTY
-    ) {
+        string $property,
+        string $code = UniqueProperty::NON_UNIQUE_PROPERTY
+    ): bool {
         /** @var \Symfony\Component\Validator\ConstraintViolationInterface $violation */
         foreach ($violations as $violation) {
             if ($violation->getCode() === $code && $violation->getPropertyPath() === $property) {
@@ -289,7 +292,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      *
      * @return User
      */
-    private function findUserByActivationKeyAndUsername($activationKey, $username)
+    private function findUserByActivationKeyAndUsername($activationKey, string $username): User
     {
         if (!$user = $this->userRepository->findUserByUsernameAndActivationKey($username, $activationKey)) {
             throw $this->createActivationException();
@@ -312,7 +315,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      *
      * @return bool
      */
-    private function isActivationExpired(User $user)
+    private function isActivationExpired(User $user): bool
     {
         return $user->getPendingActivation()->isActivationExpired();
     }
@@ -327,8 +330,8 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      */
     private function generateUsernameSuggestionsByNonUniqueUsername(
         ConstraintViolationListInterface $violations,
-        $username
-    ) {
+        string $username
+    ): array {
         return $this->hasViolation($violations, 'username', UniqueProperty::NON_UNIQUE_PROPERTY)
             ? $this->suggestor->getPossibleSuggestions($username)
             : [];
@@ -339,7 +342,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      *
      * @return UserActivationException
      */
-    private function createActivationException()
+    private function createActivationException(): UserActivationException
     {
         return new UserActivationException();
     }
@@ -347,9 +350,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Determines the default role which should get every newly activated user.
      *
-     * @return \AppBundle\Model\User\Role
+     * @return Role
      */
-    private function determineDefaultRole()
+    private function determineDefaultRole(): Role
     {
         // if the purger runs a bulk delete on users
         // there occur foreign key constraint issues with the
@@ -380,9 +383,9 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
     /**
      * Generates a 255 byte long activation key.
      *
-     * @return int
+     * @return string
      */
-    private function get255ByteLongValidationKey()
+    private function get255ByteLongValidationKey(): string
     {
         return $this->activationKeyCodeGenerator->generate(255);
     }
@@ -394,7 +397,7 @@ final class TwoStepRegistrationApproach implements AccountCreationInterface, Acc
      *
      * @return bool
      */
-    private function tooManyGenerationAttempts($currentAmount)
+    private function tooManyGenerationAttempts(int $currentAmount): bool
     {
         return $currentAmount >= 200;
     }

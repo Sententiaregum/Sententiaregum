@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User;
 
 use AppBundle\Model\User\Util\DateTimeComparison;
@@ -200,7 +202,7 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public static function create($username, $password, $email, PasswordHasherInterface $passwordHasher)
+    public static function create(string $username, string $password, string $email, PasswordHasherInterface $passwordHasher): self
     {
         $user = new self();
         $user->setOrUpdatePassword($password, $passwordHasher);
@@ -234,7 +236,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -244,7 +246,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -260,7 +262,7 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public function setOrUpdatePassword($password, PasswordHasherInterface $passwordHasher, $old = null)
+    public function setOrUpdatePassword(string $password, PasswordHasherInterface $passwordHasher, string $old = null): self
     {
         if ($this->password && !$passwordHasher->compareWith($this->password, $old)) {
             throw new \InvalidArgumentException('Old password is invalid, but must be given to change it!');
@@ -276,7 +278,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -286,7 +288,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -306,7 +308,7 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public function updateLastAction()
+    public function updateLastAction(): self
     {
         $this->lastAction = new DateTime();
 
@@ -318,7 +320,7 @@ class User implements UserInterface, Serializable
      *
      * @return DateTime
      */
-    public function getLastAction()
+    public function getLastAction(): \DateTime
     {
         return $this->lastAction;
     }
@@ -328,7 +330,7 @@ class User implements UserInterface, Serializable
      *
      * @return DateTime
      */
-    public function getRegistrationDate()
+    public function getRegistrationDate(): \DateTime
     {
         return $this->registrationDate;
     }
@@ -343,7 +345,7 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public function modifyActivationStatus($state, $key = null)
+    public function modifyActivationStatus($state, $key = null): self
     {
         if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED], true)) {
             throw new \InvalidArgumentException('Invalid state!');
@@ -369,7 +371,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getActivationStatus()
+    public function getActivationStatus(): string
     {
         return $this->state;
     }
@@ -403,7 +405,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    public function isLocked()
+    public function isLocked(): bool
     {
         return $this->locked;
     }
@@ -415,7 +417,7 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public function setAboutText($aboutText)
+    public function setAboutText($aboutText): self
     {
         $this->aboutText = (string) $aboutText;
 
@@ -427,7 +429,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getAboutText()
+    public function getAboutText(): string
     {
         return $this->aboutText;
     }
@@ -437,9 +439,9 @@ class User implements UserInterface, Serializable
      *
      * @param string $activationKey
      *
-     * @return $this
+     * @return User
      */
-    public function storeUniqueActivationKeyForNonApprovedUser($activationKey)
+    public function storeUniqueActivationKeyForNonApprovedUser($activationKey): self
     {
         if (self::STATE_APPROVED === $this->getActivationStatus()) {
             throw new \LogicException('Approved users cannot have an activation key!');
@@ -459,9 +461,9 @@ class User implements UserInterface, Serializable
     /**
      * Removes the activation key.
      *
-     * @return $this
+     * @return User
      */
-    public function removeActivationKey()
+    public function removeActivationKey(): self
     {
         if (self::STATE_APPROVED !== $this->getActivationStatus()) {
             throw new \LogicException('Only approved users can remove activation keys!');
@@ -480,9 +482,9 @@ class User implements UserInterface, Serializable
      * @throws \InvalidArgumentException If the user is not approved.
      * @throws \LogicException           If the role is already attached.
      *
-     * @return $this
+     * @return User
      */
-    public function addRole(Role $role)
+    public function addRole(Role $role): self
     {
         if ($this->getActivationStatus() === static::STATE_NEW) {
             throw new \InvalidArgumentException('Cannot attach role on non-approved user!');
@@ -506,9 +508,9 @@ class User implements UserInterface, Serializable
      *
      * @param Role $role
      *
-     * @return $this
+     * @return User
      */
-    public function removeRole(Role $role)
+    public function removeRole(Role $role): self
     {
         if (!$this->hasRole($role)) {
             throw new \LogicException(sprintf('Cannot remove not existing role "%s"!', $role->getRole()));
@@ -526,9 +528,9 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    public function hasRole(Role $role)
+    public function hasRole(Role $role): bool
     {
-        return $this->roles->exists(function ($index, Role $userRole) use ($role) {
+        return $this->roles->exists(function (int $index, Role $userRole) use ($role) {
             return $role->getRole() === $userRole->getRole();
         });
     }
@@ -538,7 +540,7 @@ class User implements UserInterface, Serializable
      *
      * @return Role[]
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles->toArray();
     }
@@ -548,9 +550,9 @@ class User implements UserInterface, Serializable
      *
      * @param User $user
      *
-     * @return $this
+     * @return User
      */
-    public function addFollowing(User $user)
+    public function addFollowing(User $user): self
     {
         $this->following->add($user);
 
@@ -562,9 +564,9 @@ class User implements UserInterface, Serializable
      *
      * @param User $user
      *
-     * @return $this
+     * @return User
      */
-    public function removeFollowing(User $user)
+    public function removeFollowing(User $user): self
     {
         if (!$this->follows($user)) {
             throw new \LogicException('Cannot remove relation with invalid user "%s"!', $user->getUsername());
@@ -582,7 +584,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    public function follows(User $user)
+    public function follows(User $user): bool
     {
         return $this->following->exists(function ($index, User $following) use ($user) {
             return $following->getId() === $user->getId();
@@ -594,7 +596,7 @@ class User implements UserInterface, Serializable
      *
      * @return Role[]
      */
-    public function getFollowing()
+    public function getFollowing(): array
     {
         return $this->following->toArray();
     }
@@ -604,7 +606,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -616,9 +618,9 @@ class User implements UserInterface, Serializable
      *
      * @throws \InvalidArgumentException If the locale is invalid.
      *
-     * @return $this
+     * @return User
      */
-    public function modifyUserLocale($locale)
+    public function modifyUserLocale(string $locale): self
     {
         if (!(bool) preg_match('/^([a-z]{2})$/', $locale)) {
             throw new \InvalidArgumentException('Invalid locale!');
@@ -647,7 +649,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    public function addAndValidateNewUserIp($ip, DateTimeComparison $comparison)
+    public function addAndValidateNewUserIp(string $ip, DateTimeComparison $comparison): bool
     {
         if (!($isKnown = $this->isKnownIp($ip))) {
             $attempt = new AuthenticationAttempt();
@@ -668,9 +670,9 @@ class User implements UserInterface, Serializable
      *
      * @param string $ip
      *
-     * @return $this
+     * @return User
      */
-    public function addFailedAuthenticationWithIp($ip)
+    public function addFailedAuthenticationWithIp(string $ip): self
     {
         if (!$this->isKnownIp($ip)) {
             if (!($attempt = $this->getAuthAttemptModelByIp($ip, self::FAILED_AUTH_POOL))) {
@@ -694,7 +696,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    public function exceedsIpFailedAuthAttemptMaximum($ip, DateTimeComparison $comparison)
+    public function exceedsIpFailedAuthAttemptMaximum(string $ip, DateTimeComparison $comparison): bool
     {
         if (!$this->isKnownIp($ip, self::FAILED_AUTH_POOL)) {
             return false;
@@ -708,7 +710,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->id,
@@ -775,7 +777,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    private function isKnownIp($ip, $dataSource = self::AUTH_ATTEMPT_POOL)
+    private function isKnownIp(string $ip, string $dataSource = self::AUTH_ATTEMPT_POOL): bool
     {
         return !empty($this->getAuthAttemptModelByIp($ip, $dataSource));
     }
@@ -788,7 +790,7 @@ class User implements UserInterface, Serializable
      *
      * @return AuthenticationAttempt|null
      */
-    private function getAuthAttemptModelByIp($ip, $dataSource = self::AUTH_ATTEMPT_POOL)
+    private function getAuthAttemptModelByIp($ip, string $dataSource = self::AUTH_ATTEMPT_POOL)
     {
         $authAttempt = null;
         $pool        = $dataSource === self::AUTH_ATTEMPT_POOL
@@ -814,7 +816,7 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    private function needsAuthWarning(AuthenticationAttempt $attempt, DateTimeComparison $comparison)
+    private function needsAuthWarning(AuthenticationAttempt $attempt, DateTimeComparison $comparison): bool
     {
         $count = $attempt->getAttemptCount();
         if (self::MAX_FAILED_ATTEMPTS_FROM_IP <= $count) {
@@ -834,7 +836,7 @@ class User implements UserInterface, Serializable
      * @param string             $ip
      * @param DateTimeComparison $comparison
      */
-    private function eraseKnownIpFromBadIPList($ip, DateTimeComparison $comparison)
+    private function eraseKnownIpFromBadIPList(string $ip, DateTimeComparison $comparison)
     {
         if ($this->isPreviouslyLoginFailed('-10 minutes', $comparison)) {
             // if it failed before the login, the login may be corrupted,
@@ -861,10 +863,10 @@ class User implements UserInterface, Serializable
      *
      * @return bool
      */
-    private function isPreviouslyLoginFailed($diff, DateTimeComparison $comparison, $ignoreLastAttempts = false)
+    private function isPreviouslyLoginFailed(string $diff, DateTimeComparison $comparison, bool $ignoreLastAttempts = false): bool
     {
         return $this->failedAuthentications->exists(
-            function ($index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $comparison) {
+            function (int $index, AuthenticationAttempt $failedAttempt) use ($diff, $ignoreLastAttempts, $comparison) {
                 $ipRange = $failedAttempt->getLastFailedAttemptTimesInRange();
 
                 return $comparison(

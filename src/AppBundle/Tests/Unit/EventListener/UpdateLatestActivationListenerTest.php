@@ -10,22 +10,20 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\EventListener;
 
 use AppBundle\EventListener\UpdateLatestActivationListener;
 use AppBundle\Model\User\User;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testUpdateLastActionAfterLogin()
     {
-        $listener = new UpdateLatestActivationListener(
-            $this->getRequestStack()
-        );
+        $listener = new UpdateLatestActivationListener();
 
         $user     = User::create('Ma27', 'foo', 'foo@bar.de', new PhpPasswordHasher());
         $dateTime = new \DateTime('-5 minutes');
@@ -34,19 +32,5 @@ class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
         $listener->updateOnLogin(new OnAuthenticationEvent($user));
 
         $this->assertGreaterThan($dateTime->getTimestamp(), $user->getLastAction()->getTimestamp());
-    }
-
-    /**
-     * @return RequestStack
-     */
-    private function getRequestStack()
-    {
-        $request = Request::create('/');
-        $request->server->set('REQUEST_TIME', time());
-
-        $stack = new RequestStack();
-        $stack->push($request);
-
-        return $stack;
     }
 }

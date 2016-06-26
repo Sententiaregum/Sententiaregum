@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Tests\Unit\EventListener;
 
 use AppBundle\EventListener\I18nSecurityResponseListener;
@@ -26,7 +28,7 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
      * @param string $message
      * @param string $expected
      */
-    public function testBuildResponse($message, $expected)
+    public function testBuildResponse($message, string $expected)
     {
         $translator = $this->getMock(TranslatorInterface::class);
         $translator
@@ -36,9 +38,13 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
         $locales = ['en'];
 
-        $listener  = new I18nSecurityResponseListener($locales, $translator);
-        $exception = new CredentialException($message);
-        $event     = new AssembleResponseEvent(null, $exception);
+        if ($message) {
+            $exception = new CredentialException($message);
+        } else {
+            $exception = new CredentialException();
+        }
+        $listener = new I18nSecurityResponseListener($locales, $translator);
+        $event    = new AssembleResponseEvent(null, $exception);
 
         $listener->onResponseCreation($event);
         $response = $event->getResponse();

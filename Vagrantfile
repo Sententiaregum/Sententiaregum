@@ -3,18 +3,16 @@
 
 require 'yaml'
 
-Vagrant.require_version ">= 1.7"
+Vagrant.require_version ">=1.8.4"
 Vagrant.configure(2) do |config|
   # Check for required plugins
-  unless Vagrant.has_plugin?('vagrant-r10k', '>=0.4')
-    abort 'The `r10k` plugin is required! Install by typing `vagrant plugin install vagrant-r10k`'
-  end
+  plugin_check
 
   # Load settings
   settings = load_config
 
   # VM settings
-  config.vm.box      = 'ubuntu/trusty64'
+  config.vm.box      = 'puppetlabs/ubuntu-16.04-64-puppet'
   config.vm.hostname = settings.fetch('hostname')
 
   config.vm.synced_folder '.', '/var/www/sententiaregum', :nfs => true
@@ -35,12 +33,19 @@ Vagrant.configure(2) do |config|
   config.r10k.puppet_dir      = 'vagrant/puppet'
   config.r10k.puppetfile_path = 'vagrant/puppet/Puppetfile'
 
-  # Provisioners
+  # Shell provisioner to avoid TTY issues during the puppet provisioning
+  # see: https://github.com/mitchellh/vagrant/issues/1673#issuecomment-26650102
+  config.vm.provision :shell do |s|
+    s.privileged = false
+    s.inline     = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
+
+  # Build the dev machine using puppet
   config.vm.provision :puppet do |puppet|
-    puppet.manifests_path    = 'vagrant/manifests'
+    puppet.environment_path  = 'vagrant/puppet/environment'
+    puppet.environment       = 'sententiaregum'
     puppet.module_path       = ['vagrant/puppet/modules', 'vagrant/puppet/library']
-    puppet.manifest_file     = 'site.pp'
-    puppet.options           = ['--verbose']
+    puppet.options           = ['--verbose --strict off']
     puppet.hiera_config_path = 'vagrant/hiera.yaml'
   end
 end
@@ -56,4 +61,26 @@ def load_config
   end
 
   return settings
+end
+
+def plugin_check
+  def validate(name, version = nil, optional = true)
+    def get_message_type(is_optional)
+      is_optional ? 'not required, but recommended' : 'required'
+    end
+
+    unless Vagrant.has_plugin?(name, version)
+      type = get_message_type optional
+      message = "The `#{name}` plugin is #{type}! Install it by typing `vagrant plugin install #{name}`."
+      if optional
+        puts message
+      else
+        abort message
+      end
+    end
+  end
+
+  validate 'vagrant-r10k', '>=0.4', false
+  validate 'vagrant-cachier'
+  validate 'vagrant-hostmanager'
 end

@@ -5,7 +5,7 @@ set -e
 # the lint tasks will be executed at the php 5.6 build
 # since it isn't necessary to execute on any build the same tests with the
 # same requirements.
-if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
+if [ $TRAVIS_PHP_VERSION = '7' ]; then
     # javascript/less linting
     npm run lint
 

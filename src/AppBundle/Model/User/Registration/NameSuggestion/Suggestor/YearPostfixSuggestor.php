@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\User\Registration\NameSuggestion\Suggestor;
 
 /**
@@ -24,7 +26,7 @@ final class YearPostfixSuggestor implements SuggestorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPossibleSuggestions($username)
+    public function getPossibleSuggestions(string $username): array
     {
         $result = [];
 
@@ -47,7 +49,7 @@ final class YearPostfixSuggestor implements SuggestorInterface
      *
      * @return string
      */
-    private function getCurrentYearAsString()
+    private function getCurrentYearAsString(): string
     {
         return (string) $this->getCurrentYear();
     }
@@ -55,9 +57,9 @@ final class YearPostfixSuggestor implements SuggestorInterface
     /**
      * Returns a random year.
      *
-     * @return string
+     * @return int
      */
-    private function getRandomYearThatIsLessThanTheCurrentYear()
+    private function getRandomYearThatIsLessThanTheCurrentYear(): int
     {
         $current = $this->getCurrentYear();
         $range   = range($current - 51, $current - 1);
@@ -70,7 +72,7 @@ final class YearPostfixSuggestor implements SuggestorInterface
      *
      * @return string
      */
-    private function getCurrentYear()
+    private function getCurrentYear(): string
     {
         return (new \DateTime('now'))->format('Y');
     }
@@ -83,7 +85,7 @@ final class YearPostfixSuggestor implements SuggestorInterface
      *
      * @return bool
      */
-    private function isNumberLastChar($username, $amount = 1)
+    private function isNumberLastChar(string $username, int $amount = 1): bool
     {
         return true === (bool) preg_match(sprintf(self::YEAR_MATCHING_REGEX, $amount), $username);
     }
