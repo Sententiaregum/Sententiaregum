@@ -19,14 +19,15 @@ default:
         - AppBundle\Tests\Functional\AppContext
         - AppBundle\Tests\Functional\API\Locale\SwitcherContext
         - AppBundle\Tests\Functional\API\Locale\ProviderContext
-    fixtures:
+    doctrine:
       filters: { tags: "@fixtures" }
       type:    symfony_bundle
       bundle:  AppBundle
       contexts:
         - AppBundle\Tests\Functional\AppContext
-        - AppBundle\Tests\Functional\Doctrine\DataFixtures\FixtureContext
-        - AppBundle\Tests\Functional\Doctrine\DataFixtures\ProductionFixtureContext
+        - AppBundle\Tests\Functional\Doctrine\Database\FixtureContext
+        - AppBundle\Tests\Functional\Doctrine\Database\ProductionFixtureContext
+        - AppBundle\Tests\Functional\Doctrine\Database\InstallContext
   formatters:
     pretty:
       paths:    false

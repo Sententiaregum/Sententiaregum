@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\DataFixtures;
+namespace AppBundle\Tests\Functional\Doctrine\Database;
 
 use AppBundle\Command\LoadCustomFixturesCommand;
 use AppBundle\Tests\Functional\FixtureLoadingContext;

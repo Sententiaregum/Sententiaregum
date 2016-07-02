@@ -61,6 +61,19 @@ As there are no labels, the commit message should look like this:
 
     [Feature] {short description what you've done}
 
+The keyword in the square brackets can be someone of those:
+
+- **Bug**
+- **Code Quality**
+- **Minor**
+- **Feature**
+- **Documentation**
+- **Enhancement**
+- **Improvement**
+- **Refactor**
+- **Security**
+- **Support/Maintenance**
+
 If there's a label added to your PR, the commit message should be renamed to the following pattern:
 
     {Issue Type (red label)} {short description what you've done}
@@ -74,9 +87,9 @@ You just need to tell what has changed.
 
 Please add: 
     ```Resolves #{issue}``` in every pull request.
-    
+
 This is needed, so that waffle.io can attach the PR to the issue card.
-    
+
 __Note__: if you have fixed a bug that is not reported in the issue tracker, please add a detailed description how this bug was caused.
 
 #### Reviews
@@ -112,3 +125,11 @@ of the whole feature, the controller also need custom test cases.
 The frontend has a test suite based on Mocha with the BDD style API.
 Every module requires its own testcase to ensure the behavior of the module.
 Components should also mock the whole app lifecycle to test the communication.
+
+5) Migrations
+-------------
+
+When the first release (*0.1.0*) is tagged, every model change requires its own migration file as the schema updating process of doctrine is not safe enough
+and can lead to data loss.
+
+This migration file can be generated using `bin/console doctrine:migrations:generate`.

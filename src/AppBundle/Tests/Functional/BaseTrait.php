@@ -19,7 +19,9 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Basic trait to separate the AppContext from the BaseContext.
@@ -183,5 +185,23 @@ trait BaseTrait
         $client = $this->getRecentClient();
 
         return $client->getProfile()->getCollector('swiftmailer');
+    }
+
+    /**
+     * Executor which runs a command.
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return CommandTester
+     */
+    public function executeCommand(string $name, array $args = []): CommandTester
+    {
+        $application = new Application($this->getKernel());
+        $tester      = new CommandTester($application->get($name));
+
+        $tester->execute($args, ['interactive' => false]);
+
+        return $tester;
     }
 }
