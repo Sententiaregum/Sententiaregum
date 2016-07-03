@@ -171,7 +171,7 @@ EOF
                     // migrations should be used in order to ensure on production environments
                     // with already existing data that the data will be preserved
                     // using custom migration classes for DDL changes.
-                    $migrationInput->setInteractive($input->isInteractive());
+                    $migrationInput->setInteractive(false);
                     $command->run($migrationInput, new NullOutput());
                 }
 
@@ -285,7 +285,7 @@ EOF
                     $command      = $application->find($target);
                     $fixtureInput = new ArrayInput($args);
 
-                    $fixtureInput->setInteractive($input->isInteractive());
+                    $fixtureInput->setInteractive(false);
                     $command->run($fixtureInput, new NullOutput());
 
                     ++$fixtureApplied;
