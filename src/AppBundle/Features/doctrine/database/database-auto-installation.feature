@@ -33,8 +33,8 @@ Feature: database installation
 
     Scenario: data is in sync
         Given the database schema is applied
-        When I try to apply the schema
-        Then the process will be skipped
+        When I apply the schema
+        Then the process should be skipped
 
     Scenario: error because of invalid options
         When I apply using the --production-fixtures option and the --append option

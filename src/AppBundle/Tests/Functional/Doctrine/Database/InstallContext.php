@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace AppBundle\Tests\Functional\Doctrine\Database;
 
@@ -19,7 +19,6 @@ use AppBundle\Tests\Functional\BaseTrait;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Behat\Tester\Exception\PendingException;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
@@ -37,6 +36,11 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      * @var \Symfony\Component\Console\Tester\CommandTester
      */
     private $tester;
+
+    /**
+     * @var \Exception
+     */
+    private $exception;
 
     /** @BeforeScenario @fixtures&&@database */
     public function recreateSchema()
@@ -180,7 +184,13 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iApplyUsingAnInvalidStrategy()
     {
-        throw new PendingException();
+        try {
+            $this->executeCommand('sententiaregum:install:database', [
+                '--strategy' => 'invalid strategy',
+            ]);
+        } catch (\Exception $ex) {
+            $this->exception = $ex;
+        }
     }
 
     /**
@@ -188,7 +198,7 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iShouldSeeAnErrorFromTheInstaller()
     {
-        throw new PendingException();
+        Assertion::eq($this->exception->getMessage(), 'The strategy must be either "migrations" or "schema-update"!');
     }
 
     /**
@@ -196,23 +206,16 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function theDatabaseSchemaIsApplied()
     {
-        throw new PendingException();
+        $this->iApplyTheSchema();
+        $this->tester = null;
     }
 
     /**
-     * @When I try to apply the schema
+     * @Then the process should be skipped
      */
-    public function iTryToApplyTheSchema()
+    public function theProcessShouldBeSkipped()
     {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then the process will be skipped
-     */
-    public function theProcessWillBeSkipped()
-    {
-        throw new PendingException();
+        Assertion::regex($this->tester->getDisplay(), '/Validated 1 manager, 0 needed schema appliance, 1 was in sync./');
     }
 
     /**
@@ -220,7 +223,13 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iApplyUsingTheProductionFixturesOptionAndTheAppendOption()
     {
-        throw new PendingException();
+        try {
+            $this->executeCommand('sententiaregum:install:database', [
+                '--production-fixtures' => true,
+            ]);
+        } catch (\Exception $ex) {
+            $this->exception = $ex;
+        }
     }
 
     /**
@@ -228,6 +237,6 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function theApplianceShouldBeSkipped()
     {
-        throw new PendingException();
+        Assertion::eq($this->exception->getMessage(), 'The `--production-fixtures` option must not be set if the `--apply-fixtures` option is not present!');
     }
 }
