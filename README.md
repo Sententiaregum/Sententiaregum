@@ -20,7 +20,7 @@ Sententiaregum is a social network based on a REST api written with Symfony3 and
 
 ## Docs
 
-The docs can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/)
+The docs can be found [here](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/).
 
 ## License
 

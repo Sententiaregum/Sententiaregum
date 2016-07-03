@@ -20,7 +20,7 @@ use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
 /**
- * Handler that runs the npm installation after the composer install.
+ * Handler that is responsible for certain install tasks (e.g. database schema setup, fixture appliance or frontend preparation).
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
@@ -59,77 +59,25 @@ class ScriptHandler extends AbstractScriptHandler
     }
 
     /**
-     * Loads the doctrine data fixtures (disabled when using the "--no-dev" flag).
-     *
-     * @param Event $event
-     */
-    public static function loadDoctrineDataFixtures(Event $event)
-    {
-        if (PreInstallHandler::$firstInstall) {
-            if ($event->isDevMode()) {
-                static::executeCommand(
-                    $event,
-                    static::getConsoleDir($event, 'load data fixtures'),
-                    'doctrine:fixtures:load --no-interaction'
-                );
-            } else {
-                static::executeCommand(
-                    $event,
-                    static::getConsoleDir($event, 'load production data fixtures'),
-                    'sententiaregum:fixtures:production --no-interaction --env=prod'
-                );
-            }
-        }
-    }
-
-    /**
      * Creates the doctrine schema.
      *
      * @param Event $event
      */
     public static function createDoctrineSchema(Event $event)
     {
-        if (PreInstallHandler::$firstInstall) {
-            $envs = $event->isDevMode() ? ['dev', 'test'] : ['prod'];
-            self::dropDoctrineSchema($event, $envs);
+        $envs = $event->isDevMode() ? ['dev', 'test'] : ['prod'];
 
-            foreach ($envs as $env) {
-                static::executeCommand(
-                    $event,
-                    static::getConsoleDir($event, 'create doctrine schema'),
-                    sprintf('doctrine:schema:create --env=%s', $env)
-                );
-            }
-        }
-    }
-
-    /**
-     * Updates the doctrine schema.
-     *
-     * @param Event $event
-     */
-    public static function updateDoctrineSchema(Event $event)
-    {
-        static::executeCommand(
-            $event,
-            static::getConsoleDir($event, 'update doctrine schema'),
-            'doctrine:schema:update --force'
-        );
-    }
-
-    /**
-     * Drops the doctrine schema.
-     *
-     * @param Event    $event
-     * @param string[] $envs
-     */
-    private static function dropDoctrineSchema(Event $event, array $envs = [])
-    {
         foreach ($envs as $env) {
+            $cmd = sprintf('sententiaregum:install:database --no-interaction --apply-fixtures --env=%s', $env);
+
+            if (!$event->isDevMode()) {
+                $cmd .= ' --production-fixtures -s migrations';
+            }
+
             static::executeCommand(
                 $event,
-                static::getConsoleDir($event, 'drop doctrine schema'),
-                sprintf('doctrine:schema:drop --force --env=%s', $env)
+                static::getConsoleDir($event, 'create doctrine schema'),
+                $cmd
             );
         }
     }
