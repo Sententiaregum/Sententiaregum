@@ -5,9 +5,7 @@ A social network based on Symfony and ReactJS
 ### Build
 [![Build Status](https://travis-ci.org/Sententiaregum/Sententiaregum.svg?branch=master)](https://travis-ci.org/Sententiaregum/Sententiaregum)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Sententiaregum/Sententiaregum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Sententiaregum/Sententiaregum/?branch=master)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/Sententiaregum/Sententiaregum/badge.svg)](https://travis-ci.org/Sententiaregum/Sententiaregum)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf/mini.png)](https://insight.sensiolabs.com/projects/720e0e5c-514d-4269-9d3f-c9de9ad4d7bf)
-[![HHVM Status](http://hhvm.h4cc.de/badge/sententiaregum/sententiaregum.png)](http://hhvm.h4cc.de/package/sententiaregum/sententiaregum)
 
 ### Development
 [![Stories in Ready](https://badge.waffle.io/Sententiaregum/Sententiaregum.svg?label=ready&title=Ready)](http://waffle.io/Sententiaregum/Sententiaregum)

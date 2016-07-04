@@ -10,8 +10,10 @@
  * file that was distributed with this source code
  */
 
-use SLLH\StyleCIBridge\ConfigBridge as Config;
+use Symfony\Component\Finder\Finder;
+use Symfony\CS\Config\Config;
 use Symfony\CS\Fixer\Contrib\HeaderCommentFixer;
+use Symfony\CS\FixerInterface;
 
 $header = <<<EOF
 This file is part of the Sententiaregum project.
@@ -25,6 +27,13 @@ EOF;
 
 HeaderCommentFixer::setHeader($header);
 
+$finder = Finder::create()
+    ->files()
+    ->in(['app', 'src/AppBundle'])
+    ->name('*.php');
+
 return Config::create()
+    ->finder($finder)
+    ->level(FixerInterface::CONTRIB_LEVEL)
     ->setUsingCache(true)
 ;
