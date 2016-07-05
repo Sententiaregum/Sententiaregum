@@ -47,6 +47,7 @@ class StrictTypeDeclarationFixer extends AbstractFixer
                 $before = $tokens[$assignmentTokenIndex - 1];
                 $after  = $tokens[$assignmentTokenIndex + 1];
 
+                // clear tokens before and afterwords if they're whitespaces
                 if ($before->isWhitespace()) {
                     $before->clear();
                 }
