@@ -36,9 +36,13 @@ class StrictTypeDeclarationFixer extends AbstractFixer
                 $whitespace->clear();
             }
 
-            $assignmentTokenIndex = $this->jumpWhitespaces($tokens, $index, 3);
-            $assignmentToken      = $tokens[$assignmentTokenIndex];
+            // jump to the third non-whitespace token (the third one is the equal sign to be fixed)
+            $assignmentTokenIndex = $index;
+            for ($i = 0; $i < 3; $i++) {
+                $assignmentTokenIndex = $tokens->getNextNonWhitespace($assignmentTokenIndex);
+            }
 
+            $assignmentToken = $tokens[$assignmentTokenIndex];
             if ('=' === $assignmentToken->getContent()) {
                 $before = $tokens[$assignmentTokenIndex - 1];
                 $after  = $tokens[$assignmentTokenIndex + 1];
@@ -78,23 +82,5 @@ class StrictTypeDeclarationFixer extends AbstractFixer
     {
         // after the BracesFixer and OperatorsSpacesFixer
         return -30;
-    }
-
-    /**
-     * Jumps til the next token with maximum range.
-     *
-     * @param Tokens $tokens
-     * @param int    $index
-     * @param int    $end
-     *
-     * @return int
-     */
-    private function jumpWhitespaces(Tokens $tokens, int $index, int $end): int
-    {
-        for ($i = 0; $i < $end; $i++) {
-            $index = $tokens->getNextNonWhitespace($index);
-        }
-
-        return $index;
     }
 }
