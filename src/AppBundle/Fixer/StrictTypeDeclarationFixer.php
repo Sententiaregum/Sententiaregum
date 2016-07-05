@@ -24,35 +24,39 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class StrictTypeDeclarationFixer extends AbstractFixer
 {
+    const TOKENS_FROM_DECLARE_TO_ASSIGNMENT = 3;
+    const EQUAL_SIGN                        = '=';
+
     /**
      * {@inheritdoc}
      */
     public function fix(\SplFileInfo $file, $content)
     {
         $tokens = Tokens::fromCode($content);
+
         foreach ($tokens->findGivenKind(T_DECLARE) as $index => $token) {
             $whitespace = $tokens[$index + 1];
             if ($whitespace->isWhitespace()) {
                 $whitespace->clear();
             }
 
-            // jump to the third non-whitespace token (the third one is the equal sign to be fixed)
-            $assignmentTokenIndex = $index;
-            for ($i = 0; $i < 3; $i++) {
+            // jump to the third non-whitespace token (the third one is the equal sign to be fixed);
+            for ($i = 0, $assignmentTokenIndex = $index; $i < self::TOKENS_FROM_DECLARE_TO_ASSIGNMENT; $i++) {
                 $assignmentTokenIndex = $tokens->getNextNonWhitespace($assignmentTokenIndex);
             }
 
+            // analyze before and after token
             $assignmentToken = $tokens[$assignmentTokenIndex];
-            if ('=' === $assignmentToken->getContent()) {
+            if (self::EQUAL_SIGN === $assignmentToken->getContent()) {
                 $before = $tokens[$assignmentTokenIndex - 1];
                 $after  = $tokens[$assignmentTokenIndex + 1];
 
                 // clear tokens before and afterwords if they're whitespaces
-                if ($before->isWhitespace()) {
-                    $before->clear();
-                }
-                if ($after->isWhitespace()) {
-                    $after->clear();
+                /** @var \Symfony\CS\Tokenizer\Token $token */
+                foreach ([$before, $after] as $trailingToken) {
+                    if ($trailingToken->isWhitespace()) {
+                        $trailingToken->clear();
+                    }
                 }
             }
         }
