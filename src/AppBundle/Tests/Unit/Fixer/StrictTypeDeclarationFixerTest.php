@@ -46,6 +46,22 @@ class StrictTypeDeclarationFixerTest extends AbstractFixerTestBase
                 $expected,
                 implode(PHP_EOL, ['<?php', 'declare(strict_types = 1);']),
             ],
+            [
+                $expected,
+                implode(PHP_EOL, ['<?php', 'declare  (strict_types = 1);']),
+            ],
+            [
+                $expected,
+                implode(PHP_EOL, ['<?php', 'declare(strict_types  = 1);']),
+            ],
+            [
+                $expected,
+                implode(PHP_EOL, ['<?php', 'declare(strict_types    = 1);']),
+            ],
+            [
+                $expected,
+                implode(PHP_EOL, ['<?php', 'declare(strict_types        =    1);']),
+            ],
         ];
     }
 
