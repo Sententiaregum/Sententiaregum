@@ -18,7 +18,7 @@ use Symfony\CS\AbstractFixer;
 use Symfony\CS\Tokenizer\Tokens;
 
 /**
- * StrictTypeDeclarationFixer.
+ * Custom fixer for PHP's `T_DECLARE` tokens to fix an incompatibility issue between PHPCS and StyleCI.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
