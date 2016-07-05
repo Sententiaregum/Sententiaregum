@@ -4,6 +4,7 @@ finder:
   exclude:
     - "app"
     - "web"
+    - "var"
 
 disabled:
   - unalign_equals

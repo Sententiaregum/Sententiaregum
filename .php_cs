@@ -25,6 +25,10 @@ EOF;
 
 HeaderCommentFixer::setHeader($header);
 
-return Config::create()
+/** @var \Symfony\CS\Config\Config $config */
+$config = Config::create();
+
+return $config
+    ->addCustomFixer(new \AppBundle\Fixer\StrictTypeDeclarationFixer())
     ->setUsingCache(true)
 ;
