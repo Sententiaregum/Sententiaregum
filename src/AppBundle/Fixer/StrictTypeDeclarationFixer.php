@@ -52,7 +52,7 @@ class StrictTypeDeclarationFixer extends AbstractFixer
                 $after  = $tokens[$assignmentTokenIndex + 1];
 
                 // clear tokens before and afterwords if they're whitespaces
-                /** @var \Symfony\CS\Tokenizer\Token $token */
+                /* @var \Symfony\CS\Tokenizer\Token $token */
                 foreach ([$before, $after] as $trailingToken) {
                     if ($trailingToken->isWhitespace()) {
                         $trailingToken->clear();
