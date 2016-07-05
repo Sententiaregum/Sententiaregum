@@ -4,6 +4,7 @@ finder:
   exclude:
     - "app"
     - "web"
+    - "var"
 
 disabled:
   - unalign_equals
@@ -13,3 +14,4 @@ enabled:
   - php_unit_construct
   - strict_param
   - strict
+  - random_api_migration
