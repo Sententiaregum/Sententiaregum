@@ -46,3 +46,7 @@ services:
       - "@translator"
     tags:
       - { name: kernel.event_subscriber }
+  app.listener.not_found_response:
+    class: AppBundle\EventListener\NotFoundResponseListener
+    tags:
+      - { name: kernel.event_subscriber }
