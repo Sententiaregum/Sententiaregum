@@ -62,7 +62,7 @@ class NotFoundResponseListener implements EventSubscriberInterface
     }
 
     /**
-     * Transforms the URI into a hashbang url
+     * Transforms the URI into a hashbang url.
      *
      * @param string $requestUri
      *
