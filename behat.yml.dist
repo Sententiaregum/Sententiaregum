@@ -11,6 +11,7 @@ default:
         - AppBundle\Tests\Functional\API\User\UserDetailsContext
         - AppBundle\Tests\Functional\Redis\OnlineUsersRedisClusterContext
         - AppBundle\Tests\Functional\Doctrine\DQL\UsersContext
+        - AppBundle\Tests\Functional\Doctrine\DQL\RoleContext
     locale:
       filters: { tags: "@locale" }
       type:    symfony_bundle

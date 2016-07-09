@@ -1,6 +1,6 @@
 services:
   app.doctrine.fixtures_loader:
-    class: AppBundle\Doctrine\ConfigurableFixturesLoader
+    class: AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader
     arguments:
       - "@doctrine.orm.default_entity_manager"
   app.request.dto_param_converter:
@@ -10,13 +10,13 @@ services:
     tags:
       - { name: request.param_converter, converter: dto }
   app.user.registration.activation_key_generator:
-    class: AppBundle\Model\User\Registration\Generator\ActivationKeyCodeGenerator
+    class: AppBundle\Model\User\Util\ActivationKeyCode\ActivationKeyCodeGenerator
   app.user.registration.name_suggestor:
-    class: AppBundle\Model\User\Registration\NameSuggestion\ChainSuggestor
+    class: AppBundle\Model\User\Util\NameSuggestion\ChainSuggestor
     arguments:
       - "@app.repository.user"
   app.user.registration:
-    class: AppBundle\Model\User\Registration\TwoStepRegistrationApproach
+    class: AppBundle\Model\User\Handler\TwoStepRegistrationApproach
     arguments:
       - "@doctrine.orm.default_entity_manager"
       - "@app.user.registration.activation_key_generator"
@@ -27,7 +27,7 @@ services:
       - "@app.repository.user"
       - "@app.repository.role"
   app.ip.tracer:
-    class: AppBundle\Model\Ip\Tracer\FreeGeoIpTracingService
+    class: AppBundle\Service\Ip\FreeGeoIpTracingService
     arguments:
       - "@guzzle.client.freegeoip"
   app.view.i18n_error_response_builder:
@@ -35,7 +35,7 @@ services:
     arguments:
       - "@translator"
   app.user.service.date_time_comparator:
-    class: AppBundle\Model\User\Util\DateTimeComparison
+    class: AppBundle\Model\User\Util\Date\DateTimeComparison
   app.validator.middleware:
     class: AppBundle\Validator\Middleware\DTOValidationMiddleware
     public: false

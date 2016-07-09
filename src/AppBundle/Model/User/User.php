@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\User;
 
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +29,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  *
- * @ORM\Entity(repositoryClass="AppBundle\Model\User\UserRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Service\Doctrine\Repository\UserRepository")
  * @ORM\Table(name="User", indexes={
  *     @ORM\Index(name="user_lastAction", columns={"last_action"}),
  *     @ORM\Index(name="user_locale", columns={"locale"}),
@@ -644,8 +644,8 @@ class User implements UserInterface, Serializable
     /**
      * Checks whether the user ip is new and if true it will be persisted.
      *
-     * @param string             $ip
-     * @param DateTimeComparison $comparison
+     * @param string                                             $ip
+     * @param \AppBundle\Model\User\Util\Date\DateTimeComparison $comparison
      *
      * @return bool
      */
@@ -811,8 +811,8 @@ class User implements UserInterface, Serializable
     /**
      * Checks if enough failed authentications are done in the past to rise an auth warning.
      *
-     * @param AuthenticationAttempt $attempt
-     * @param DateTimeComparison    $comparison
+     * @param AuthenticationAttempt                              $attempt
+     * @param \AppBundle\Model\User\Util\Date\DateTimeComparison $comparison
      *
      * @return bool
      */

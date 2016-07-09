@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Command;
 
-use AppBundle\Doctrine\ProductionFixtureInterface;
+use AppBundle\Service\Doctrine\DataFixtures\ProductionFixtureInterface;
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -90,7 +90,7 @@ EOF
         $bundles   = $input->getArgument('bundles');
         $container = $this->getContainer();
 
-        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $container->get('app.doctrine.fixtures_loader');
         /** @var \Symfony\Component\HttpKernel\KernelInterface $kernel */
         $kernel = $container->get('kernel');

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Functional\Doctrine\DQL;
 
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -153,7 +153,7 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
      */
     public function iDeleteAncientAuthData()
     {
-        /** @var \AppBundle\Model\User\UserRepository $userRepository */
+        /** @var \AppBundle\Service\Doctrine\Repository\UserRepository $userRepository */
         $userRepository = $this->getRepository('Account:User');
         $userRepository->deleteAncientAttemptData(new \DateTime('-6 months'));
     }

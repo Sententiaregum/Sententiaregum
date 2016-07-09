@@ -24,7 +24,7 @@ class ValidationInfoTest extends \PHPUnit_Framework_TestCase
     {
         $info       = new ValidationInfo();
         $violations = new ConstraintViolationList([
-            new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar')
+            new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar'),
         ]);
 
         $info->violationList = $violations;

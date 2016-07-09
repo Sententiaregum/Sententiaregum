@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
+use AppBundle\Model\User\Provider\OnlineUserIdWriteProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnFirewallAuthenticationEvent;
 
@@ -26,7 +26,7 @@ use Ma27\ApiKeyAuthenticationBundle\Event\OnFirewallAuthenticationEvent;
 class OnlineUsersUpdateListener
 {
     /**
-     * @var OnlineUserIdDataProviderInterface
+     * @var OnlineUserIdWriteProviderInterface
      */
     private $userIdProvider;
 
@@ -38,11 +38,11 @@ class OnlineUsersUpdateListener
     /**
      * Constructor.
      *
-     * @param OnlineUserIdDataProviderInterface $provider
-     * @param EntityManagerInterface            $entityManager
+     * @param OnlineUserIdWriteProviderInterface $provider
+     * @param EntityManagerInterface             $entityManager
      */
     public function __construct(
-        OnlineUserIdDataProviderInterface $provider,
+        OnlineUserIdWriteProviderInterface $provider,
         EntityManagerInterface $entityManager
     ) {
         $this->userIdProvider = $provider;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Model\User\Util;
 
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 
 class DateTimeComparisonTest extends \PHPUnit_Framework_TestCase
 {

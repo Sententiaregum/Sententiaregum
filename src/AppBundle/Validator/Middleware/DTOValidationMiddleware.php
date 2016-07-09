@@ -46,6 +46,7 @@ class DTOValidationMiddleware implements MessageBusMiddleware
     {
         if (!$message instanceof ValidatableDTO || !$message->shouldValidate()) {
             $next($message);
+
             return;
         }
 

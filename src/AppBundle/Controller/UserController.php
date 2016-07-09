@@ -60,7 +60,7 @@ class UserController extends BaseController
      */
     public function createUserAction(CreateUserDTO $dto)
     {
-        /** @var \AppBundle\Model\User\Registration\TwoStepRegistrationApproach $registrator */
+        /** @var \AppBundle\Model\User\Handler\TwoStepRegistrationApproach $registrator */
         $registrator = $this->get('app.user.registration');
 
         $result = $registrator->registration($dto);
@@ -98,7 +98,7 @@ class UserController extends BaseController
      */
     public function activateUserAction(ParamFetcher $paramFetcher)
     {
-        /** @var \AppBundle\Model\User\Registration\TwoStepRegistrationApproach $registrator */
+        /** @var \AppBundle\Model\User\Handler\TwoStepRegistrationApproach $registrator */
         $registrator = $this->get('app.user.registration');
 
         try {
@@ -149,7 +149,7 @@ class UserController extends BaseController
      */
     public function onlineFollowingListAction(): array
     {
-        /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
+        /** @var \AppBundle\Model\User\Provider\OnlineUserIdReadProviderInterface $cluster */
         $cluster        = $this->get('app.redis.cluster.online_users');
         $userRepository = $this->getDoctrine()->getRepository('Account:User');
         $currentUser    = $this->getCurrentUser();

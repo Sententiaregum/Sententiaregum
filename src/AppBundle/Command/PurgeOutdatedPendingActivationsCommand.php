@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Command;
 
-use AppBundle\Model\User\UserRepository;
+use AppBundle\Model\User\UserWriteRepositoryInterface;
 use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,16 +28,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class PurgeOutdatedPendingActivationsCommand extends Command
 {
     /**
-     * @var UserRepository
+     * @var UserWriteRepositoryInterface
      */
     private $userRepository;
 
     /**
      * Constructor.
      *
-     * @param UserRepository $repository
+     * @param UserWriteRepositoryInterface $repository
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(UserWriteRepositoryInterface $repository)
     {
         parent::__construct();
 

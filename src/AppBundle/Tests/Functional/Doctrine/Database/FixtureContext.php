@@ -67,7 +67,7 @@ class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iApplyFixtures()
     {
-        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
         $loader->applyFixtures([RoleFixture::class], $this->callback);
@@ -120,7 +120,7 @@ class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iApplyAnInvalidFixture()
     {
-        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
         try {
@@ -144,7 +144,7 @@ class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     public function iLoadFixturesFromTheDatafixturesOrmDirectoryInsideAppbundle()
     {
-        /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $loader */
+        /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
 
         $this->directoryResult = $loader->loadProductionFixturesFromDirectory(__DIR__.'/../../../../DataFixtures/ORM');

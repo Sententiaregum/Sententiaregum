@@ -1,6 +1,6 @@
 services:
   app.redis.cluster.online_users:
-    class: AppBundle\Redis\OnlineUserIdCluster
+    class: AppBundle\Service\Redis\OnlineUserIdCluster
     arguments:
       - "@snc_redis.online_users"
     lazy: true

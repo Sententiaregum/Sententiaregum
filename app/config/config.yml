@@ -42,7 +42,7 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         types:
-            date_time_array: "AppBundle\\Type\\DateTimeArrayType"
+            date_time_array: "AppBundle\\Service\\Doctrine\\Type\\DateTimeArrayType"
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:

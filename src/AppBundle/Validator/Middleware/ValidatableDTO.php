@@ -37,7 +37,7 @@ abstract class ValidatableDTO
     protected $info;
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function shouldValidate(): bool
     {
@@ -45,7 +45,7 @@ abstract class ValidatableDTO
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function shouldContinueOnInvalid(): bool
     {

@@ -15,10 +15,10 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Unit\EventListener;
 
 use AppBundle\EventListener\CredentialNotifyListener;
-use AppBundle\Model\Ip\Tracer\IpTracingServiceInterface;
+use AppBundle\Model\Ip\Provider\IpTracingServiceInterface;
 use AppBundle\Model\Ip\Value\IpLocation;
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnInvalidCredentialsEvent;

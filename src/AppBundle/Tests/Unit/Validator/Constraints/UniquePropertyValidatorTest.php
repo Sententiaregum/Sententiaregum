@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Validator\Constraints;
 
-use AppBundle\Model\User\Registration\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Model\User\User;
+use AppBundle\Model\User\Util\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Constraints\UniquePropertyValidator;
 use Doctrine\Common\Persistence\ManagerRegistry;

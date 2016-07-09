@@ -80,7 +80,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('validate')
             ->willReturn(new ConstraintViolationList([
-                new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar')
+                new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar'),
             ]));
 
         $middleware = new DTOValidationMiddleware($validator);
@@ -105,7 +105,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('validate')
             ->willReturn(new ConstraintViolationList([
-                new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar')
+                new ConstraintViolation('Error!', '<error template>', [], 'root', 'root.property', 'foobar'),
             ]));
 
         $middleware = new DTOValidationMiddleware($validator);
