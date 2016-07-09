@@ -29,6 +29,8 @@
         "ramsey/uuid": "^3.4",
         "eightpoints/guzzle-bundle": "^4.5",
         "ocramius/proxy-manager": "^2.0",
+        "simple-bus/symfony-bridge": "^4.1",
+        "simple-bus/doctrine-orm-bridge": "^4.0",
         "roave/security-advisories": "dev-master",
         "doctrine/data-fixtures": "^1.2.1"
     },

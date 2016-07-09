@@ -36,3 +36,10 @@ services:
       - "@translator"
   app.user.service.date_time_comparator:
     class: AppBundle\Model\User\Util\DateTimeComparison
+  app.validator.middleware:
+    class: AppBundle\Validator\Middleware\DTOValidationMiddleware
+    public: false
+    tags:
+      - { name: command_bus_middleware, priority: 100 }
+    arguments:
+      - "@validator"

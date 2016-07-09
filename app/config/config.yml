@@ -105,10 +105,6 @@ nelmio_api_doc:
 # SncRedis Configuration
 snc_redis:
     clients:
-        pending_activations:
-            type: predis
-            alias: pending_activations
-            dsn: "redis://localhost:%pending_activations_redis_port%"
         doctrine_cache:
             type: predis
             alias: doctrine_cache
@@ -132,3 +128,8 @@ doctrine_migrations:
     namespace:  "Sententiaregum\\Migrations"
     table_name: "sententiaregum_migrations"
     name:       "Sententiaregum Migrations"
+
+# DoctrineOrmBridge Configuration (SimpleBus)
+doctrine_orm_bridge:
+    entity_manager: default
+    connection: default
