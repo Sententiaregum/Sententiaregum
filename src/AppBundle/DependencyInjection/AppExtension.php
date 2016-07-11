@@ -33,7 +33,7 @@ class AppExtension extends Extension
     {
         $fileLoader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        foreach (['services', 'validators', 'redis', 'listeners', 'repositories', 'commands'] as $baseName) {
+        foreach (['services', 'validators', 'redis', 'listeners', 'repositories', 'commands', 'handlers', 'middlewares'] as $baseName) {
             $fileLoader->load(sprintf('%s.yml', $baseName));
         }
     }

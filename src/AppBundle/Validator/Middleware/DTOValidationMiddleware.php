@@ -57,7 +57,7 @@ class DTOValidationMiddleware implements MessageBusMiddleware
 
         $message->setValidationInfo($info);
 
-        if (($message->getInfo()->isValid())
+        if ($message->getInfo()->isValid()
             || ($message->shouldContinueOnInvalid() && !$message->getInfo()->isValid())
         ) {
             $next($message);

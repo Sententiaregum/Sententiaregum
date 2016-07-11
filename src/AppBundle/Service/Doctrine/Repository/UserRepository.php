@@ -18,7 +18,6 @@ use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserReadRepositoryInterface;
 use AppBundle\Model\User\UserWriteRepositoryInterface;
 use DateTime;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
@@ -34,7 +33,7 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
     /**
      * {@inheritdoc}
      *
-     * @throws DBALException If something went wrong with the transaction
+     * @throws \Exception If something went wrong with the transaction
      */
     public function deletePendingActivationsByDate(DateTime $dateTime): int
     {
@@ -65,7 +64,7 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
             $connection->commit();
 
             return $affected;
-        } catch (DBALException $ex) {
+        } catch (\Exception $ex) {
             $connection->rollBack();
 
             throw $ex;
@@ -74,53 +73,67 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception If something in the DB transaction went wrong.
      */
     public function deleteAncientAttemptData(DateTime $dateTime): int
     {
-        $qb     = $this->_em->createQueryBuilder();
-        $search = clone $qb;
-        $expr   = $qb->expr();
+        $connection = $this->_em->getConnection();
 
-        // unfortunately DQL can't do joins on DELETE queries
-        $idQuery = $search
-            ->select('authentication_attempt.id')
-            ->distinct()
-            ->from('Account:AuthenticationAttempt', 'authentication_attempt')
-            ->join('Account:User', 'user', Join::WITH, $expr->isMemberOf(
-                'authentication_attempt',
-                'user.failedAuthentications'
-            ))
-            ->where($expr->lt(
-                'authentication_attempt.latestDateTime',
-                ':date_time'
-            ))
-            ->setParameter(':date_time', $dateTime, Type::DATETIME)
-            ->getQuery()
-            ->setHydrationMode(Query::HYDRATE_ARRAY);
+        // build a transaction on top of the rest to avoid side-effects
+        try {
+            $connection->beginTransaction();
 
-        $ids = array_column($idQuery->getResult(), 'id');
+            $qb     = $this->_em->createQueryBuilder();
+            $search = clone $qb;
+            $expr   = $qb->expr();
 
-        if (!empty($ids)) {
-            $connection    = $this->_em->getConnection();
-            $list          = implode(',', array_fill(0, count($ids), '?'));
-            $relationQuery = $connection->prepare("DELETE FROM `FailedAuthAttempt2User` WHERE `attemptId` IN ({$list})");
+            // unfortunately DQL can't do joins on DELETE queries
+            $idQuery = $search
+                ->select('authentication_attempt.id')
+                ->distinct()
+                ->from('Account:AuthenticationAttempt', 'authentication_attempt')
+                ->join('Account:User', 'user', Join::WITH, $expr->isMemberOf(
+                    'authentication_attempt',
+                    'user.failedAuthentications'
+                ))
+                ->where($expr->lt(
+                    'authentication_attempt.latestDateTime',
+                    ':date_time'
+                ))
+                ->setParameter(':date_time', $dateTime, Type::DATETIME)
+                ->getQuery()
+                ->setHydrationMode(Query::HYDRATE_ARRAY);
 
-            // drop relations manually before removing the models
-            $result = $relationQuery->execute($ids);
+            $ids = array_column($idQuery->getResult(), 'id');
 
-            if ($result) {
-                $affected = $qb
-                    ->delete('Account:AuthenticationAttempt', 'attempt')
-                    ->where($expr->in('attempt.id', ':ids'))
-                    ->setParameter(':ids', $ids)
-                    ->getQuery()
-                    ->execute();
+            if (!empty($ids)) {
+                $list          = implode(',', array_fill(0, count($ids), '?'));
+                $relationQuery = $connection->prepare("DELETE FROM `FailedAuthAttempt2User` WHERE `attemptId` IN ({$list})");
 
-                return $affected + $result;
+                // drop relations manually before removing the models
+                $result = $relationQuery->execute($ids);
+
+                if ($result) {
+                    $affected = $qb
+                        ->delete('Account:AuthenticationAttempt', 'attempt')
+                        ->where($expr->in('attempt.id', ':ids'))
+                        ->setParameter(':ids', $ids)
+                        ->getQuery()
+                        ->execute();
+
+                    return $affected + $result;
+                }
             }
-        }
 
-        return 0;
+            $connection->commit();
+
+            return 0;
+        } catch (\Exception $ex) {
+            $connection->rollBack();
+
+            throw $ex;
+        }
     }
 
     /**
@@ -176,6 +189,24 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
                 }
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(User $user): string
+    {
+        $this->_em->persist($user);
+
+        return $user->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(User $user)
+    {
+        $this->_em->remove($user);
     }
 
     /**

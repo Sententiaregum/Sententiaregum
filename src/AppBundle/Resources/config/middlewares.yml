@@ -1,0 +1,15 @@
+services:
+  app.validator.middleware:
+    class: AppBundle\Validator\Middleware\DTOValidationMiddleware
+    public: false
+    tags:
+      - { name: command_bus_middleware, priority: 100 }
+    arguments:
+      - "@validator"
+  app.name_suggestion.middleware:
+    class: AppBundle\Model\User\Middleware\NameSuggestionMiddleware
+    public: false
+    tags:
+      - { name: command_bus_middleware, priority: 90 } # after the `validator middleware`
+    arguments:
+      - "@app.user.registration.name_suggestor"

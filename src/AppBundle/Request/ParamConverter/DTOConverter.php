@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace AppBundle\Request\ParamConverter;
 
-use Doctrine\Instantiator\Instantiator;
 use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -48,11 +48,32 @@ class DTOConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration): bool
     {
-        $instance = $this->getDTOInstance($configuration->getClass());
-        foreach ($this->getDTOParametersByClass($configuration->getClass()) as $property) {
+        $class                 = $configuration->getClass();
+        $constant              = sprintf('%s::EMPTY_PROPERTIES', $class);
+        $propertiesToBeSkipped = [];
+        $instance              = new $class();
+        $declaredProperties    = array_filter(
+            (new \ReflectionClass($class))->getProperties(),
+            function (ReflectionProperty $property) use ($class) {
+                return $property->getDeclaringClass()->name === $class;
+            }
+        );
+
+        // fetch result properties that are optional and to be skipped as those must not be processed
+        if (defined($constant)) {
+            $propertiesToBeSkipped = constant($constant);
+        }
+
+        /** @var ReflectionProperty $property */
+        foreach ($declaredProperties as $property) {
             $propertyName = $property->getName();
+            if (in_array($propertyName, $propertiesToBeSkipped, true)) {
+                continue;
+            }
+
+            // non-writable properties cause issues with the DTO creation
             if (!$this->propertyAccess->isWritable($instance, $propertyName)) {
-                throw new \RuntimeException($this->getInvalidPropertyExceptionMessage($configuration->getClass(), $propertyName));
+                throw new \RuntimeException($this->getInvalidPropertyExceptionMessage($class, $propertyName));
             }
 
             $this->propertyAccess->setValue(
@@ -76,35 +97,6 @@ class DTOConverter implements ParamConverterInterface
     }
 
     /**
-     * Creates a list of all dto parameters.
-     *
-     * @param string $class
-     *
-     * @return \ReflectionProperty[]
-     */
-    private function getDTOParametersByClass(string $class): array
-    {
-        return (new \ReflectionClass($class))->getProperties();
-    }
-
-    /**
-     * Creates an instance of the data transfer object.
-     *
-     * @param string $class
-     *
-     * @return object
-     */
-    private function getDTOInstance(string $class)
-    {
-        static $instantiator;
-        if (!$instantiator) {
-            $instantiator = new Instantiator();
-        }
-
-        return $instantiator->instantiate($class);
-    }
-
-    /**
      * Searches for properties inside the request object.
      *
      * @param Request            $request
@@ -117,15 +109,23 @@ class DTOConverter implements ParamConverterInterface
     private function findAttributeInRequest(Request $request, ReflectionProperty $property)
     {
         $propertyPath = $property->getName();
-        if ($request->query->has($propertyPath)
-            || $request->attributes->has($propertyPath)
-            || $request->request->has($propertyPath)
-        ) {
-            return $request->get($propertyPath);
-        }
 
-        if ($request->files->has($propertyPath)) {
-            return $request->files->get($propertyPath);
+        foreach ([true, false] as $camelCase) {
+            $key = $camelCase ? $propertyPath : Container::underscore($propertyPath);
+
+            // optimization: don't call against Request#get() to avoid duplicated code lookups
+            if ($request->query->has($key)) {
+                return $request->query->get($key);
+            }
+            if ($request->attributes->has($key)) {
+                return $request->attributes->get($key);
+            }
+            if ($request->request->has($key)) {
+                return $request->request->get($key);
+            }
+            if ($request->files->has($key)) {
+                return $request->files->get($key);
+            }
         }
 
         throw new \InvalidArgumentException(sprintf('Property "%s" not found in request stack!', $propertyPath));

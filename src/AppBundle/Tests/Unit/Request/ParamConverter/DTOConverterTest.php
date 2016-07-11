@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Request\ParamConverter;
 
+use AppBundle\Model\User\DTO\ActivateAccountDTO;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Request\ParamConverter\DTOConverter;
 use AppBundle\Tests\Unit\Fixtures\FileUploadDTO;
@@ -64,7 +65,20 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($converter->apply($request, new ParamConverter(['class' => CreateUserDTO::class, 'name' => 'dto'])));
         $this->assertInstanceOf(CreateUserDTO::class, $request->attributes->get('dto'));
 
-        $this->assertEmpty($request->get('dto')->getPassword());
+        $this->assertEmpty($request->get('dto')->password);
+        $this->assertNull($request->get('dto')->user);
+    }
+
+    public function testAssignUnderscoreValueToCamelCaseProperty()
+    {
+        $converter = new DTOConverter(new PropertyAccessor());
+        $request   = Request::create('/');
+
+        $request->attributes->set('username', 'Ma27');
+        $request->attributes->set('activation_key', '123456');
+
+        $this->assertTrue($converter->apply($request, new ParamConverter(['class' => ActivateAccountDTO::class, 'name' => 'dto'])));
+        $this->assertSame('123456', $request->get('dto')->activationKey);
     }
 
     /**

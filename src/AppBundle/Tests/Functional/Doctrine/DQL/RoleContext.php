@@ -19,6 +19,11 @@ use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 
+/**
+ * Behat context for role model interactions.
+ *
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ */
 class RoleContext extends FixtureLoadingContext implements SnippetAcceptingContext
 {
     /**

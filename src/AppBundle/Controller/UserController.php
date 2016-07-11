@@ -15,10 +15,10 @@ declare(strict_types=1);
 namespace AppBundle\Controller;
 
 use AppBundle\Exception\UserActivationException;
+use AppBundle\Model\User\DTO\ActivateAccountDTO;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Value\Credentials;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -51,29 +51,26 @@ class UserController extends BaseController
      *
      * @param CreateUserDTO $dto
      *
-     * @return mixed[]|View
+     * @return View
      *
      * @Rest\Post("/users.{_format}", name="app.user.create", requirements={"_format"="^(json|xml)$"})
-     * @Rest\View(statusCode=201)
-     *
      * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\CreateUserDTO")
      */
-    public function createUserAction(CreateUserDTO $dto)
+    public function createUserAction(CreateUserDTO $dto): View
     {
-        /** @var \AppBundle\Model\User\Handler\TwoStepRegistrationApproach $registrator */
-        $registrator = $this->get('app.user.registration');
+        $this->handle($dto);
 
-        $result = $registrator->registration($dto);
-        if (!$result->isValid()) {
-            $response = ['errors' => $this->sortViolationMessagesByPropertyPath($result->getViolations())];
-            if (!empty($result->getSuggestions())) {
-                $response['name_suggestions'] = $result->getSuggestions();
+        if (($info = $dto->getInfo()) && !$info->isValid()) {
+            $response    = ['errors' => $this->sortViolationMessagesByPropertyPath($info->violationList)];
+            $suggestions = $info->getExtraValue(CreateUserDTO::SUGGESTIONS, true);
+            if (!empty($suggestions)) {
+                $response['name_suggestions'] = $suggestions;
             }
 
             return View::create($response, Response::HTTP_BAD_REQUEST);
         }
 
-        return ['id' => $result->getUser()->getId()];
+        return View::create(['id' => $dto->user->getId()]);
     }
 
     /**
@@ -86,26 +83,24 @@ class UserController extends BaseController
      *     }
      * )
      *
-     * @param ParamFetcher $paramFetcher
+     * @param ActivateAccountDTO $dto
      *
      * @return View
      *
      * @Rest\Patch("/users/activate.{_format}", name="app.user.activate", requirements={"_format"="^(json|xml)$"})
-     * @Rest\View(statusCode=204)
-     *
-     * @Rest\QueryParam(name="username", description="Name of the user to activate")
-     * @Rest\QueryParam(name="activation_key", description="Activation key")
+     * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\ActivateAccountDTO")
      */
-    public function activateUserAction(ParamFetcher $paramFetcher)
+    public function activateUserAction(ActivateAccountDTO $dto): View
     {
-        /** @var \AppBundle\Model\User\Handler\TwoStepRegistrationApproach $registrator */
-        $registrator = $this->get('app.user.registration');
-
         try {
-            $registrator->approveByActivationKey($paramFetcher->get('activation_key'), $paramFetcher->get('username'));
+            $this->handle($dto);
+
+            $code = Response::HTTP_NO_CONTENT;
         } catch (UserActivationException $ex) {
-            return View::create(null, Response::HTTP_FORBIDDEN);
+            $code = Response::HTTP_FORBIDDEN;
         }
+
+        return View::create(null, $code);
     }
 
     /**
@@ -150,7 +145,8 @@ class UserController extends BaseController
     public function onlineFollowingListAction(): array
     {
         /** @var \AppBundle\Model\User\Provider\OnlineUserIdReadProviderInterface $cluster */
-        $cluster        = $this->get('app.redis.cluster.online_users');
+        $cluster = $this->get('app.redis.cluster.online_users');
+        /** @var \AppBundle\Model\User\UserReadRepositoryInterface $userRepository */
         $userRepository = $this->getDoctrine()->getRepository('Account:User');
         $currentUser    = $this->getCurrentUser();
 

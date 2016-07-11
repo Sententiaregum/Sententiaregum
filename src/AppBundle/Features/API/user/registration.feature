@@ -19,18 +19,20 @@ Feature: registration
         Then I should see 'The username "Ma27" is already taken!' for property "username"
         And I should see suggestions for my username
 
-    Scenario: taking an email with an invalid email
+    Scenario Outline: account creation with invalid data
         When I send a registration request with the following credentials:
-            | username | password | email  | locale |
-            | TestUser | 72aM     | foobar | en     |
-        Then I should see "The email is invalid!" for property "email"
+            | username   | password   | email   | locale   |
+            | <username> | <password> | <email> | <locale> |
+        Then I should see '<error>' for property "<property>"
 
-    Scenario: taking an invalid username
-        When I send a registration request with the following credentials:
-            | username | password | email           | locale |
-            | +=*      | 123456   | foo@example.org | en     |
-        Then I should see "A username can contain alphanumeric characters and the special characters dot, underscore and dash!" for property "username"
-
+        Examples:
+          | username | password | email                   | locale | error                                                                                               | property |
+          | TestUser | 72aM     | foobar                  | en     | The email is invalid!                                                                               | email    |
+          | +=*      | 123456   | foo@example.org         | en     | A username can contain alphanumeric characters and the special characters dot, underscore and dash! | username |
+          | Ma27_2   | 123456   | Ma27@sententiaregum.dev | en     | Email address "Ma27@sententiaregum.dev" is already in use!                                          | email    |
+          | TestUser | 72aM     | foo@example.org         | fr     | The locale of the new user is invalid!                                                              | locale   |
+          | ab       | 72aM     | foo@example.org         | en     | The username should have at least three characters!                                                 | username |
+          | Ma27_2   | 72       | foo@example.org         | en     | The password should have at least four characters!                                                  | password |
     Scenario: approval with expired activation key
         When I send a registration request with the following credentials:
             | username       | password | email                             | locale |

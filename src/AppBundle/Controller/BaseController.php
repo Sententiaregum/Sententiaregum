@@ -112,4 +112,14 @@ abstract class BaseController extends Controller
     {
         return $this->getParameter('app.locale_keys');
     }
+
+    /**
+     * Handles a message.
+     *
+     * @param mixed $message
+     */
+    protected function handle($message)
+    {
+        $this->get('command_bus')->handle($message);
+    }
 }

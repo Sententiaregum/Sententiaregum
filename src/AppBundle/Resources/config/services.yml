@@ -15,17 +15,6 @@ services:
     class: AppBundle\Model\User\Util\NameSuggestion\ChainSuggestor
     arguments:
       - "@app.repository.user"
-  app.user.registration:
-    class: AppBundle\Model\User\Handler\TwoStepRegistrationApproach
-    arguments:
-      - "@doctrine.orm.default_entity_manager"
-      - "@app.user.registration.activation_key_generator"
-      - "@validator"
-      - "@event_dispatcher"
-      - "@ma27_api_key_authentication.password.strategy"
-      - "@app.user.registration.name_suggestor"
-      - "@app.repository.user"
-      - "@app.repository.role"
   app.ip.tracer:
     class: AppBundle\Service\Ip\FreeGeoIpTracingService
     arguments:
@@ -36,10 +25,3 @@ services:
       - "@translator"
   app.user.service.date_time_comparator:
     class: AppBundle\Model\User\Util\Date\DateTimeComparison
-  app.validator.middleware:
-    class: AppBundle\Validator\Middleware\DTOValidationMiddleware
-    public: false
-    tags:
-      - { name: command_bus_middleware, priority: 100 }
-    arguments:
-      - "@validator"

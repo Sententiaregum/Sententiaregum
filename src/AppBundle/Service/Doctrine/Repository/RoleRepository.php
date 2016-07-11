@@ -29,6 +29,8 @@ class RoleRepository extends EntityRepository implements RoleReadRepositoryInter
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException If the default role is not present.
      */
     public function determineDefaultRole(): Role
     {

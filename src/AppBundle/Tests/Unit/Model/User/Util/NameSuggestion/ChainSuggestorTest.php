@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Model\User\Util\NameSuggestion;
 
+use AppBundle\Model\User\UserReadRepositoryInterface;
 use AppBundle\Model\User\Util\NameSuggestion\ChainSuggestor;
-use AppBundle\Service\Doctrine\Repository\UserRepository;
 
 class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoResults()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
         $repository
             ->expects($this->never())
             ->method('filterUniqueUsernames');
@@ -32,13 +32,13 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterResults()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('filterUniqueUsernames')
             ->willReturn(['ma.27']);
 
-        $suggestor = new \AppBundle\Model\User\Util\NameSuggestion\ChainSuggestor($repository);
+        $suggestor = new ChainSuggestor($repository);
         $result    = $suggestor->getPossibleSuggestions('ma_27');
 
         $this->assertCount(1, $result);

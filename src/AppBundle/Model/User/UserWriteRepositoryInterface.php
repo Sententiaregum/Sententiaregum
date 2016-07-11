@@ -40,4 +40,20 @@ interface UserWriteRepositoryInterface
      * @return int
      */
     public function deleteAncientAttemptData(DateTime $dateTime): int;
+
+    /**
+     * Saves a user and returns its UUID.
+     *
+     * @param User $user
+     *
+     * @return string
+     */
+    public function save(User $user): string;
+
+    /**
+     * Removes a user.
+     *
+     * @param User $user
+     */
+    public function remove(User $user);
 }

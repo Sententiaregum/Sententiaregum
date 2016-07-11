@@ -56,7 +56,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
             ->with('get', ['/json/'.$ip, ['headers' => ['Accept-Language' => 'en']]])
             ->willReturn($response);
 
-        $service = new \AppBundle\Service\Ip\FreeGeoIpTracingService($client);
+        $service = new FreeGeoIpTracingService($client);
         $result  = $service->getIpLocationData($ip, 'en');
 
         $this->assertInstanceOf(IpLocation::class, $result);
@@ -136,7 +136,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
 
-        $service = new \AppBundle\Service\Ip\FreeGeoIpTracingService($client);
+        $service = new FreeGeoIpTracingService($client);
         $this->assertNull($service->getIpLocationData($ip, 'en'));
     }
 
