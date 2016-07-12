@@ -26,12 +26,12 @@ and the setup of the backend and frontend will be processed.
 ### Note about fixture appliance
 
 At the deployment for production some fixtures implemented for production will be applied.
-These fixtures must implement the interface __AppBundle\Doctrine\ORM\ProductionFixtureInterface__ which extends the basic __FixtureInterface__ of the data fixtures library.
+These fixtures must implement the interface __AppBundle\Service\Doctrine\DataFixtures\ProductionFixtureInterface__ which extends the basic __FixtureInterface__ of the data fixtures library.
 
 Currently the following fixtures implement this interface:
 
-- AppBundle\DataFixtures\ORM\RoleFixture *(prior=1)* (Setup for necessary roles)
-- AppBundle\DataFixtures\ORM\AdminFixture *(prior=2)* (Setup to have an admin user)
+- AppBundle\DataFixtures\ORM\RoleFixture (Setup for necessary roles)
+- AppBundle\DataFixtures\ORM\AdminFixture (Setup to have an admin user)
 
 ### Deploying with capistrano
 
@@ -53,3 +53,5 @@ The following gems are obligatory for deploying with capistrano:
 #### Prerequirements to the server
 
 Above some necessary packages are shown that must be present before running capistrano.
+
+## [Next (Custom configurations)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/custom_config.md)

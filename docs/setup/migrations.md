@@ -8,3 +8,5 @@ In order to apply migrations run the following command:
 ``` shell
 bin/console doctrine:migrations:migrate
 ```
+
+## [Next (NodeJS Environment)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/nodejs_environment.md)

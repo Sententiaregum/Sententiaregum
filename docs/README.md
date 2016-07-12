@@ -7,3 +7,5 @@
 - [Custom configurations](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/custom_config.md)
 - [Migrations](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/migrations.md)
 - [NodeJS Environment](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/nodejs_environment.md)
+- [Frontend Architecture](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/architecture/frontend.md)
+- [Backend Architecture](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/architecture/backend.md)
