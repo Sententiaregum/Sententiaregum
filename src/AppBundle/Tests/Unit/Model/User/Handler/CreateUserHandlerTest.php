@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Model\User\Handler;
 
+use AppBundle\Model\Core\Provider\NotificatorInterface;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Handler\CreateUserHandler;
 use AppBundle\Model\User\UserWriteRepositoryInterface;
 use AppBundle\Model\User\Util\ActivationKeyCode\ActivationKeyCodeGenerator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,10 +28,10 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUser()
     {
-        $dispatcher = $this->getMock(EventDispatcherInterface::class);
-        $dispatcher
+        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator
             ->expects($this->once())
-            ->method('dispatch');
+            ->method('publishNotification');
 
         $validator = $this->getMock(ValidatorInterface::class);
         $validator
@@ -46,8 +46,10 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('save');
 
-        $handler = new CreateUserHandler($repository, $hasher, $dispatcher, $generator, $validator);
+        $handler = new CreateUserHandler($repository, $hasher, $generator, $validator);
         $dto     = new CreateUserDTO();
+
+        $handler->setNotificator($notificator);
 
         $dto->username = 'Ma27';
         $dto->password = '123456';
@@ -74,10 +76,10 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerationFailure()
     {
-        $dispatcher = $this->getMock(EventDispatcherInterface::class);
-        $dispatcher
+        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator
             ->expects($this->never())
-            ->method('dispatch');
+            ->method('publishNotification');
 
         $validator = $this->getMock(ValidatorInterface::class);
         $validator
@@ -92,8 +94,10 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('save');
 
-        $handler = new CreateUserHandler($repository, $hasher, $dispatcher, $generator, $validator);
+        $handler = new CreateUserHandler($repository, $hasher, $generator, $validator);
         $dto     = new CreateUserDTO();
+
+        $handler->setNotificator($notificator);
 
         $dto->username = 'Ma27';
         $dto->password = '123456';

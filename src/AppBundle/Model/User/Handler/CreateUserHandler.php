@@ -14,14 +14,13 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\User\Handler;
 
-use AppBundle\Event\MailerEvent;
+use AppBundle\Model\Core\Util\NotificatableTrait;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserWriteRepositoryInterface;
 use AppBundle\Model\User\Util\ActivationKeyCode\ActivationKeyCodeGeneratorInterface;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PasswordHasherInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -31,6 +30,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 final class CreateUserHandler
 {
+    use NotificatableTrait;
+
     /**
      * @var UserWriteRepositoryInterface
      */
@@ -40,11 +41,6 @@ final class CreateUserHandler
      * @var PasswordHasherInterface
      */
     private $hasher;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
 
     /**
      * @var ActivationKeyCodeGeneratorInterface
@@ -61,18 +57,15 @@ final class CreateUserHandler
      *
      * @param UserWriteRepositoryInterface        $userRepository
      * @param PasswordHasherInterface             $passwordHasher
-     * @param EventDispatcherInterface            $dispatcher
      * @param ActivationKeyCodeGeneratorInterface $keyGenerator
      * @param ValidatorInterface                  $validator
      */
     public function __construct(
         UserWriteRepositoryInterface $userRepository,
         PasswordHasherInterface $passwordHasher,
-        EventDispatcherInterface $dispatcher,
         ActivationKeyCodeGeneratorInterface $keyGenerator,
         ValidatorInterface $validator
     ) {
-        $this->eventDispatcher = $dispatcher;
         $this->userRepository  = $userRepository;
         $this->hasher          = $passwordHasher;
         $this->keyGenerator    = $keyGenerator;
@@ -102,7 +95,7 @@ final class CreateUserHandler
             }
 
             $activationKey = $this->keyGenerator->generate(255);
-            $options = [
+            $options       = [
                 'entity' => 'Account:User',
                 'field'  => 'pendingActivation.key',
             ];
@@ -113,15 +106,14 @@ final class CreateUserHandler
         $user->storeUniqueActivationKeyForNonApprovedUser($activationKey);
         $this->userRepository->save($user);
 
-        $mailerEvent = new MailerEvent();
-        $mailerEvent
-            ->setTemplateSource('AppBundle:Email/Activation:activation')
-            ->addUser($user)
-            ->addParameter('activation_key', $user->getPendingActivation()->getKey())
-            ->addParameter('username', $user->getUsername())
-            ->setLanguage($user->getLocale());
-
-        $this->eventDispatcher->dispatch(MailerEvent::EVENT_NAME, $mailerEvent);
+        $this->notify(
+            [
+                'activation_key' => $user->getPendingActivation()->getKey(),
+                'username'       => $user->getUsername(),
+            ],
+            [$user],
+            $user->getLocale()
+        );
 
         $userDTO->user = $user;
     }
