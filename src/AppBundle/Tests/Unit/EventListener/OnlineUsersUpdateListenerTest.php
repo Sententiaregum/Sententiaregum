@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Tests\EventListener;
 
 use AppBundle\EventListener\OnlineUsersUpdateListener;
-use AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface;
+use AppBundle\Model\User\Provider\OnlineUserIdWriteProviderInterface;
 use AppBundle\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnFirewallAuthenticationEvent;
@@ -25,7 +25,7 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testUpdateOnlineUsers()
     {
-        $provider = $this->getMock(OnlineUserIdDataProviderInterface::class);
+        $provider = $this->getMock(OnlineUserIdWriteProviderInterface::class);
         $provider
             ->expects($this->once())
             ->method('addUserId');

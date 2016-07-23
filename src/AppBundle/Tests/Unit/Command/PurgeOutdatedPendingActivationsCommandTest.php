@@ -15,14 +15,14 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Unit\Command;
 
 use AppBundle\Command\PurgeOutdatedPendingActivationsCommand;
-use AppBundle\Model\User\UserRepository;
+use AppBundle\Model\User\UserWriteRepositoryInterface;
 use AppBundle\Test\CommandTestCase;
 
 class PurgeOutdatedPendingActivationsCommandTest extends CommandTestCase
 {
     public function testPurgeData()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
+        $repository = $this->getMock(UserWriteRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('deletePendingActivationsByDate')

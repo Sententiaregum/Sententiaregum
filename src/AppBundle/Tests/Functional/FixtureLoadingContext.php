@@ -45,7 +45,7 @@ abstract class FixtureLoadingContext implements KernelAwareContext
     public function loadDataFixtures()
     {
         if (static::$applyFixtures) {
-            /** @var \AppBundle\Doctrine\ConfigurableFixturesLoader $service */
+            /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $service */
             $service  = $this->getContainer()->get('app.doctrine.fixtures_loader');
             $fixtures = [RoleFixture::class];
 

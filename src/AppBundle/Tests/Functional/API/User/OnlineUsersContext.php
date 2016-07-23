@@ -65,7 +65,7 @@ class OnlineUsersContext extends FixtureLoadingContext implements SnippetAccepti
      */
     public function theFollowingUsersAreOnline(TableNode $table)
     {
-        /** @var \AppBundle\Model\User\Online\OnlineUserIdDataProviderInterface $cluster */
+        /** @var \AppBundle\Model\User\Provider\OnlineUserIdReadProviderInterface $cluster */
         $cluster = $this->getContainer()->get('app.redis.cluster.online_users');
         $repo    = $this->getEntityManager()->getRepository('Account:User');
 

@@ -14,6 +14,7 @@ The following list of npm packages must be installed globally:
 - mocha
 - eslint
 - eslint-plugin-react
+- eslint-plugin-varspacing
 - less
 
 The dev server is currently not supported, if you'd like to auto-compile your bundle, you need to run the following command:
@@ -43,3 +44,5 @@ The rest of the linters used during the build process can be found at the __befo
 All local node packages and build production files will be synced.
 
 For ESLint the [ESLint Integration for PhpStorm/WebStorm](https://plugins.jetbrains.com/plugin/7494) can be used.
+
+## [Next (Frontend Architecture)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/architecture/frontend.md)

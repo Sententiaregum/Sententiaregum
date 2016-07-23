@@ -40,6 +40,10 @@ class AppKernel extends Kernel
             new Snc\RedisBundle\SncRedisBundle(),
             new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
 
+            new SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
+            new SimpleBus\SymfonyBridge\DoctrineOrmBridgeBundle(),
+
             new AppBundle\AppBundle(),
         ];
 

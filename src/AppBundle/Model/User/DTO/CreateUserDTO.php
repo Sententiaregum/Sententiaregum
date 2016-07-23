@@ -14,8 +14,10 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\User\DTO;
 
+use AppBundle\Model\User\User;
 use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\UniqueDTOParams;
+use AppBundle\Validator\Middleware\ValidatableDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,8 +40,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  */
-class CreateUserDTO
+class CreateUserDTO extends ValidatableDTO
 {
+    const EMPTY_PROPERTIES = ['user'];
+    const SUGGESTIONS      = 'suggestions';
+
     /**
      * @var string
      *
@@ -55,7 +60,7 @@ class CreateUserDTO
      *     pattern="/^[A-z0-9_\-\.]+$/i"
      * )
      */
-    private $username;
+    public $username;
 
     /**
      * @var string
@@ -68,7 +73,7 @@ class CreateUserDTO
      *     maxMessage="VALIDATORS_REGISTRATION_PASSWORD_MAX"
      * )
      */
-    private $password;
+    public $password;
 
     /**
      * @var string
@@ -76,76 +81,25 @@ class CreateUserDTO
      * @Assert\NotBlank(message="VALIDATORS_REGISTRATION_EMAIL_EMPTY")
      * @Assert\Email(message="VALIDATORS_REGISTRATION_INVALID_EMAIL")
      */
-    private $email;
+    public $email;
 
     /**
      * @var string
      *
      * @Locale(message="VALIDATORS_REGISTRATION_LOCALE")
      */
-    private $locale = 'en';
+    public $locale = 'en';
 
     /**
-     * @return string
+     * @var User
      */
-    public function getUsername()
-    {
-        return $this->username;
-    }
+    public $user;
 
     /**
-     * @param string $username
+     * Constructor.
      */
-    public function setUsername($username)
+    public function __construct()
     {
-        $this->username = (string) $username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = (string) $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = (string) $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = (string) $locale;
+        $this->continueOnInvalid = true;
     }
 }

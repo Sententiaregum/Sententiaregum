@@ -15,14 +15,14 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Command;
 
 use AppBundle\Command\PurgeAncientAuthAttemptDataCommand;
-use AppBundle\Model\User\UserRepository;
+use AppBundle\Model\User\UserWriteRepositoryInterface;
 use AppBundle\Test\CommandTestCase;
 
 class PurgeAncientAuthAttemptDataCommandTest extends CommandTestCase
 {
     public function testPurgeAuthAttemptData()
     {
-        $repoMock = $this->getMockWithoutInvokingTheOriginalConstructor(UserRepository::class);
+        $repoMock = $this->getMock(UserWriteRepositoryInterface::class);
         $repoMock->expects($this->once())
             ->method('deleteAncientAttemptData')
             ->willReturn(5);

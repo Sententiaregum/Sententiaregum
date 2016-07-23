@@ -54,3 +54,5 @@ If you'd like to override some parameters for some special cases,
 you just have to create a file called *local.yaml* in the *vagrant/hieradata* directory.
 This file is capable at overriding all parameters provided in the *common.yaml* file
 thanks to hiera's merge feature and is ignored by GIT.
+
+## [Next (Install)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/install/install.md)

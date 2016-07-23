@@ -162,9 +162,6 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
     {
         $user = $this->getRegisteredUser();
 
-        $redis = $this->getContainer()->get('snc_redis.pending_activations');
-        $redis->del(sprintf('activation:%s', $user->getPendingActivation()->getKey()));
-
         $connection = $this->getEntityManager()->getConnection();
 
         $bind  = (new \DateTime('-3 hours'))->format('Y-m-d H:i:s');

@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Doctrine\ProductionFixtureInterface;
 use AppBundle\Model\User\User;
+use AppBundle\Service\Doctrine\DataFixtures\ProductionFixtureInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;

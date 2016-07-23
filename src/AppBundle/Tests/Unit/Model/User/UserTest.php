@@ -16,7 +16,7 @@ namespace AppBundle\Tests\Model\User;
 
 use AppBundle\Model\User\Role;
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class UserTest extends \PHPUnit_Framework_TestCase

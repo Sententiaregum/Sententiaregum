@@ -49,3 +49,16 @@ Feature: user repository
         Then I should see the following names:
             | username |
             | Ma27     |
+
+    Scenario: persist a user
+        When I try to persist the following user:
+            | username | password | email        |
+            | Ma27     | 123456   | ma27@foo.com |
+        Then it should be present in the identity map
+
+    Scenario: remove a user
+        Given the following users exist:
+            | username | password | email                | activation_date | is_non_activated |
+            | 0        | 123456   | 0@sententiaregum.dev | -3 hours        | true             |
+        When I try to remove the user "0"
+        Then it should be scheduled for removal

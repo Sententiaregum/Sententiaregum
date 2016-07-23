@@ -15,42 +15,26 @@ declare(strict_types=1);
 namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Validator\Constraints as Assert;
+use AppBundle\Validator\Middleware\ValidatableDTO;
 
 /**
  * Data transfer object that contains data for a locale switch.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class LocaleSwitcherDTO
+class LocaleSwitcherDTO extends ValidatableDTO
 {
+    const EMPTY_PROPERTIES = ['user'];
+
     /**
      * @var string
      *
      * @Assert\Locale
      */
-    private $locale;
+    public $locale;
 
     /**
-     * Get locale.
-     *
-     * @return string
+     * @var \AppBundle\Model\User\User
      */
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Set locale.
-     *
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale(string $locale)
-    {
-        $this->locale = (string) $locale;
-
-        return $this;
-    }
+    public $user;
 }

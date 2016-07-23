@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
-use AppBundle\Model\Ip\Tracer\IpTracingServiceInterface;
+use AppBundle\Model\Ip\Provider\IpTracingServiceInterface;
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\AbstractUserEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;

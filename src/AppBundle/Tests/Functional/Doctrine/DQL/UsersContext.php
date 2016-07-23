@@ -15,11 +15,12 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Functional\Doctrine\DQL;
 
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\DateTimeComparison;
+use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 /**
  * Feature context for user repository.
@@ -153,7 +154,7 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
      */
     public function iDeleteAncientAuthData()
     {
-        /** @var \AppBundle\Model\User\UserRepository $userRepository */
+        /** @var \AppBundle\Service\Doctrine\Repository\UserRepository $userRepository */
         $userRepository = $this->getRepository('Account:User');
         $userRepository->deleteAncientAttemptData(new \DateTime('-6 months'));
     }
@@ -185,5 +186,42 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
 
         Assertion::allInArray($this->filterResult, $list);
         Assertion::count($this->filterResult, count($list));
+    }
+
+    /**
+     * @When I try to persist the following user:
+     */
+    public function iTryToPersistTheFollowingUser(TableNode $table)
+    {
+        $row  = $table->getRow(1);
+        $user = User::create($row[0], $row[1], $row[2], new PhpPasswordHasher());
+
+        $this->getRepository('Account:User')->save($user);
+        $this->user = $user;
+    }
+
+    /**
+     * @Then it should be present in the identity map
+     */
+    public function itShouldBePresentInTheIdentityMap()
+    {
+        Assertion::true($this->getEntityManager()->getUnitOfWork()->isInIdentityMap($this->user));
+    }
+
+    /**
+     * @When I try to remove the user :arg1
+     */
+    public function iTryToRemoveTheUser($arg1)
+    {
+        $repository = $this->getRepository('Account:User');
+        $repository->remove($this->user = $repository->findOneBy(['username' => $arg1]));
+    }
+
+    /**
+     * @Then it should be scheduled for removal
+     */
+    public function itShouldBeScheduledForRemoval()
+    {
+        Assertion::true($this->getEntityManager()->getUnitOfWork()->isScheduledForDelete($this->user));
     }
 }

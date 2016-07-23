@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Doctrine\ProductionFixtureInterface;
 use AppBundle\Model\User\Role;
+use AppBundle\Service\Doctrine\DataFixtures\ProductionFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**

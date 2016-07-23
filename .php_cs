@@ -29,6 +29,6 @@ HeaderCommentFixer::setHeader($header);
 $config = Config::create();
 
 return $config
-    ->addCustomFixer(new \AppBundle\Fixer\StrictTypeDeclarationFixer())
+    ->addCustomFixer(new \AppBundle\Service\PHPCS\Fixer\StrictTypeDeclarationFixer())
     ->setUsingCache(true)
 ;

@@ -1,13 +1,13 @@
 services:
   app.repository.user:
-    class: AppBundle\Model\User\UserRepository
+    class: AppBundle\Service\Doctrine\Repository\UserRepository
     public: false
     lazy: true
     factory: ["@doctrine.orm.default_entity_manager", 'getRepository']
     arguments:
       - "Account:User"
   app.repository.role:
-    class: AppBundle\Model\User\RoleRepository
+    class: AppBundle\Service\Doctrine\Repository\RoleRepository
     public: false
     lazy: true
     factory: ["@doctrine.orm.default_entity_manager", 'getRepository']

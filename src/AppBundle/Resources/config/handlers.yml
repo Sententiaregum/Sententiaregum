@@ -1,0 +1,25 @@
+services:
+  app.handler.create_account:
+    class: AppBundle\Model\User\Handler\CreateUserHandler
+    arguments:
+      - "@app.repository.user"
+      - "@ma27_api_key_authentication.password.strategy"
+      - "@app.user.registration.activation_key_generator"
+      - "@validator"
+    tags:
+      - { name: command_handler, handles: AppBundle\Model\User\DTO\CreateUserDTO, method: __invoke }
+      - { name: app.command_handler.notificatable, template: "AppBundle:Email/Activation:activation" }
+  app.handler.activate_account:
+    class: AppBundle\Model\User\Handler\ActivateAccountHandler
+    arguments:
+      - "@app.repository.user" # the `UserRepository` contains all interfaces, but the logic needs to be separated
+      - "@app.repository.user"
+      - "@app.repository.role"
+    tags:
+      - { name: command_handler, handles: AppBundle\Model\User\DTO\ActivateAccountDTO, method: __invoke }
+  app.handler.switch_locale:
+    class: AppBundle\Model\User\Handler\LocaleSwitcherHandler
+    arguments:
+      - "@app.repository.user"
+    tags:
+      - { name: command_handler, handles: AppBundle\Model\User\DTO\LocaleSwitcherDTO, method: __invoke }

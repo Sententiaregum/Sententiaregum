@@ -74,22 +74,11 @@ class LocaleController extends BaseController
      */
     public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO)
     {
-        /** @var \Symfony\Component\Validator\Validator\ValidatorInterface $validator */
-        $validator = $this->get('validator');
+        $localeSwitcherDTO->user = $this->getCurrentUser();
+        $this->handle($localeSwitcherDTO);
 
-        if (count($validator->validate($localeSwitcherDTO)) > 0) {
+        if (($info = $localeSwitcherDTO->getInfo()) && !$info->isValid()) {
             throw new HttpException(Response::HTTP_BAD_REQUEST);
-        }
-
-        $user = $this->getCurrentUser();
-
-        if ($user->getLocale() !== $newLocale = $localeSwitcherDTO->getLocale()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $user->modifyUserLocale($newLocale);
-
-            $em->persist($user);
-            $em->flush();
         }
     }
 }
