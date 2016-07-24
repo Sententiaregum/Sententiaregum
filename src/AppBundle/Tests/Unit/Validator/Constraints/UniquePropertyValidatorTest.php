@@ -147,7 +147,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->expects($this->once())
             ->method('findOneBy')
             ->with(['test-field' => 'test'])
-            ->willReturnCallback(function() {
+            ->willReturnCallback(function () {
                 throw ORMException::unrecognizedField('test-field');
             });
 

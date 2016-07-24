@@ -87,7 +87,7 @@ class UniquePropertyValidator extends ConstraintValidator
 
             /** @var \Doctrine\ORM\EntityRepository $repository */
             $repository = $manager->getRepository($entityAlias);
-            $search = $repository->findOneBy([$field => $value]);
+            $search     = $repository->findOneBy([$field => $value]);
         } catch (ORMException $e) {
             throw new ConstraintDefinitionException(sprintf(
                 'During the validation whether the given property is unique or not, doctrine threw an exception with the following message: "%s". Did you misconfigure any parameters such as the field or entity name?',
