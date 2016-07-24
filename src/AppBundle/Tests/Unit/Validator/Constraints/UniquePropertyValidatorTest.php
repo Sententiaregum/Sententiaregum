@@ -15,18 +15,18 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Unit\Validator\Constraints;
 
 use AppBundle\Model\User\User;
-use AppBundle\Model\User\Util\NameSuggestion\Suggestor\SuggestorInterface;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Constraints\UniquePropertyValidator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\ORMException;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
-use Symfony\Component\Validator\Validation;
 
 class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 {
@@ -64,18 +64,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->willReturn($manager);
 
-        $suggestor = $this->getMock(SuggestorInterface::class);
-        $suggestor
-            ->expects($this->any())
-            ->method('getPossibleSuggestions')
-            ->willReturn(['Ma.27']);
-
-        return new UniquePropertyValidator($mockRegistry, $suggestor);
-    }
-
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
+        return new UniquePropertyValidator($mockRegistry);
     }
 
     /**
@@ -84,7 +73,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidConstraint()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
         $propertyMock->validate('value', $this->getMock(Constraint::class));
     }
 
@@ -94,7 +83,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValueMustBeString()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
+        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate([], new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username']));
@@ -106,7 +95,12 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidManagerAlias()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
+        $registry = $this->getMock(ManagerRegistry::class);
+        $registry
+            ->expects($this->once())
+            ->method('getManager');
+
+        $propertyMock = new UniquePropertyValidator($registry);
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -117,36 +111,44 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage Cannot find entity manager for model "AnotherMapping:InvalidModel"!
+     * @expectedExceptionMessage Cannot find entity manager for model "TestMapping:User"!
      */
-    public function testNoManagerForModel()
+    public function testNoManagerForEntity()
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class), $this->getMock(SuggestorInterface::class));
+        $registry = $this->getMock(ManagerRegistry::class);
+        $registry
+            ->expects($this->once())
+            ->method('getManagerForClass');
+
+        $propertyMock = new UniquePropertyValidator($registry);
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
             'test',
-            new UniqueProperty(['entity' => 'AnotherMapping:InvalidModel', 'field' => 'username'])
+            new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username'])
         );
     }
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage Invalid field "invalid"!
+     * @expectedExceptionMessage During the validation whether the given property is unique or not, doctrine threw an exception with the following message: "Unrecognized field: test-field". Did you misconfigure any parameters such as the field or entity name?
      */
-    public function testInvalidProperty()
+    public function testFindOneByThrowsORMException()
     {
-        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
-        $classMetadata
-            ->expects($this->any())
-            ->method('hasField')
-            ->willReturn(false);
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['test-field' => 'test'])
+            ->willReturnCallback(function () {
+                throw ORMException::unrecognizedField('test-field');
+            });
 
         $manager = $this->getMock(ObjectManager::class);
         $manager
             ->expects($this->any())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
+            ->method('getRepository')
+            ->willReturn($repository);
 
         $mockRegistry = $this->getMock(ManagerRegistry::class);
         $mockRegistry
@@ -154,76 +156,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getManagerForClass')
             ->willReturn($manager);
 
-        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
-
-        $propertyMock->validate(
-            'test',
-            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'invalid'])
-        );
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage The configured field "test-field" must not be an embeddable, an association or an identifier!
-     */
-    public function testFieldIsAssociation()
-    {
-        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
-        $classMetadata
-            ->expects($this->any())
-            ->method('hasAssociation')
-            ->willReturn(true);
-
-        $manager = $this->getMock(ObjectManager::class);
-        $manager
-            ->expects($this->any())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
-
-        $mockRegistry = $this->getMock(ManagerRegistry::class);
-        $mockRegistry
-            ->expects($this->any())
-            ->method('getManagerForClass')
-            ->willReturn($manager);
-
-        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
-
-        $propertyMock->validate(
-            'test',
-            new UniqueProperty(['entity' => 'AnotherMapping:User', 'field' => 'test-field'])
-        );
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     * @expectedExceptionMessage The given entity "AnotherMapping:User" must not be an embeddable or an abstract/superclass object!
-     */
-    public function testClassIsEmbeddable()
-    {
-        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
-        $classMetadata
-            ->expects($this->any())
-            ->method('hasField')
-            ->willReturn(true);
-
-        $classMetadata->isEmbeddedClass    = true;
-        $classMetadata->isMappedSuperclass = false;
-
-        $manager = $this->getMock(ObjectManager::class);
-        $manager
-            ->expects($this->any())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
-
-        $mockRegistry = $this->getMock(ManagerRegistry::class);
-        $mockRegistry
-            ->expects($this->any())
-            ->method('getManagerForClass')
-            ->willReturn($manager);
-
-        $propertyMock = new UniquePropertyValidator($mockRegistry, $this->getMock(SuggestorInterface::class));
+        $propertyMock = new UniquePropertyValidator($mockRegistry);
         $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
@@ -238,9 +171,9 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             'Ma27',
             new UniqueProperty(
                 [
-                    'entity'              => 'TestMapping:User',
-                    'field'               => 'username',
-                    'propertyPath'        => 'custom',
+                    'entity'       => 'TestMapping:User',
+                    'field'        => 'username',
+                    'propertyPath' => 'custom',
                 ]
             )
         );

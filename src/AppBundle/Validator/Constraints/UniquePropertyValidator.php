@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Validator\Constraints;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -43,17 +44,12 @@ class UniquePropertyValidator extends ConstraintValidator
     }
 
     /**
-     * Validates whether the given value is unique when using it as a specific field on a specific model.
-     *
-     * @param string|object $value
-     * @param Constraint    $constraint
+     * {@inheritdoc}
      *
      * @throws UnexpectedTypeException       If the constraint is no UniqueProperty constraint.
-     * @throws UnexpectedTypeException       If the ExecutionContext is invalid (to be removed when upgrading to 3.0, just used in order to verify the correct context).
      * @throws UnexpectedTypeException       If the value is not a scalar value or has a __toString() interceptor.
      * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class.
-     * @throws ConstraintDefinitionException If the entity field cannot be found.
-     * @throws ConstraintDefinitionException If the entity field is an invalid mapping (e.g. an association or an identifier)
+     * @throws ConstraintDefinitionException If an @see{ORMException} caused by misconfigured fields.
      */
     public function validate($value, Constraint $constraint)
     {
@@ -83,38 +79,21 @@ class UniquePropertyValidator extends ConstraintValidator
         }
 
         $field = $constraint->field;
-        /** @var \Doctrine\ORM\Mapping\ClassMetadata $metadata */
-        $metadata = $manager->getClassMetadata($entityAlias);
 
-        if ($metadata->hasAssociation($field)
-            || isset($metadata->embeddedClasses[$field])
-            || $metadata->isIdentifier($field)
-        ) {
+        try {
+            // NOTE: in cases like misconfigured fields an ORMException will be thrown.
+            // In order to ease debugging, this exception will be catched and a ConstraintDefinitionException will
+            // be thrown.
+
+            /** @var \Doctrine\ORM\EntityRepository $repository */
+            $repository = $manager->getRepository($entityAlias);
+            $search     = $repository->findOneBy([$field => $value]);
+        } catch (ORMException $e) {
             throw new ConstraintDefinitionException(sprintf(
-                'The configured field "%s" must not be an embeddable, an association or an identifier!',
-                $field
-            ));
-        } elseif (!$metadata->hasField($field)) {
-            throw new ConstraintDefinitionException(sprintf(
-                'Invalid field "%s"!',
-                $field
-            ));
+                'During the validation whether the given property is unique or not, doctrine threw an exception with the following message: "%s". Did you misconfigure any parameters such as the field or entity name?',
+                $e->getMessage()
+            ), 0, $e);
         }
-
-        if ($metadata->isEmbeddedClass
-            || $metadata->isMappedSuperclass
-            || (($reflection = $metadata->getReflectionClass()) && $reflection->isAbstract())
-        ) {
-            throw new ConstraintDefinitionException(sprintf(
-                'The given entity "%s" must not be an embeddable or an abstract/superclass object!',
-                $entityAlias
-            ));
-        }
-
-        /** @var \Doctrine\Common\Persistence\ObjectRepository $repository */
-        $repository = $manager->getRepository($entityAlias);
-        $query      = [$field => $value];
-        $search     = $repository->findOneBy($query);
 
         if (!empty($search)) {
             $this
