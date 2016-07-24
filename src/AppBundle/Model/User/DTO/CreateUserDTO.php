@@ -16,7 +16,7 @@ namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Model\User\User;
 use AppBundle\Validator\Constraints\Locale;
-use AppBundle\Validator\Constraints\UniqueDTOParams;
+use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Middleware\ValidatableDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,21 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Data transfer object that contains all mandatory parameters for the first step of the registration process.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- *
- * @UniqueDTOParams(
- *     fieldConfig={
- *         {
- *             "message"="VALIDATORS_REGISTRATION_USERNAME_TAKEN",
- *             "field"="username",
- *             "entity"="Account:User"
- *         },
- *         {
- *             "entity"="Account:User",
- *             "field"="email",
- *             "message"="VALIDATORS_REGISTRATION_EMAIL_TAKEN"
- *         }
- *     }
- * )
  */
 class CreateUserDTO extends ValidatableDTO
 {
@@ -59,6 +44,7 @@ class CreateUserDTO extends ValidatableDTO
      *     message="VALIDATORS_REGISTRATION_USERNAME_PATTERN",
      *     pattern="/^[A-z0-9_\-\.]+$/i"
      * )
+     * @UniqueProperty(message="VALIDATORS_REGISTRATION_USERNAME_TAKEN", entity="Account:User", field="username")
      */
     public $username;
 
@@ -80,6 +66,7 @@ class CreateUserDTO extends ValidatableDTO
      *
      * @Assert\NotBlank(message="VALIDATORS_REGISTRATION_EMAIL_EMPTY")
      * @Assert\Email(message="VALIDATORS_REGISTRATION_INVALID_EMAIL")
+     * @UniqueProperty(message="VALIDATORS_REGISTRATION_EMAIL_TAKEN", entity="Account:User", field="email")
      */
     public $email;
 
