@@ -16,6 +16,7 @@ namespace AppBundle\EventListener;
 
 use AppBundle\Event\MailerEvent;
 use AppBundle\Model\Ip\Provider\IpTracingServiceInterface;
+use AppBundle\Model\User\Provider\BlockedAccountWriteProviderInterface;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,6 +61,11 @@ class CredentialNotifyListener implements EventSubscriberInterface
     private $comparison;
 
     /**
+     * @var BlockedAccountWriteProviderInterface
+     */
+    private $accountBlockerProvider;
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents(): array
@@ -73,24 +79,27 @@ class CredentialNotifyListener implements EventSubscriberInterface
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface    $entityManager
-     * @param EventDispatcherInterface  $eventDispatcher
-     * @param RequestStack              $requestStack
-     * @param IpTracingServiceInterface $ipTracer
-     * @param DateTimeComparison        $comparison
+     * @param EntityManagerInterface               $entityManager
+     * @param EventDispatcherInterface             $eventDispatcher
+     * @param RequestStack                         $requestStack
+     * @param IpTracingServiceInterface            $ipTracer
+     * @param DateTimeComparison                   $comparison
+     * @param BlockedAccountWriteProviderInterface $accountBlockerProvider
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack,
         IpTracingServiceInterface $ipTracer,
-        DateTimeComparison $comparison
+        DateTimeComparison $comparison,
+        BlockedAccountWriteProviderInterface $accountBlockerProvider
     ) {
-        $this->entityManager   = $entityManager;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->requestStack    = $requestStack;
-        $this->ipTracer        = $ipTracer;
-        $this->comparison      = $comparison;
+        $this->entityManager          = $entityManager;
+        $this->eventDispatcher        = $eventDispatcher;
+        $this->requestStack           = $requestStack;
+        $this->ipTracer               = $ipTracer;
+        $this->comparison             = $comparison;
+        $this->accountBlockerProvider = $accountBlockerProvider;
     }
 
     /**
@@ -148,6 +157,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      */
     private function dispatchNotificationEvent(User $user, string $templateName, string $eventName)
     {
+        $this->accountBlockerProvider->addTemporaryBlockedAccountID($user->getId());
         $event = new MailerEvent();
         $event->addUser($user)
             ->addParameter('notification_target', $user)

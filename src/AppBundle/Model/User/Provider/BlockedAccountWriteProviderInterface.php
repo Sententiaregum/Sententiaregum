@@ -12,22 +12,19 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Model\Core\DTO;
+namespace AppBundle\Model\User\Provider;
 
 /**
- * PaginatableDTO.
+ * BlockedAccountWriteProviderInterface.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class PaginatableDTO
+interface BlockedAccountWriteProviderInterface
 {
     /**
-     * @var int
+     * Adds a new user id for a user which is meant to be blocked temporarily.
+     *
+     * @param string $user
      */
-    public $limit = 25;
-
-    /**
-     * @var int
-     */
-    public $offset = 0;
+    public function addTemporaryBlockedAccountID(string $user);
 }

@@ -4,3 +4,7 @@ services:
     arguments:
       - "@snc_redis.online_users"
     lazy: true
+  app.redis.cluster.blocked_account:
+    class: AppBundle\Service\Redis\BlockedAccountCluster
+    arguments:
+      - "@snc_redis.blocked_users"

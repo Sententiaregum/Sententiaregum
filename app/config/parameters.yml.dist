@@ -24,6 +24,7 @@ parameters:
     # Redis ports
     doctrine_redis_port:            6379
     online_users_port:              6379
+    blocked_users_port:             6379
 
     # Functional testing
     test_db:                        behat
