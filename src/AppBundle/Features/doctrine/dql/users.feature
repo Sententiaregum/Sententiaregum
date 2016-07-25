@@ -22,7 +22,6 @@ Feature: user repository
           | limit | offset | id_count |
           | 25    | 0      | 2        |
           | 1     | 1      | 1        |
-
     Scenario: load follower by activation key and username
         Given the database is purged
         And the following users exist:
