@@ -12,7 +12,6 @@
 
 namespace AppBundle\Model\Core\DTO;
 
-
 /**
  * PaginatableDTO.
  *

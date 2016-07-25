@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 namespace AppBundle\Model\User;
+
 use AppBundle\Model\Core\DTO\PaginatableDTO;
 
 /**
