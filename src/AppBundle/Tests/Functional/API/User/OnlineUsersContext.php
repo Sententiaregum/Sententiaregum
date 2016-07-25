@@ -99,7 +99,7 @@ class OnlineUsersContext extends FixtureLoadingContext implements SnippetAccepti
      *
      * @param TableNode $table
      */
-    public function heShouldSeeTheFollowingData(TableNode $table)
+    public function iShouldSeeTheFollowingData(TableNode $table)
     {
         $hash = $table->getHash();
         $em   = $this->getEntityManager();

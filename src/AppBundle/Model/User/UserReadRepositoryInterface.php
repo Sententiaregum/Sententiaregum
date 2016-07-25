@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 namespace AppBundle\Model\User;
+use AppBundle\Model\Core\DTO\PaginatableDTO;
 
 /**
  * User repository interface which provides read access to the user model.
@@ -24,11 +25,12 @@ interface UserReadRepositoryInterface
     /**
      * Creates a list that contains the ids of all users following a specific user.
      *
-     * @param User $user
+     * @param User           $user
+     * @param PaginatableDTO $dto
      *
      * @return int[]
      */
-    public function getFollowingIdsByUser(User $user): array;
+    public function getFollowingIdsByUser(User $user, PaginatableDTO $dto): array;
 
     /**
      * Loads a user by its username and activation key.

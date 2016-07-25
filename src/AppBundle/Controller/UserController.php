@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Controller;
 
 use AppBundle\Exception\UserActivationException;
+use AppBundle\Model\Core\DTO\PaginatableDTO;
 use AppBundle\Model\User\DTO\ActivateAccountDTO;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Model\User\Value\Credentials;
@@ -137,12 +138,15 @@ class UserController extends BaseController
      *
      * Controller action that creates a list of users the current user follows that shows which users are online.
      *
+     * @param PaginatableDTO $dto
+     *
      * @return bool[]
      *
      * @Rest\Get("/protected/users/online.{_format}", name="app.user.online", requirements={"_format"="^(json|xml)$"})
      * @Rest\View
+     * @ParamConverter(name="dto", class="AppBundle\Model\Core\DTO\PaginatableDTO")
      */
-    public function onlineFollowingListAction(): array
+    public function onlineFollowingListAction(PaginatableDTO $dto): array
     {
         /** @var \AppBundle\Model\User\Provider\OnlineUserIdReadProviderInterface $cluster */
         $cluster = $this->get('app.redis.cluster.online_users');
@@ -150,6 +154,6 @@ class UserController extends BaseController
         $userRepository = $this->getDoctrine()->getRepository('Account:User');
         $currentUser    = $this->getCurrentUser();
 
-        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser));
+        return $cluster->validateUserIds($userRepository->getFollowingIdsByUser($currentUser, $dto));
     }
 }
