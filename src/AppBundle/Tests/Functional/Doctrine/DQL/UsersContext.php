@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Functional\Doctrine\DQL;
 
+use AppBundle\Model\Core\DTO\PaginatableDTO;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
@@ -86,24 +87,29 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
     }
 
     /**
-     * @When I ask for a list of follower ids for user :arg1
+     * @When I ask for a list of follower ids for user :arg1 with limit :arg2 and offset :arg3
      */
-    public function iAskForAListOfFollowerIdsForUser($arg1)
+    public function iAskForAListOfFollowerIdsForUser($arg1, $arg2, $arg3)
     {
+        $dto         = new PaginatableDTO();
+        $dto->limit  = (int) $arg2;
+        $dto->offset = (int) $arg3;
+
         $this->followerIds = $this
             ->getEntityManager()
             ->getRepository('Account:User')
             ->getFollowingIdsByUser(
-                $this->getEntityManager()->getRepository('Account:User')->findOneBy(['username' => $arg1])
+                $this->getEntityManager()->getRepository('Account:User')->findOneBy(['username' => $arg1]),
+                $dto
             );
     }
 
     /**
-     * @Then I should get two ids
+     * @Then I should get :arg1 ids
      */
-    public function iShouldGetTwoIds()
+    public function iShouldGetTwoIds($arg1)
     {
-        Assertion::count($this->followerIds, 2);
+        Assertion::count($this->followerIds, (int) $arg1);
     }
 
     /**

@@ -16,6 +16,10 @@ addons:
     - mysql-client-core-5.6
     - mysql-client-5.6
 
+branches:
+  only:
+    - master
+
 # composer cache for faster install process and less issues with github api
 cache:
   directories:

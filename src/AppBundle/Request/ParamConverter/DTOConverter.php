@@ -79,7 +79,11 @@ class DTOConverter implements ParamConverterInterface
             $this->propertyAccess->setValue(
                 $instance,
                 $propertyName,
-                $this->findAttributeInRequest($request, $property)
+                $this->findAttributeInRequest(
+                    $request,
+                    $property,
+                    $this->propertyAccess->getValue($instance, $propertyName)
+                )
             );
         }
 
@@ -101,12 +105,13 @@ class DTOConverter implements ParamConverterInterface
      *
      * @param Request            $request
      * @param ReflectionProperty $property
+     * @param mixed              $current
      *
      * @throws \InvalidArgumentException If the property cannot be found in the request stack
      *
      * @return mixed
      */
-    private function findAttributeInRequest(Request $request, ReflectionProperty $property)
+    private function findAttributeInRequest(Request $request, ReflectionProperty $property, $current = null)
     {
         $propertyPath = $property->getName();
 
@@ -126,6 +131,10 @@ class DTOConverter implements ParamConverterInterface
             if ($request->files->has($key)) {
                 return $request->files->get($key);
             }
+        }
+
+        if (null !== $current) {
+            return $current;
         }
 
         throw new \InvalidArgumentException(sprintf('Property "%s" not found in request stack!', $propertyPath));

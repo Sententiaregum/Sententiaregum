@@ -13,11 +13,15 @@ Feature: user repository
         Then one user should still exist
         And two users should be removed
 
-    Scenario: get follower ids
+    Scenario Outline: get follower ids
         Given the user fixtures have been applied
-        When I ask for a list of follower ids for user "Ma27"
-        Then I should get two ids
+        When I ask for a list of follower ids for user "Ma27" with limit <limit> and offset <offset>
+        Then I should get "<id_count>" ids
 
+        Examples:
+          | limit | offset | id_count |
+          | 25    | 0      | 2        |
+          | 1     | 1      | 1        |
     Scenario: load follower by activation key and username
         Given the database is purged
         And the following users exist:

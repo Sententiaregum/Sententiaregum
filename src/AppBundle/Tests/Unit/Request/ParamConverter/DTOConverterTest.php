@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Request\ParamConverter;
 
+use AppBundle\Model\Core\DTO\PaginatableDTO;
 use AppBundle\Model\User\DTO\ActivateAccountDTO;
 use AppBundle\Model\User\DTO\CreateUserDTO;
 use AppBundle\Request\ParamConverter\DTOConverter;
@@ -102,5 +103,19 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($converter->apply($request, new ParamConverter(['class' => FileUploadDTO::class, 'name' => 'dto'])));
 
         $this->assertInstanceOf(UploadedFile::class, $request->attributes->get('dto')->getFile());
+    }
+
+    public function testDefaultValue()
+    {
+        $converter = new DTOConverter(new PropertyAccessor());
+        $request   = Request::create('/');
+
+        $this->assertTrue($converter->apply($request, new ParamConverter(['class' => PaginatableDTO::class, 'name' => 'dto'])));
+
+        /** @var PaginatableDTO $paginatableDTO */
+        $paginatableDTO = $request->attributes->get('dto');
+
+        $this->assertSame(25, $paginatableDTO->limit);
+        $this->assertSame(0, $paginatableDTO->offset);
     }
 }

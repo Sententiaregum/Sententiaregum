@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Service\Doctrine\Repository;
 
+use AppBundle\Model\Core\DTO\PaginatableDTO;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\UserReadRepositoryInterface;
 use AppBundle\Model\User\UserWriteRepositoryInterface;
@@ -139,17 +140,28 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
     /**
      * {@inheritdoc}
      */
-    public function getFollowingIdsByUser(User $user): array
+    public function getFollowingIdsByUser(User $user, PaginatableDTO $dto): array
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $result = $qb
+        $qb
             ->select('partial user.{id}')
             ->distinct()
             ->from('Account:User', 'user')
             ->join('Account:User', 'current_user', Join::WITH, $qb->expr()->eq('current_user.id', ':user_id'))
             ->where($qb->expr()->isMemberOf('user', 'current_user.following'))
-            ->setParameter(':user_id', $user->getId())
+            ->setParameter(':user_id', $user->getId());
+
+        // copy pagination parameters
+        // into the query builder.
+        if (null !== $limit = $dto->limit) {
+            $qb->setMaxResults($limit);
+        }
+        if (null !== $offset = $dto->offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        $result = $qb
             ->getQuery()
             ->getResult(Query::HYDRATE_ARRAY);
 
@@ -169,17 +181,16 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
      */
     public function filterUniqueUsernames(array $names): array
     {
-        $qb        = $this->_em->createQueryBuilder();
-        $nonUnique = array_column(
-            $qb
-                ->select('user.username')
-                ->from('Account:User', 'user')
-                ->where($qb->expr()->in('user.username', ':names'))
-                ->setParameter(':names', $names)
-                ->getQuery()
-                ->getResult(Query::HYDRATE_ARRAY),
-            'username'
-        );
+        $qb     = $this->_em->createQueryBuilder();
+        $result = $qb
+            ->select('user.username')
+            ->from('Account:User', 'user')
+            ->where($qb->expr()->in('user.username', ':names'))
+            ->setParameter(':names', $names)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        $nonUnique = array_column($result, 'username');
 
         return array_values(// re-index array after filter process
             array_filter(
