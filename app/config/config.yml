@@ -113,6 +113,10 @@ snc_redis:
             type: predis
             alias: online_users
             dsn: "redis://localhost:%online_users_port%"
+        blocked_users:
+            type: predis
+            alias: blocked_users
+            dsn: "redis://localhost:%blocked_users_port%"
 
 # Guzzle Configuration
 guzzle:

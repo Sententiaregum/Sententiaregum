@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Tests\Unit\EventListener;
 
 use AppBundle\EventListener\IncompleteUserCheckListener;
+use AppBundle\Model\User\Provider\BlockedAccountReadInterface;
 use AppBundle\Model\User\User;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
@@ -31,7 +32,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
         $user->modifyActivationStatus(User::STATE_APPROVED);
         $user->lock();
 
-        $hook = new IncompleteUserCheckListener();
+        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -43,7 +44,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
-        $hook = new IncompleteUserCheckListener();
+        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -56,7 +57,27 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->lock();
 
-        $hook = new IncompleteUserCheckListener();
+        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
+        $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
+    }
+
+    /**
+     * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
+     * @expectedExceptionMessage BACKEND_AUTH_BLOCKED
+     */
+    public function testAccountIsTemporaryBlocked()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->modifyActivationStatus(User::STATE_APPROVED);
+
+        $provider = $this->getMock(BlockedAccountReadInterface::class);
+        $provider
+            ->expects($this->once())
+            ->method('isAccountTemporaryBlocked')
+            ->with($user->getId())
+            ->willReturn(true);
+
+        $hook = new IncompleteUserCheckListener($provider);
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 }

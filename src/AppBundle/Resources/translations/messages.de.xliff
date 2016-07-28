@@ -16,6 +16,11 @@
                 <source>BACKEND_AUTH_FAILURE</source>
                 <target>Die Zugangsdaten sind ungültig!</target>
             </trans-unit>
+
+            <trans-unit id="BACKEND_AUTH_BLOCKED">
+                <source>BACKEND_AUTH_BLOCKED</source>
+                <target>Aufgrund von verdächtiger Kontoaktiviät wurde das Konto für etwa eine Minute gesperrt. Bitte überprüfe deine Emails für weitere Informationen.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

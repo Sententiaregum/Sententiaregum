@@ -12,22 +12,21 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Model\Core\DTO;
+namespace AppBundle\Model\User\Provider;
 
 /**
- * PaginatableDTO.
+ * BlockedAccountReadInterface.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class PaginatableDTO
+interface BlockedAccountReadInterface
 {
     /**
-     * @var int
+     * Checks if the account is temporary blocked.
+     *
+     * @param string $user
+     *
+     * @return bool
      */
-    public $limit = 25;
-
-    /**
-     * @var int
-     */
-    public $offset = 0;
+    public function isAccountTemporaryBlocked(string $user): bool;
 }

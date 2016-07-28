@@ -17,6 +17,7 @@ namespace AppBundle\Tests\Unit\EventListener;
 use AppBundle\EventListener\CredentialNotifyListener;
 use AppBundle\Model\Ip\Provider\IpTracingServiceInterface;
 use AppBundle\Model\Ip\Value\IpLocation;
+use AppBundle\Model\User\Provider\BlockedAccountWriteProviderInterface;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\Util\Date\DateTimeComparison;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,7 +58,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getIpLocationData')
             ->willReturn(new IpLocation('127.0.0.1', 'Germany', 'Bavaria', 'Munich', 48, 11));
 
-        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison());
+        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison(), $this->getMock(BlockedAccountWriteProviderInterface::class));
         $listener->onAuthentication(new OnAuthenticationEvent($user));
 
         $this->assertFalse($user->addAndValidateNewUserIp('127.0.0.1', new DateTimeComparison()));
@@ -93,7 +94,13 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getIpLocationData')
             ->willReturn(new IpLocation('127.0.0.1', 'Germany', 'Bavaria', 'Munich', 48, 11));
 
-        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison());
+        $provider = $this->getMock(BlockedAccountWriteProviderInterface::class);
+        $provider
+            ->expects($this->once())
+            ->method('addTemporaryBlockedAccountID')
+            ->with($user->getId());
+
+        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison(), $provider);
         $listener->onFailedAuthentication(new OnInvalidCredentialsEvent($user));
     }
 
@@ -118,7 +125,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getIpLocationData');
 
-        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison());
+        $listener = new CredentialNotifyListener($entityManager, $eventDispatcher, $stack, $tracer, new DateTimeComparison(), $this->getMock(BlockedAccountWriteProviderInterface::class));
         $listener->onFailedAuthentication(new OnInvalidCredentialsEvent());
     }
 }

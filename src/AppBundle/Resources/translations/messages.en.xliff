@@ -16,6 +16,11 @@
                 <source>BACKEND_AUTH_FAILURE</source>
                 <target>The credentials were refused!</target>
             </trans-unit>
+
+            <trans-unit id="BACKEND_AUTH_BLOCKED">
+                <source>BACKEND_AUTH_BLOCKED</source>
+                <target>Due to suspicious account activity the account has been disabled for one minute. Please check your emails for further information.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
