@@ -37,9 +37,14 @@ set :composer_dump_autoload_flags, '--optimize'
 set :composer_download_url,        'https://getcomposer.org/installer'
 
 # sf3 cache
+SSHKit.config.command_map[:sententiaregum_app_cli] = "bin/console"
 namespace :cache do
   task :build do
-    execute 'bin/console cache:warmup'
+    on roles :all do
+      within fetch :composer_working_dir do
+        execute :sententiaregum_app_cli, 'cache:warmup'
+      end
+    end
   end
 end
 

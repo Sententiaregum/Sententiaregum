@@ -37,8 +37,24 @@ The process can be simply triggered with ``cap deploy {stage}``. The stage can b
 As there are some sensible parameters that should not be placed in the ``deploy.rb`` itself it is possible to adjust
 them through yaml:
 
-The ``deploy/config/deploy.yaml.dist`` is a template for such a configuration containing example parameters which are
-necessary for capistrano to run. You just have to copy this file to ``deploy/config/deploy.yaml`` and then run capistrano.
+Some basic parameters are placed in the `deploy/config/defaults.yaml`. By adding a `deploy.yaml` or `{stage}.yaml` in the same directory
+those parameters can be modified.
+Furthermore some mandatory parameters must be adjusted:
+
+- `port` (SSH port where to login)
+- `webserver_user`
+- `local_user` (unless set, the value of `ssh_user` will be used)
+- `ssh_user`
+
+Furthermore the server must be configured properly:
+
+``` yaml
+server:
+  production:
+    domain: '0.0.0.0' # domain of the production server
+  develop:
+    domain: '0.0.0.0' # domain of the develop server
+```
 
 #### Required packages
 
