@@ -10,6 +10,7 @@
 # Parameters
 /app/config/parameters.yml
 /app/config/parameters.ini
+/app/config/parameters.*.yml
 
 # Managed by Composer
 /app/bootstrap.php.cache
@@ -64,11 +65,10 @@ npm-debug.log
 # PHPCS
 /.php_cs.cache
 
-# SSH Key Deployment
-/vagrant/ssh_key_path.yaml
-
 # Capistrano Configuration
 /deploy/config/deploy.yaml
+/deploy/config/develop.yaml
+/deploy/config/production.yaml
 
 # LocalStorage Emulation
 /node-emulator/

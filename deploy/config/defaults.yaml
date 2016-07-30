@@ -1,0 +1,6 @@
+deploy_to:     /var/www/sententiaregum
+keep_releases: 3
+allow_sudo:    false
+repo_url:      'git@github.com:Sententiaregum/Sententiaregum.git'
+branch:        master
+composer:      "1.2.0"

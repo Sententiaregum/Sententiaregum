@@ -13,7 +13,7 @@ snc_redis:
             client: doctrine_cache
             entity_manager: default
         second_level_cache:
-            client: cache
+            client: doctrine_cache
             entity_manager: default
 
 monolog:
