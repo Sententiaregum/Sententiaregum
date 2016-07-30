@@ -73,6 +73,7 @@
     "mocha": "^2.3.4",
     "moxios": "^0.2.0",
     "node-localstorage": "^1.3.0",
+    "npm-shrinkwrap": "^200.5.1",
     "react-addons-test-utils": "^15.0.2",
     "request": "~2.72",
     "sinon": "^1.17.2",
