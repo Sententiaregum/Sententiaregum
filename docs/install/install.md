@@ -21,8 +21,6 @@ and the setup of the backend and frontend will be processed.
 
 ## Deployment
 
-> __NOTE:__ the capistrano implementation is currently experimental and needs some more work during [#265](https://github.com/Sententiaregum/Sententiaregum/issues/265) and [#186](https://github.com/Sententiaregum/Sententiaregum/issues/186).
-
 ### Note about fixture appliance
 
 At the deployment for production some fixtures implemented for production will be applied.
@@ -47,11 +45,21 @@ necessary for capistrano to run. You just have to copy this file to ``deploy/con
 The following gems are obligatory for deploying with capistrano:
 
 - ``capistrano``
-- ``capistrano-symfony``
+- ``capistrano-upload-config``
 - ``capistrano-composer``
+
+#### How to configure the application
+
+The gem `capistrano-upload-config` helps to upload configuration files. The configuration file `app/config/parameters.yml`
+is required to configure the application (e.g. redis ports and database configuration) and needs to be managed manually by uploading.
+For each capistrano stage (`develop` and `production`) a custom configuration file (`parameters.{stage}.yml`) can be created containing the necessary
+parameters for the stage to deploy to. The appropriate configuration file will be selected by capistrano and uploaded as `parameters.yml` and placed into
+the `app/config` directory at the target server.
 
 #### Prerequirements to the server
 
 Above some necessary packages are shown that must be present before running capistrano.
+You might also have a look at our [Testing VM](https://github.com/Sententiaregum/deployment-test-vm).
+This VM is used in order to test the capistrano configuration.
 
 ## [Next (Custom configurations)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/custom_config.md)
