@@ -19,15 +19,16 @@ import Nav from 'react-bootstrap/lib/Nav';
  * Renderer for the menu markup.
  *
  * @param {Object} props The component properties.
+ * @param {Object} context The component context.
  *
  * @returns {React.Element} The markup of the menu.
  */
-const MenuWrapper = props => {
+const MenuWrapper = (props, context) => {
   return (
     <Navbar inverse fixedTop>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="/#/">Sententiaregum</a>
+          {context.router.isActive('/', true) ? <span>Sententiaregum</span> : <a href="/#/">Sententiaregum</a>}
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
@@ -45,4 +46,10 @@ MenuWrapper.propTypes = {
   children: React.PropTypes.node
 };
 
+MenuWrapper.contextTypes = {
+  router: React.PropTypes.oneOfType([
+    React.PropTypes.func,
+    React.PropTypes.object
+  ])
+};
 export default MenuWrapper;

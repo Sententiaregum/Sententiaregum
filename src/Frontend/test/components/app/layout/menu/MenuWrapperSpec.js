@@ -22,7 +22,7 @@ describe('MenuWrapper', () => {
       <MenuWrapper>
         <Menu items={[{ url: '/#/login', label: 'Login' }]} />
       </MenuWrapper>
-    ));
+    ), {context: {router: {isActive: () => { return false}}}});
 
     const brand = markup.find('a');
     expect(brand.prop('href')).to.equal('/#/');
