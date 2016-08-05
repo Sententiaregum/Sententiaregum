@@ -35,6 +35,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *     @ORM\Index(name="user_locale", columns={"locale"}),
  *     @ORM\Index(name="user_activation", columns={"username", "pendingActivation_activation_date"})
  * })
+ * @ORM\Cache(usage="READ_WRITE", region="strict")
  */
 class User implements UserInterface, Serializable
 {

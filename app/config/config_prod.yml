@@ -1,20 +1,51 @@
 imports:
     - { resource: config.yml }
+    - { resource: "@AppBundle/Resources/config/prod_cache.yml" }
 
 snc_redis:
     doctrine:
         metadata_cache:
-            client: doctrine_cache
+            client:         doctrine_cache
             entity_manager: default
+            namespace:      "doctrine:metadata:"
         result_cache:
-            client: doctrine_cache
+            client:         doctrine_cache
             entity_manager: default
+            namespace:      "doctrine:result:"
         query_cache:
-            client: doctrine_cache
+            client:         doctrine_cache
             entity_manager: default
+            namespace:      "doctrine:query:"
         second_level_cache:
-            client: doctrine_cache
+            client:         doctrine_cache
             entity_manager: default
+            namespace:      "doctrine:slc:"
+
+framework:
+    validation:
+        cache: app.redis_cache.validator.metadata_cache
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                second_level_cache:
+                    region_cache_driver:
+                        type: service
+                        id:   app.redis_cache.doctrine.second_level_cache
+                    enabled: true
+                    regions:
+                        strict:
+                            cache_driver:
+                                type: service
+                                id:   app.redis_cache.doctrine.second_level_cache
+                            lock_path: "%kernel.cache_dir%/doctrine/orm/slc/filelock"
+                            type:      filelock
+                        non_strict:
+                            cache_driver:
+                                type: service
+                                id:   app.redis_cache.doctrine.second_level_cache
+                            type: default
 
 monolog:
     handlers:

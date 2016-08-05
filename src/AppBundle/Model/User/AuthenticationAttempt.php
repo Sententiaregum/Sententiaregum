@@ -28,6 +28,7 @@ use Ramsey\Uuid\Uuid;
  *     @ORM\Index(name="auth_last_datetime_range", columns={"latest_date_time"}),
  *     @ORM\Index(name="auth_ip", columns={"ip"})
  * })
+ * @ORM\Cache(usage="READ_WRITE", region="strict")
  */
 class AuthenticationAttempt implements \Serializable
 {
