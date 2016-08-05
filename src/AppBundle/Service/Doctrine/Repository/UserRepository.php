@@ -163,6 +163,10 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
 
         $result = $qb
             ->getQuery()
+            ->setCacheable(true)
+            ->setLifetime(1200)
+            ->setCacheRegion('non_strict')
+            ->useResultCache(true, 1200)
             ->getResult(Query::HYDRATE_ARRAY);
 
         return array_column($result, 'id');

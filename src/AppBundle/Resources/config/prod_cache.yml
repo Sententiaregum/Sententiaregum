@@ -1,0 +1,13 @@
+services:
+    app.redis_cache.doctrine.second_level_cache:
+        class:     "%snc_redis.doctrine_cache_predis.class%"
+        arguments: ["@snc_redis.doctrine_cache"]
+    app.redis_cache.validator.metadata_cache:
+        class:     Symfony\Component\Validator\Mapping\Cache\DoctrineCache
+        arguments: ["@app.redis_cache.doctrine.cache.predis"]
+    app.redis_cache.doctrine.cache.predis:
+        class:     Doctrine\Common\Cache\PredisCache
+        parent:    "doctrine_cache.abstract.predis"
+        arguments: ["@snc_redis.doctrine_cache"]
+        calls:
+            - [setNamespace, ['symfony:validation:']]
