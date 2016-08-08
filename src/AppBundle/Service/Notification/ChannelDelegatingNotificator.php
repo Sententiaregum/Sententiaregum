@@ -53,7 +53,7 @@ final class ChannelDelegatingNotificator implements NotificatorInterface
      */
     public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null)
     {
-        if (!$template) {
+        if (null === $template) {
             if (!array_key_exists($name, $this->templateMap)) {
                 throw new \LogicException(sprintf(
                     'Cannot generate template name for notification with name "%s"!',

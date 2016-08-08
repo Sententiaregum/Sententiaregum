@@ -19,8 +19,6 @@ use AppBundle\Model\User\Handler\CreateUserHandler;
 use AppBundle\Service\Notification\ChannelDelegatingNotificator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_TestCase
 {

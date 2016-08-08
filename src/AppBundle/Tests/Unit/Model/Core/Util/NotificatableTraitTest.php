@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Model\Core\Util;
 
-use AppBundle\Service\Notification\NotificationInput;
 use AppBundle\Model\Core\Provider\NotificatorInterface;
 use AppBundle\Model\Core\Util\NotificatableTrait;
 use AppBundle\Model\User\User;
+use AppBundle\Service\Notification\NotificationInput;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class NotificatableTraitTest extends \PHPUnit_Framework_TestCase

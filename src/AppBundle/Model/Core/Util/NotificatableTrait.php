@@ -42,7 +42,7 @@ trait NotificatableTrait
     /**
      * Creates the event and runs the notificator.
      *
-     * @param string[]                     $parameters
+     * @param mixed[]                      $parameters
      * @param \AppBundle\Model\User\User[] $users
      * @param string[]                     $channels
      * @param string                       $language
@@ -58,7 +58,7 @@ trait NotificatableTrait
 
         $event = new NotificationInput();
 
-        if ($language) {
+        if (null === $language) {
             $event->setLanguage($language);
         }
 

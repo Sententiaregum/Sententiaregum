@@ -25,7 +25,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnInvalidCredentialsEvent;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

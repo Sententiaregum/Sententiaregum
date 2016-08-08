@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Service\Notification;
 
-use AppBundle\Service\Notification\NotificationInput;
 use AppBundle\Model\User\User;
+use AppBundle\Service\Notification\NotificationInput;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class NotificationInputTest extends \PHPUnit_Framework_TestCase
