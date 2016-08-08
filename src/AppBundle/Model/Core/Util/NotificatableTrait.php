@@ -58,7 +58,7 @@ trait NotificatableTrait
 
         $event = new NotificationInput();
 
-        if (null === $language) {
+        if (null !== $language) {
             $event->setLanguage($language);
         }
 
