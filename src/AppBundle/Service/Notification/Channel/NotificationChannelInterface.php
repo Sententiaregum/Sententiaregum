@@ -12,24 +12,21 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Model\Core\Provider;
+namespace AppBundle\Service\Notification\Channel;
 
 use AppBundle\Service\Notification\NotificationInput;
 
 /**
- * Interface for a notificator service.
+ * NotificationChannelInterface.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-interface NotificatorInterface
+interface NotificationChannelInterface
 {
     /**
      * Publishes a notification.
      *
-     * @param string            $name
-     * @param NotificationInput $event
-     * @param string[]          $channels
-     * @param string|null       $template
+     * @param NotificationInput $input
      */
-    public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null);
+    public function publish(NotificationInput $input);
 }

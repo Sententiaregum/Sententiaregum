@@ -12,20 +12,18 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Event;
+namespace AppBundle\Service\Notification;
 
 use AppBundle\Model\User\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event base class of the notification system.
+ * Simple DTO containing all necessary information for the notification system.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class MailerEvent extends Event
+class NotificationInput extends Event
 {
-    const EVENT_NAME = 'app.events.notification';
-
     /**
      * @var User[]
      */
@@ -51,7 +49,7 @@ class MailerEvent extends Event
      *
      * @param User $user
      *
-     * @return MailerEvent
+     * @return NotificationInput
      */
     public function addUser(User $user): self
     {
@@ -65,7 +63,7 @@ class MailerEvent extends Event
      *
      * @param string $templateSource
      *
-     * @return MailerEvent
+     * @return NotificationInput
      */
     public function setTemplateSource(string $templateSource): self
     {
@@ -82,7 +80,7 @@ class MailerEvent extends Event
      *
      * @throws \InvalidArgumentException Cannot use paameter locale as it is reserved
      *
-     * @return MailerEvent
+     * @return NotificationInput
      */
     public function addParameter(string $name, $value): self
     {
@@ -139,7 +137,7 @@ class MailerEvent extends Event
      *
      * @param string $language
      *
-     * @return MailerEvent
+     * @return NotificationInput
      */
     public function setLanguage(string $language): self
     {

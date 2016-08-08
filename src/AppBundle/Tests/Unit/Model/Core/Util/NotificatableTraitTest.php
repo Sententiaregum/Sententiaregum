@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\Model\Core\Util;
 
-use AppBundle\Event\MailerEvent;
+use AppBundle\Service\Notification\NotificationInput;
 use AppBundle\Model\Core\Provider\NotificatorInterface;
 use AppBundle\Model\Core\Util\NotificatableTrait;
 use AppBundle\Model\User\User;
@@ -24,12 +24,12 @@ class NotificatableTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Dispatcher must be set before running `NotificatableTrait::notify`!
+     * @expectedExceptionMessage Notification service must be set before running `NotificatableTrait::notify`!
      */
     public function testMissingNotificator()
     {
         $trait = $this->getMockForTrait(NotificatableTrait::class);
-        $trait->notify([], [], 'en');
+        $trait->notify([], [], [], 'en');
     }
 
     public function testConfigureData()
@@ -41,12 +41,13 @@ class NotificatableTraitTest extends \PHPUnit_Framework_TestCase
         $publisher
             ->expects($this->once())
             ->method('publishNotification')
-            ->willReturnCallback(function (string $className, MailerEvent $event) use ($class) {
+            ->willReturnCallback(function (string $className, NotificationInput $event, array $channels) use ($class) {
                 self::assertSame($className, $class);
                 self::assertCount(1, $event->getUsers());
-                self::assertSame('en', $event->getLanguage());
+                self::assertNull($event->getLanguage());
                 self::assertCount(1, $event->getParameters());
                 self::assertSame('bar', $event->getParameters()['foo']);
+                self::assertSame($channels, ['mail']);
 
                 $user = $event->getUsers()[0];
                 self::assertSame('Ma27', $user->getUsername());
@@ -55,6 +56,6 @@ class NotificatableTraitTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'ma27@sententiaregum.dev', new PhpPasswordHasher());
         $trait->setNotificator($publisher);
 
-        $trait->notify(['foo' => 'bar'], [$user]);
+        $trait->notify(['foo' => 'bar'], [$user], ['mail']);
     }
 }

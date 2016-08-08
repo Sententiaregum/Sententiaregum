@@ -19,16 +19,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Compiler which configures the notification system and connects it to the command handlers.
+ * ConnectChannelsWithDelegatorPass.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class ConfigureNotificatableCommandHandlersPass implements CompilerPassInterface
+class ConnectChannelsWithDelegatorPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      *
-     * @throws \LogicException If the tag is declared multiple times or the `template` attribute is missing.
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -36,25 +36,27 @@ class ConfigureNotificatableCommandHandlersPass implements CompilerPassInterface
             return;
         }
 
-        $templateMap = [];
-        $notificator = $container->getDefinition('app.notification');
-        $tagName     = 'app.command_handler.notificatable';
+        $tagName  = 'app.notificator.channel';
+        $channels = [];
         foreach ($container->findTaggedServiceIds($tagName) as $id => $tags) {
             if (count($tags) > 1) {
                 throw new \LogicException(sprintf(
-                    'The tag `%s` must be declared one time only!',
+                    'The tag `%s` can be declared one time only!',
                     $tagName
                 ));
             }
 
-            $definition = $container->getDefinition($id);
-            if (array_key_exists('template', $tags[0])) {
-                $templateMap[$definition->getClass()] = $tags[0]['template'];
+            if (!array_key_exists('alias', $tags[0])) {
+                throw new \LogicException(sprintf(
+                    'The attribute "alias" is missing in the tag defintion "%s" of service "%s"!',
+                    $tagName,
+                    $id
+                ));
             }
 
-            $definition->addMethodCall('setNotificator', [new Reference('app.notification')]);
+            $channels[$tags[0]['alias']] = new Reference($id);
         }
 
-        $notificator->replaceArgument(0, $templateMap);
+        $container->getDefinition('app.notification')->replaceArgument(1, $channels);
     }
 }

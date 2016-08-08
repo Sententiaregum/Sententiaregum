@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Core\Util;
 
-use AppBundle\Event\MailerEvent;
 use AppBundle\Model\Core\Provider\NotificatorInterface;
+use AppBundle\Service\Notification\NotificationInput;
 
 /**
  * Helper trait which is responsible for the notification in command handlers.
@@ -44,23 +44,32 @@ trait NotificatableTrait
      *
      * @param string[]                     $parameters
      * @param \AppBundle\Model\User\User[] $users
+     * @param string[]                     $channels
      * @param string                       $language
+     * @param string|null                  $template
      *
      * @throws \LogicException If the dispatcher is not set.
      */
-    public function notify(array $parameters, array $users, string $language = 'en')
+    public function notify(array $parameters, array $users, array $channels = [], string $language = null, string $template = null)
     {
         if (!$this->notificator) {
-            throw new \LogicException('Dispatcher must be set before running `NotificatableTrait::notify`!');
+            throw new \LogicException('Notification service must be set before running `NotificatableTrait::notify`!');
         }
 
-        $args  = array_flip($parameters);
-        $event = new MailerEvent();
-        $event->setLanguage($language);
+        $event = new NotificationInput();
+
+        if ($language) {
+            $event->setLanguage($language);
+        }
 
         array_walk($users, [$event, 'addUser']);
-        array_walk($args, [$event, 'addParameter']);
 
-        $this->notificator->publishNotification(get_class($this), $event);
+        // can't flip and walk here since parameter values might be objects
+        // and those must not be flipped.
+        foreach ($parameters as $name => $value) {
+            $event->addParameter($name, $value);
+        }
+
+        $this->notificator->publishNotification(get_class($this), $event, $channels, $template);
     }
 }

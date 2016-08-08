@@ -12,17 +12,17 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Unit\Event;
+namespace AppBundle\Tests\Unit\Service\Notification;
 
-use AppBundle\Event\MailerEvent;
+use AppBundle\Service\Notification\NotificationInput;
 use AppBundle\Model\User\User;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
-class MailerEventTest extends \PHPUnit_Framework_TestCase
+class NotificationInputTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddParameter()
     {
-        $event = new MailerEvent();
+        $event = new NotificationInput();
         $event->addParameter('foo', 'bar');
         $this->assertCount(1, $event->getParameters());
         $this->assertSame($event->getParameters()['foo'], 'bar');
@@ -30,7 +30,7 @@ class MailerEventTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUser()
     {
-        $event = new MailerEvent();
+        $event = new NotificationInput();
         $user  = User::create('Ma27', '123456', 'foo@bar.baz', new PhpPasswordHasher());
         $event->addUser($user);
 
@@ -40,14 +40,14 @@ class MailerEventTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTemplateSource()
     {
-        $event = new MailerEvent();
+        $event = new NotificationInput();
         $event->setTemplateSource('@AppBundle/Resources/views/Email/notification.html.twig');
         $this->assertSame('@AppBundle/Resources/views/Email/notification.html.twig', $event->getTemplateSource());
     }
 
     public function setLocale()
     {
-        $event = new MailerEvent();
+        $event = new NotificationInput();
         $event->setLanguage('de');
         $this->assertSame('de', $event->getLanguage());
     }
@@ -58,7 +58,7 @@ class MailerEventTest extends \PHPUnit_Framework_TestCase
      */
     public function addInvalidParameter()
     {
-        $event = new MailerEvent();
+        $event = new NotificationInput();
         $event->addParameter('locale', 'de');
     }
 }

@@ -1,4 +1,4 @@
-{% if tracing_data is not null %}
+{% if tracing_data is not null and tracing_data.city is not empty %}
     <p class="location_result">{{ tracing_data.ip }}: {{ tracing_data.city }}, {{ tracing_data.region }}, {{ tracing_data.country }}</p>
     <p class="location-result">{{ 'NOTIFICATIONS_IP_TRACE_LAT_LONG'|trans({}, 'notifications', locale) }}: {{ tracing_data.latitude }}, {{ tracing_data.longitude }}</p>
 {% else %}
