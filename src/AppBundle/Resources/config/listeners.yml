@@ -5,15 +5,6 @@ services:
       - "@app.redis.cluster.blocked_account"
     tags:
       - { name: kernel.event_listener, event: ma27_api_key_authentication.authentication, priority: 255, method: validateUserOnAuthentication }
-  app.listener.email:
-    class: AppBundle\EventListener\MailListener
-    arguments:
-      - "@mailer"
-      - "@translator"
-      - "@templating.engine.twig"
-      - "%mailer_from_address%"
-    tags:
-      - { name: kernel.event_listener, event: app.events.notification, method: onMailEvent }
   app.listener.online_users:
     class: AppBundle\EventListener\OnlineUsersUpdateListener
     arguments:
@@ -35,13 +26,12 @@ services:
     class: AppBundle\EventListener\CredentialNotifyListener
     arguments:
       - "@doctrine.orm.default_entity_manager"
-      - "@event_dispatcher"
       - "@request_stack"
       - "@app.ip.tracer"
-      - "@app.user.service.date_time_comparator"
       - "@app.redis.cluster.blocked_account"
     tags:
       - { name: kernel.event_subscriber }
+      - { name: app.command_handler.notificatable }
   app.listener.i18n_security_response:
     class: AppBundle\EventListener\I18nSecurityResponseListener
     arguments:

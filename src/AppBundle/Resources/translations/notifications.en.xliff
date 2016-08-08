@@ -39,7 +39,7 @@
 
             <trans-unit id="NOTIFICATIONS_IP_TRACE_NO_RESULT">
                 <source>NOTIFICATIONS_IP_TRACE_NO_RESULT</source>
-                <target>Unable to trace ip address!</target>
+                <target>Sorry, but the IP could not be traced!</target>
             </trans-unit>
 
             <trans-unit id="NOTIFICATIONS_FAILED_AUTHENTICATION">

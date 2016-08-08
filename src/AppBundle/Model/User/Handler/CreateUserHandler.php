@@ -78,6 +78,7 @@ final class CreateUserHandler
      * @param CreateUserDTO $userDTO
      *
      * @throws \OverflowException If the activation keycode generation failed.
+     * @throws \LogicException
      */
     public function __invoke(CreateUserDTO $userDTO)
     {
@@ -112,6 +113,7 @@ final class CreateUserHandler
                 'username'       => $user->getUsername(),
             ],
             [$user],
+            ['mail'],
             $user->getLocale()
         );
 

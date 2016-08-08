@@ -39,7 +39,7 @@
 
             <trans-unit id="NOTIFICATIONS_IP_TRACE_NO_RESULT">
                 <source>NOTIFICATIONS_IP_TRACE_NO_RESULT</source>
-                <target>Es konnte leider nichts geortet werden!</target>
+                <target>Die IP konnte leider nicht verfolgt werden!</target>
             </trans-unit>
 
             <trans-unit id="NOTIFICATIONS_FAILED_AUTHENTICATION">

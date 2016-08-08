@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Event\MailerEvent;
+use AppBundle\Model\Core\Util\NotificatableTrait;
 use AppBundle\Model\Ip\Provider\IpTracingServiceInterface;
 use AppBundle\Model\User\Provider\BlockedAccountWriteProviderInterface;
 use AppBundle\Model\User\User;
@@ -24,7 +24,6 @@ use Ma27\ApiKeyAuthenticationBundle\Event\AbstractUserEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnAuthenticationEvent;
 use Ma27\ApiKeyAuthenticationBundle\Event\OnInvalidCredentialsEvent;
 use Ma27\ApiKeyAuthenticationBundle\Ma27ApiKeyAuthenticationEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -35,15 +34,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class CredentialNotifyListener implements EventSubscriberInterface
 {
+    use NotificatableTrait;
+
     /**
      * @var EntityManagerInterface
      */
     private $entityManager;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
 
     /**
      * @var IpTracingServiceInterface
@@ -54,11 +50,6 @@ class CredentialNotifyListener implements EventSubscriberInterface
      * @var RequestStack
      */
     private $requestStack;
-
-    /**
-     * @var DateTimeComparison
-     */
-    private $comparison;
 
     /**
      * @var BlockedAccountWriteProviderInterface
@@ -80,25 +71,19 @@ class CredentialNotifyListener implements EventSubscriberInterface
      * Constructor.
      *
      * @param EntityManagerInterface               $entityManager
-     * @param EventDispatcherInterface             $eventDispatcher
      * @param RequestStack                         $requestStack
      * @param IpTracingServiceInterface            $ipTracer
-     * @param DateTimeComparison                   $comparison
      * @param BlockedAccountWriteProviderInterface $accountBlockerProvider
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack,
         IpTracingServiceInterface $ipTracer,
-        DateTimeComparison $comparison,
         BlockedAccountWriteProviderInterface $accountBlockerProvider
     ) {
         $this->entityManager          = $entityManager;
-        $this->eventDispatcher        = $eventDispatcher;
         $this->requestStack           = $requestStack;
         $this->ipTracer               = $ipTracer;
-        $this->comparison             = $comparison;
         $this->accountBlockerProvider = $accountBlockerProvider;
     }
 
@@ -115,11 +100,10 @@ class CredentialNotifyListener implements EventSubscriberInterface
 
         $masterRequest = $this->requestStack->getMasterRequest();
         $user->addFailedAuthenticationWithIp($masterRequest->getClientIp());
-        if ($user->exceedsIpFailedAuthAttemptMaximum($masterRequest->getClientIp(), $this->comparison)) {
+        if ($user->exceedsIpFailedAuthAttemptMaximum($masterRequest->getClientIp(), new DateTimeComparison())) {
             $this->dispatchNotificationEvent(
                 $user,
-                'failed_authentication',
-                MailerEvent::EVENT_NAME
+                'failed_authentication'
             );
         }
 
@@ -136,11 +120,10 @@ class CredentialNotifyListener implements EventSubscriberInterface
     {
         $user = $this->getUser($event);
 
-        if ($user->addAndValidateNewUserIp($this->requestStack->getMasterRequest()->getClientIp(), $this->comparison)) {
+        if ($user->addAndValidateNewUserIp($this->requestStack->getMasterRequest()->getClientIp(), new DateTimeComparison())) {
             $this->dispatchNotificationEvent(
                 $user,
-                'new_login',
-                MailerEvent::EVENT_NAME
+                'new_login'
             );
 
             $this->entityManager->persist($user);
@@ -153,24 +136,26 @@ class CredentialNotifyListener implements EventSubscriberInterface
      *
      * @param User   $user
      * @param string $templateName
-     * @param string $eventName
+     *
+     * @throws \LogicException
      */
-    private function dispatchNotificationEvent(User $user, string $templateName, string $eventName)
+    private function dispatchNotificationEvent(User $user, string $templateName)
     {
         $this->accountBlockerProvider->addTemporaryBlockedAccountID($user->getId());
-        $event = new MailerEvent();
-        $event->addUser($user)
-            ->addParameter('notification_target', $user)
-            ->addParameter(
-                'tracing_data',
-                $this->ipTracer->getIpLocationData(
+
+        $this->notify(
+            [
+                'notification_target' => $user,
+                'tracing_data'        => $this->ipTracer->getIpLocationData(
                     $this->requestStack->getMasterRequest()->getClientIp(),
                     $user->getLocale()
-                )
-            )
-            ->setTemplateSource(sprintf('AppBundle:Email/AuthAttempt:%s', $templateName));
-
-        $this->eventDispatcher->dispatch($eventName, $event);
+                ),
+            ],
+            [$user],
+            ['mail'],
+            null,
+            sprintf('AppBundle:Email/AuthAttempt:%s', $templateName)
+        );
     }
 
     /**
