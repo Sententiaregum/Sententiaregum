@@ -27,7 +27,7 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->load([], $container);
         $resources = $container->getResources();
-        $this->assertCount(8, $resources);
+        $this->assertCount(9, $resources);
 
         $names = array_map(function (FileResource $resource) {
             $split = explode('/', $resource->getResource());
@@ -38,7 +38,7 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(
             0,
             array_diff(
-                ['listeners.yml', 'commands.yml', 'redis.yml', 'repositories.yml', 'services.yml', 'validators.yml'],
+                ['listeners.yml', 'commands.yml', 'redis.yml', 'repositories.yml', 'services.yml', 'validators.yml', 'suggestors.yml'],
                 $names
             )
         );

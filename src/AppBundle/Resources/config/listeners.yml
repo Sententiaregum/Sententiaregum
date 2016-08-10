@@ -31,7 +31,7 @@ services:
       - "@app.redis.cluster.blocked_account"
     tags:
       - { name: kernel.event_subscriber }
-      - { name: app.command_handler.notificatable }
+      - { name: app.service.notificatable }
   app.listener.i18n_security_response:
     class: AppBundle\EventListener\I18nSecurityResponseListener
     arguments:

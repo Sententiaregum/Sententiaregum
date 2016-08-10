@@ -16,6 +16,8 @@ namespace AppBundle\Tests\Unit\Model\User\Util\NameSuggestion;
 
 use AppBundle\Model\User\UserReadRepositoryInterface;
 use AppBundle\Model\User\Util\NameSuggestion\ChainSuggestor;
+use AppBundle\Model\User\Util\NameSuggestion\Suggestor\DotReplacementSuggestor;
+use AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor;
 
 class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,6 +29,8 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
             ->method('filterUniqueUsernames');
 
         $suggestor = new ChainSuggestor($repository);
+        $suggestor->register(new YearPostfixSuggestor());
+        $suggestor->register(new DotReplacementSuggestor());
         $this->assertCount(0, $suggestor->getPossibleSuggestions('foo2016'));
     }
 
@@ -39,9 +43,26 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['ma.27']);
 
         $suggestor = new ChainSuggestor($repository);
-        $result    = $suggestor->getPossibleSuggestions('ma_27');
+        $suggestor->register(new YearPostfixSuggestor());
+        $suggestor->register(new DotReplacementSuggestor());
+
+        $result = $suggestor->getPossibleSuggestions('ma_27');
 
         $this->assertCount(1, $result);
         $this->assertContains('ma.27', $result);
+    }
+
+    /**
+     * Test case to avoid regression with array_merge() which expects >=2 parameters.
+     */
+    public function testNoSuggestors()
+    {
+        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
+        $repository
+            ->expects(self::never())
+            ->method('filterUniqueUsernames');
+
+        $suggestor = new ChainSuggestor($repository);
+        self::assertCount(0, $suggestor->getPossibleSuggestions('Ma27'));
     }
 }

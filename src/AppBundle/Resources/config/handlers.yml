@@ -8,7 +8,7 @@ services:
       - "@validator"
     tags:
       - { name: command_handler, handles: AppBundle\Model\User\DTO\CreateUserDTO, method: __invoke }
-      - { name: app.command_handler.notificatable, template: "AppBundle:Email/Activation:activation" }
+      - { name: app.service.notificatable, template: "AppBundle:Email/Activation:activation" }
   app.handler.activate_account:
     class: AppBundle\Model\User\Handler\ActivateAccountHandler
     arguments:

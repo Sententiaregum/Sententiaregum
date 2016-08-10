@@ -1,0 +1,9 @@
+services:
+  app.user.registration.suggestor.year_postfix:
+    class: AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor
+    tags:
+      - { name: app.registration.suggestor }
+  app.user.registration.suggestor.dot_replacement:
+    class: AppBundle\Model\User\Util\NameSuggestion\Suggestor\DotReplacementSuggestor
+    tags:
+      - { name: app.registration.suggestor }

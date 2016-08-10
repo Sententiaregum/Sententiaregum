@@ -14,22 +14,22 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Unit\DependencyInjection\Compiler;
 
-use AppBundle\DependencyInjection\Compiler\ConfigureNotificatableCommandHandlersPass;
+use AppBundle\DependencyInjection\Compiler\ConfigureNotificatableServicesPass;
 use AppBundle\Model\User\Handler\CreateUserHandler;
 use AppBundle\Service\Notification\ChannelDelegatingNotificator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_TestCase
+class ConfigureNotificatableServicesPassTest extends \PHPUnit_Framework_TestCase
 {
     public function testMissingDefinition()
     {
         $container = new ContainerBuilder();
-        $container->addCompilerPass(new ConfigureNotificatableCommandHandlersPass());
+        $container->addCompilerPass(new ConfigureNotificatableServicesPass());
 
         $definition = new Definition(CreateUserHandler::class); // we use the user handler for testing purposes here
         $definition->addTag(
-            'app.command_handler.notificatable',
+            'app.service.notificatable',
             ['template' => 'AppBundle:Email/Activation:activation']
         );
 
@@ -42,20 +42,20 @@ class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_T
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage The tag `app.command_handler.notificatable` must be declared one time only!
+     * @expectedExceptionMessage The tag `app.service.notificatable` must be declared one time only!
      */
     public function testDeclareTagMultipleTimes()
     {
         $container = new ContainerBuilder();
-        $container->addCompilerPass(new ConfigureNotificatableCommandHandlersPass());
+        $container->addCompilerPass(new ConfigureNotificatableServicesPass());
 
         $definition = new Definition(CreateUserHandler::class); // we use the user handler for testing purposes here
         $definition->addTag(
-            'app.command_handler.notificatable',
+            'app.service.notificatable',
             ['template' => 'AppBundle:Email/Activation:activation']
         );
         $definition->addTag(
-            'app.command_handler.notificatable',
+            'app.service.notificatable',
             ['template' => 'AppBundle:Email/Activation:activation']
         );
 
@@ -67,11 +67,11 @@ class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_T
     public function testConnectNotificatorServiceWithHandler()
     {
         $container = new ContainerBuilder();
-        $container->addCompilerPass(new ConfigureNotificatableCommandHandlersPass());
+        $container->addCompilerPass(new ConfigureNotificatableServicesPass());
 
         $definition = new Definition(CreateUserHandler::class); // we use the user handler for testing purposes here
         $definition->addTag(
-            'app.command_handler.notificatable',
+            'app.service.notificatable',
             ['template' => 'AppBundle:Email/Activation:activation']
         );
 
@@ -99,11 +99,11 @@ class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_T
     public function testNoTemplateIsPresentAsTagAttribute()
     {
         $container = new ContainerBuilder();
-        $container->addCompilerPass(new ConfigureNotificatableCommandHandlersPass());
+        $container->addCompilerPass(new ConfigureNotificatableServicesPass());
 
         $definition = new Definition(CreateUserHandler::class); // we use the user handler for testing purposes here
         $definition->addTag(
-            'app.command_handler.notificatable',
+            'app.service.notificatable',
             []
         );
 
@@ -117,5 +117,6 @@ class ConfigureNotificatableCommandHandlersPassTest extends \PHPUnit_Framework_T
         self::assertCount(1, $calls = $container->getDefinition('app.handler.create_user')->getMethodCalls());
         self::assertCount(0, $container->getDefinition('app.notification')->getArgument(1));
         self::assertSame((string) $calls[0][0], 'setNotificator');
+        self::assertSame((string) $calls[0][1][0], 'app.notification');
     }
 }
