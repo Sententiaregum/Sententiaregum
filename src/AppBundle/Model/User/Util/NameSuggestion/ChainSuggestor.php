@@ -15,9 +15,7 @@ declare(strict_types=1);
 namespace AppBundle\Model\User\Util\NameSuggestion;
 
 use AppBundle\Model\User\UserReadRepositoryInterface;
-use AppBundle\Model\User\Util\NameSuggestion\Suggestor\DotReplacementSuggestor;
 use AppBundle\Model\User\Util\NameSuggestion\Suggestor\SuggestorInterface;
-use AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor;
 
 /**
  * Class that builds suggestions for usernames.
