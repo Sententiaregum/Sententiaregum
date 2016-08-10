@@ -44,9 +44,6 @@ class ChainSuggestor implements ChainSuggestorInterface
     public function __construct(UserReadRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-
-        $this->register(new YearPostfixSuggestor());
-        $this->register(new DotReplacementSuggestor());
     }
 
     /**
@@ -55,6 +52,8 @@ class ChainSuggestor implements ChainSuggestorInterface
     public function getPossibleSuggestions(string $name): array
     {
         $suggestions = array_merge(
+            [],
+            [], // array_merge expects at least 2 parameters
             ...array_map(function (SuggestorInterface $suggestor) use ($name) {
                 return $suggestor->getPossibleSuggestions($name);
             }, $this->suggestors)

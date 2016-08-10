@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class ConfigureNotificatableCommandHandlersPass implements CompilerPassInterface
+class ConfigureNotificatableServicesPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
@@ -38,7 +38,7 @@ class ConfigureNotificatableCommandHandlersPass implements CompilerPassInterface
 
         $templateMap = [];
         $notificator = $container->getDefinition('app.notification');
-        $tagName     = 'app.command_handler.notificatable';
+        $tagName     = 'app.service.notificatable';
         foreach ($container->findTaggedServiceIds($tagName) as $id => $tags) {
             if (count($tags) > 1) {
                 throw new \LogicException(sprintf(
