@@ -40,3 +40,7 @@ services:
       - "%mailer_from_address%"
     tags:
       - { name: app.notificator.channel, alias: mail }
+  app.recaptcha_validator:
+    class: ReCaptcha\ReCaptcha
+    arguments:
+      - "%secret_key%"

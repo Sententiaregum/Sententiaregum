@@ -41,10 +41,11 @@ class UserController extends BaseController
      *         {"name"="_format", "dataType"="string", "requirement"="^(json|xml)$", "description"="Data format to return"}
      *     },
      *     parameters={
-     *         {"name"="username", "dataType"="string", "required"=true, "description"="Name of the new user"},
-     *         {"name"="password", "dataType"="string", "required"=true, "description"="Password of the new user"},
-     *         {"name"="email", "dataType"="string", "required"=true, "description"="Email of the new user"},
-     *         {"name"="locale", "dataType"="string", "required"=true, "description"="Locale/Language of the new user"},
+     *         {"name"="username",      "dataType"="string", "required"=true, "description"="Name of the new user"},
+     *         {"name"="password",      "dataType"="string", "required"=true, "description"="Password of the new user"},
+     *         {"name"="email",         "dataType"="string", "required"=true, "description"="Email of the new user"},
+     *         {"name"="locale",        "dataType"="string", "required"=true, "description"="Locale/Language of the new user"},
+     *         {"name"="recaptchaHash", "dataType"="string", "required"=true, "description"="Captcha hash the user generates"},
      *     }
      * )
      *

@@ -61,6 +61,11 @@
                 <source>VALIDATORS_REGISTRATION_EMAIL_EMPTY</source>
                 <target>Die Email darf nicht leer sein!</target>
             </trans-unit>
+
+             <trans-unit id="VALIDATORS_REGISTRATION_CAPTCHA_INVALID">
+                <source>VALIDATORS_REGISTRATION_CAPTCHA_INVALID</source>
+                <target>Das Captcha war nicht gültig!</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -57,7 +57,7 @@ class RegistrationContext extends FixtureLoadingContext implements SnippetAccept
         $this->response = $this->performRequest(
             'POST',
             '/api/users.json',
-            ['username' => $row[0], 'password' => $row[1], 'email' => $row[2], 'locale' => $row[3]],
+            ['username' => $row[0], 'password' => $row[1], 'email' => $row[2], 'locale' => $row[4], 'recaptchaHash' => $row[3]],
             true,
             [],
             [],

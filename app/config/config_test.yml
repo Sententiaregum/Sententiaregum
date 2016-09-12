@@ -18,3 +18,7 @@ swiftmailer:
 doctrine:
     dbal:
         dbname: "%test_db%"
+
+services:
+    app.recaptcha_validator:
+        class: AppBundle\Test\RecaptchaFixture
