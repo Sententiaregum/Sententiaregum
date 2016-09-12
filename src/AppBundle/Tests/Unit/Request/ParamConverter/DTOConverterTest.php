@@ -61,6 +61,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $request->query->set('password', null);
         $request->request->set('email', 'Ma27@sententiaregum.dev');
         $request->attributes->set('locale', 'de');
+        $request->attributes->set('recaptchaHash', 'test-hash');
 
         $this->assertFalse($request->attributes->has('dto'));
         $this->assertTrue($converter->apply($request, new ParamConverter(['class' => CreateUserDTO::class, 'name' => 'dto'])));

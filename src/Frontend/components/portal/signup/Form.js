@@ -23,11 +23,15 @@ import deepAssign from 'deep-assign';
 import { connector, runAction } from 'sententiaregum-flux-container';
 import getStateValue from '../../../store/provider/getStateValue';
 import CurrentLocaleStore from '../../../store/CurrentLocaleStore';
+import Recaptcha from 'react-recaptcha';
+import siteKey from '../../../config/recaptcha';
+import update from 'react-addons-update';
 
 /**
  * Form component for the signup page.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Benjamin Bieler <benjaminbieler2014@gmail.com>
  */
 export default class Form extends Component {
   /**
@@ -44,7 +48,7 @@ export default class Form extends Component {
 
     const currentState = RegistrationStore.getState(), hasState = currentState ? true : false;
     this.helper        = new FormHelper(
-      { username: '', email: '', locale: getStateValue(CurrentLocaleStore, 'locale', 'en') },
+      { username: '', email: '', locale: getStateValue(CurrentLocaleStore, 'locale', 'en'), recaptchaHash: '' },
       { password: '' },
       { suggestions: hasState ? currentState.suggestions : [] },
       nextState => this.setState(deepAssign({ data: this.state.data }, nextState)),
@@ -71,13 +75,16 @@ export default class Form extends Component {
   componentWillUnmount() {
     connector(RegistrationStore).unsubscribe(this.handler);
   }
-
   /**
    * Renders the component.
    *
    * @returns {React.Element} The vDOM markup.
    */
   render() {
+
+    const callback = function () {
+    };
+
     return (
       <form onSubmit={this._createAccount.bind(this)}>
         <Suggestions suggestions={this.state.validation.suggestions} />
@@ -107,9 +114,31 @@ export default class Form extends Component {
           helper={this.helper}
           value={this.helper.getValue(this.state.data.locale, 'locale')}
           options={{ de: 'Deutsch (Deutschland)', en: 'English (USA)' }} />
+        <Recaptcha
+            sitekey={siteKey}
+            render='explicit'
+            onloadCallback={callback}
+            verifyCallback={this.verifyCallback.bind(this)}
+        />
         <LoadableButtonBar btnLabel={this.helper.getFormFieldAlias('button')} progress={this.state.progress} />
       </form>
     );
+  }
+
+  /**
+   * Verifies the callback.
+   *
+   * @param {string} response Hash the user generates.
+   *
+   * @returns {void}
+   */
+  verifyCallback(response) {
+    const newState = update(this.state, {
+      data: {
+        recaptchaHash: { $set: response }
+      }
+    });
+    this.setState(newState);
   }
 
   /**
@@ -125,10 +154,11 @@ export default class Form extends Component {
     this.setState(this.helper.startProgress());
 
     runAction(registration, [{
-      username: this.state.data.username,
-      password: this.state.data.password,
-      email:    this.state.data.email,
-      locale:   this.state.data.locale
+      username:      this.state.data.username,
+      password:      this.state.data.password,
+      email:         this.state.data.email,
+      locale:        this.state.data.locale,
+      recaptchaHash: this.state.data.recaptchaHash
     }]);
   }
 

@@ -4,6 +4,7 @@ before_commands:
 filter:
     excluded_paths:
         - src/AppBundle/Tests/
+        - src/AppBundle/Test/
         - src/AppBundle/Resources/
         - src/AppBundle/Behat/
         - src/AppBundle/DataFixtures/

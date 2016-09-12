@@ -16,6 +16,7 @@ namespace AppBundle\Model\User\DTO;
 
 use AppBundle\Model\User\User;
 use AppBundle\Validator\Constraints\Locale;
+use AppBundle\Validator\Constraints\Recaptcha;
 use AppBundle\Validator\Constraints\UniqueProperty;
 use AppBundle\Validator\Middleware\ValidatableDTO;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -76,6 +77,13 @@ class CreateUserDTO extends ValidatableDTO
      * @Locale(message="VALIDATORS_REGISTRATION_LOCALE")
      */
     public $locale = 'en';
+
+    /**
+     * @var string
+     *
+     * @Recaptcha(message="VALIDATORS_REGISTRATION_CAPTCHA_INVALID")
+     */
+    public $recaptchaHash;
 
     /**
      * @var User

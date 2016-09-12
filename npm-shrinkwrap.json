@@ -3614,6 +3614,11 @@
       "from": "react-prop-types@>=0.3.0 <0.4.0",
       "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.3.2.tgz"
     },
+    "react-recaptcha": {
+      "version": "2.1.1",
+      "from": "react-recaptcha@latest",
+      "resolved": "https://registry.npmjs.org/react-recaptcha/-/react-recaptcha-2.1.1.tgz"
+    },
     "react-router": {
       "version": "2.5.1",
       "from": "react-router@>=2.0.0 <3.0.0",

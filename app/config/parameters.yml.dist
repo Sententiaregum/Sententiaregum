@@ -28,3 +28,7 @@ parameters:
 
     # Functional testing
     test_db:                        behat
+
+    # ReCAPTCHA
+    secret_key:                     ~
+    site_url:                       "http://sententiaregum.dev"

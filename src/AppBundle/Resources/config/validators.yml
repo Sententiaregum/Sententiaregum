@@ -11,3 +11,10 @@ services:
       - "@doctrine"
     tags:
       - { name: validator.constraint_validator, alias: "app.validator.unique_property" }
+  app.validator.recaptcha_key:
+    class: AppBundle\Validator\Constraints\RecaptchaValidator
+    arguments:
+      - "@app.recaptcha_validator"
+      - "%site_url%"
+    tags:
+      - { name: validator.constraint_validator, alias: "app.validator.recaptcha_key" }

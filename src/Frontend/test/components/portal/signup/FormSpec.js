@@ -38,10 +38,11 @@ describe('Form', () => {
     const cmp = shallow(<Form />);
     cmp.setState({
       data: {
-        username: 'Ma27',
-        password: '123456',
-        email:    'foo@bar.de',
-        locale:   'de'
+        username:      'Ma27',
+        password:      '123456',
+        email:         'foo@bar.de',
+        locale:        'de',
+        recaptchaHash: 'recaptcha-hash'
       }
     });
 
@@ -62,10 +63,11 @@ describe('Form', () => {
 
     cmp.setState({
       data: {
-        username: 'Ma27',
-        password: '123456',
-        email:    'foo@bar.de',
-        locale:   'de'
+        username:      'Ma27',
+        password:      '123456',
+        email:         'foo@bar.de',
+        locale:        'de',
+        recaptchaHash: 'recaptcha-hash'
       }
     });
 
@@ -85,10 +87,11 @@ describe('Form', () => {
     const cmp = shallow(<Form />);
     cmp.setState({
       data: {
-        username: 'Ma27',
-        password: '123456',
-        email:    'foo@bar.de',
-        locale:   'de'
+        username:      'Ma27',
+        password:      '123456',
+        email:         'foo@bar.de',
+        locale:        'de',
+        recaptchaHash: 'recaptcha-hash'
       }
     });
 

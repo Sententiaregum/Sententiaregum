@@ -10,7 +10,8 @@
     "lint": "eslint ./src/Frontend && lessc src/Frontend/styles/custom.less --lint",
     "prod": "NODE_ENV=production npm run frontend",
     "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter dot --require babel-polyfill --require src/Frontend/test/DOM.js",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "postinstall": "bash ./bin/generate-frontend-recaptcha.sh"
   },
   "repository": {
     "type": "git",
@@ -47,9 +48,11 @@
     "object.assign": "^4.0.3",
     "perfect-scrollbar": "^0.6.11",
     "react": "^15.1",
+    "react-addons-update": "^15.3.1",
     "react-bootstrap": "^0.29",
     "react-dom": "^15.1",
     "react-interpolate-component": "^0.9",
+    "react-recaptcha": "^2.1.1",
     "react-router": "^2.0",
     "react-spinkit": "^1.1.6",
     "react-translate-component": "^0.11",
