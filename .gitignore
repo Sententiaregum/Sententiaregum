@@ -17,6 +17,7 @@
 /var/bootstrap.php.cache
 /bin/*
 !bin/console
+!bin/generate-frontend-recaptcha.sh
 !bin/.gitkeep
 /vendor/
 
@@ -72,3 +73,6 @@ npm-debug.log
 
 # LocalStorage Emulation
 /node-emulator/
+
+# ReCAPTCHA
+/src/Frontend/config/recaptcha.js
