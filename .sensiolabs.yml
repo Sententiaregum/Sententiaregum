@@ -7,6 +7,7 @@ global_exclude_dirs:
   - travis-ci
   - vagrant
   - app
+  - Test
 
 rules:
   symfony.configuration.error_pages_should_be_customised: # we use FOSRest, so a custom "error" template is not necessary

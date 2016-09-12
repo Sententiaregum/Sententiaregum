@@ -28,6 +28,8 @@ class RecaptchaFixture extends ReCaptcha
      */
     public function __construct()
     {
+        // everything is kept simple here, just for testing purposes
+        parent::__construct('my-test-secret');
     }
 
     /**
