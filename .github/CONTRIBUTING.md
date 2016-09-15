@@ -6,21 +6,11 @@ This guideline shows some conventions when contributing to Sententiaregum, so yo
 1) Code style
 -------------
 
-Your patch __must__ follow the [symfony coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
+All the PHP code in Your patch __must__ follow the [symfony coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
+The frontend will be checked by the linter of the `less` package and `eslint`.
 
-For the javascript frontend we use the tools scss-lint and eslint that will be installed automatically on the VM.
-If your code violates one of their convetions, the travis build will break and github blocks any attempt to merge your PR.
-
-__Note:__ before sending a PR that changes PHP code, please run the following command:
-
-    bin/php-cs-fixer fix
-
-So you don't need to worry about code style. If you don't do and there are still code style issues, then the PR cannot be merged since StyleCI will fail.
-The JavaScript CS will be validated using eslint.
-
-To view javascript errors (cannot be fixed automatically atm), run the following command:
-
-    npm run lint
+If some code violates the CS, the build will break. The backend will be validated using `styleci` and the frontend with the `npm run lint` command during
+the continuous integration.
 
 2) Branch name, user stories and commit message
 -----------------------------------------------
@@ -44,14 +34,21 @@ So if you add a realtime messenger to this application, the branch could look li
 - In case of a story the commits should **NOT** be squashed, as a story contains a lot of sub-tasks (which on the other hand should be squashed) written in the PR of the story. 
 - Every story has to have at least **two** reviewers. 
 
+Subtasks might be added to the project board as notes.
+
+### Project board
+
+Whenever a collaborator is assigned to a ticket he's responsible for keeping the card on the project board up-to-date (including the corresponding PR).
+If a new contributor PR will be openend, the card should be moved straight to `In Review`.
+
 ### Commit message
 
 #### When fixing a ticket
 
-When fixing an issue, the issue should have a red label (e.g. Infrastructure/Maintenance/Bug).
+When fixing an issue, the issue should have a red label (e.g. Enhancement/Maintenance/Bug).
 Then the commit message should look like this:
 
-    {Issue type (e.g. Infrastructure/Maintenance/Bug} #{ticket number} {short description what you've done}
+    {Issue type (e.g. Enhancement/Maintenance/Bug} #{ticket number} {short description what you've done}
 
 If there's no red label at the ticket, the issue type is __Minor__.
 
@@ -83,19 +80,16 @@ If there's a label added to your PR, the commit message should be renamed to the
 ---------------
 
 The pull request should have some content, too.
-You just need to tell what has changed.
+You just need to tell what has changed, but every PR has a default template which can be used for that.
 
-Please add: 
-    ```Resolves #{issue}``` in every pull request.
-
-This is needed, so that waffle.io can attach the PR to the issue card.
+You don't need to worry about closing the ticket after that as the merger is responsible for that (by adding `resolves #{ticket nr}` to the merge commit for instance).
 
 __Note__: if you have fixed a bug that is not reported in the issue tracker, please add a detailed description how this bug was caused.
 
 #### Reviews
 
-If a line note is added, you should fix that. If there's a reason why that should not be fixed, please comment on the diff, too.
-If the review is ready and at least one collaborator or owner gave thumbs up, you should squash all of your commit into a big one.
+Every reviewer can tell whether or not a change is necessary before merging the PR. Everything should be fixed before
+a collaborator can merge.
 
 4) Tests
 --------

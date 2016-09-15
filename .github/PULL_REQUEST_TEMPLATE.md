@@ -2,6 +2,11 @@
 
 Short description of what the PR is doing here.
 
-### Related tickets
+### Related issues
 
-If your PR fixes tickets, they should be placed here.
+Just add a list of issues here that are fixed.
+
+### BC breaks
+
+None.
+
