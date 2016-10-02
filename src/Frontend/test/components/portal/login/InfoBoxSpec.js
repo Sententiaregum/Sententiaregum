@@ -13,7 +13,7 @@
 import InfoBox from '../../../../components/portal/login/InfoBox';
 import TestUtils from 'react/lib/ReactTestUtils';
 import React from 'react';
-import chai from 'chai';
+import { expect } from 'chai';
 
 describe('InfoBox', () => {
   it('renders infobox', () => {
@@ -21,7 +21,7 @@ describe('InfoBox', () => {
     renderer.render(<InfoBox />);
     const output  = renderer.getRenderOutput();
 
-    chai.expect(output.props.children.props.className).to.equal('info-div-text');
-    chai.expect(output.props.children.props.children.props.content).to.equal('pages.portal.login.info_text');
+    expect(output.props.children.props.className).to.equal('info-div-text');
+    expect(output.props.children.props.children.props.content).to.equal('pages.portal.login.info_text');
   })
 });

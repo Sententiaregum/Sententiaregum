@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React,{ Component } from 'react';
 import Spinner from 'react-spinkit';
 import counterpart from 'counterpart';
 
@@ -19,7 +19,7 @@ import counterpart from 'counterpart';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class LoadableButtonBar extends React.Component {
+export default class LoadableButtonBar extends Component {
   /**
    * Constructor.
    *

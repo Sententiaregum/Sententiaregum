@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import Alert from 'react-bootstrap/lib/Alert';
 
 /**
@@ -18,7 +18,7 @@ import Alert from 'react-bootstrap/lib/Alert';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class DismissableAlertBox extends React.Component {
+export default class DismissableAlertBox extends Component {
   /**
    * Constructor.
    *

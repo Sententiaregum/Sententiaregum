@@ -13,7 +13,7 @@
 import Nav from 'react-bootstrap/lib/Nav';
 import MenuStore from '../../../../store/MenuStore';
 import { buildMenuItems } from '../../../../actions/MenuActions';
-import React from 'react';
+import React, { Component } from 'react';
 import MenuItem from '../../markup/MenuItem';
 import { connector, runAction } from 'sententiaregum-flux-container';
 import UserStore from '../../../../store/UserStore';
@@ -24,7 +24,7 @@ import UserStore from '../../../../store/UserStore';
  * @author Benjamin Bieler <benjaminbieler2014@gmail.com>
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class Menu extends React.Component {
+export default class Menu extends Component {
   /**
    * Constructor.
    *
