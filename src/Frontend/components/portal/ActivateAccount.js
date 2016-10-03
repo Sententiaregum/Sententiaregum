@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import DismissableAlertBox from '../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
 import { activate } from '../../actions/PortalActions';
@@ -22,7 +22,7 @@ import { connector, runAction } from 'sententiaregum-flux-container';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class ActivateAccount extends React.Component {
+export default class ActivateAccount extends Component {
   /**
    * Constructor.
    *

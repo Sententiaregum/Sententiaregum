@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
 
@@ -19,7 +19,7 @@ import Translate from 'react-translate-component';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default class Suggestions extends React.Component {
+export default class Suggestions extends Component {
   /**
    * Constructor.
    *

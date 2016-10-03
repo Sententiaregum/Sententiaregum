@@ -10,37 +10,37 @@
 
 'use strict';
 
-import sinon from 'sinon';
-import chai from 'chai';
+import { expect } from 'chai';
+import { stub } from 'sinon';
 import Cookies from 'cookies-js';
 import LocaleService from '../../../util/http/LocaleService';
 
 describe('LocaleService', () => {
   it('returns default locale if cookie store is empty', () => {
-    sinon.stub(Cookies, 'get', () => null);
-    chai.expect(LocaleService.getLocale()).to.equal('en');
+    stub(Cookies, 'get', () => null);
+    expect(LocaleService.getLocale()).to.equal('en');
     Cookies.get.restore();
   });
 
   it('fetches locale from local store', () => {
-    sinon.stub(Cookies, 'get', () => 'de');
+    stub(Cookies, 'get', () => 'de');
 
-    chai.expect(LocaleService.getLocale()).to.equal('de');
+    expect(LocaleService.getLocale()).to.equal('de');
     Cookies.get.restore();
   });
 
   it('sets default locale', () => {
-    sinon.stub(Cookies, 'get', () => null);
-    sinon.stub(Cookies, 'set');
+    stub(Cookies, 'get', () => null);
+    stub(Cookies, 'set');
 
     LocaleService.setLocale(null);
-    chai.expect(Cookies.set.calledWith('language', 'en')).to.equals(true);
+    expect(Cookies.set.calledWith('language', 'en')).to.equals(true);
     Cookies.get.restore();
     Cookies.set.restore();
   });
 
   it('throws error on invalid languages', () => {
-    chai.expect(
+    expect(
       () => LocaleService.setLocale('fr')
     ).to.throw('[LocaleService.setLocale(fr)] Invalid locale! Allowed locales are de,en!')
   });
