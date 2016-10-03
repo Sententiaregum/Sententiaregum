@@ -63,9 +63,6 @@ npm-debug.log
 /app/config/local_config_prod.yml
 /app/config/local_config_test.yml
 
-# PHPCS
-/.php_cs.cache
-
 # Capistrano Configuration
 /deploy/config/deploy.yaml
 /deploy/config/develop.yaml

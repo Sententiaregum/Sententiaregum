@@ -72,9 +72,7 @@ ma27_api_key_authentication:
         password:
             strategy: php55
     api_key_purge:
-        enabled:        true
-        log_state:      true
-        logger_service: "logger"
+        enabled: false
 
 # FOSRest Configuration
 fos_rest:

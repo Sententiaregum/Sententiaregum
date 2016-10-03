@@ -9,8 +9,8 @@ This guideline shows some conventions when contributing to Sententiaregum, so yo
 All the PHP code in Your patch __must__ follow the [symfony coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
 The frontend will be checked by the linter of the `less` package and `eslint`.
 
-If some code violates the CS, the build will break. The backend will be validated using `styleci` and the frontend with the `npm run lint` command during
-the continuous integration.
+If some code violates the CS, the build will break. The backend will be validated using `Style CI`, a continuous integration service connected
+with the GitHub repository, and the frontend with the `npm run lint` command during the continuous integration.
 
 2) Branch name, user stories and commit message
 -----------------------------------------------
