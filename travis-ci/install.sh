@@ -2,9 +2,9 @@
 
 set -e
 
-# setup for node 6
+# setup for node 7
 sudo rm -rf ~/.nvm
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # basic database setup

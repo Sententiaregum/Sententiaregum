@@ -120,7 +120,8 @@
     "require-yield": [2],
     "prefer-template": [2],
     "react/jsx-uses-react": [2],
-    "react/jsx-uses-vars": [2]
+    "react/jsx-uses-vars": [2],
+    "react/display-name": [0]
   },
   "env": {
     "es6":     true,
@@ -128,7 +129,7 @@
     "node":    true,
     "mocha":   true
   },
-  "extends": ["eslint:recommended", "plugin:varspacing/recommended"],
+  "extends": ["eslint:recommended", "plugin:varspacing/recommended", "plugin:react/recommended"],
   "plugins": [
     "react",
     "varspacing"
