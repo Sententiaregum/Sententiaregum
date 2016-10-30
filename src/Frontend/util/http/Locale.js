@@ -20,16 +20,14 @@ import Cookies from 'cookies-js';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class LocaleService {
+export default new class {
   /**
    * Constructor.
    *
-   * @param {string} defaultLanguage Language whether to use if the language cookie is empty.
-   *
    * @returns {void}
    */
-  constructor(defaultLanguage) {
-    this.defaultLanguage = defaultLanguage || 'en';
+  constructor() {
+    this.defaultLanguage = 'en';
   }
 
   /**
@@ -68,6 +66,4 @@ class LocaleService {
     Cookies.set('language', newLocale);
     counterpart.setLocale(newLocale);
   }
-}
-
-export default new LocaleService('en');
+}();

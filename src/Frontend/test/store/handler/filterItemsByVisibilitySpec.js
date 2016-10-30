@@ -31,24 +31,24 @@ describe('filterItemsByVisibility', () => {
   ];
 
   it('filters everything for insufficient credentials', () => {
-    const result = filterItemsByVisibility(exampleData, { is_admin: false, logged_in: false});
+    const result = filterItemsByVisibility({ items: exampleData, authData: { is_admin: false, logged_in: false} });
 
-    expect(result[0].id).to.equal('public item');
-    expect(result.length).to.equal(1);
+    expect(result.items[0].id).to.equal('public item');
+    expect(result.items.length).to.equal(1);
   });
 
   it('filters everything for authenticated users', () => {
-    const result = filterItemsByVisibility(exampleData, { is_admin: false, logged_in: true });
+    const result = filterItemsByVisibility({ items: exampleData, authData: { is_admin: false, logged_in: true } });
 
-    expect(result.length).to.equal(1);
-    expect(result[0].id).to.equal('internal');
+    expect(result.items.length).to.equal(1);
+    expect(result.items[0].id).to.equal('internal');
   });
 
   it('filters everything for authenticated users with admin rights', () => {
-    const result = filterItemsByVisibility(exampleData, { is_admin: true, logged_in: true });
+    const result = filterItemsByVisibility({ items: exampleData, authData: { is_admin: true, logged_in: true } });
 
-    expect(result.length).to.equal(2);
-    expect(result[0].id).to.equal('protected item');
-    expect(result[1].id).to.equal('internal');
+    expect(result.items.length).to.equal(2);
+    expect(result.items[0].id).to.equal('protected item');
+    expect(result.items[1].id).to.equal('internal');
   });
 });

@@ -13,9 +13,9 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import Cookies from 'cookies-js';
-import LocaleService from '../../../util/http/LocaleService';
+import LocaleService from '../../../util/http/Locale';
 
-describe('LocaleService', () => {
+describe('Locale', () => {
   it('returns default locale if cookie store is empty', () => {
     stub(Cookies, 'get', () => null);
     expect(LocaleService.getLocale()).to.equal('en');

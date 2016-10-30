@@ -10,23 +10,35 @@
 
 'use strict';
 
-import initializeCredentials from '../../../store/initializer/initializeCredentials';
-import ApiKey from '../../../util/http/ApiKeyService';
+import userState from '../../../store/initializer/userState';
+import ApiKey from '../../../util/http/ApiKey';
 import { stub } from 'sinon';
 import { expect } from 'chai';
 
-describe('initializeCredentials', () => {
-  it('builds user state', () => {
+describe('userState', () => {
+  it('builds the default state', () => {
     stub(ApiKey, 'getUsername', () => 'Ma27');
     stub(ApiKey, 'isLoggedIn', () => true);
     stub(ApiKey, 'isAdmin', () => true);
     stub(ApiKey, 'getApiKey', () => 'key');
 
-    const nextState = initializeCredentials();
-    expect(nextState.is_admin).to.equal(true);
-    expect(nextState.is_logged_in).to.equal(true);
-    expect(nextState.username).to.equal('Ma27');
-    expect(nextState.key).to.equal('key');
+    expect(userState()).to.deep.equal({
+      auth: {
+        is_admin:      true,
+        apiKey:       'key',
+        username:     'Ma27',
+        authenticated: true,
+        success:       true,
+        message:       null
+      },
+      activation:   { success: false },
+      creation:     {
+        success:          false,
+        errors:           {},
+        name_suggestions: [],
+        id:               null
+      },
+    });
 
     ApiKey.getUsername.restore();
     ApiKey.isLoggedIn.restore();

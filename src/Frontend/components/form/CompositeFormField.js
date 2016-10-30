@@ -16,8 +16,7 @@ import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import FormHelper from '../../util/react/FormHelper';
 import counterpart from 'counterpart';
 import invariant from 'invariant';
-import getStateValue from '../../store/provider/getStateValue';
-import CurrentLocaleStore from '../../store/CurrentLocaleStore';
+import Locale from '../../util/http/Locale';
 
 /**
  * Abstract ReactJS component which behaves as wrapper for form fields.
@@ -34,7 +33,7 @@ export default class CompositeFormField extends Component {
    */
   constructor(props) {
     super(props);
-    this.handler = () => this.forceUpdate();
+    this._change = () => this.forceUpdate();
   }
 
   /**
@@ -44,7 +43,7 @@ export default class CompositeFormField extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    counterpart.onLocaleChange(this.handler);
+    counterpart.onLocaleChange(this._change);
   }
 
   /**
@@ -53,7 +52,7 @@ export default class CompositeFormField extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    counterpart.offLocaleChange(this.handler);
+    counterpart.offLocaleChange(this._change);
   }
 
   /**
@@ -93,7 +92,7 @@ export default class CompositeFormField extends Component {
       return [];
     }
 
-    const errorsForProperty = errorList[getStateValue(CurrentLocaleStore, 'locale', 'en')];
+    const errorsForProperty = errorList[Locale.getLocale()];
     invariant(
       'undefined' !== typeof errorsForProperty,
       'Cannot extract errors from state!'
@@ -116,7 +115,8 @@ export default class CompositeFormField extends Component {
 }
 
 CompositeFormField.propTypes = {
-  name:   React.PropTypes.string,
-  errors: React.PropTypes.object,
-  helper: React.PropTypes.instanceOf(FormHelper)
+  name:     React.PropTypes.string,
+  errors:   React.PropTypes.object,
+  helper:   React.PropTypes.instanceOf(FormHelper),
+  children: React.PropTypes.node
 };

@@ -10,12 +10,12 @@
 
 'use strict';
 
-import ApiKeyService from '../../../util/http/ApiKeyService';
+import ApiKeyService from '../../../util/http/ApiKey';
 import { expect } from 'chai';
-import Locale from '../../../util/http/LocaleService';
+import Locale from '../../../util/http/Locale';
 import { stub } from 'sinon';
 
-describe('ApiKeyService', () => {
+describe('ApiKey', () => {
   afterEach(() => {
     localStorage.removeItem('api_key');
     localStorage.removeItem('username');

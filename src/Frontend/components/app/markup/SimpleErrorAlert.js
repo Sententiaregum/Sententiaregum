@@ -12,8 +12,7 @@
 
 import React, { Component } from 'react';
 import DismissableAlertBox from './DismissableAlertBox';
-import getStateValue from '../../../store/provider/getStateValue';
-import CurrentLocaleStore from '../../../store/CurrentLocaleStore';
+import Locale from '../../../util/http/Locale';
 import counterpart from 'counterpart';
 
 /**
@@ -34,7 +33,7 @@ export default class SimpleErrorAlert extends Component {
 
     this.state = { errors: props.error };
 
-    this.translationReloader = () => this.forceUpdate();
+    this.refreshTranslations = () => this.forceUpdate();
   }
 
   /**
@@ -43,7 +42,7 @@ export default class SimpleErrorAlert extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    counterpart.onLocaleChange(this.translationReloader);
+    counterpart.onLocaleChange(this.refreshTranslations);
   }
 
   /**
@@ -52,7 +51,7 @@ export default class SimpleErrorAlert extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    counterpart.offLocaleChange(this.translationReloader);
+    counterpart.offLocaleChange(this.refreshTranslations);
   }
 
   componentWillReceiveProps(next) {
@@ -67,7 +66,7 @@ export default class SimpleErrorAlert extends Component {
   render() {
     return (
       <DismissableAlertBox bsStyle="danger">
-        <p>{this.state.errors[getStateValue(CurrentLocaleStore, 'locale', 'en')]}</p>
+        <p>{this.state.errors[Locale.getLocale()]}</p>
       </DismissableAlertBox>
     );
   }
