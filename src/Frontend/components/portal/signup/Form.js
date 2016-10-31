@@ -12,8 +12,7 @@
 
 import React, { Component } from 'react';
 import LoadableButtonBar from '../../form/LoadableButtonBar';
-import { registration } from '../../../actions/PortalActions';
-import RegistrationStore from '../../../store/RegistrationStore';
+import userActions from '../../../actions/userActions';
 import Suggestions from './Suggestions';
 import Success from './Success';
 import FormHelper from '../../../util/react/FormHelper';
@@ -21,11 +20,12 @@ import FormField from '../../form/FormField';
 import SelectableField from '../../form/SelectableField';
 import deepAssign from 'deep-assign';
 import { connector, runAction } from 'sententiaregum-flux-container';
-import getStateValue from '../../../store/provider/getStateValue';
-import CurrentLocaleStore from '../../../store/CurrentLocaleStore';
+import localeStore from '../../../store/localeStore';
 import Recaptcha from 'react-recaptcha';
 import siteKey from '../../../config/recaptcha';
 import update from 'react-addons-update';
+import userStore from '../../../store/userStore';
+import { CREATE_ACCOUNT } from '../../../constants/Portal';
 
 /**
  * Form component for the signup page.
@@ -44,18 +44,18 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
 
-    this.handler = this._handleChange.bind(this);
+    this._handleChange = this._handleChange.bind(this);
 
-    const currentState = RegistrationStore.getState(), hasState = currentState ? true : false;
+    const currentState = userStore.getStateValue('creation');
     this.helper        = new FormHelper(
-      { username: '', email: '', locale: getStateValue(CurrentLocaleStore, 'locale', 'en'), recaptchaHash: '' },
+      { username: '', email: '', locale: localeStore.getStateValue('current.locale', 'en'), recaptchaHash: '' },
       { password: '' },
-      { suggestions: hasState ? currentState.suggestions : [] },
+      { suggestions: currentState.name_suggestions },
       nextState => this.setState(deepAssign({ data: this.state.data }, nextState)),
       'pages.portal.create_account.form'
     );
 
-    this.state = this.helper.getInitialState(hasState ? currentState.errors : {});
+    this.state = this.helper.getInitialState(currentState.errors);
   }
 
   /**
@@ -64,7 +64,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    connector(RegistrationStore).useWith(this.handler);
+    connector(userStore).subscribe(this._handleChange);
   }
 
   /**
@@ -73,7 +73,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    connector(RegistrationStore).unsubscribe(this.handler);
+    connector(userStore).unsubscribe(this._handleChange);
   }
   /**
    * Renders the component.
@@ -81,8 +81,7 @@ export default class Form extends Component {
    * @returns {React.Element} The vDOM markup.
    */
   render() {
-
-    const callback = function () {
+    const callback = () => {
     };
 
     return (
@@ -153,7 +152,7 @@ export default class Form extends Component {
     e.preventDefault();
     this.setState(this.helper.startProgress());
 
-    runAction(registration, [{
+    runAction(CREATE_ACCOUNT, userActions, [{
       username:      this.state.data.username,
       password:      this.state.data.password,
       email:         this.state.data.email,
@@ -169,11 +168,10 @@ export default class Form extends Component {
    * @private
    */
   _handleChange() {
-    const state = RegistrationStore.getState();
-    if (!state) {
-      this.setState(this.helper.getSuccessState(this.state.data));
-    } else {
-      this.setState(this.helper.getErrorState(this.state.data, state.errors, { suggestions: state.suggestions }));
-    }
+    const state = userStore.getStateValue('creation');
+    this.setState(state.success
+      ? this.helper.getSuccessState(this.state.data)
+      : this.helper.getErrorState(this.state.data, state.errors, { suggestions: state.name_suggestions })
+    );
   }
 }

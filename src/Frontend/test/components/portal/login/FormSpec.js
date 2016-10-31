@@ -14,14 +14,14 @@ import Form from '../../../../components/portal/login/Form';
 import React from 'react';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
 import { shallow } from 'enzyme';
-import AuthenticationStore from '../../../../store/AuthenticationStore';
+import userStore from '../../../../store/userStore';
 import FormHelper from '../../../../util/react/FormHelper';
+import axios from 'axios';
 
 describe('Form', () => {
   it('handles errors', () => {
-    stub(AuthenticationStore, 'getState', () => ({
+    stub(userStore, 'getStateValue', () => ({
       message: {
         de: 'Ungültige Zugangsdaten',
         en: 'Invalid credentials'
@@ -36,18 +36,16 @@ describe('Form', () => {
     expect(cmp.find('SimpleErrorAlert').prop('error').en).to.equal('Invalid credentials');
 
     FormHelper.prototype.isSubmitted.restore();
-    AuthenticationStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 
   it('handles success', () => {
-    stub(AuthenticationStore, 'getState', () => ({}));
+    stub(userStore, 'getStateValue', () => ({}));
 
-    const replacer = spy();
+    const replace = spy();
     const cmp      = shallow(<Form />, {
       context: {
-        router: {
-          replace: replacer
-        }
+        router: { replace }
       }
     });
 
@@ -59,15 +57,22 @@ describe('Form', () => {
     });
 
     cmp.instance()._change();
-    expect(replacer.calledOnce).to.equal(true);
-    expect(replacer.calledWith('/dashboard')).to.equal(true);
+    expect(replace.calledOnce).to.equal(true);
+    expect(replace.calledWith('/dashboard')).to.equal(true);
 
-    AuthenticationStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 
   it('handles submit', () => {
-    stub(AuthenticationStore, 'getState', () => ({}));
-    stub(AccountWebAPIUtils, 'requestApiKey');
+    stub(axios, 'post', () => ({
+      then() {
+        return this;
+      },
+      catch() {
+        return this;
+      }
+    }));
+    stub(userStore, 'getStateValue', () => ({}));
 
     const cmp = shallow(<Form />);
     cmp.setState({
@@ -79,12 +84,9 @@ describe('Form', () => {
 
     cmp.simulate('submit', { preventDefault: () => {} });
 
-    expect(AccountWebAPIUtils.requestApiKey.calledOnce);
+    expect(axios.post.calledWith('/api/api-key.json', { login: 'Ma27', password: '123456' })).to.equal(true);
 
-    expect(AccountWebAPIUtils.requestApiKey.args[0][0]).to.equal('Ma27');
-    expect(AccountWebAPIUtils.requestApiKey.args[0][1]).to.equal('123456');
-
-    AccountWebAPIUtils.requestApiKey.restore();
-    AuthenticationStore.getState.restore();
+    userStore.getStateValue.restore();
+    axios.post.restore();
   });
 });

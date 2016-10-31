@@ -15,36 +15,26 @@ import Menu from '../../../../../components/app/layout/menu/Menu';
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import { shallow } from 'enzyme';
-import MenuStore from '../../../../../store/MenuStore';
+import { pure } from 'sententiaregum-flux-react';
 
 describe('Menu', () => {
   it('renders empty menu bar into document', () => {
-    expect(shallow(<Menu items={[]} />).contains('MenuItem')).to.equal(false);
+    expect(shallow(pure(Menu, { items: [] })).contains('MenuItem')).to.equal(false);
   });
 
   it('renders menu items', () => {
-    stub(MenuStore, 'getState', () => ([
+    const items = [
       {
         label: 'menu.start',
         url:   '/#/'
       }
-    ]));
+    ];
 
-    const markup = shallow(<Menu items={[]} />, {
-      context: {
-        router: {
-          isActive: () => false
-        }
-      }
-    });
-
-    markup.instance()._storeMenuItems();
-    markup.update();
+    const markup = shallow(pure(Menu, { items }), { context: { router: { isActive: url => url === '/' } } });
 
     const item = markup.find('MenuItem');
     expect(item.prop('url')).to.equal('/#/');
     expect(item.prop('label')).to.equal('menu.start');
-
-    MenuStore.getState.restore();
+    expect(item.prop('isActive')).to.equal(true);
   });
 });

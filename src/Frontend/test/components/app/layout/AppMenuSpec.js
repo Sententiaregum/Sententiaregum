@@ -25,7 +25,7 @@ describe('AppMenuSpec', () => {
     ];
 
     const markup  = shallow(<AppMenu config={items} />);
-    const wrapper = markup.find('MenuWrapper > Menu');
+    const wrapper = markup.find('MenuWrapper');
 
     expect(wrapper.prop('items')).to.equal(items);
   });

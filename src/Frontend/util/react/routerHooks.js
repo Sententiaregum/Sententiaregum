@@ -10,8 +10,7 @@
 
 'use strict';
 
-import getStateValue from '../../store/provider/getStateValue';
-import UserStore from '../../store/UserStore';
+import userStore from '../../store/userStore';
 
 /**
  * Replace handler for locations in the app.
@@ -23,7 +22,7 @@ import UserStore from '../../store/UserStore';
  * @returns {void}
  */
 function replace(needsLogin, target, replace) {
-  const isLoggedIn = getStateValue(UserStore, 'is_logged_in', false);
+  const isLoggedIn = userStore.getStateValue('auth.authenticated');
   if (needsLogin === isLoggedIn) {
     replace({
       pathname: target

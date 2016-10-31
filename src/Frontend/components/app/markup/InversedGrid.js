@@ -23,7 +23,7 @@ import invariant from 'invariant';
  *
  * @returns {React.Element} The markup.
  */
-export default props => {
+const InversedGrid = props => {
   invariant(
     2 === props.children.length,
     'This element requires exactly 2 children!'
@@ -42,3 +42,9 @@ export default props => {
     </Grid>
   );
 };
+
+InversedGrid.propTypes = {
+  children: React.PropTypes.node
+};
+
+export default InversedGrid;

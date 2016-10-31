@@ -26,7 +26,7 @@ const SelectableField = props => {
 
   return (
     <CompositeFormField name={name} errors={errors} helper={helper}>
-      <FormControl name={name} value={value} onChange={helper.getChangeListener()} componentClass="select" {...settings} main={true}>
+      <FormControl name={name} value={value} onChange={helper.getChangeListener()} componentClass="select" {...settings}>
         {Object.keys(options).map((key, i) => <option value={key} key={i}>{options[key]}</option>)}
       </FormControl>
     </CompositeFormField>

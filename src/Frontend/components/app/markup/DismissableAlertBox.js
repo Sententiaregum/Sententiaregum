@@ -65,5 +65,9 @@ export default class DismissableAlertBox extends Component {
 }
 
 DismissableAlertBox.propTypes = {
+  children: React.PropTypes.node
+};
+
+DismissableAlertBox.propTypes = {
   bsStyle: React.PropTypes.string
 };

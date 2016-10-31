@@ -11,104 +11,36 @@
 'use strict';
 
 import Nav from 'react-bootstrap/lib/Nav';
-import MenuStore from '../../../../store/MenuStore';
-import { buildMenuItems } from '../../../../actions/MenuActions';
-import React, { Component } from 'react';
+import React from 'react';
 import MenuItem from '../../markup/MenuItem';
-import { connector, runAction } from 'sententiaregum-flux-container';
-import UserStore from '../../../../store/UserStore';
+import { subscribeStores } from 'sententiaregum-flux-react';
+import menuStore from '../../../../store/menuStore';
 
 /**
- * Configurable menu rendering component.
+ * Simple helper to build a list of menu items.
  *
- * @author Benjamin Bieler <benjaminbieler2014@gmail.com>
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @param {Array.<Object>} items   The list of items to render.
+ * @param {Object.<*>}     context The component tree context.
+ *
+ * @returns {Array.<MenuItem>} List of menu items.
  */
-export default class Menu extends Component {
-  /**
-   * Constructor.
-   *
-   * @param {Object} props Internal properties.
-   *
-   * @returns {void}
-   */
-  constructor(props) {
-    super(props);
+const items = (items, context) => items.map((item, i) => {
+  const u = item.url.slice(2);
+  return <MenuItem label={item.label} url={item.url} key={i} isActive={context.router.isActive(u, '/' === u)} />;
+});
 
-    this.state = {
-      items: []
-    };
-
-    this.handle       = this._storeMenuItems.bind(this);
-    this.authReloader = this._reEvaluateMenuItems.bind(this);
-  }
-
-  /**
-   * Connects the component with the data store.
-   *
-   * @returns {void}
-   */
-  componentDidMount() {
-    connector(MenuStore).useWith(this.handle);
-    connector(UserStore).useWith(this.authReloader);
-
-    this._reEvaluateMenuItems();
-  }
-
-  /**
-   * Removes the hook to the menu store.
-   *
-   * @returns {void}
-   */
-  componentWillUnmount() {
-    connector(MenuStore).unsubscribe(this.handle);
-    connector(UserStore).unsubscribe(this.authReloader);
-  }
-
-  /**
-   * Creates a configurable menu component for bootstrap3.
-   *
-   * @returns {React.Element} Renders the menu bar.
-   */
-  render() {
-    const items = this.state.items.map((item, i) => {
-      const urlWithoutPrefix = item.url.slice(2);
-      return <MenuItem
-        label={item.label}
-        url={item.url}
-        key={i}
-        isActive={this.context.router.isActive(urlWithoutPrefix, '/' === urlWithoutPrefix)} />;
-    });
-
-    let nav = false;
-    if (0 < items.length) {
-      nav = <Nav pullRight>{items}</Nav>;
-    }
-
-    return nav;
-  }
-
-  /**
-   * Stores a new menu item.
-   *
-   * @returns {void}
-   */
-  _storeMenuItems() {
-    this.setState({
-      items: MenuStore.getState()
-    });
-  }
-
-  /**
-   * Reevaluates the menu items.
-   *
-   * @returns {void}
-   * @private
-   */
-  _reEvaluateMenuItems() {
-    runAction(buildMenuItems, [this.props.items]);
-  }
-}
+/**
+ * Simple react component which builds the menu bar.
+ *
+ * @param {Object.<*>} props   The component properties.
+ * @param {Object.<*>} context The component tree context.
+ *
+ * @returns {React.Element} The component markup.
+ */
+const Menu = (props, context) => {
+  const rItems = items(props.items, context);
+  return 0 < rItems.length ? <Nav pullRight>{rItems}</Nav> : false;
+};
 
 Menu.propTypes = {
   items: React.PropTypes.array
@@ -120,3 +52,7 @@ Menu.contextTypes = {
     React.PropTypes.object
   ])
 };
+
+export default subscribeStores(Menu, {
+  'items': [menuStore, 'items']
+});

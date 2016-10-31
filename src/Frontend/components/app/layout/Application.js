@@ -30,4 +30,8 @@ const Application = props => {
   );
 };
 
+Application.propTypes = {
+  children: React.PropTypes.node
+};
+
 export default Application;

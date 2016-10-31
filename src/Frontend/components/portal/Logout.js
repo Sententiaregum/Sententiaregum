@@ -15,8 +15,9 @@ import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import { runAction, connector } from 'sententiaregum-flux-container';
-import { logout } from '../../actions/PortalActions';
-import UserStore from '../../store/UserStore';
+import userActions from '../../actions/userActions';
+import userStore from '../../store/userStore';
+import { LOGOUT } from '../../constants/Portal';
 
 /**
  * Logout component.
@@ -34,7 +35,7 @@ export default class Logout extends Component {
   constructor(props) {
     super(props);
 
-    this.handler = this._redirectAfterLogout.bind(this);
+    this._redirectAfterLogout = () => this.context.router.replace('/');
   }
 
   /**
@@ -43,8 +44,8 @@ export default class Logout extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    connector(UserStore).useWith(this.handler);
-    runAction(logout, []);
+    connector(userStore).subscribe(this._redirectAfterLogout);
+    runAction(LOGOUT, userActions, []);
   }
 
   /**
@@ -53,7 +54,7 @@ export default class Logout extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    connector(UserStore).unsubscribe(this.handler);
+    connector(userStore).unsubscribe(this._redirectAfterLogout);
   }
 
   /**
@@ -68,16 +69,6 @@ export default class Logout extends Component {
         <ProgressBar active bsStyle="warning" now={100} />
       </div>
     );
-  }
-
-  /**
-   * Handles the redirect when the logout request was successful.
-   *
-   * @returns {void}
-   * @private
-   */
-  _redirectAfterLogout() {
-    this.context.router.replace('/');
   }
 }
 
