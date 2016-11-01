@@ -20,6 +20,10 @@ branches:
   only:
     - master
 
+env:
+  - NODE_VERSION=6.x
+  - NODE_VERSION=7.x
+
 # composer cache for faster install process and less issues with github api
 cache:
   directories:
