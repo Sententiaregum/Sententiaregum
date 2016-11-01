@@ -12,13 +12,14 @@
 
 import React, { Component } from 'react';
 import LoadableButtonBar from '../../form/LoadableButtonBar';
-import { authenticate } from '../../../actions/PortalActions';
-import AuthenticationStore from '../../../store/AuthenticationStore';
+import userActions from '../../../actions/userActions';
 import FormHelper from '../../../util/react/FormHelper';
 import { runAction, connector } from 'sententiaregum-flux-container';
 import deepAssign from 'deep-assign';
 import FormField from '../../form/FormField';
 import SimpleErrorAlert from '../../app/markup/SimpleErrorAlert';
+import userStore from '../../../store/userStore';
+import { REQUEST_API_KEY } from '../../../constants/Portal';
 
 /**
  * Form component for the login form.
@@ -35,9 +36,9 @@ export default class Form extends Component {
    */
   constructor(props) {
     super(props);
-    this.handler = this._change.bind(this);
+    this._change = this._change.bind(this);
 
-    const state = AuthenticationStore.getState().message;
+    const state = userStore.getStateValue('auth.message');
     this.helper = new FormHelper(
       { username: '' },
       { password: '' },
@@ -56,7 +57,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    connector(AuthenticationStore).useWith(this.handler);
+    connector(userStore).subscribe(this._change);
   }
 
   /**
@@ -65,7 +66,7 @@ export default class Form extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    connector(AuthenticationStore).unsubscribe(this.handler);
+    connector(userStore).unsubscribe(this._change);
   }
 
   /**
@@ -74,14 +75,12 @@ export default class Form extends Component {
    * @returns {React.Element} The markup.
    */
   render() {
-    let errorBox;
-    if (!this.state.success && this.helper.isSubmitted()) {
-      errorBox = <SimpleErrorAlert error={this.state.validation.errors} />;
-    }
-
     return (
       <form onSubmit={this._login.bind(this)}>
-        {errorBox}
+        {!this.state.success && this.helper.isSubmitted()
+          ? <SimpleErrorAlert error={this.state.validation.errors} />
+          : false
+        }
         <FormField
           name="username"
           type="text"
@@ -108,7 +107,7 @@ export default class Form extends Component {
    * @private
    */
   _change() {
-    const state = AuthenticationStore.getState();
+    const state = userStore.getStateValue('auth');
     if (state.message) {
       this.setState(this.helper.getErrorState(this.state.data, state.message));
 
@@ -132,7 +131,7 @@ export default class Form extends Component {
   _login(e) {
     this.setState(this.helper.startProgress());
 
-    runAction(authenticate, [this.state.data.username, this.state.data.password]);
+    runAction(REQUEST_API_KEY, userActions, [{ username: this.state.data.username, password: this.state.data.password }]);
     e.preventDefault();
   }
 }

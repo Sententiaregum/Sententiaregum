@@ -10,29 +10,29 @@
 
 'use strict';
 
-import UserStore from '../../../store/UserStore';
-import { protectPage, redirectToDashboard } from '../../../util/security/RouterHooks';
+import userStore from '../../../store/userStore';
+import { protectPage, redirectToDashboard } from '../../../util/react/routerHooks';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
 
-describe('RouterHooks', () => {
+describe('routerHooks', () => {
   it('protects page', () => {
-    stub(UserStore, 'getState', () => ({ is_logged_in: false }));
+    stub(userStore, 'getStateValue', () => false);
     const replace = spy();
 
     protectPage({}, replace);
     expect(replace.calledWith({ pathname: '/' })).to.equal(true);
 
-    UserStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 
   it('redirects to dashboard', () => {
-    stub(UserStore, 'getState', () => ({ is_logged_in: true }));
+    stub(userStore, 'getStateValue', () => true);
     const replace = spy();
 
     redirectToDashboard({}, replace);
     expect(replace.calledWith({ pathname: '/dashboard' })).to.equal(true);
 
-    UserStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 });

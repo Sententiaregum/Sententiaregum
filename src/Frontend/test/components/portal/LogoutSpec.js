@@ -15,7 +15,6 @@ import { shallow } from 'enzyme';
 import Logout from '../../../components/portal/Logout';
 import React from 'react';
 import { spy, stub } from 'sinon';
-import AccountWebAPIUtils from '../../../util/api/AccountWebAPIUtils';
 
 describe('Logout', () => {
   it('renders markup', () => {

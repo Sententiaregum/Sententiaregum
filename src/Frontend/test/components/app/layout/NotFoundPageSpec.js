@@ -15,7 +15,7 @@ import NotFoundPage from '../../../../components/app/layout/NotFoundPage';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import { stub } from 'sinon';
-import ApiKey from '../../../../util/http/ApiKeyService';
+import ApiKey from '../../../../util/http/ApiKey';
 
 describe('NotFoundPage', () => {
   it('renders a 404 page', () => {

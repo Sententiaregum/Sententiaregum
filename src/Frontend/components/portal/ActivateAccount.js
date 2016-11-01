@@ -13,8 +13,9 @@
 import React, { Component } from 'react';
 import DismissableAlertBox from '../app/markup/DismissableAlertBox';
 import Translate from 'react-translate-component';
-import { activate } from '../../actions/PortalActions';
-import ActivationStore from '../../store/ActivationStore';
+import userActions from '../../actions/userActions';
+import userStore from '../../store/userStore';
+import { ACTIVATE_ACCOUNT } from '../../constants/Portal';
 import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**
@@ -38,7 +39,7 @@ export default class ActivateAccount extends Component {
       failure:  false
     };
 
-    this.handle = this._handleChange.bind(this);
+    this._handleChange = this._handleChange.bind(this);
   }
 
   /**
@@ -47,8 +48,8 @@ export default class ActivateAccount extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    connector(ActivationStore).useWith(this.handle);
-    runAction(activate, [this.props.params.name, this.props.params.key]);
+    connector(userStore).subscribe(this._handleChange);
+    runAction(ACTIVATE_ACCOUNT, userActions, [{ username: this.props.params.name, key: this.props.params.key }]);
   }
 
   /**
@@ -57,7 +58,7 @@ export default class ActivateAccount extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    connector(ActivationStore).unsubscribe(this.handle);
+    connector(userStore).unsubscribe(this._handleChange);
   }
 
   /**
@@ -102,7 +103,7 @@ export default class ActivateAccount extends Component {
    * @private
    */
   _handleChange() {
-    const state = ActivationStore.getState();
+    const state = userStore.getStateValue('activation');
     if (state.success) {
       this.setState({
         progress: false,
@@ -129,6 +130,10 @@ export default class ActivateAccount extends Component {
     return <Translate content={this.state.success ? 'pages.portal.activate.success' : 'pages.portal.activate.error'} />;
   }
 }
+
+ActivateAccount.propTypes = {
+  params: React.PropTypes.object
+};
 
 ActivateAccount.contextTypes = {
   router: React.PropTypes.oneOfType([

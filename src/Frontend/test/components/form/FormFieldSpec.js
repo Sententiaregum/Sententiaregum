@@ -26,7 +26,5 @@ describe('FormField', () => {
     expect(markup.contains(<FormControl.Feedback />)).to.equal(true);
     expect(markup.find('FormControl').prop('name')).to.equal('test');
     expect(markup.find('FormControl').prop('type')).to.equal('text');
-    expect(markup.find('FormControl').prop('main')).to.equal(true);
-    expect(markup.find('FormControlFeedback').prop('main')).to.not.equal(true);
   });
 });

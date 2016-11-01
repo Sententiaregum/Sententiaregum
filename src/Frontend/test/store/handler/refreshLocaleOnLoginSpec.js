@@ -12,22 +12,30 @@
 
 import { stub } from 'sinon';
 import { expect } from 'chai';
-import Locale from '../../../util/http/LocaleService';
-import handleLogin from '../../../store/handler/handleLogin';
+import handleLogin from '../../../store/handler/refreshLocaleOnLogin';
 import counterpart from 'counterpart';
 
-describe('handleLogin', () => {
+describe('refreshLocaleOnLogin', () => {
   it('manages locales after user event', () => {
-    stub(Locale, 'getLocale', () => 'de');
     stub(counterpart, 'getLocale', () => 'en');
     stub(counterpart, 'setLocale');
 
-    expect(handleLogin().locale).to.equal('de');
+    expect(handleLogin({ locale: 'de', success: true }, { locales: ['de', 'en'], current: { locale: 'en' } }))
+      .to.deep.equal({ locales: ['de', 'en'], current: { locale: 'de' } });
+
     expect(counterpart.setLocale.calledOnce).to.equal(true);
     expect(counterpart.setLocale.calledWith('de')).to.equal(true);
 
-    Locale.getLocale.restore();
     counterpart.setLocale.restore();
+    counterpart.getLocale.restore();
+  });
+
+  it('returns previous state if locale is empty', () => {
+    stub(counterpart, 'getLocale', () => 'en');
+
+    expect(handleLogin({ success: false }, { locales: ['de', 'en'], current: { locale: 'en' } }))
+      .to.deep.equal({ locales: ['de', 'en'], current: { locale: 'en' } });
+
     counterpart.getLocale.restore();
   });
 });

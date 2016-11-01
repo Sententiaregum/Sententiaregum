@@ -10,18 +10,20 @@
 
 'use strict';
 
-import Locale from '../../util/http/LocaleService';
 import counterpart from 'counterpart';
 
 /**
  * Handler which updates the locale.
  *
+ * @param {String}  locale  The new locale.
+ * @param {Object}  prev    The previous state.
+ * @param {boolean} success Whether or not the login successed.
+ *
  * @returns {Object} The updated locale.
  */
-export default () => {
-  const locale = Locale.getLocale();
-  if (locale !== counterpart.getLocale()) {
+export default ({ locale, success }, prev) => {
+  if (locale !== counterpart.getLocale() && success) {
     counterpart.setLocale(locale);
   }
-  return { locale };
+  return success ? Object.assign({}, prev, { current: { locale } }) : prev;
 };

@@ -30,7 +30,7 @@ export default class LoadableButtonBar extends Component {
   constructor(props) {
     super(props);
 
-    this.handler = () => this.forceUpdate();
+    this._change = () => this.forceUpdate();
     this.state   = {
       progress: this.props.progress
     };
@@ -43,7 +43,7 @@ export default class LoadableButtonBar extends Component {
    * @returns {void}
    */
   componentDidMount() {
-    counterpart.onLocaleChange(this.handler);
+    counterpart.onLocaleChange(this._change);
   }
 
   /**
@@ -52,7 +52,7 @@ export default class LoadableButtonBar extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    counterpart.offLocaleChange(this.handler);
+    counterpart.offLocaleChange(this._change);
   }
 
   /**

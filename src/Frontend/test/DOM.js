@@ -17,3 +17,6 @@ global.window       = jsdom('<html><head></head><body></body></html>').defaultVi
 global.document     = window.document;
 global.navigator    = window.navigator;
 global.localStorage = new LocalStorage('./node-emulator');
+
+require.extensions['.css'] = () => {
+};

@@ -19,7 +19,7 @@ import Application from '../components/app/layout/Application';
 import DashboardIndex from '../components/network/dashboard/Index';
 import Logout from '../components/portal/Logout';
 import { IndexRoute, Router, Route, hashHistory } from 'react-router';
-import { redirectToDashboard, protectPage } from '../util/security/RouterHooks';
+import { redirectToDashboard, protectPage } from '../util/react/routerHooks';
 
 export default (
   <Router history={hashHistory}>

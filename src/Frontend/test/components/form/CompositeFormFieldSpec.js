@@ -16,7 +16,7 @@ import CompositeFormField from '../../../components/form/CompositeFormField';
 import FormHelper from '../../../util/react/FormHelper';
 import { expect } from 'chai';
 import { stub } from 'sinon';
-import Locale from '../../../util/http/LocaleService';
+import Locale from '../../../util/http/Locale';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 
 describe('CompositeFormField', () => {

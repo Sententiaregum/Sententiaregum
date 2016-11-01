@@ -14,11 +14,11 @@ import Form from '../../../../components/portal/signup/Form';
 import React from 'react';
 import { stub } from 'sinon';
 import { expect } from 'chai';
-import AccountWebAPIUtils from '../../../../util/api/AccountWebAPIUtils';
 import { shallow } from 'enzyme';
-import Locale from '../../../../util/http/LocaleService';
-import RegistrationStore from '../../../../store/RegistrationStore';
+import Locale from '../../../../util/http/Locale';
+import userStore from '../../../../store/userStore';
 import Success from '../../../../components/portal/signup/Success';
+import axios from 'axios';
 
 describe('Form', () => {
   it('handles invalid data and renders its errors into the markup', () => {
@@ -29,9 +29,10 @@ describe('Form', () => {
       }
     };
 
-    stub(RegistrationStore, 'getState', () => ({
+    stub(userStore, 'getStateValue', () => ({
       errors,
-      suggestions
+      name_suggestions: suggestions,
+      success:          false
     }));
 
     stub(Locale, 'getLocale', () => 'en');
@@ -52,12 +53,17 @@ describe('Form', () => {
     expect(cmp.find('form > [name="username"]').prop('errors')).to.equal(errors);
 
     Locale.getLocale.restore();
-    RegistrationStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 
   it('shows success', () => {
     stub(Locale, 'getLocale', () => 'en');
-    stub(RegistrationStore, 'getState', () => null);
+    stub(userStore, 'getStateValue', () => ({
+      success:          true,
+      errors:           {},
+      name_suggestions: [],
+      id:               null
+    }));
 
     const cmp = shallow(<Form />);
 
@@ -78,11 +84,18 @@ describe('Form', () => {
     expect(cmp.contains(<Success />)).to.equal(true);
 
     Locale.getLocale.restore();
-    RegistrationStore.getState.restore();
+    userStore.getStateValue.restore();
   });
 
   it('handles submit', () => {
-    stub(AccountWebAPIUtils, 'createAccount');
+    stub(axios, 'post', () => ({
+      then() {
+        return this;
+      },
+      catch() {
+        return this;
+      }
+    }));
 
     const cmp = shallow(<Form />);
     cmp.setState({
@@ -96,14 +109,15 @@ describe('Form', () => {
     });
 
     cmp.simulate('submit', { preventDefault: () => {} });
-    expect(AccountWebAPIUtils.createAccount.calledOnce);
-    const data = AccountWebAPIUtils.createAccount.args[0][0];
 
-    expect(data.username).to.equal('Ma27');
-    expect(data.password).to.equal('123456');
-    expect(data.email).to.equal('foo@bar.de');
-    expect(data.locale).to.equal('de');
+    expect(axios.post.calledWith('/api/users.json', {
+      username:      'Ma27',
+      password:      '123456',
+      email:         'foo@bar.de',
+      locale:        'de',
+      recaptchaHash: 'recaptcha-hash'
+    }));
 
-    AccountWebAPIUtils.createAccount.restore();
+    axios.post.restore();
   });
 });

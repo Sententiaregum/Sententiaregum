@@ -16,14 +16,16 @@
  * @param {Array}  items    The menu items.
  * @param {Object} authData Information about the authentication status.
  *
- * @returns {Array} The new state.
+ * @returns {Object} The new state.
  */
-export default (items, authData) => {
-  return items.filter(item => {
-    return !(
-      'ROLE_ADMIN' === item.role && !authData.is_admin
-      || item.logged_in && !authData.logged_in
-      || item.portal && authData.logged_in
-    );
-  });
+export default ({ items, authData }) => {
+  return {
+    items: items.filter(item => {
+      return !(
+        'ROLE_ADMIN' === item.role && !authData.is_admin
+        || item.logged_in && !authData.logged_in
+        || item.portal && authData.logged_in
+      );
+    })
+  };
 };

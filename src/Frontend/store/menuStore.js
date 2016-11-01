@@ -10,8 +10,10 @@
 
 'use strict';
 
-import { store } from 'sententiaregum-flux-container';
+import { store, subscribe } from 'sententiaregum-flux-container';
+import filterItemsByVisibility from './handler/filterItemsByVisibility';
+import { TRANSFORM_ITEMS } from '../constants/Menu';
 
 export default store({
-  GET_LOCALES: { params: ['locales'], function: locales => locales }
-});
+  [TRANSFORM_ITEMS]: subscribe(subscribe.chain()(filterItemsByVisibility))
+}, { items: [] });

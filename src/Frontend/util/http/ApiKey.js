@@ -10,14 +10,14 @@
 
 'use strict';
 
-import Locale from './LocaleService';
+import Locale from './Locale';
 
 /**
  * Service which is responsible for handling the interaction with api keys.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class ApiKeyService {
+export default new class {
   /**
    * Checks if a user is logged in.
    *
@@ -91,6 +91,4 @@ class ApiKeyService {
     localStorage.removeItem('user_roles');
     localStorage.removeItem('username');
   }
-}
-
-export default new ApiKeyService();
+}();

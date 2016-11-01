@@ -15,17 +15,17 @@ import { stub } from 'sinon';
 import { expect } from 'chai';
 import React from 'react';
 import { shallow } from 'enzyme';
-import LocaleStore from '../../../../store/LocaleStore';
-import CurrentLocaleStore from '../../../../store/CurrentLocaleStore';
+import { pure } from 'sententiaregum-flux-react';
+import localeStore from '../../../../store/localeStore';
+import Locale from '../../../../util/http/Locale';
 
 describe('LanguageSwitcher', () => {
   it('renders the locales received from flux', () => {
-    stub(CurrentLocaleStore, 'getState', () => ({ locale: 'de' }));
-    stub(LocaleStore, 'getState', () => ({ de: 'Deutsch' }));
+    const locales = { 'de': 'Deutsch' };
+    stub(localeStore, 'getStateValue', () => locales);
+    stub(Locale, 'getLocale', () => 'de');
 
-    const markup = shallow(<LanguageSwitcher />);
-    markup.instance()._refreshLocales();
-    markup.update();
+    const markup = shallow(pure(LanguageSwitcher, { locales }));
 
     expect(markup.find('LoadingDropDown')).to.have.length(0);
 
@@ -33,12 +33,12 @@ describe('LanguageSwitcher', () => {
     expect(item.prop('isActive')).to.equal(true);
     expect(item.prop('displayName')).to.equal('Deutsch');
 
-    LocaleStore.getState.restore();
-    CurrentLocaleStore.getState.restore();
+    localeStore.getStateValue.restore();
+    Locale.getLocale.restore();
   });
 
   it('shows loading bar', () => {
-    const markup = shallow(<LanguageSwitcher />);
+    const markup = shallow(pure(LanguageSwitcher));
     expect(markup.find('LoadingDropDown')).to.have.length(1);
   });
 });

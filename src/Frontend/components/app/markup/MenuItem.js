@@ -29,7 +29,7 @@ const MenuItem = props => {
   );
 };
 
-MenuItem.PropTypes = {
+MenuItem.propTypes = {
   url:      React.PropTypes.string,
   label:    React.PropTypes.string,
   isActive: React.PropTypes.bool

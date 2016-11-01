@@ -23,8 +23,8 @@ import Menu from './menu/Menu';
  */
 const AppMenu = props => {
   return (
-    <MenuWrapper>
-      <Menu items={props.config} />
+    <MenuWrapper items={props.config}>
+      <Menu />
     </MenuWrapper>
   );
 };
