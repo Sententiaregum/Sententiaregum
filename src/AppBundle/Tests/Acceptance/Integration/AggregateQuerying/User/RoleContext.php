@@ -12,9 +12,10 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\DQL;
+namespace AppBundle\Tests\Acceptance\Integration\AggregateQuerying\User;
 
 use AppBundle\Model\User\Role;
+use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -24,7 +25,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class RoleContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class RoleContext extends AbstractIntegrationContext
 {
     /**
      * @var \Exception
@@ -36,16 +37,10 @@ class RoleContext extends FixtureLoadingContext implements SnippetAcceptingConte
      */
     private $resultRole;
 
-    /** @BeforeScenario @role&&@user&&@repository */
-    public function loadDataFixtures()
-    {
-        parent::loadDataFixtures();
-    }
-
     /**
      * @When I determine the default role
      */
-    public function iDetermineTheDefaultRole()
+    public function determineDefaultRole()
     {
         try {
             $this->resultRole = $this->getEntityManager()->getRepository('Account:Role')->determineDefaultRole();
@@ -57,7 +52,7 @@ class RoleContext extends FixtureLoadingContext implements SnippetAcceptingConte
     /**
      * @Then I should get the :arg1 role
      */
-    public function iShouldGetTheRole($arg1)
+    public function checkRole($arg1)
     {
         Assertion::eq($this->resultRole->getRole(), $arg1);
     }
@@ -65,7 +60,7 @@ class RoleContext extends FixtureLoadingContext implements SnippetAcceptingConte
     /**
      * @Then I should get an error
      */
-    public function iShouldGetAnError()
+    public function ensureError()
     {
         Assertion::isInstanceOf($this->exception, \RuntimeException::class);
         Assertion::eq($this->exception->getMessage(), 'Role "ROLE_USER" is not present!');

@@ -1,6 +1,7 @@
-@user @role @repository
-Feature: role repository
-    Extended role model logic
+@aggregate-querying
+Feature: query role data
+    In order to establish a role-system inside the authorization process,
+    certain query APIs for the role model are needed.
 
     Scenario: determine default role
         When I determine the default role

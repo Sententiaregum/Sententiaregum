@@ -40,7 +40,7 @@ class ProductionFixtureApplianceContext extends AbstractIntegrationContext
     /**
      * @When I run the production fixtures loader
      */
-    public function iRunTheProductionFixturesLoader()
+    public function runProductionFixtureAppliance()
     {
         $cmdApplication = new Application($this->getKernel());
         $cmdApplication->add(new LoadCustomFixturesCommand());
@@ -53,7 +53,7 @@ class ProductionFixtureApplianceContext extends AbstractIntegrationContext
     /**
      * @Then I should see the logging messages
      */
-    public function iShouldSeeTheLoggingMessages()
+    public function ensureLoggingMessages()
     {
         $display = $this->display;
 
@@ -65,7 +65,7 @@ class ProductionFixtureApplianceContext extends AbstractIntegrationContext
     /**
      * @Then the role and admin fixtures should be applied
      */
-    public function theRoleAndAdminFixturesShouldBeApplied()
+    public function ensureAppliedFixtures()
     {
         $em = $this->getEntityManager();
 

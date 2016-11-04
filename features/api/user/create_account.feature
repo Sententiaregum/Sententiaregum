@@ -5,13 +5,13 @@ Feature: create account
     Scenario: create new user account
         Given I have the following payload:
         """
-        {
-            "username":      "sententiaregum",
-            "password":      "123456",
-            "email":         "sententiaregum@sententiaregum.dev",
-            "recaptchaHash": "hash",
-            "locale":        "de"
-        }
+          {
+          "username":      "sententiaregum",
+          "password":      "123456",
+          "email":         "sententiaregum@sententiaregum.dev",
+          "recaptchaHash": "hash",
+          "locale":        "de"
+          }
         """
         When I submit a request to "POST /api/users.json"
         Then I should get a response with the 200 status code
@@ -28,13 +28,13 @@ Feature: create account
     Scenario: taking a username that is already taken
         Given I have the following payload:
         """
-        {
-            "username":      "Ma27",
-            "password":      "72aM",
-            "email":         "m@27.org",
-            "recaptchaHash": "hash",
-            "locale":        "en"
-        }
+          {
+          "username":      "Ma27",
+          "password":      "72aM",
+          "email":         "m@27.org",
+          "recaptchaHash": "hash",
+          "locale":        "en"
+          }
         """
         When I submit a request to "POST /api/users.json"
         Then I should get a response with the 400 status code
@@ -44,13 +44,13 @@ Feature: create account
     Scenario Outline: account creation with invalid data
         Given I have the following payload:
         """
-        {
-            "username":      "<username>",
-            "password":      "<password>",
-            "email":         "<email>",
-            "recaptchaHash": "<recaptchaHash>",
-            "locale":        "<locale>"
-        }
+          {
+          "username":      "<username>",
+          "password":      "<password>",
+          "email":         "<email>",
+          "recaptchaHash": "<recaptchaHash>",
+          "locale":        "<locale>"
+          }
         """
         When I submit a request to "POST /api/users.json"
         Then I should get a response with the 400 status code
@@ -64,7 +64,6 @@ Feature: create account
           | TestUser | 72aM     | foo@example.org         | fr     | hash          | The locale of the new user is invalid!                                                              | locale   |
           | ab       | 72aM     | foo@example.org         | en     | hash          | The username should have at least three characters!                                                 | username |
           | Ma27_2   | 72       | foo@example.org         | en     | hash          | The password should have at least four characters!                                                  | password |
-
     Scenario: approval with expired activation key
         Given I created an account with username "sententiaregum"
         And I should have "A5WTBA1JE01A8KFDK7LVLN" as activation key

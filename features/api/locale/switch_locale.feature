@@ -9,9 +9,9 @@ Feature: switch locale
     Scenario: switch to unsupported locale
         Given I have the following payload:
         """
-        {
-            "locale": "fr"
-        }
+          {
+          "locale": "fr"
+          }
         """
         When I submit a request to "PATCH /api/protected/locale.json"
         Then I should get a response with the 400 status code
@@ -19,9 +19,9 @@ Feature: switch locale
     Scenario: switch locale
         Given I have the following payload:
         """
-        {
-            "locale": "en"
-        }
+          {
+          "locale": "en"
+          }
         """
         When I submit a request to "PATCH /api/protected/locale.json"
         Then I should get a response with the 204 status code

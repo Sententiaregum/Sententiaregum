@@ -38,7 +38,7 @@ class OnlineUsersContext implements KernelAwareContext
     /** @BeforeScenario */
     public function connectToAPiContext(BeforeScenarioScope $scope)
     {
-        return ContextHelper::connectToAPIContext($scope);
+        $this->apiContext = ContextHelper::connectToAPIContext($scope);
     }
 
     /** @AfterScenario */
@@ -62,7 +62,7 @@ class OnlineUsersContext implements KernelAwareContext
 
             // send another request to declare the user as online
             $client->request('GET', '/api/protected/users/credentials.json', [], [], [
-                'HTTP_X-API-KEY' => json_decode($client->getResponse()->getContent(), true)['apiKey']
+                'HTTP_X-API-KEY' => json_decode($client->getResponse()->getContent(), true)['apiKey'],
             ]);
         }
     }

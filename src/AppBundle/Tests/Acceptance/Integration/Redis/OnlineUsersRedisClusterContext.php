@@ -12,12 +12,14 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Redis;
+namespace AppBundle\Tests\Acceptance\Integration\Redis;
 
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
 
 /**
  * Behat context for the basic behavior of the cluster containing the
@@ -25,40 +27,45 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class OnlineUsersRedisClusterContext implements KernelAwareContext
 {
-    /**
-     * @var bool
-     */
-    protected static $applyUserFixtures = false;
+    use KernelDictionary;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $result;
+    private $result = [];
 
-    /** @BeforeScenario @user&&@online_users_cluster */
-    public function loadDataFixtures()
+    /** @AfterScenario */
+    public function cleanUp()
     {
-        parent::loadDataFixtures();
+        $this->result = [];
     }
 
     /**
-     * @Given the user with id :arg1 will be marked as online
+     * @Given /^the following users are online:$/
+     *
+     * @param TableNode $node
      */
-    public function theUserWithIdWillBeMarkedAsOnline($arg1)
+    public function ensureUsersAreOnline(TableNode $node)
     {
-        $this->getContainer()->get('app.redis.cluster.online_users')->addUserId($arg1);
+        $service = $this->getContainer()->get('app.redis.cluster.online_users');
+
+        foreach ($node->getHash() as $data) {
+            $service->addUserId($data['uuid']);
+        }
     }
 
     /**
-     * @When I'd like to know the state of the following user ids:
+     * @When /^I check the following UUIDs:$/
+     *
+     * @param TableNode $table
      */
-    public function iDLikeToKnowTheStateOfTheFollowingUserIds(TableNode $table)
+    public function checkIdList(TableNode $table)
     {
         $userIdList = array_map(
             function ($row) {
-                return $row['user_id'];
+                return $row['uuid'];
             },
             $table->getHash()
         );
@@ -72,8 +79,8 @@ class OnlineUsersRedisClusterContext extends FixtureLoadingContext implements Sn
     public function iShouldSeeTheFollowingResult(TableNode $table)
     {
         foreach ($table->getHash() as $row) {
-            $userId = $row['user_id'];
-            $state  = $row['state'] === 'true';
+            $userId = $row['uuid'];
+            $state  = $row['is_active'] === 'true';
 
             Assertion::keyExists($this->result, $userId);
             Assertion::eq($state, $this->result[$userId]);

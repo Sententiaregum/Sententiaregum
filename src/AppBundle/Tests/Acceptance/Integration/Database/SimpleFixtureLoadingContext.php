@@ -17,9 +17,7 @@ namespace AppBundle\Tests\Acceptance\Integration\Database;
 use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\Model\User\Role;
 use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 
 /**
@@ -60,7 +58,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I apply fixtures
      */
-    public function iApplyFixtures()
+    public function applyFixtures()
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -71,7 +69,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should be able to fetch them from the database
      */
-    public function iShouldBeAbleToFetchThemFromTheDatabase()
+    public function ensureAppropriateAppliance()
     {
         $em = $this->getEntityManager();
         foreach (['ROLE_USER', 'ROLE_ADMIN'] as $role) {
@@ -82,7 +80,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I have a logging callback defined
      */
-    public function iHaveALoggingCallbackDefined()
+    public function defineLoggerForFixtureAppliance()
     {
         $that           = &$this;
         $this->callback = function ($message) use ($that) {
@@ -94,7 +92,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then the callback should be called
      */
-    public function theCallbackShouldBeCalled()
+    public function ensureLoggerWasCalled()
     {
         Assertion::true($this->data['called']);
     }
@@ -102,7 +100,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then the log messages should be shown
      */
-    public function theLogMessagesShouldBeShown()
+    public function checkLogMessage()
     {
         list($line0, $line1) = $this->data['output'];
 
@@ -113,7 +111,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I apply an invalid fixture
      */
-    public function iApplyAnInvalidFixture()
+    public function applyUnknownFixtures()
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -128,7 +126,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should get an error
      */
-    public function iShouldGetAnError()
+    public function checkError()
     {
         Assertion::notNull($this->exception);
         Assertion::isInstanceOf($this->exception, \InvalidArgumentException::class);
@@ -137,7 +135,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I load production fixtures from the DataFixtures\/ORM directory inside AppBundle
      */
-    public function iLoadFixturesFromTheDatafixturesOrmDirectoryInsideAppbundle()
+    public function loadProdFixturesFromDir()
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -148,7 +146,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should see the following fixtures
      */
-    public function iShouldSeeTheFollowingFixtures(TableNode $table)
+    public function checkFixtures(TableNode $table)
     {
         $classes = array_map(
             function ($array) {

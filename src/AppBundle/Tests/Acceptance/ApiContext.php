@@ -85,7 +85,7 @@ class ApiContext implements KernelAwareContext
         $container->get('app.doctrine.fixtures_loader')->applyFixtures([
             UserFixture::class,
             RoleFixture::class,
-            AdminFixture::class
+            AdminFixture::class,
         ]);
     }
 

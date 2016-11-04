@@ -14,14 +14,9 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Acceptance\Functional\User;
 
-use AppBundle\Model\User\User;
 use AppBundle\Tests\Acceptance\ContextHelper;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
-use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Symfony\Component\DomCrawler\Crawler;

@@ -12,14 +12,17 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\DQL;
+namespace AppBundle\Tests\Acceptance\Integration\AggregateQuerying\User;
 
+use AppBundle\DataFixtures\ORM\AdminFixture;
+use AppBundle\DataFixtures\ORM\RoleFixture;
+use AppBundle\DataFixtures\ORM\UserFixture;
 use AppBundle\Model\Core\DTO\PaginatableDTO;
+use AppBundle\Model\User\PendingActivation;
 use AppBundle\Model\User\User;
 use AppBundle\Model\User\Util\Date\DateTimeComparison;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
+use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
@@ -28,17 +31,12 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class UsersContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class UsersContext extends AbstractIntegrationContext
 {
-    /**
-     * @var bool
-     */
-    protected static $applyUserFixtures = false;
-
     /**
      * @var int
      */
-    private $resultCount;
+    private $resultCount = 0;
 
     /**
      * @var int[]
@@ -55,19 +53,88 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
      */
     private $filterResult;
 
-    /** @BeforeScenario @user&&@repository */
-    public function loadDataFixtures()
+    /** @BeforeScenario */
+    public function applyFixtures()
     {
-        parent::loadDataFixtures();
+        $this->getContainer()->get('app.doctrine.fixtures_loader')->applyFixtures([
+            UserFixture::class,
+            RoleFixture::class,
+            AdminFixture::class,
+        ]);
+    }
+
+    /** @AfterScenario */
+    public function cleanUp()
+    {
+        $this->resultCount = 0;
+        $this->followerIds = [];
+        $this->user        = null;
+
+        $this->getEntityManager()->clear();
+    }
+
+    /**
+     * @Given /^a user with name "(.*)" has an expired activation$/
+     *
+     * @param string $username
+     */
+    public function createExpiredUser(string $username)
+    {
+        $em = $this->getEntityManager();
+
+        $user = User::create($username, '123456', sprintf('%s@sententiaregum.dev', $username), new PhpPasswordHasher());
+        $r    = new \ReflectionProperty($user, 'pendingActivation');
+        $r->setAccessible(true);
+        $r->setValue($user, new PendingActivation(new \DateTime('-3 hours')));
+
+        $em->persist($user);
+        $em->flush();
     }
 
     /**
      * @When I try to delete all users with pending activation
      */
-    public function iTryToDeleteAllUsersWithPendingActivation()
+    public function deleteUsersWithExpiredPendingActivation()
     {
         $repository        = $this->getEntityManager()->getRepository('Account:User');
         $this->resultCount = $repository->deletePendingActivationsByDate(new \DateTime('-2 hours'));
+    }
+
+    /**
+     * @Then /^the user "(.*)" should be removed$/
+     *
+     * @param string $username
+     */
+    public function ensureUserWasRemoved(string $username)
+    {
+        Assertion::count($this->getEntityManager()->getRepository('Account:User')->findBy(['username' => $username]), 0);
+    }
+
+    /**
+     * @Given /^the user "(.*)" is not activated and has activation key "(.*)"$/
+     *
+     * @param string $username
+     * @param string $key
+     */
+    public function createNonActivatedUser(string $username, string $key)
+    {
+        $em = $this->getEntityManager();
+
+        $user = User::create($username, '123456', sprintf('%s@sententiaregum.dev', $username), new PhpPasswordHasher());
+        $r    = new \ReflectionProperty($user, 'pendingActivation');
+        $r->setAccessible(true);
+        $r->setValue($user, new PendingActivation(new \DateTime(), $key));
+
+        $em->persist($user);
+        $em->flush();
+    }
+
+    /**
+     * @Then /^I should get one result$/
+     */
+    public function ensureOneResult()
+    {
+        Assertion::isInstanceOf($this->user, User::class);
     }
 
     /**
@@ -113,11 +180,14 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
     }
 
     /**
-     * @When I'd like to see a user by with username :arg1 and key :arg2
+     * @When /^I'd like to see a user by with username "(.*)" and key "(.*)"$/
+     *
+     * @param string $username
+     * @param string $key
      */
-    public function iDLikeToSeeAUserByWithUsernameAndKey($arg1, $arg2)
+    public function findUserByNameAndKey(string $username, string $key)
     {
-        $this->user = $this->getEntityManager()->getRepository('Account:User')->findUserByUsernameAndActivationKey($arg1, $arg2);
+        $this->user = $this->getEntityManager()->getRepository('Account:User')->findUserByUsernameAndActivationKey($username, $key);
     }
 
     /**
@@ -130,8 +200,10 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
 
     /**
      * @Given the following auth data exist:
+     *
+     * @param TableNode $table
      */
-    public function theFollowingAuthDataExist(TableNode $table)
+    public function ensureAuthAttemptData(TableNode $table)
     {
         foreach ($table->getHash() as $row) {
             $user   = $row['affected'];
@@ -158,35 +230,41 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
     /**
      * @When I delete ancient auth data
      */
-    public function iDeleteAncientAuthData()
+    public function removeAuthData()
     {
         /** @var \AppBundle\Service\Doctrine\Repository\UserRepository $userRepository */
-        $userRepository = $this->getRepository('Account:User');
+        $userRepository = $this->getEntityManager()->getRepository('Account:User');
         $userRepository->deleteAncientAttemptData(new \DateTime('-6 months'));
     }
 
     /**
-     * @Then no log about :arg1 should exist on user :arg2 should exist
+     * @Then /^no log about "(.*)" should exist on user "(.*)" should exist$/
+     *
+     * @param string $ip
+     * @param string $username
      */
-    public function noLogAboutShouldExist($arg1, $arg2)
+    public function ensureNoLogRemains(string $ip, string $username)
     {
         Assertion::false(
-            $this->getRepository('Account:User')->findOneBy(['username' => $arg2])->exceedsIpFailedAuthAttemptMaximum($arg1, new DateTimeComparison())
+            $this->getEntityManager()->getRepository('Account:User')
+                ->findOneBy(['username' => $username])->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison())
         );
     }
 
     /**
      * @When I want to filter for non-unique usernames with the following data:
      */
-    public function iWantToFilterForNonUniqueUsernamesWithTheFollowingData(TableNode $table)
+    public function filterForUniqueUsernames(TableNode $table)
     {
-        $this->filterResult = $this->getRepository('Account:User')->filterUniqueUsernames(array_column($table->getHash(), 'username'));
+        $this->filterResult = $this->getEntityManager()->getRepository('Account:User')->filterUniqueUsernames(array_column($table->getHash(), 'username'));
     }
 
     /**
      * @Then I should see the following names:
+     *
+     * @param TableNode $table
      */
-    public function iShouldSeeTheFollowingNames(TableNode $table)
+    public function validateNames(TableNode $table)
     {
         $list = array_column($table->getHash(), 'username');
 
@@ -196,37 +274,49 @@ class UsersContext extends FixtureLoadingContext implements SnippetAcceptingCont
 
     /**
      * @When I try to persist the following user:
+     *
+     * @param TableNode $table
      */
-    public function iTryToPersistTheFollowingUser(TableNode $table)
+    public function persistUser(TableNode $table)
     {
         $row  = $table->getRow(1);
         $user = User::create($row[0], $row[1], $row[2], new PhpPasswordHasher());
 
-        $this->getRepository('Account:User')->save($user);
+        $this->getEntityManager()->getRepository('Account:User')->save($user);
         $this->user = $user;
     }
 
     /**
      * @Then it should be present in the identity map
      */
-    public function itShouldBePresentInTheIdentityMap()
+    public function ensureInIdentityMap()
     {
         Assertion::true($this->getEntityManager()->getUnitOfWork()->isInIdentityMap($this->user));
     }
 
     /**
-     * @When I try to remove the user :arg1
+     * @Then it should be scheduled for insert
      */
-    public function iTryToRemoveTheUser($arg1)
+    public function ensureScheduledForPersist()
     {
-        $repository = $this->getRepository('Account:User');
-        $repository->remove($this->user = $repository->findOneBy(['username' => $arg1]));
+        Assertion::true($this->getEntityManager()->getUnitOfWork()->isScheduledForInsert($this->user));
+    }
+
+    /**
+     * @When I try to remove the user :arg1
+     *
+     * @param string $username
+     */
+    public function removeUser(string $username)
+    {
+        $repository = $this->getEntityManager()->getRepository('Account:User');
+        $repository->remove($this->user = $repository->findOneBy(['username' => $username]));
     }
 
     /**
      * @Then it should be scheduled for removal
      */
-    public function itShouldBeScheduledForRemoval()
+    public function ensureScheduledForRemoval()
     {
         Assertion::true($this->getEntityManager()->getUnitOfWork()->isScheduledForDelete($this->user));
     }

@@ -8,11 +8,11 @@ Feature: find currently active users
 
     Scenario: find following users that are currently active
         Given the following users are online:
-            | username  | password  |
-            | Ma27      | 72aM      |
-            | admin     | 123456    |
+            | username | password |
+            | Ma27     | 72aM     |
+            | admin    | 123456   |
         When I submit a request to "GET /api/protected/users/online.json"
         Then I should get a response with the 200 status code
         And the following users should be active:
-            | username  |
-            | Ma27      |
+            | username |
+            | Ma27     |
