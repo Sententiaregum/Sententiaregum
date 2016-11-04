@@ -1,6 +1,7 @@
-@fixtures @database
+@database
 Feature: database installation
-    Command which does a huge database setup
+    In order to keep the setup of the platform as easy as possible,
+    an command-line API is needed in order to automate the setup of the database
 
     Scenario: schema appliance
         Given the schema is dropped

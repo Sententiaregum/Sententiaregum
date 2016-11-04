@@ -12,12 +12,11 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\Database;
+namespace AppBundle\Tests\Acceptance\Integration\Database;
 
 use AppBundle\Command\LoadCustomFixturesCommand;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
+use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -26,7 +25,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class ProductionFixtureContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class ProductionFixtureApplianceContext extends AbstractIntegrationContext
 {
     /**
      * @var bool
@@ -37,12 +36,6 @@ class ProductionFixtureContext extends FixtureLoadingContext implements SnippetA
      * @var string
      */
     private $display;
-
-    /** @BeforeScenario @fixtures&&@loader */
-    public function loadDataFixtures()
-    {
-        parent::loadDataFixtures();
-    }
 
     /**
      * @When I run the production fixtures loader

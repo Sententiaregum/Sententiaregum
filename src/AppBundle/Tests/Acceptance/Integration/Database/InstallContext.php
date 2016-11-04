@@ -12,13 +12,11 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\Database;
+namespace AppBundle\Tests\Acceptance\Integration\Database;
 
 use AppBundle\Model\User\User;
-use AppBundle\Tests\Functional\BaseTrait;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
+use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
@@ -28,10 +26,8 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class InstallContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class InstallContext extends AbstractIntegrationContext
 {
-    use BaseTrait;
-
     /**
      * @var \Symfony\Component\Console\Tester\CommandTester
      */
@@ -42,7 +38,7 @@ class InstallContext extends FixtureLoadingContext implements SnippetAcceptingCo
      */
     private $exception;
 
-    /** @BeforeScenario @fixtures&&@database */
+    /** @BeforeScenario */
     public function recreateSchema()
     {
         $em   = $this->getEntityManager();

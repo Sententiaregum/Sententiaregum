@@ -12,10 +12,11 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Functional\Doctrine\Database;
+namespace AppBundle\Tests\Acceptance\Integration\Database;
 
 use AppBundle\DataFixtures\ORM\RoleFixture;
 use AppBundle\Model\User\Role;
+use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
 use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -26,7 +27,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingContext
+class SimpleFixtureLoadingContext extends AbstractIntegrationContext
 {
     /**
      * @var bool
@@ -55,12 +56,6 @@ class FixtureContext extends FixtureLoadingContext implements SnippetAcceptingCo
      * @var string
      */
     private $directoryResult;
-
-    /** @BeforeScenario @fixtures&&@appliance */
-    public function loadDataFixtures()
-    {
-        parent::loadDataFixtures();
-    }
 
     /**
      * @When I apply fixtures

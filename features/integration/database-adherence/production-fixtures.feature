@@ -1,6 +1,8 @@
-@fixtures @loader
+@database
 Feature: production fixtures loader
-    Some fixtures should be loaded on production such as the role fixture or the admin fixture.
+    Fixtures are necessary in order to simulate certain workflows in a test/dev environment,
+    but on a prod environment these fixtures shouldn't be present anymore. However some
+    fixtures with very basic data are necessary to be applied there.
 
     Scenario: load production fixtures
         Given the database is purged
