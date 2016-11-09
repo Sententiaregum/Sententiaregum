@@ -22,6 +22,7 @@ composer::target_dir: '/usr/local/bin'
 # php
 php::globals::config_root: "/etc/php/7.0"
 php::globals::php_version: '7.0'
+php::composer::source: "https://getcomposer.org/download/1.2.0/composer.phar"
 
 sententiaregum::backend::php::fpm: false
 sententiaregum::backend::php::extensions:
