@@ -16,9 +16,7 @@ namespace AppBundle\Tests\Acceptance\Integration\AggregateQuerying\User;
 
 use AppBundle\Model\User\Role;
 use AppBundle\Tests\Acceptance\AbstractIntegrationContext;
-use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 
 /**
  * Behat context for role model interactions.

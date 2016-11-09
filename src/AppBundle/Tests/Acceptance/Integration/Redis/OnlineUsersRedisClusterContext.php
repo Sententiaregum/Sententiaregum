@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Acceptance\Integration\Redis;
 
-use AppBundle\Tests\Functional\FixtureLoadingContext;
 use Assert\Assertion;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
