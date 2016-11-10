@@ -118,7 +118,7 @@ class ApiContext implements KernelAwareContext
             $password
         ));
 
-        $this->apiKey = json_decode($response->getContent(), true)['apiKey'];
+        $this->apiKey = $this->decode($response->getContent())['apiKey'];
     }
 
     /**
@@ -138,8 +138,7 @@ class ApiContext implements KernelAwareContext
      */
     public function submitRequest(string $request)
     {
-        $method = ($matched = (bool) preg_match('/^([\w]+) (\/(.*))$/', $request, $matches)) ? $matches[1] : 'GET';
-        $url    = $matched ? $matches[2] : $request;
+        list($method, $url) = $this->analyzeURLInput($request);
 
         if ($this->profilerEnabled) {
             $this->client->enableProfiler();
@@ -264,11 +263,20 @@ class ApiContext implements KernelAwareContext
      */
     private function evaluatePropertyPath(string $propertyPath)
     {
-        static $accessor = null;
-        if (!$accessor) {
-            $accessor = PropertyAccess::createPropertyAccessor();
-        }
+        return PropertyAccess::createPropertyAccessor()->getValue($this->response, $propertyPath);
+    }
 
-        return $accessor->getValue($this->response, $propertyPath);
+    /**
+     * Analyzes a request input which might look like "POST /api/create".
+     *
+     * @param string $request
+     *
+     * @return array
+     */
+    private function analyzeURLInput(string $request): array
+    {
+        $method = ($matched = (bool) preg_match('/^([\w]+) (\/(.*))$/', $request, $matches)) ? $matches[1] : 'GET';
+
+        return [$method, $matched ? $matches[2] : $request];
     }
 }

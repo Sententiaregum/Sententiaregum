@@ -54,7 +54,7 @@ abstract class AbstractIntegrationContext implements KernelAwareContext
      *
      * @return EntityManagerInterface
      */
-    protected function getEntityManager():EntityManagerInterface
+    protected function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()->get('doctrine.orm.default_entity_manager');
     }

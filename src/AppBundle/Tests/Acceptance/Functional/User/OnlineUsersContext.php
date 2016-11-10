@@ -78,12 +78,12 @@ class OnlineUsersContext implements KernelAwareContext
         $repository = $this->getContainer()->get('app.repository.user');
 
         Assertion::eq(
-            $this->apiContext->getResponse(),
+            $response = $this->apiContext->getResponse(),
             array_combine(
                 array_map(function (array $data) use ($repository):string {
                     return $repository->findOneBy(['username' => $data['username']])->getId();
                 }, $node->getHash()),
-                array_fill(0, 1, 1)
+                array_fill(0, count($response), 1)
             )
         );
     }
