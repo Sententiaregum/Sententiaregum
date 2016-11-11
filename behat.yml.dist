@@ -1,35 +1,37 @@
 default:
   suites:
+    # acceptance API suites
     user:
       filters: { tags: "@user" }
-      type:    symfony_bundle
-      bundle:  AppBundle
       contexts:
-        - AppBundle\Tests\Functional\AppContext
-        - AppBundle\Tests\Functional\API\User\RegistrationContext
-        - AppBundle\Tests\Functional\API\User\OnlineUsersContext
-        - AppBundle\Tests\Functional\API\User\UserDetailsContext
-        - AppBundle\Tests\Functional\Redis\OnlineUsersRedisClusterContext
-        - AppBundle\Tests\Functional\Doctrine\DQL\UsersContext
-        - AppBundle\Tests\Functional\Doctrine\DQL\RoleContext
-        - AppBundle\Tests\Functional\Redis\BlockedAccountClusterContext
+        - AppBundle\Tests\Acceptance\ApiContext
+        - AppBundle\Tests\Acceptance\Functional\User\OnlineUsersContext
+        - AppBundle\Tests\Acceptance\Functional\User\CreateAccountContext
     locale:
       filters: { tags: "@locale" }
-      type:    symfony_bundle
-      bundle:  AppBundle
       contexts:
-        - AppBundle\Tests\Functional\AppContext
-        - AppBundle\Tests\Functional\API\Locale\SwitcherContext
-        - AppBundle\Tests\Functional\API\Locale\ProviderContext
-    doctrine:
-      filters: { tags: "@fixtures" }
-      type:    symfony_bundle
-      bundle:  AppBundle
+        - AppBundle\Tests\Acceptance\ApiContext
+        - AppBundle\Tests\Acceptance\Functional\Locale\SwitcherContext
+
+    # integration suites
+    database:
+      filters: { tags: "@database" }
       contexts:
-        - AppBundle\Tests\Functional\AppContext
-        - AppBundle\Tests\Functional\Doctrine\Database\FixtureContext
-        - AppBundle\Tests\Functional\Doctrine\Database\ProductionFixtureContext
-        - AppBundle\Tests\Functional\Doctrine\Database\InstallContext
+        - AppBundle\Tests\Acceptance\CLIContext
+        - AppBundle\Tests\Acceptance\Integration\Database\InstallContext
+        - AppBundle\Tests\Acceptance\Integration\Database\ProductionFixtureApplianceContext
+        - AppBundle\Tests\Acceptance\Integration\Database\SimpleFixtureLoadingContext
+    redis:
+      filters: { tags: "@redis" }
+      contexts:
+        - AppBundle\Tests\Acceptance\Integration\Redis\BlockedAccountClusterContext
+        - AppBundle\Tests\Acceptance\Integration\Redis\OnlineUsersRedisClusterContext
+    aggregate_querying:
+      filters: { tags: "@aggregate-querying" }
+      contexts:
+        - AppBundle\Tests\Acceptance\CLIContext
+        - AppBundle\Tests\Acceptance\Integration\AggregateQuerying\User\RoleContext
+        - AppBundle\Tests\Acceptance\Integration\AggregateQuerying\User\UsersContext
   formatters:
     pretty:
       paths:    false

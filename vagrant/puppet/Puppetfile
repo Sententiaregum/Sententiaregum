@@ -14,6 +14,4 @@ mod 'puppet/staging', '2.0.0'
 mod 'willdurand/nodejs', '1.9.5'
 mod 'maestrodev/wget', '1.7.3'
 mod 'saz/timezone', '3.3.0'
-mod 'mayflower/php',
-  :git => 'git://github.com/mayflower/puppet-php.git',
-  :ref => 'master'
+mod 'mayflower/php', '4.0.0-beta1'
