@@ -77,7 +77,7 @@ final class ActivateAccountHandler
             throw new UserActivationException();
         }
 
-        $user->modifyActivationStatus(User::STATE_APPROVED, $activateAccountDTO->activationKey);
+        $user->performStateTransition(User::STATE_APPROVED, $activateAccountDTO->activationKey);
 
         // the role needs to be added during approval since a non-approved user must not have any role in the system.
         // Furthermore it leads to technical issues when running the purger as the roles may cause a constraint violation

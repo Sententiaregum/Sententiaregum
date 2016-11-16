@@ -29,8 +29,8 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
     public function testUserIsLocked()
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->modifyActivationStatus(User::STATE_APPROVED);
-        $user->lock();
+        $user->performStateTransition(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_LOCKED);
 
         $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
@@ -50,25 +50,12 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
-     * @expectedExceptionMessage BACKEND_AUTH_NON_APPROVED
-     */
-    public function testUserIsNonApprovedAndLocked()
-    {
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->lock();
-
-        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
-        $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
-    }
-
-    /**
-     * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
      * @expectedExceptionMessage BACKEND_AUTH_BLOCKED
      */
     public function testAccountIsTemporaryBlocked()
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->modifyActivationStatus(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_APPROVED);
 
         $provider = $this->getMock(BlockedAccountReadInterface::class);
         $provider

@@ -41,6 +41,7 @@ class User implements UserInterface, Serializable
 {
     const STATE_NEW                   = 'new';
     const STATE_APPROVED              = 'approved';
+    const STATE_LOCKED                = 'locked';
     const MAX_FAILED_ATTEMPTS_FROM_IP = 3;
     const FAILED_AUTH_POOL            = 'failed_auths';
     const AUTH_ATTEMPT_POOL           = 'auth_attempts';
@@ -106,13 +107,6 @@ class User implements UserInterface, Serializable
      * @ORM\Column(name="state", type="string")
      */
     private $state;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="locked", type="boolean")
-     */
-    private $locked = false;
 
     /**
      * @var string
@@ -229,7 +223,7 @@ class User implements UserInterface, Serializable
         $this->registrationDate      = new DateTime();
         $this->lastAction            = new DateTime();
 
-        $this->modifyActivationStatus(self::STATE_NEW);
+        $this->performStateTransition(self::STATE_NEW);
     }
 
     /**
@@ -343,26 +337,36 @@ class User implements UserInterface, Serializable
      * @param string $key
      *
      * @throws \InvalidArgumentException If no activation key is given.
+     * @throws \LogicException           If a locked user receives an invalid state transition.
      *
      * @return User
      */
-    public function modifyActivationStatus($state, $key = null): self
+    public function performStateTransition(string $state, string $key = null): self
     {
-        if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED], true)) {
+        if (!in_array($state, [self::STATE_NEW, self::STATE_APPROVED, self::STATE_LOCKED], true)) {
             throw new \InvalidArgumentException('Invalid state!');
         }
 
-        $this->state = (string) $state;
+        switch ($state) {
+            case self::STATE_APPROVED:
+                if (self::STATE_NEW === $this->state) {
+                    if (($activationInfo = $this->pendingActivation) && $key !== $activationInfo->getKey()) {
+                        throw new \InvalidArgumentException('Invalid activation key given!');
+                    }
 
-        if (self::STATE_APPROVED === $this->state) {
-            if (($activationInfo = $this->pendingActivation) && $key !== $activationInfo->getKey()) {
-                throw new \InvalidArgumentException('Invalid activation key given!');
-            }
-
-            $this->removeActivationKey();
-        } else {
-            $this->pendingActivation = new PendingActivation($this->getRegistrationDate());
+                    $this->removeActivationKey();
+                }
+                break;
+            case self::STATE_LOCKED:
+                if (self::STATE_NEW === $this->state) {
+                    throw new \LogicException('Only approved users can be locked!');
+                }
+                break;
+            default:
+                $this->pendingActivation = new PendingActivation($this->getRegistrationDate());
         }
+
+        $this->state = $state;
 
         return $this;
     }
@@ -372,33 +376,9 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getActivationStatus(): string
+    public function getState(): string
     {
         return $this->state;
-    }
-
-    /**
-     * Locks the user.
-     *
-     * @return $this
-     */
-    public function lock()
-    {
-        $this->locked = true;
-
-        return $this;
-    }
-
-    /**
-     * Unlocks the user.
-     *
-     * @return $this
-     */
-    public function unlock()
-    {
-        $this->locked = false;
-
-        return $this;
     }
 
     /**
@@ -408,7 +388,17 @@ class User implements UserInterface, Serializable
      */
     public function isLocked(): bool
     {
-        return $this->locked;
+        return $this->state === self::STATE_LOCKED;
+    }
+
+    /**
+     * Checks if the current user is approved.
+     *
+     * @return bool
+     */
+    public function isApproved(): bool
+    {
+        return $this->state === self::STATE_APPROVED;
     }
 
     /**
@@ -442,16 +432,10 @@ class User implements UserInterface, Serializable
      *
      * @return User
      */
-    public function storeUniqueActivationKeyForNonApprovedUser($activationKey): self
+    public function storeUniqueActivationKeyForNonApprovedUser(string $activationKey): self
     {
-        if (self::STATE_APPROVED === $this->getActivationStatus()) {
+        if (self::STATE_APPROVED === $this->state || self::STATE_LOCKED === $this->state) {
             throw new \LogicException('Approved users cannot have an activation key!');
-        }
-
-        if (empty($activationKey)) {
-            $problem = 'Cannot set empty activation key! Please call "removeActivationKey()" instead for the removal of the activation key!';
-
-            throw new \LogicException($problem);
         }
 
         $this->pendingActivation->setKey($activationKey);
@@ -466,7 +450,7 @@ class User implements UserInterface, Serializable
      */
     public function removeActivationKey(): self
     {
-        if (self::STATE_APPROVED !== $this->getActivationStatus()) {
+        if (self::STATE_NEW !== $this->state) {
             throw new \LogicException('Only approved users can remove activation keys!');
         }
 
@@ -487,8 +471,8 @@ class User implements UserInterface, Serializable
      */
     public function addRole(Role $role): self
     {
-        if ($this->getActivationStatus() === static::STATE_NEW) {
-            throw new \InvalidArgumentException('Cannot attach role on non-approved user!');
+        if (!$this->isApproved()) {
+            throw new \InvalidArgumentException('Cannot attach role on non-approved or locked user!');
         }
 
         if ($this->hasRole($role)) {
@@ -565,12 +549,16 @@ class User implements UserInterface, Serializable
      *
      * @param User $user
      *
+     * @throws \LogicException If the following user doesn't exist.
+     *
      * @return User
      */
     public function removeFollowing(User $user): self
     {
         if (!$this->follows($user)) {
-            throw new \LogicException('Cannot remove relation with invalid user "%s"!', $user->getUsername());
+            throw new \LogicException(sprintf(
+                'Cannot remove relation with invalid user "%s"!', $user->getUsername()
+            ));
         }
 
         $this->following->removeElement($user);
@@ -722,7 +710,6 @@ class User implements UserInterface, Serializable
             $this->registrationDate->getTimestamp(),
             $this->apiKey,
             $this->state,
-            $this->locked,
             $this->aboutText,
             $this->getRoles(),
             $this->getFollowing(),
@@ -748,12 +735,11 @@ class User implements UserInterface, Serializable
         $this->registrationDate      = new DateTime(sprintf('@%s', $data[5]));
         $this->apiKey                = $data[6];
         $this->state                 = $data[7];
-        $this->locked                = $data[8];
-        $this->aboutText             = $data[9];
-        $this->roles                 = new ArrayCollection($data[10]);
-        $this->following             = new ArrayCollection($data[11]);
-        $this->authentications       = new ArrayCollection($data[12]);
-        $this->failedAuthentications = new ArrayCollection($data[13]);
+        $this->aboutText             = $data[8];
+        $this->roles                 = new ArrayCollection($data[9]);
+        $this->following             = new ArrayCollection($data[10]);
+        $this->authentications       = new ArrayCollection($data[11]);
+        $this->failedAuthentications = new ArrayCollection($data[12]);
     }
 
     /**

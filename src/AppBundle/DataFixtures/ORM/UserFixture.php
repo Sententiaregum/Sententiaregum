@@ -36,20 +36,20 @@ class UserFixture implements FixtureInterface, DependentFixtureInterface
         $userRole       = $manager->getRepository('Account:Role')->findOneBy(['role' => 'ROLE_USER']);
 
         $user1 = User::create('Ma27', '72aM', 'Ma27@sententiaregum.dev', $passwordHasher);
-        $user1->modifyActivationStatus(User::STATE_APPROVED);
+        $user1->performStateTransition(User::STATE_APPROVED);
         $user1->addRole($userRole);
         $user1->updateLastAction();
         $user1->modifyUserLocale('de');
 
         $user2 = User::create('benbieler', 'releibneb', 'benbieler@sententiaregum.dev', $passwordHasher);
-        $user2->modifyActivationStatus(User::STATE_APPROVED);
+        $user2->performStateTransition(User::STATE_APPROVED);
         $user2->addRole($userRole);
         $user2->updateLastAction();
 
         $locked = User::create('anonymus', 'sumynona', 'anonymus@example.org', $passwordHasher);
-        $locked->modifyActivationStatus(User::STATE_APPROVED);
+        $locked->performStateTransition(User::STATE_APPROVED);
         $locked->addRole($userRole);
-        $locked->lock();
+        $locked->performStateTransition(User::STATE_LOCKED);
         $locked->updateLastAction();
 
         $user2->addFollowing($user1);

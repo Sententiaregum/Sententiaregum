@@ -55,15 +55,19 @@ class IncompleteUserCheckListener
         $user = $event->getUser();
 
         $isLocked      = $user->isLocked();
-        $isNonApproved = $user->getActivationStatus() !== User::STATE_APPROVED;
+        $isNonApproved = !$user->isApproved();
 
         if ($isLocked || $isNonApproved || $this->temporaryBlockedAccountProvider->isAccountTemporaryBlocked($user->getId())) {
             switch (true) {
-                case $isNonApproved:
-                    $message = 'BACKEND_AUTH_NON_APPROVED';
-                    break;
+                // NOTE: it's necessary to check `locked` at first now since `locked` is a state transition that can't be done
+                // if a user is non-approved, but can be done if the user's approved. Therefore
+                // it's safe to rely on $isLocked without looking at `$isNonApproved`, but $isNonApproved is false
+                // if the user's locked since this is another state.
                 case $isLocked:
                     $message = 'BACKEND_AUTH_LOCKED';
+                    break;
+                case $isNonApproved:
+                    $message = 'BACKEND_AUTH_NON_APPROVED';
                     break;
                 default:
                     $message = 'BACKEND_AUTH_BLOCKED';
