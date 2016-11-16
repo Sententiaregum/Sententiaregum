@@ -337,7 +337,7 @@ class User implements UserInterface, Serializable
      * @param string $key
      *
      * @throws \InvalidArgumentException If no activation key is given.
-     * @throws \LogicException If a locked user receives an invalid state transition.
+     * @throws \LogicException           If a locked user receives an invalid state transition.
      *
      * @return User
      */
