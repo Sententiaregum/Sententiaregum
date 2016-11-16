@@ -400,6 +400,7 @@ class User implements UserInterface, Serializable
     {
         return $this->state === self::STATE_APPROVED;
     }
+
     /**
      * Set aboutText.
      *
