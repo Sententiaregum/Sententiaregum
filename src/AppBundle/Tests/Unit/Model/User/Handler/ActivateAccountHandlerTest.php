@@ -106,7 +106,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
     public function testActivateAccount()
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->modifyActivationStatus(User::STATE_NEW);
+        $user->performStateTransition(User::STATE_NEW);
         $user->storeUniqueActivationKeyForNonApprovedUser('key');
 
         $writeRepository = $this->getMock(UserWriteRepositoryInterface::class);
@@ -139,7 +139,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
         $handler($dto);
 
         $this->assertTrue($user->hasRole($role));
-        $this->assertSame(User::STATE_APPROVED, $user->getActivationStatus());
+        $this->assertSame(User::STATE_APPROVED, $user->getState());
         $this->assertNull($user->getPendingActivation());
     }
 }

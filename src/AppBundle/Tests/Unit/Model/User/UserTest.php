@@ -26,10 +26,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertFalse($user->isLocked());
 
-        $user->lock();
+        $user->performStateTransition(User::STATE_APPROVED); // state transition (new -> approved) as non-approved users can't be locked
+        $user->performStateTransition(User::STATE_LOCKED);
         $this->assertTrue($user->isLocked());
 
-        $user->unlock();
+        $user->performStateTransition(User::STATE_APPROVED);
         $this->assertFalse($user->isLocked());
     }
 
@@ -40,7 +41,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetActivationKeyOnApprovedUser()
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->modifyActivationStatus(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_APPROVED);
 
         $user->storeUniqueActivationKeyForNonApprovedUser('any long activation key');
     }
@@ -49,19 +50,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->storeUniqueActivationKeyForNonApprovedUser('any long api key');
-        $user->modifyActivationStatus(User::STATE_APPROVED, 'any long api key');
+        $user->performStateTransition(User::STATE_APPROVED, 'any long api key');
 
-        $this->assertSame(User::STATE_APPROVED, $user->getActivationStatus());
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot set empty activation key! Please call "removeActivationKey()" instead for the removal of the activation key!
-     */
-    public function testEmptyActivationKey()
-    {
-        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->storeUniqueActivationKeyForNonApprovedUser(null);
+        $this->assertSame(User::STATE_APPROVED, $user->getState());
     }
 
     public function testFactory()
@@ -107,7 +98,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
 
-        $user->modifyActivationStatus(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_APPROVED);
 
         $user->addRole($role);
         $this->assertTrue($user->hasRole($role));
@@ -121,7 +112,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot attach role on non-approved user!
+     * @expectedExceptionMessage Cannot attach role on non-approved or locked user!
      */
     public function testRolesOnNonApprovedUser()
     {
@@ -258,7 +249,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $hasher = new PhpPasswordHasher();
         $user   = User::create('Ma27', 'foo', 'foo@bar.de', $hasher);
 
-        $user->modifyActivationStatus(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_APPROVED);
         $user->addRole(new Role('ROLE_USER'));
         $user->addAndValidateNewUserIp('33.33.33.33', new DateTimeComparison());
 
@@ -275,7 +266,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo@bar.de', $newUser->getEmail());
         $this->assertInstanceOf(\DateTime::class, $newUser->getLastAction());
         $this->assertInstanceOf(\DateTime::class, $newUser->getRegistrationDate());
-        $this->assertSame(User::STATE_APPROVED, $newUser->getActivationStatus());
+        $this->assertSame(User::STATE_APPROVED, $newUser->getState());
         $this->assertCount(1, $newUser->getRoles());
         $this->assertFalse($user->addAndValidateNewUserIp('33.33.33.33', new DateTimeComparison()));
         $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', new DateTimeComparison()));
@@ -289,7 +280,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->storeUniqueActivationKeyForNonApprovedUser(uniqid());
-        $user->modifyActivationStatus(User::STATE_APPROVED);
+        $user->performStateTransition(User::STATE_APPROVED);
     }
 
     /**
@@ -299,20 +290,20 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testInvalidState()
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $user->modifyActivationStatus('any random state');
+        $user->performStateTransition('any random state');
     }
 
     public function testActivationLifecycle()
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
-        $this->assertSame(User::STATE_NEW, $user->getActivationStatus());
+        $this->assertSame(User::STATE_NEW, $user->getState());
 
         $activationKey = 'a long activation key'; // to be generated by a domain service
         $user->storeUniqueActivationKeyForNonApprovedUser($activationKey);
         $this->assertSame($activationKey, $user->getPendingActivation()->getKey());
 
-        $user->modifyActivationStatus(User::STATE_APPROVED, $activationKey);
-        $this->assertSame(User::STATE_APPROVED, $user->getActivationStatus());
+        $user->performStateTransition(User::STATE_APPROVED, $activationKey);
+        $this->assertSame(User::STATE_APPROVED, $user->getState());
         $this->assertNull($user->getPendingActivation());
     }
 
@@ -345,5 +336,72 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->modifyUserLocale('DE');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Role "ROLE_USER" already attached at user "Ma27"!
+     */
+    public function testAddRoleTwice()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $role = new Role('ROLE_USER');
+
+        $user->performStateTransition(User::STATE_APPROVED);
+        $user->addRole($role);
+        $user->addRole($role);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot remove not existing role "ROLE_USER"!
+     */
+    public function testRemoveNonExistentRole()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $role = new Role('ROLE_USER');
+
+        $user->removeRole($role);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot remove relation with invalid user "benbieler"!
+     */
+    public function testTryToRemoveInvalidFollowing()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->removeFollowing(User::create('benbieler', '123456', 'benbieler@sententiaregum.dev', new PhpPasswordHasher()));
+    }
+
+    public function testModifyLocale()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $this->assertSame('en', $user->getLocale());
+        $user->modifyUserLocale('de');
+
+        $this->assertSame('de', $user->getLocale());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Only approved users can remove activation keys!
+     */
+    public function testTryRemoveActivationKeyAfterStateTransition()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->performStateTransition(User::STATE_APPROVED);
+
+        $user->removeActivationKey();
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Only approved users can be locked!
+     */
+    public function testTransitionFromNewToLocked()
+    {
+        $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
+        $user->performStateTransition(User::STATE_LOCKED);
     }
 }
