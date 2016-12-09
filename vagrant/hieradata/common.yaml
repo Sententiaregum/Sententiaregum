@@ -20,12 +20,12 @@ composer::command_name: composer
 composer::target_dir: '/usr/local/bin'
 
 # php
-php::globals::config_root: "/etc/php/7.0"
-php::globals::php_version: '7.0'
+php::globals::config_root: "/etc/php/7.1"
+php::globals::php_version: "7.1"
 php::composer::source: "https://getcomposer.org/download/1.2.2/composer.phar"
 
-sententiaregum::backend::php::fpm: false
-sententiaregum::backend::php::extensions:
+php::fpm: false
+php::extensions:
   gd:     {}
   mysql:  {}
   curl:   {}
@@ -34,14 +34,17 @@ sententiaregum::backend::php::extensions:
   xdebug: {}
   apcu:
     package_prefix: 'php-'
-  mbstring:
-    package_prefix: 'php7.0-'
+  mbstring: {}
 
-sententiaregum::backend::php::settings:
+php::package_prefix: 'php7.1-'
+
+php::settings:
   Date/date.timezone: 'UTC'
 
 # apache
 apache::mpm_module: prefork
+apache::mod::php::package_name: 'libapache2-mod-php7.1'
+apache::mod::php::php_version: '7.1'
 
 sententiaregum::backend::server::host_name: sententiaregum.dev
 sententiaregum::backend::server::doc_root: /var/www/sententiaregum/web
