@@ -30,18 +30,18 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidData()
     {
-        $writeRepository = $this->getMock(UserWriteRepositoryInterface::class);
+        $writeRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $writeRepository
             ->expects($this->never())
             ->method('save');
 
-        $readRepository = $this->getMock(UserReadRepositoryInterface::class);
+        $readRepository = $this->createMock(UserReadRepositoryInterface::class);
         $readRepository
             ->expects($this->once())
             ->method('findUserByUsernameAndActivationKey')
             ->with('Ma27', 'key');
 
-        $roleRepository = $this->getMock(RoleReadRepositoryInterface::class);
+        $roleRepository = $this->createMock(RoleReadRepositoryInterface::class);
         $roleRepository
             ->expects($this->never())
             ->method('determineDefaultRole');
@@ -77,19 +77,19 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
         $p2->setValue($v, new \DateTime('-5 hours'));
         $p->setValue($user, $v);
 
-        $readRepository = $this->getMock(UserReadRepositoryInterface::class);
+        $readRepository = $this->createMock(UserReadRepositoryInterface::class);
         $readRepository
             ->expects($this->once())
             ->method('findUserByUsernameAndActivationKey')
             ->with('Ma27', $key)
             ->willReturn($user);
 
-        $roleRepository = $this->getMock(RoleReadRepositoryInterface::class);
+        $roleRepository = $this->createMock(RoleReadRepositoryInterface::class);
         $roleRepository
             ->expects($this->never())
             ->method('determineDefaultRole');
 
-        $writeRepository = $this->getMock(UserWriteRepositoryInterface::class);
+        $writeRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $writeRepository
             ->expects($this->never())
             ->method('save');
@@ -109,13 +109,13 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
         $user->performStateTransition(User::STATE_NEW);
         $user->storeUniqueActivationKeyForNonApprovedUser('key');
 
-        $writeRepository = $this->getMock(UserWriteRepositoryInterface::class);
+        $writeRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $writeRepository
             ->expects($this->once())
             ->method('save')
             ->with($user);
 
-        $readRepository = $this->getMock(UserReadRepositoryInterface::class);
+        $readRepository = $this->createMock(UserReadRepositoryInterface::class);
         $readRepository
             ->expects($this->once())
             ->method('findUserByUsernameAndActivationKey')
@@ -124,7 +124,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
 
         $role = new Role('ROLE_USER');
 
-        $roleRepository = $this->getMock(RoleReadRepositoryInterface::class);
+        $roleRepository = $this->createMock(RoleReadRepositoryInterface::class);
         $roleRepository
             ->expects($this->once())
             ->method('determineDefaultRole')

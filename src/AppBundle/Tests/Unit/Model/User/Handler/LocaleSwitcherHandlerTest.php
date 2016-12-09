@@ -24,7 +24,7 @@ class LocaleSwitcherHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testUserWithoutLocaleChange()
     {
-        $userRepository = $this->getMock(UserWriteRepositoryInterface::class);
+        $userRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $userRepository
             ->expects($this->never())
             ->method('save');
@@ -46,7 +46,7 @@ class LocaleSwitcherHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
-        $userRepository = $this->getMock(UserWriteRepositoryInterface::class);
+        $userRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $userRepository
             ->expects($this->once())
             ->method('save')

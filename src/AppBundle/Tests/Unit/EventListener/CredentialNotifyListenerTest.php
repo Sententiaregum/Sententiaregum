@@ -34,7 +34,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
-        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->once())
             ->method('persist')
@@ -47,18 +47,18 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $stack   = new RequestStack();
         $stack->push($request);
 
-        $tracer = $this->getMock(IpTracingServiceInterface::class, ['getIpLocationData']);
+        $tracer = $this->createMock(IpTracingServiceInterface::class);
         $tracer
             ->expects($this->any())
             ->method('getIpLocationData')
             ->willReturn(new IpLocation('127.0.0.1', 'Germany', 'Bavaria', 'Munich', 48, 11));
 
-        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
             ->expects(self::once())
             ->method('publishNotification');
 
-        $listener = new CredentialNotifyListener($entityManager, $stack, $tracer, $this->getMock(BlockedAccountWriteProviderInterface::class));
+        $listener = new CredentialNotifyListener($entityManager, $stack, $tracer, $this->createMock(BlockedAccountWriteProviderInterface::class));
         $listener->setNotificator($notificator);
         $listener->onAuthentication(new OnAuthenticationEvent($user));
 
@@ -71,7 +71,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $user->addFailedAuthenticationWithIp('127.0.0.1');
         $user->addFailedAuthenticationWithIp('127.0.0.1');
 
-        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->once())
             ->method('persist')
@@ -84,19 +84,19 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $stack   = new RequestStack();
         $stack->push($request);
 
-        $tracer = $this->getMock(IpTracingServiceInterface::class, ['getIpLocationData']);
+        $tracer = $this->createMock(IpTracingServiceInterface::class);
         $tracer
             ->expects($this->any())
             ->method('getIpLocationData')
             ->willReturn(new IpLocation('127.0.0.1', 'Germany', 'Bavaria', 'Munich', 48, 11));
 
-        $provider = $this->getMock(BlockedAccountWriteProviderInterface::class);
+        $provider = $this->createMock(BlockedAccountWriteProviderInterface::class);
         $provider
             ->expects($this->once())
             ->method('addTemporaryBlockedAccountID')
             ->with($user->getId());
 
-        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
             ->expects(self::once())
             ->method('publishNotification');
@@ -108,7 +108,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testNoNotificationIfUsernameIsWrong()
     {
-        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->never())
             ->method('persist');
@@ -117,17 +117,17 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $stack   = new RequestStack();
         $stack->push($request);
 
-        $tracer = $this->getMock(IpTracingServiceInterface::class, ['getIpLocationData']);
+        $tracer = $this->createMock(IpTracingServiceInterface::class);
         $tracer
             ->expects($this->never())
             ->method('getIpLocationData');
 
-        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
             ->expects(self::never())
             ->method('publishNotification');
 
-        $listener = new CredentialNotifyListener($entityManager, $stack, $tracer, $this->getMock(BlockedAccountWriteProviderInterface::class));
+        $listener = new CredentialNotifyListener($entityManager, $stack, $tracer, $this->createMock(BlockedAccountWriteProviderInterface::class));
         $listener->setNotificator($notificator);
         $listener->onFailedAuthentication(new OnInvalidCredentialsEvent());
     }

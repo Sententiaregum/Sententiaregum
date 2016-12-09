@@ -22,7 +22,7 @@ class PurgeOutdatedPendingActivationsCommandTest extends CommandTestCase
 {
     public function testPurgeData()
     {
-        $repository = $this->getMock(UserWriteRepositoryInterface::class);
+        $repository = $this->createMock(UserWriteRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('deletePendingActivationsByDate')

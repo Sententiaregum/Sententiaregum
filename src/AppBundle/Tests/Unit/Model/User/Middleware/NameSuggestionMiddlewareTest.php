@@ -28,7 +28,7 @@ class NameSuggestionMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         $suggestions = ['Ma27_2016', 'Ma27_2000'];
 
-        $suggestor = $this->getMock(SuggestorInterface::class);
+        $suggestor = $this->createMock(SuggestorInterface::class);
         $suggestor
             ->expects($this->any())
             ->method('getPossibleSuggestions')
@@ -64,7 +64,7 @@ class NameSuggestionMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testAborted($dto)
     {
-        $suggestor  = $this->getMock(SuggestorInterface::class);
+        $suggestor  = $this->createMock(SuggestorInterface::class);
         $middleware = new NameSuggestionMiddleware($suggestor);
 
         $invoked = false;

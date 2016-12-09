@@ -34,7 +34,7 @@ class NotFoundResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $listener = new NotFoundResponseListener();
         $event    = new GetResponseForExceptionEvent(
-            $this->getMock(HttpKernelInterface::class),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST,
             $exception
@@ -96,7 +96,7 @@ class NotFoundResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $listener = new NotFoundResponseListener();
         $event    = new GetResponseForExceptionEvent(
-            $this->getMock(HttpKernelInterface::class),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST,
             $exception

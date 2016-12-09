@@ -35,7 +35,7 @@ class NotificatableTraitTest extends \PHPUnit_Framework_TestCase
     public function testConfigureData()
     {
         $trait     = $this->getMockForTrait(NotificatableTrait::class);
-        $publisher = $this->getMock(NotificatorInterface::class);
+        $publisher = $this->createMock(NotificatorInterface::class);
 
         $class = get_class($trait);
         $publisher

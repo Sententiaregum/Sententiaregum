@@ -29,7 +29,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGetLocationData($ip)
     {
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->createMock(StreamInterface::class);
         $stream
             ->expects($this->any())
             ->method('__toString')
@@ -43,13 +43,13 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->any())
             ->method('getBody')
             ->willReturn($stream);
 
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
@@ -70,13 +70,13 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidIp()
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
             ->with('get', ['/json/foo', ['headers' => ['Accept-Language' => 'en']]])
             ->will($this->returnCallback(function () {
-                throw new ClientException('404 file not found', $this->getMockWithoutInvokingTheOriginalConstructor(Request::class));
+                throw new ClientException('404 file not found', $this->createMock(Request::class));
             }));
 
         $service = new FreeGeoIpTracingService($client);
@@ -85,13 +85,13 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCannotTrack()
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
             ->with('get', ['/json/192.168.56.112', ['headers' => ['Accept-Language' => 'en']]])
             ->will($this->returnCallback(function () {
-                throw new ClientException('404 file not found', $this->getMockWithoutInvokingTheOriginalConstructor(Request::class));
+                throw new ClientException('404 file not found', $this->createMock(Request::class));
             }));
 
         $service = new FreeGeoIpTracingService($client);
@@ -106,19 +106,19 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBrokenResponse()
     {
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->createMock(StreamInterface::class);
         $stream
             ->expects($this->any())
             ->method('__toString')
             ->willReturn('{ip":"192.168.56.112"}');
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->any())
             ->method('getBody')
             ->willReturn($stream);
 
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
@@ -134,7 +134,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testLocalIp($ip)
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
 
         $service = new FreeGeoIpTracingService($client);
         $this->assertNull($service->getIpLocationData($ip, 'en'));

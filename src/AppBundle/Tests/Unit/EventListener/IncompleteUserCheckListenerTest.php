@@ -32,7 +32,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
         $user->performStateTransition(User::STATE_APPROVED);
         $user->performStateTransition(User::STATE_LOCKED);
 
-        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
+        $hook = new IncompleteUserCheckListener($this->createMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -44,7 +44,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
-        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
+        $hook = new IncompleteUserCheckListener($this->createMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -57,7 +57,7 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_APPROVED);
 
-        $provider = $this->getMock(BlockedAccountReadInterface::class);
+        $provider = $this->createMock(BlockedAccountReadInterface::class);
         $provider
             ->expects($this->once())
             ->method('isAccountTemporaryBlocked')

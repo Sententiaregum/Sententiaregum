@@ -30,7 +30,7 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildResponse($message, string $expected)
     {
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator
             ->expects($this->once())
             ->method('trans')
@@ -57,7 +57,7 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessResponse()
     {
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator
             ->expects($this->never())
             ->method('trans');

@@ -193,7 +193,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testNewUserIpCauseRemovalOfOlderLoginIssues()
     {
-        $mock = $this->getMock(DateTimeComparison::class);
+        $mock = $this->createMock(DateTimeComparison::class);
         $mock
             ->expects($this->any())
             ->method('__invoke')
@@ -213,7 +213,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testFailedAuthOutOfRange()
     {
-        $mock = $this->getMock(DateTimeComparison::class);
+        $mock = $this->createMock(DateTimeComparison::class);
         $mock
             ->expects($this->any())
             ->method('__invoke')
@@ -240,7 +240,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
         $this->assertFalse(
-            $user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', $this->getMock(DateTimeComparison::class))
+            $user->exceedsIpFailedAuthAttemptMaximum('127.0.0.1', $this->createMock(DateTimeComparison::class))
         );
     }
 

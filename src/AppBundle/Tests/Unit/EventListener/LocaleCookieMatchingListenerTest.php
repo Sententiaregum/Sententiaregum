@@ -26,7 +26,7 @@ class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/');
         $request->cookies->set('language', 'de');
 
-        $event    = new GetResponseEvent($this->getMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event    = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
         $listener = new LocaleCookieMatchingListener('en');
 
         $listener->onKernelRequest($event);
@@ -42,7 +42,7 @@ class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
         $request->setLocale('en');
         $request->attributes->set('_locale', 'en');
 
-        $event    = new GetResponseEvent($this->getMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
+        $event    = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
         $listener = new LocaleCookieMatchingListener('en');
 
         $listener->onKernelRequest($event);

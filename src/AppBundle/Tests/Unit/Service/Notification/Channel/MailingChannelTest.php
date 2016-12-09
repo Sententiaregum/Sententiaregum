@@ -32,7 +32,7 @@ class MailingChannelTest extends \PHPUnit_Framework_TestCase
         $input->addUser(User::create('benbieler', '123456', 'benbieler@sententiaregum.dev', new PhpPasswordHasher()));
         $input->setTemplateSource('AppBundle:emails:test');
 
-        $mailer = $this->getMockWithoutInvokingTheOriginalConstructor(\Swift_Mailer::class);
+        $mailer = $this->createMock(\Swift_Mailer::class);
         $mailer
             ->expects(self::once())
             ->method('send')
@@ -41,7 +41,7 @@ class MailingChannelTest extends \PHPUnit_Framework_TestCase
                 self::assertSame($message->getFrom(), ['info@sententiaregum.dev' => 'Sententiaregum']);
             });
 
-        $templatingEngine = $this->getMockWithoutInvokingTheOriginalConstructor(EngineInterface::class);
+        $templatingEngine = $this->createMock(EngineInterface::class);
         $templatingEngine
             ->expects(self::at(0))
             ->method('render')
@@ -54,7 +54,7 @@ class MailingChannelTest extends \PHPUnit_Framework_TestCase
             ->with('AppBundle:emails:test.html.twig', ['locale' => 'en'])
             ->willReturn('<b>Notifications</b>');
 
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator
             ->expects(self::once())
             ->method('trans')

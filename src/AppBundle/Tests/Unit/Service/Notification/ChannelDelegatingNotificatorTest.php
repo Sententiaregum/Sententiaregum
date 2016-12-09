@@ -32,7 +32,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
             ->addParameter('foo', 'bar')
             ->addUser($user);
 
-        $channel = $this->getMock(NotificationChannelInterface::class);
+        $channel = $this->createMock(NotificationChannelInterface::class);
         $channel
             ->expects(self::once())
             ->method('publish')
@@ -40,7 +40,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
                 self::assertSame($input, $event);
             });
 
-        $unusedChannel = $this->getMock(NotificationChannelInterface::class);
+        $unusedChannel = $this->createMock(NotificationChannelInterface::class);
         $unusedChannel
             ->expects(self::never())
             ->method('publish');
@@ -71,7 +71,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateArgumentReplacesTemplateMapConfiguration()
     {
-        $channel = $this->getMock(NotificationChannelInterface::class);
+        $channel = $this->createMock(NotificationChannelInterface::class);
         $channel
             ->expects(self::once())
             ->method('publish');

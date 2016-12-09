@@ -22,7 +22,7 @@ class PurgeAncientAuthAttemptDataCommandTest extends CommandTestCase
 {
     public function testPurgeAuthAttemptData()
     {
-        $repoMock = $this->getMock(UserWriteRepositoryInterface::class);
+        $repoMock = $this->createMock(UserWriteRepositoryInterface::class);
         $repoMock->expects($this->once())
             ->method('deleteAncientAttemptData')
             ->willReturn(5);

@@ -75,6 +75,6 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
     public function testInvalidConstraint()
     {
         $localeValidator = new LocaleValidator([]);
-        $localeValidator->validate('value', $this->getMock(Constraint::class));
+        $localeValidator->validate('value', $this->createMock(Constraint::class));
     }
 }

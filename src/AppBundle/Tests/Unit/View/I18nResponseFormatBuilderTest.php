@@ -61,7 +61,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
 
         $service = new I18nResponseFormatBuilder(new IdentityTranslator());
         $service->formatTranslatableViolationList(
-            new ConstraintViolationList([$this->getMockWithoutInvokingTheOriginalConstructor(ConstraintViolation::class)]),
+            new ConstraintViolationList([$this->createMock(ConstraintViolation::class)]),
             true,
             $allLanguages,
             $target
@@ -98,7 +98,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testTransChoiceFails()
     {
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects($this->once())
             ->method('transChoice')
             ->will($this->returnCallback(

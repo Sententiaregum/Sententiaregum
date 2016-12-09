@@ -23,7 +23,7 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoResults()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
+        $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository
             ->expects($this->never())
             ->method('filterUniqueUsernames');
@@ -36,7 +36,7 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterResults()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
+        $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('filterUniqueUsernames')
@@ -57,7 +57,7 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoSuggestors()
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(UserReadRepositoryInterface::class);
+        $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository
             ->expects(self::never())
             ->method('filterUniqueUsernames');
