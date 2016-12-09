@@ -19,9 +19,9 @@ use AppBundle\Validator\Constraints\Recaptcha as RecaptchaConstraint;
 use AppBundle\Validator\Constraints\RecaptchaValidator;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class RecaptchaValidatorTest extends AbstractConstraintValidatorTest
+class RecaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     public function createValidator()
     {

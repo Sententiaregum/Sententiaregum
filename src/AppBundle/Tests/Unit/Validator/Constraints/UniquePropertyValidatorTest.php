@@ -26,9 +26,9 @@ use Doctrine\ORM\ORMException;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
+class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
 {
     protected function createValidator()
     {
