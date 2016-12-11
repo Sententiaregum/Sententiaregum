@@ -49,21 +49,30 @@ final class ValidationInfo
      *
      * @throws \InvalidArgumentException If a non-optional attribute is missing.
      *
-     * @return string|null
+     * @return mixed
      */
     public function getExtraValue(string $info, bool $optional = false)
     {
-        if (!array_key_exists($info, $this->extra)) {
-            if (!$optional) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Missing property "%s" in extra data!',
-                    $info
-                ));
-            }
-
-            return;
+        $extra = $this->retrieveExtraValue($info);
+        if (!$optional && !$extra) {
+            throw new \InvalidArgumentException(sprintf(
+                'Missing property "%s" in extra data!',
+                $info
+            ));
         }
 
-        return $this->extra[$info];
+        return $extra;
+    }
+
+    /**
+     * Helper method to retrieve an extra value or null.
+     *
+     * @param string $info
+     *
+     * @return null|string
+     */
+    private function retrieveExtraValue(string $info)
+    {
+        return $this->extra[$info] ?? null;
     }
 }

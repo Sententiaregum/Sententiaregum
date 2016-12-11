@@ -97,7 +97,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $service = new FreeGeoIpTracingService($client);
         $result  = $service->getIpLocationData('192.168.56.112', 'en');
 
-        $this->assertNull($result);
+        $this->assertTrue($result->isEmpty());
     }
 
     /**
@@ -137,7 +137,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMock(Client::class);
 
         $service = new FreeGeoIpTracingService($client);
-        $this->assertNull($service->getIpLocationData($ip, 'en'));
+        $this->assertTrue($service->getIpLocationData($ip, 'en')->isEmpty());
     }
 
     /**

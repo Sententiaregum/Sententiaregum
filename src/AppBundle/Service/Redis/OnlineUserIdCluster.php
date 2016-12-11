@@ -43,7 +43,7 @@ class OnlineUserIdCluster implements OnlineUserIdReadProviderInterface, OnlineUs
     /**
      * {@inheritdoc}
      */
-    public function addUserId(string $userId)
+    public function addUserId(string $userId): void
     {
         $key = $this->createRedisStorageKeyByUserId($userId);
 
@@ -56,15 +56,7 @@ class OnlineUserIdCluster implements OnlineUserIdReadProviderInterface, OnlineUs
      */
     public function validateUserIds(array $ids): array
     {
-        $that             = &$this;
-        $onlineOfflineMap = array_map(
-            function ($userId) use ($that) {
-                return $that->redis->exists($that->createRedisStorageKeyByUserId($userId));
-            },
-            $ids
-        );
-
-        return array_combine($ids, $onlineOfflineMap);
+        return array_combine($ids, array_map([$this, 'exists'], $ids));
     }
 
     /**
@@ -77,5 +69,17 @@ class OnlineUserIdCluster implements OnlineUserIdReadProviderInterface, OnlineUs
     private function createRedisStorageKeyByUserId(string $id): string
     {
         return sprintf('online:%s', $id);
+    }
+
+    /**
+     * Checks if the given user id is existant in the online users cluster of the redis database.
+     *
+     * @param string $userId
+     *
+     * @return bool
+     */
+    private function exists(string $userId): bool
+    {
+        return (bool) $this->redis->exists($this->createRedisStorageKeyByUserId($userId));
     }
 }

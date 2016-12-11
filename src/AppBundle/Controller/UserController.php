@@ -94,15 +94,14 @@ class UserController extends BaseController
      */
     public function activateUserAction(ActivateAccountDTO $dto): View
     {
+        $failed = false;
         try {
             $this->handle($dto);
-
-            $code = Response::HTTP_NO_CONTENT;
         } catch (UserActivationException $ex) {
-            $code = Response::HTTP_FORBIDDEN;
+            $failed = true;
+        } finally {
+            return View::create(null, $failed ? Response::HTTP_FORBIDDEN : Response::HTTP_NO_CONTENT);
         }
-
-        return View::create(null, $code);
     }
 
     /**
