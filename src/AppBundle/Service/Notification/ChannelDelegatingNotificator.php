@@ -51,7 +51,7 @@ final class ChannelDelegatingNotificator implements NotificatorInterface
      *
      * @throws \LogicException If the name is invalid.
      */
-    public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null)
+    public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null): void
     {
         if (null === $template) {
             if (!array_key_exists($name, $this->templateMap)) {

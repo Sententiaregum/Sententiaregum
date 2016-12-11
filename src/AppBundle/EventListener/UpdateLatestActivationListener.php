@@ -28,7 +28,7 @@ class UpdateLatestActivationListener
      *
      * @param OnAuthenticationEvent $event
      */
-    public function updateOnLogin(OnAuthenticationEvent $event)
+    public function updateOnLogin(OnAuthenticationEvent $event): void
     {
         /** @var \AppBundle\Model\User\User $user */
         $user = $event->getUser();

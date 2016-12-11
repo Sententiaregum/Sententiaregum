@@ -175,7 +175,7 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
     /**
      * {@inheritdoc}
      */
-    public function findUserByUsernameAndActivationKey(string $username, string $activationKey)
+    public function findUserByUsernameAndActivationKey(string $username, string $activationKey): ?User
     {
         return $this->findOneBy(['username' => $username, 'pendingActivation.key' => $activationKey]);
     }
@@ -219,7 +219,7 @@ class UserRepository extends EntityRepository implements UserReadRepositoryInter
     /**
      * {@inheritdoc}
      */
-    public function remove(User $user)
+    public function remove(User $user): void
     {
         $this->_em->remove($user);
     }

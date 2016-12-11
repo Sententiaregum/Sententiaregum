@@ -27,7 +27,7 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FreeGeoIpTracingService implements IpTracingServiceInterface
 {
-    const PRIVATE_IPS = ['::1', '127.0.0.1'];
+    private const PRIVATE_IPS = ['::1', '127.0.0.1'];
 
     /**
      * @var Client

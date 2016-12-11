@@ -44,7 +44,7 @@ class LocaleCookieMatchingListener
      *
      * @param GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $request = $event->getRequest();

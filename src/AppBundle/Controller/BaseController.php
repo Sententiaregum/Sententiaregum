@@ -118,7 +118,7 @@ abstract class BaseController extends Controller
      *
      * @param mixed $message
      */
-    protected function handle($message)
+    protected function handle($message): void
     {
         $this->get('command_bus')->handle($message);
     }

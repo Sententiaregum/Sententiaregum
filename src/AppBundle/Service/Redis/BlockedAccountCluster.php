@@ -43,7 +43,7 @@ class BlockedAccountCluster implements BlockedAccountWriteProviderInterface, Blo
     /**
      * {@inheritdoc}
      */
-    public function addTemporaryBlockedAccountID(string $user)
+    public function addTemporaryBlockedAccountID(string $user): void
     {
         $key = $this->buildStorageKeyWithID($user);
 

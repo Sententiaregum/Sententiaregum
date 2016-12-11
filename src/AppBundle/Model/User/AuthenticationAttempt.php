@@ -166,7 +166,7 @@ class AuthenticationAttempt implements \Serializable
     /**
      * {@inheritdoc}
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->id,
@@ -180,8 +180,8 @@ class AuthenticationAttempt implements \Serializable
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->ip, $this->attemptCount, $this->lastDateTimeRange, $this->latestDateTime) = unserialize($serialized);
+        [$this->id, $this->ip, $this->attemptCount, $this->lastDateTimeRange, $this->latestDateTime] = unserialize($serialized);
     }
 }

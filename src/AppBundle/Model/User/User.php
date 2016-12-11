@@ -43,8 +43,9 @@ class User implements UserInterface, Serializable
     const STATE_APPROVED              = 'approved';
     const STATE_LOCKED                = 'locked';
     const MAX_FAILED_ATTEMPTS_FROM_IP = 3;
-    const FAILED_AUTH_POOL            = 'failed_auths';
-    const AUTH_ATTEMPT_POOL           = 'auth_attempts';
+
+    private const FAILED_AUTH_POOL  = 'failed_auths';
+    private const AUTH_ATTEMPT_POOL = 'auth_attempts';
 
     /**
      * @var string
@@ -293,7 +294,7 @@ class User implements UserInterface, Serializable
      *
      * @return string
      */
-    public function getApiKey()
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
     }
@@ -575,7 +576,7 @@ class User implements UserInterface, Serializable
      */
     public function follows(User $user): bool
     {
-        return $this->following->exists(function ($index, User $following) use ($user) {
+        return $this->following->exists(function (int $index, User $following) use ($user) {
             return $following->getId() === $user->getId();
         });
     }
@@ -625,7 +626,7 @@ class User implements UserInterface, Serializable
      *
      * @return PendingActivation
      */
-    public function getPendingActivation()
+    public function getPendingActivation(): ?PendingActivation
     {
         return $this->pendingActivation;
     }
@@ -723,7 +724,7 @@ class User implements UserInterface, Serializable
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $data = unserialize($serialized);
 
@@ -777,7 +778,7 @@ class User implements UserInterface, Serializable
      *
      * @return AuthenticationAttempt|null
      */
-    private function getAuthAttemptModelByIp($ip, string $dataSource = self::AUTH_ATTEMPT_POOL)
+    private function getAuthAttemptModelByIp($ip, string $dataSource = self::AUTH_ATTEMPT_POOL): ?AuthenticationAttempt
     {
         $authAttempt = null;
         $pool        = $dataSource === self::AUTH_ATTEMPT_POOL
@@ -823,7 +824,7 @@ class User implements UserInterface, Serializable
      * @param string             $ip
      * @param DateTimeComparison $comparison
      */
-    private function eraseKnownIpFromBadIPList(string $ip, DateTimeComparison $comparison)
+    private function eraseKnownIpFromBadIPList(string $ip, DateTimeComparison $comparison): void
     {
         if ($this->isPreviouslyLoginFailed('-10 minutes', $comparison)) {
             // if it failed before the login, the login may be corrupted,

@@ -26,5 +26,5 @@ interface BlockedAccountWriteProviderInterface
      *
      * @param string $user
      */
-    public function addTemporaryBlockedAccountID(string $user);
+    public function addTemporaryBlockedAccountID(string $user): void;
 }

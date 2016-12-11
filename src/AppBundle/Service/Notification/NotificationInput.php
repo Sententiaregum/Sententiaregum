@@ -127,7 +127,7 @@ class NotificationInput extends Event
      *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): ?string
     {
         return $this->language;
     }

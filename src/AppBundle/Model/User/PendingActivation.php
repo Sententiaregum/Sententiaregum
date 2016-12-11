@@ -83,7 +83,7 @@ class PendingActivation implements \Serializable
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): ?string
     {
         return $this->key;
     }
@@ -91,7 +91,7 @@ class PendingActivation implements \Serializable
     /**
      * {@inheritdoc}
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->key,
@@ -102,8 +102,8 @@ class PendingActivation implements \Serializable
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->key, $this->activationDate) = unserialize($serialized);
+        [$this->key, $this->activationDate] = unserialize($serialized);
     }
 }

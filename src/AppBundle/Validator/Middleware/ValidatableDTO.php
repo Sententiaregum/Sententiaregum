@@ -55,7 +55,7 @@ abstract class ValidatableDTO
     /**
      * @return ValidationInfo
      */
-    public function getInfo()
+    public function getInfo(): ?ValidationInfo
     {
         return $this->info;
     }
@@ -69,7 +69,7 @@ abstract class ValidatableDTO
      *
      * @return $this
      */
-    public function setValidationInfo(ValidationInfo $validationInfo)
+    public function setValidationInfo(ValidationInfo $validationInfo): self
     {
         if ($this->info) {
             throw new \LogicException('Cannot override the whole validation info! Please use the getter and modify the reference!');

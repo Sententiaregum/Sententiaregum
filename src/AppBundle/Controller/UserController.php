@@ -92,7 +92,7 @@ class UserController extends BaseController
      * @Rest\Patch("/users/activate.{_format}", name="app.user.activate", requirements={"_format"="^(json|xml)$"})
      * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\ActivateAccountDTO")
      */
-    public function activateUserAction(ActivateAccountDTO $dto): View
+    public function activateUserAction(ActivateAccountDTO $dto): ?View
     {
         $failed = false;
         try {

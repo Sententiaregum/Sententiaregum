@@ -33,13 +33,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class InstallDatabaseCommand extends ContainerAwareCommand
 {
-    const STRATEGY_SCHEMA_UPDATE = 'schema-update';
-    const STRATEGY_MIGRATIONS    = 'migrations';
+    private const STRATEGY_SCHEMA_UPDATE = 'schema-update';
+    private const STRATEGY_MIGRATIONS    = 'migrations';
 
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('sententiaregum:install:database')

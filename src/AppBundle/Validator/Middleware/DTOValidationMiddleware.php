@@ -42,7 +42,7 @@ class DTOValidationMiddleware implements MessageBusMiddleware
     /**
      * {@inheritdoc}
      */
-    public function handle($message, callable $next)
+    public function handle($message, callable $next): void
     {
         if (!$message instanceof ValidatableDTO || !$message->shouldValidate()) {
             $next($message);

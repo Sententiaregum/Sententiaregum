@@ -50,7 +50,7 @@ class Credentials
      *
      * @return $this
      */
-    public static function fromEntity(User $user)
+    public static function fromEntity(User $user): self
     {
         return new static(
             $user->getUsername(),

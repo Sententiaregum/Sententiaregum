@@ -148,7 +148,7 @@ class IpLocation
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return null === $this->ip;
     }

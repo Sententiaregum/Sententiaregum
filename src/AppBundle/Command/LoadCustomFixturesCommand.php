@@ -31,7 +31,7 @@ class LoadCustomFixturesCommand extends DoctrineCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('sententiaregum:fixtures:production')
@@ -111,7 +111,7 @@ EOF
                 $instanceList = $loader->loadProductionFixturesFromDirectory($fixturesPath);
 
                 return array_map(
-                    function (ProductionFixtureInterface $fixture) {
+                    function (ProductionFixtureInterface $fixture): string {
                         return get_class($fixture);
                     },
                     $instanceList

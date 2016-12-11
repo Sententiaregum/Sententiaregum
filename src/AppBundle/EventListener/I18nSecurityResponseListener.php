@@ -32,8 +32,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class I18nSecurityResponseListener implements EventSubscriberInterface
 {
-    const AUTH_DEFAULT_ERROR = 'BACKEND_AUTH_FAILURE';
-    const TRANSLATION_DOMAIN = 'messages';
+    private const AUTH_DEFAULT_ERROR = 'BACKEND_AUTH_FAILURE';
+    private const TRANSLATION_DOMAIN = 'messages';
 
     /**
      * @var mixed[]
@@ -72,7 +72,7 @@ class I18nSecurityResponseListener implements EventSubscriberInterface
      *
      * @param AssembleResponseEvent $event
      */
-    public function onResponseCreation(AssembleResponseEvent $event)
+    public function onResponseCreation(AssembleResponseEvent $event): void
     {
         if ($event->isSuccess()) {
             return;

@@ -34,7 +34,7 @@ trait NotificatableTrait
      *
      * @param NotificatorInterface $notificator
      */
-    public function setNotificator(NotificatorInterface $notificator)
+    public function setNotificator(NotificatorInterface $notificator): void
     {
         $this->notificator = $notificator;
     }
@@ -50,7 +50,7 @@ trait NotificatableTrait
      *
      * @throws \LogicException If the dispatcher is not set.
      */
-    public function notify(array $parameters, array $users, array $channels = [], string $language = null, string $template = null)
+    public function notify(array $parameters, array $users, array $channels = [], string $language = null, string $template = null): void
     {
         if (!$this->notificator) {
             throw new \LogicException('Notification service must be set before running `NotificatableTrait::notify`!');

@@ -30,5 +30,5 @@ interface ChainSuggestorInterface extends SuggestorInterface
      *
      * @return ChainSuggestorInterface
      */
-    public function register(SuggestorInterface $suggestor);
+    public function register(SuggestorInterface $suggestor): self;
 }
