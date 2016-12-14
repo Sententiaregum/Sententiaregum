@@ -28,9 +28,9 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
      * @param string $message
      * @param string $expected
      */
-    public function testBuildResponse($message, string $expected)
+    public function testBuildResponse($message, string $expected): void
     {
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator
             ->expects($this->once())
             ->method('trans')
@@ -55,9 +55,9 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->isPropagationStopped());
     }
 
-    public function testSuccessResponse()
+    public function testSuccessResponse(): void
     {
-        $translator = $this->getMock(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator
             ->expects($this->never())
             ->method('trans');
@@ -75,7 +75,7 @@ class I18nSecurityResponseListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function provideMessage()
+    public function provideMessage(): array
     {
         return [
             [null, 'BACKEND_AUTH_FAILURE'],

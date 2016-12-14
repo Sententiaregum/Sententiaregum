@@ -92,7 +92,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      *
      * @param OnInvalidCredentialsEvent $event
      */
-    public function onFailedAuthentication(OnInvalidCredentialsEvent $event)
+    public function onFailedAuthentication(OnInvalidCredentialsEvent $event): void
     {
         if (null === $user = $this->getUser($event)) {
             return;
@@ -116,7 +116,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      *
      * @param OnAuthenticationEvent $event
      */
-    public function onAuthentication(OnAuthenticationEvent $event)
+    public function onAuthentication(OnAuthenticationEvent $event): void
     {
         $user = $this->getUser($event);
 
@@ -139,7 +139,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      *
      * @throws \LogicException
      */
-    private function dispatchNotificationEvent(User $user, string $templateName)
+    private function dispatchNotificationEvent(User $user, string $templateName): void
     {
         $this->accountBlockerProvider->addTemporaryBlockedAccountID($user->getId());
 
@@ -167,7 +167,7 @@ class CredentialNotifyListener implements EventSubscriberInterface
      *
      * @return User
      */
-    private function getUser(AbstractUserEvent $event)
+    private function getUser(AbstractUserEvent $event): ?User
     {
         $user = $event->getUser();
         if (!empty($user) && !$user instanceof User) {

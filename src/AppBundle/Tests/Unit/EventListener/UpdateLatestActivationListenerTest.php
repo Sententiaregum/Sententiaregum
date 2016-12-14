@@ -21,7 +21,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class UpdateLatestActivationListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testUpdateLastActionAfterLogin()
+    public function testUpdateLastActionAfterLogin(): void
     {
         $listener = new UpdateLatestActivationListener();
 

@@ -18,7 +18,7 @@ use AppBundle\Model\User\Role;
 
 class RoleTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSerialization()
+    public function testSerialization(): void
     {
         $role       = new Role('ROLE_USER');
         $serialized = serialize($role);

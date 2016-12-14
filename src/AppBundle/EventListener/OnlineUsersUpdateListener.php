@@ -54,7 +54,7 @@ class OnlineUsersUpdateListener
      *
      * @param OnFirewallAuthenticationEvent $event
      */
-    public function onFirewallLogin(OnFirewallAuthenticationEvent $event)
+    public function onFirewallLogin(OnFirewallAuthenticationEvent $event): void
     {
         /** @var \AppBundle\Model\User\User $user */
         $user = $event->getToken()->getUser();

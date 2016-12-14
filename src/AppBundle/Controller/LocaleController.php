@@ -72,7 +72,7 @@ class LocaleController extends BaseController
      *
      * @Rest\View(statusCode=204)
      */
-    public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO)
+    public function switchLocaleAction(LocaleSwitcherDTO $localeSwitcherDTO): void
     {
         $localeSwitcherDTO->user = $this->getCurrentUser();
         $this->handle($localeSwitcherDTO);

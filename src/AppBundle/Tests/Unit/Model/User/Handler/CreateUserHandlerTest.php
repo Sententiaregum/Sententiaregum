@@ -26,14 +26,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreateUser()
+    public function testCreateUser(): void
     {
-        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
             ->expects($this->once())
             ->method('publishNotification');
 
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->once())
             ->method('validate')
@@ -41,7 +41,7 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
 
         $hasher     = new PhpPasswordHasher();
         $generator  = new ActivationKeyCodeGenerator();
-        $repository = $this->getMock(UserWriteRepositoryInterface::class);
+        $repository = $this->createMock(UserWriteRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('save');
@@ -74,14 +74,14 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \OverflowException
      * @expectedExceptionMessage Cannot generate activation key!
      */
-    public function testGenerationFailure()
+    public function testGenerationFailure(): void
     {
-        $notificator = $this->getMock(NotificatorInterface::class);
+        $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
             ->expects($this->never())
             ->method('publishNotification');
 
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->any())
             ->method('validate')
@@ -89,7 +89,7 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
 
         $hasher     = new PhpPasswordHasher();
         $generator  = new ActivationKeyCodeGenerator();
-        $repository = $this->getMock(UserWriteRepositoryInterface::class);
+        $repository = $this->createMock(UserWriteRepositoryInterface::class);
         $repository
             ->expects($this->never())
             ->method('save');

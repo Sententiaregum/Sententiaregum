@@ -70,7 +70,7 @@ class Role implements RoleInterface, Serializable
     /**
      * {@inheritdoc}
      */
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
@@ -90,8 +90,8 @@ class Role implements RoleInterface, Serializable
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->role) = unserialize($serialized);
+        [$this->id, $this->role] = unserialize($serialized);
     }
 }

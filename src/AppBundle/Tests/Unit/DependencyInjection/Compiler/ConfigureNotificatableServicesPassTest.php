@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class ConfigureNotificatableServicesPassTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMissingDefinition()
+    public function testMissingDefinition(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConfigureNotificatableServicesPass());
@@ -44,7 +44,7 @@ class ConfigureNotificatableServicesPassTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage The tag `app.service.notificatable` must be declared one time only!
      */
-    public function testDeclareTagMultipleTimes()
+    public function testDeclareTagMultipleTimes(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConfigureNotificatableServicesPass());
@@ -64,7 +64,7 @@ class ConfigureNotificatableServicesPassTest extends \PHPUnit_Framework_TestCase
         $container->compile();
     }
 
-    public function testConnectNotificatorServiceWithHandler()
+    public function testConnectNotificatorServiceWithHandler(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConfigureNotificatableServicesPass());
@@ -96,7 +96,7 @@ class ConfigureNotificatableServicesPassTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('AppBundle:Email/Activation:activation', $arg[CreateUserHandler::class]);
     }
 
-    public function testNoTemplateIsPresentAsTagAttribute()
+    public function testNoTemplateIsPresentAsTagAttribute(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConfigureNotificatableServicesPass());

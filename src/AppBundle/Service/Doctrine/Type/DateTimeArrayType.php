@@ -80,7 +80,7 @@ final class DateTimeArrayType extends Type
         $dbFormat = $platform->getDateTimeFormatString();
 
         return array_map(
-            function ($format) use ($dbFormat) {
+            function ($format) use ($dbFormat): \DateTime {
                 return \DateTime::createFromFormat($dbFormat, $format);
             },
             $raw

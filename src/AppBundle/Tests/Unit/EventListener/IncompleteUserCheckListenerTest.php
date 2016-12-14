@@ -26,13 +26,13 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
      * @expectedExceptionMessage BACKEND_AUTH_LOCKED
      */
-    public function testUserIsLocked()
+    public function testUserIsLocked(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_APPROVED);
         $user->performStateTransition(User::STATE_LOCKED);
 
-        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
+        $hook = new IncompleteUserCheckListener($this->createMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -40,11 +40,11 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
      * @expectedExceptionMessage BACKEND_AUTH_NON_APPROVED
      */
-    public function testUserIsNonApproved()
+    public function testUserIsNonApproved(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
-        $hook = new IncompleteUserCheckListener($this->getMock(BlockedAccountReadInterface::class));
+        $hook = new IncompleteUserCheckListener($this->createMock(BlockedAccountReadInterface::class));
         $hook->validateUserOnAuthentication(new OnAuthenticationEvent($user));
     }
 
@@ -52,12 +52,12 @@ class IncompleteUserCheckListenerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Ma27\ApiKeyAuthenticationBundle\Exception\CredentialException
      * @expectedExceptionMessage BACKEND_AUTH_BLOCKED
      */
-    public function testAccountIsTemporaryBlocked()
+    public function testAccountIsTemporaryBlocked(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_APPROVED);
 
-        $provider = $this->getMock(BlockedAccountReadInterface::class);
+        $provider = $this->createMock(BlockedAccountReadInterface::class);
         $provider
             ->expects($this->once())
             ->method('isAccountTemporaryBlocked')

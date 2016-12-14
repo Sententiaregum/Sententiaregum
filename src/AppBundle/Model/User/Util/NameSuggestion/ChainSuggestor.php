@@ -67,7 +67,7 @@ class ChainSuggestor implements ChainSuggestorInterface
     /**
      * {@inheritdoc}
      */
-    public function register(SuggestorInterface $suggestor): self
+    public function register(SuggestorInterface $suggestor): ChainSuggestorInterface
     {
         $this->suggestors[] = $suggestor;
 

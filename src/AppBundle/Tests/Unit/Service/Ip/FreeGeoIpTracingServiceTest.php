@@ -27,9 +27,9 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getIps
      */
-    public function testGetGetLocationData($ip)
+    public function testGetGetLocationData($ip): void
     {
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->createMock(StreamInterface::class);
         $stream
             ->expects($this->any())
             ->method('__toString')
@@ -43,13 +43,13 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->any())
             ->method('getBody')
             ->willReturn($stream);
 
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
@@ -68,57 +68,57 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid ip address "foo" given!
      */
-    public function testInvalidIp()
+    public function testInvalidIp(): void
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
             ->with('get', ['/json/foo', ['headers' => ['Accept-Language' => 'en']]])
             ->will($this->returnCallback(function () {
-                throw new ClientException('404 file not found', $this->getMockWithoutInvokingTheOriginalConstructor(Request::class));
+                throw new ClientException('404 file not found', $this->createMock(Request::class));
             }));
 
         $service = new FreeGeoIpTracingService($client);
         $service->getIpLocationData('foo', 'en');
     }
 
-    public function testCannotTrack()
+    public function testCannotTrack(): void
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
             ->with('get', ['/json/192.168.56.112', ['headers' => ['Accept-Language' => 'en']]])
             ->will($this->returnCallback(function () {
-                throw new ClientException('404 file not found', $this->getMockWithoutInvokingTheOriginalConstructor(Request::class));
+                throw new ClientException('404 file not found', $this->createMock(Request::class));
             }));
 
         $service = new FreeGeoIpTracingService($client);
         $result  = $service->getIpLocationData('192.168.56.112', 'en');
 
-        $this->assertNull($result);
+        $this->assertTrue($result->isEmpty());
     }
 
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /^Unable to decode response body \("\{ip"\:"192\.168\.56\.112"\}"\) due to the following error \".*\"!$/
      */
-    public function testBrokenResponse()
+    public function testBrokenResponse(): void
     {
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->createMock(StreamInterface::class);
         $stream
             ->expects($this->any())
             ->method('__toString')
             ->willReturn('{ip":"192.168.56.112"}');
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->any())
             ->method('getBody')
             ->willReturn($stream);
 
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
         $client
             ->expects($this->once())
             ->method('__call')
@@ -132,12 +132,12 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getLocalIps
      */
-    public function testLocalIp($ip)
+    public function testLocalIp($ip): void
     {
-        $client = $this->getMockWithoutInvokingTheOriginalConstructor(Client::class);
+        $client = $this->createMock(Client::class);
 
         $service = new FreeGeoIpTracingService($client);
-        $this->assertNull($service->getIpLocationData($ip, 'en'));
+        $this->assertTrue($service->getIpLocationData($ip, 'en')->isEmpty());
     }
 
     /**
@@ -145,7 +145,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @return string[]
      */
-    public function getIps()
+    public function getIps(): array
     {
         return [
             ['192.168.56.112'],
@@ -158,7 +158,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @return string[]
      */
-    public function getLocalIps()
+    public function getLocalIps(): array
     {
         return [
             ['127.0.0.1'],

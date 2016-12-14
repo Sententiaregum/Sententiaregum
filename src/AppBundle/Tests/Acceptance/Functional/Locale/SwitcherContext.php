@@ -34,7 +34,7 @@ class SwitcherContext implements KernelAwareContext
      * @param string $username
      * @param string $locale
      */
-    public function ensureUserLocale(string $username, string $locale)
+    public function ensureUserLocale(string $username, string $locale): void
     {
         $actual = $this->retrieveUserByName($username)->getLocale();
 

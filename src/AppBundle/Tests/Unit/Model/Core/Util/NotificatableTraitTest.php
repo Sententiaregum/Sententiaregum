@@ -26,16 +26,16 @@ class NotificatableTraitTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Notification service must be set before running `NotificatableTrait::notify`!
      */
-    public function testMissingNotificator()
+    public function testMissingNotificator(): void
     {
         $trait = $this->getMockForTrait(NotificatableTrait::class);
         $trait->notify([], [], [], 'en');
     }
 
-    public function testConfigureData()
+    public function testConfigureData(): void
     {
         $trait     = $this->getMockForTrait(NotificatableTrait::class);
-        $publisher = $this->getMock(NotificatorInterface::class);
+        $publisher = $this->createMock(NotificatorInterface::class);
 
         $class = get_class($trait);
         $publisher

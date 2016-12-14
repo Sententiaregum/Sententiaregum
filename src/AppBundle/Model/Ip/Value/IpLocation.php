@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Ip\Value;
 
+use Doctrine\Instantiator\Instantiator;
+
 /**
  * Ip location class that contains all necessary data of the location of a ip.
  *
@@ -50,6 +52,16 @@ class IpLocation
      * @var float
      */
     private $longitude;
+
+    /**
+     * Simple constructor to create null-objects.
+     *
+     * @return IpLocation
+     */
+    public static function createEmpty(): self
+    {
+        return (new Instantiator())->instantiate(self::class);
+    }
 
     /**
      * Constructor.
@@ -129,5 +141,15 @@ class IpLocation
     public function getLongitude(): float
     {
         return $this->longitude;
+    }
+
+    /**
+     * Checks if the VO is actually empty.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return null === $this->ip;
     }
 }

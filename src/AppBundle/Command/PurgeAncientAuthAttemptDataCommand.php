@@ -54,7 +54,7 @@ class PurgeAncientAuthAttemptDataCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('sententiaregum:purge:ancient-auth-attempt-log-data')

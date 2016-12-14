@@ -20,9 +20,9 @@ use AppBundle\Test\CommandTestCase;
 
 class PurgeOutdatedPendingActivationsCommandTest extends CommandTestCase
 {
-    public function testPurgeData()
+    public function testPurgeData(): void
     {
-        $repository = $this->getMock(UserWriteRepositoryInterface::class);
+        $repository = $this->createMock(UserWriteRepositoryInterface::class);
         $repository
             ->expects($this->once())
             ->method('deletePendingActivationsByDate')

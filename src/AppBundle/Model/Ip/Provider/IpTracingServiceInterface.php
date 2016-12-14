@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Ip\Provider;
 
+use AppBundle\Model\Ip\Value\IpLocation;
+
 /**
  * Interface which attempts to trace an ip and returns an object containing all the necessary data.
  *
@@ -27,7 +29,7 @@ interface IpTracingServiceInterface
      * @param string $ip
      * @param string $userLocale
      *
-     * @return \AppBundle\Model\Ip\Value\IpLocation|null
+     * @return \AppBundle\Model\Ip\Value\IpLocation
      */
-    public function getIpLocationData(string $ip, string $userLocale);
+    public function getIpLocationData(string $ip, string $userLocale): IpLocation;
 }

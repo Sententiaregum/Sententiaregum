@@ -31,7 +31,7 @@ class ScriptHandler extends AbstractScriptHandler
      *
      * @param Event $event
      */
-    public static function installNpmDependencies(Event $event)
+    public static function installNpmDependencies(Event $event): void
     {
         $cmd = 'install';
         if (!$event->isDevMode()) {
@@ -46,7 +46,7 @@ class ScriptHandler extends AbstractScriptHandler
      *
      * @param Event $event
      */
-    public static function buildFrontendData(Event $event)
+    public static function buildFrontendData(Event $event): void
     {
         $devMode = $event->isDevMode();
         self::executeNpmCommand(
@@ -63,7 +63,7 @@ class ScriptHandler extends AbstractScriptHandler
      *
      * @param Event $event
      */
-    public static function createDoctrineSchema(Event $event)
+    public static function createDoctrineSchema(Event $event): void
     {
         $envs = $event->isDevMode() ? ['dev', 'test'] : ['prod'];
 
@@ -91,11 +91,11 @@ class ScriptHandler extends AbstractScriptHandler
      * @param int       $timeout
      * @param string    $nodeEnv
      */
-    private static function executeNpmCommand(string $command, Event $event, bool $showOutput = true, int $timeout = 500, string $nodeEnv = null)
+    private static function executeNpmCommand(string $command, Event $event, bool $showOutput = true, int $timeout = 500, string $nodeEnv = null): void
     {
         $npm         = (new ExecutableFinder())->find('npm');
         $fullCommand = sprintf('%s %s %s', $nodeEnv ? sprintf('NODE_ENV=%s', $nodeEnv) : null, $npm, $command);
-        $handler     = function ($type, $buffer) use ($event) {
+        $handler     = function ($type, $buffer) use ($event): void {
             $event->getIO()->write($buffer, false);
         };
 

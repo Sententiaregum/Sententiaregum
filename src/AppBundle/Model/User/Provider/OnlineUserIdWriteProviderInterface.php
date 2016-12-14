@@ -28,5 +28,5 @@ interface OnlineUserIdWriteProviderInterface
      *
      * @return $this
      */
-    public function addUserId(string $userId);
+    public function addUserId(string $userId): void;
 }

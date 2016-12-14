@@ -20,7 +20,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 
 class ValidationInfoTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetViolationList()
+    public function testGetViolationList(): void
     {
         $info       = new ValidationInfo();
         $violations = new ConstraintViolationList([
@@ -33,7 +33,7 @@ class ValidationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($violations, $info->violationList);
     }
 
-    public function testEmptyViolationList()
+    public function testEmptyViolationList(): void
     {
         $info = new ValidationInfo();
 
@@ -42,14 +42,14 @@ class ValidationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($info->isValid());
     }
 
-    public function testNoViolationsGiven()
+    public function testNoViolationsGiven(): void
     {
         $info = new ValidationInfo();
 
         $this->assertTrue($info->isValid());
     }
 
-    public function testExtraData()
+    public function testExtraData(): void
     {
         $info = new ValidationInfo();
 
@@ -58,7 +58,7 @@ class ValidationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($info->getExtraValue('key'), 'data');
     }
 
-    public function testOptionalExtraDataMissing()
+    public function testOptionalExtraDataMissing(): void
     {
         $info = new ValidationInfo();
 
@@ -69,7 +69,7 @@ class ValidationInfoTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Missing property "required_data" in extra data!
      */
-    public function testRequiredExtraDataMissing()
+    public function testRequiredExtraDataMissing(): void
     {
         $info = new ValidationInfo();
 

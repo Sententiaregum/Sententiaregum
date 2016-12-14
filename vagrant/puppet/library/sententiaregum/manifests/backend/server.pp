@@ -28,7 +28,7 @@ class sententiaregum::backend::server(
     ],
   }
 
-  Package['libapache2-mod-php7.0'] ~> Service['apache2']
+  Package['libapache2-mod-php7.1'] ~> Service['apache2']
 
   exec { 'disable default site':
     command => 'a2dissite 15-default.conf',

@@ -65,7 +65,7 @@ final class ActivateAccountHandler
      *
      * @param ActivateAccountDTO $activateAccountDTO
      */
-    public function __invoke(ActivateAccountDTO $activateAccountDTO)
+    public function __invoke(ActivateAccountDTO $activateAccountDTO): void
     {
         if (!$user = $this->userReadRepository->findUserByUsernameAndActivationKey($activateAccountDTO->username, $activateAccountDTO->activationKey)) {
             throw new UserActivationException();

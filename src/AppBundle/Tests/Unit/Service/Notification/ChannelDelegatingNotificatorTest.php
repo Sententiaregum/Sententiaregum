@@ -22,7 +22,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPublish()
+    public function testPublish(): void
     {
         $user  = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $class = 'AppBundle\\Model\\Core\\Handler\\SecretHandler';
@@ -32,7 +32,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
             ->addParameter('foo', 'bar')
             ->addUser($user);
 
-        $channel = $this->getMock(NotificationChannelInterface::class);
+        $channel = $this->createMock(NotificationChannelInterface::class);
         $channel
             ->expects(self::once())
             ->method('publish')
@@ -40,7 +40,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
                 self::assertSame($input, $event);
             });
 
-        $unusedChannel = $this->getMock(NotificationChannelInterface::class);
+        $unusedChannel = $this->createMock(NotificationChannelInterface::class);
         $unusedChannel
             ->expects(self::never())
             ->method('publish');
@@ -55,7 +55,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot generate template name for notification with name "AppBundle\Model\Core\Handler\SecretHandler"!
      */
-    public function testMissingMapInfo()
+    public function testMissingMapInfo(): void
     {
         $user  = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $class = 'AppBundle\\Model\\Core\\Handler\\SecretHandler';
@@ -69,9 +69,9 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
         $notificator->publishNotification($class, $event, []);
     }
 
-    public function testTemplateArgumentReplacesTemplateMapConfiguration()
+    public function testTemplateArgumentReplacesTemplateMapConfiguration(): void
     {
-        $channel = $this->getMock(NotificationChannelInterface::class);
+        $channel = $this->createMock(NotificationChannelInterface::class);
         $channel
             ->expects(self::once())
             ->method('publish');

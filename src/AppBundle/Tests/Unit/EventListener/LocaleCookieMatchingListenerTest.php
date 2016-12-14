@@ -21,12 +21,12 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMatchLocale()
+    public function testMatchLocale(): void
     {
         $request = Request::create('/');
         $request->cookies->set('language', 'de');
 
-        $event    = new GetResponseEvent($this->getMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event    = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
         $listener = new LocaleCookieMatchingListener('en');
 
         $listener->onKernelRequest($event);
@@ -35,14 +35,14 @@ class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('de', $request->attributes->get('_locale'));
     }
 
-    public function testSubRequest()
+    public function testSubRequest(): void
     {
         $request = Request::create('/');
         $request->cookies->set('language', 'de');
         $request->setLocale('en');
         $request->attributes->set('_locale', 'en');
 
-        $event    = new GetResponseEvent($this->getMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
+        $event    = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
         $listener = new LocaleCookieMatchingListener('en');
 
         $listener->onKernelRequest($event);

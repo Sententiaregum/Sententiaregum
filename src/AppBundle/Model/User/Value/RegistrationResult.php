@@ -62,7 +62,7 @@ class RegistrationResult
     /**
      * @return ConstraintViolationListInterface|null
      */
-    public function getViolations()
+    public function getViolations(): ?ConstraintViolationListInterface
     {
         return $this->violations;
     }

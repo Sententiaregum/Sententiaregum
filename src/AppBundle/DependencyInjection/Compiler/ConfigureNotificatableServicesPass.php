@@ -30,7 +30,7 @@ class ConfigureNotificatableServicesPass implements CompilerPassInterface
      *
      * @throws \LogicException If the tag is declared multiple times or the `template` attribute is missing.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('app.notification')) {
             return;

@@ -27,9 +27,9 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
      *
      * @param object $message
      */
-    public function testNoValidatableDTOGiven($message)
+    public function testNoValidatableDTOGiven($message): void
     {
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->never())
             ->method('validate');
@@ -47,9 +47,9 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($invoked);
     }
 
-    public function testValidationWithNoViolations()
+    public function testValidationWithNoViolations(): void
     {
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->once())
             ->method('validate')
@@ -73,9 +73,9 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($invoked);
     }
 
-    public function testValidationWithViolations()
+    public function testValidationWithViolations(): void
     {
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->once())
             ->method('validate')
@@ -98,9 +98,9 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($dto->getInfo()->isValid());
     }
 
-    public function testValidationWithViolationsAndEnabledContinuing()
+    public function testValidationWithViolationsAndEnabledContinuing(): void
     {
-        $validator = $this->getMock(ValidatorInterface::class);
+        $validator = $this->createMock(ValidatorInterface::class);
         $validator
             ->expects($this->once())
             ->method('validate')
@@ -128,7 +128,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function provideConfiguredObjects(): array
     {
-        $mock = $this->getMock(ValidatableDTO::class);
+        $mock = $this->createMock(ValidatableDTO::class);
         $mock
             ->expects($this->any())
             ->method('shouldValidate')

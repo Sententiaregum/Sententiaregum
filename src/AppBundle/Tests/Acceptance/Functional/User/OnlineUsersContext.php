@@ -36,13 +36,13 @@ class OnlineUsersContext implements KernelAwareContext
     private $apiContext;
 
     /** @BeforeScenario */
-    public function connectToAPiContext(BeforeScenarioScope $scope)
+    public function connectToAPiContext(BeforeScenarioScope $scope): void
     {
         $this->apiContext = ContextHelper::connectToAPIContext($scope);
     }
 
     /** @AfterScenario */
-    public function dropApiContext()
+    public function dropApiContext(): void
     {
         $this->apiContext = null;
     }
@@ -52,7 +52,7 @@ class OnlineUsersContext implements KernelAwareContext
      *
      * @param TableNode $node
      */
-    public function ensureUsersAreOnline(TableNode $node)
+    public function ensureUsersAreOnline(TableNode $node): void
     {
         /** @var \Symfony\Bundle\FrameworkBundle\Client $client */
         $client = $this->getContainer()->get('test.client');
@@ -72,7 +72,7 @@ class OnlineUsersContext implements KernelAwareContext
      *
      * @param TableNode $node
      */
-    public function checkUserActivity(TableNode $node)
+    public function checkUserActivity(TableNode $node): void
     {
         /** @var \AppBundle\Service\Doctrine\Repository\UserRepository $repository */
         $repository = $this->getContainer()->get('app.repository.user');

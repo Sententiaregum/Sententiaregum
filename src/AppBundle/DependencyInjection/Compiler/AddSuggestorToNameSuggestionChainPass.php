@@ -30,7 +30,7 @@ class AddSuggestorToNameSuggestionChainPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('app.user.registration.name_suggestor')) {
             return;

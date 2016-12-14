@@ -67,7 +67,7 @@ class MailingChannel implements NotificationChannelInterface
     /**
      * {@inheritdoc}
      */
-    public function publish(NotificationInput $input)
+    public function publish(NotificationInput $input): void
     {
         $locale  = $this->getLocale($input);
         $message = \Swift_Message::newInstance($this->translator->trans(

@@ -44,7 +44,7 @@ final class LocaleSwitcherHandler
      *
      * @param LocaleSwitcherDTO $dto
      */
-    public function __invoke(LocaleSwitcherDTO $dto)
+    public function __invoke(LocaleSwitcherDTO $dto): void
     {
         $user = $dto->user;
         if ($dto->locale !== $user->getLocale()) {

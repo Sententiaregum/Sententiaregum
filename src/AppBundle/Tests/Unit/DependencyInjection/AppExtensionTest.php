@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class AppExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLoadExtension()
+    public function testLoadExtension(): void
     {
         $container = new ContainerBuilder();
         $extension = new AppExtension();

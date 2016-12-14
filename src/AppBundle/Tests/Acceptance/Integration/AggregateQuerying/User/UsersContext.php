@@ -54,7 +54,7 @@ class UsersContext extends AbstractIntegrationContext
     private $filterResult;
 
     /** @BeforeScenario */
-    public function applyFixtures()
+    public function applyFixtures(): void
     {
         $this->getContainer()->get('app.doctrine.fixtures_loader')->applyFixtures([
             UserFixture::class,
@@ -64,7 +64,7 @@ class UsersContext extends AbstractIntegrationContext
     }
 
     /** @AfterScenario */
-    public function cleanUp()
+    public function cleanUp(): void
     {
         $this->resultCount = 0;
         $this->followerIds = [];
@@ -78,7 +78,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param string $username
      */
-    public function createExpiredUser(string $username)
+    public function createExpiredUser(string $username): void
     {
         $em = $this->getEntityManager();
 
@@ -94,7 +94,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @When I try to delete all users with pending activation
      */
-    public function deleteUsersWithExpiredPendingActivation()
+    public function deleteUsersWithExpiredPendingActivation(): void
     {
         $repository        = $this->getEntityManager()->getRepository('Account:User');
         $this->resultCount = $repository->deletePendingActivationsByDate(new \DateTime('-2 hours'));
@@ -105,7 +105,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param string $username
      */
-    public function ensureUserWasRemoved(string $username)
+    public function ensureUserWasRemoved(string $username): void
     {
         Assertion::count($this->getEntityManager()->getRepository('Account:User')->findBy(['username' => $username]), 0);
     }
@@ -116,7 +116,7 @@ class UsersContext extends AbstractIntegrationContext
      * @param string $username
      * @param string $key
      */
-    public function createNonActivatedUser(string $username, string $key)
+    public function createNonActivatedUser(string $username, string $key): void
     {
         $em = $this->getEntityManager();
 
@@ -132,7 +132,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then /^I should get one result$/
      */
-    public function ensureOneResult()
+    public function ensureOneResult(): void
     {
         Assertion::isInstanceOf($this->user, User::class);
     }
@@ -140,7 +140,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then one user should still exist
      */
-    public function oneUserShouldStillExist()
+    public function oneUserShouldStillExist(): void
     {
         Assertion::count($this->getEntityManager()->getRepository('Account:User')->findAll(), 1);
     }
@@ -148,7 +148,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then two users should be removed
      */
-    public function twoUsersShouldBeRemoved()
+    public function twoUsersShouldBeRemoved(): void
     {
         Assertion::eq(2, $this->resultCount);
     }
@@ -156,7 +156,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @When I ask for a list of follower ids for user :arg1 with limit :arg2 and offset :arg3
      */
-    public function iAskForAListOfFollowerIdsForUser($arg1, $arg2, $arg3)
+    public function iAskForAListOfFollowerIdsForUser($arg1, $arg2, $arg3): void
     {
         $dto         = new PaginatableDTO();
         $dto->limit  = (int) $arg2;
@@ -174,7 +174,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then I should get :arg1 ids
      */
-    public function iShouldGetTwoIds($arg1)
+    public function iShouldGetTwoIds($arg1): void
     {
         Assertion::count($this->followerIds, (int) $arg1);
     }
@@ -185,7 +185,7 @@ class UsersContext extends AbstractIntegrationContext
      * @param string $username
      * @param string $key
      */
-    public function findUserByNameAndKey(string $username, string $key)
+    public function findUserByNameAndKey(string $username, string $key): void
     {
         $this->user = $this->getEntityManager()->getRepository('Account:User')->findUserByUsernameAndActivationKey($username, $key);
     }
@@ -193,7 +193,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then I should see the user with id :arg1
      */
-    public function iShouldSeeTheUserWithId($arg1)
+    public function iShouldSeeTheUserWithId($arg1): void
     {
         Assertion::eq((int) $arg1, $this->user->getId());
     }
@@ -203,7 +203,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param TableNode $table
      */
-    public function ensureAuthAttemptData(TableNode $table)
+    public function ensureAuthAttemptData(TableNode $table): void
     {
         foreach ($table->getHash() as $row) {
             $user   = $row['affected'];
@@ -230,7 +230,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @When I delete ancient auth data
      */
-    public function removeAuthData()
+    public function removeAuthData(): void
     {
         /** @var \AppBundle\Service\Doctrine\Repository\UserRepository $userRepository */
         $userRepository = $this->getEntityManager()->getRepository('Account:User');
@@ -243,7 +243,7 @@ class UsersContext extends AbstractIntegrationContext
      * @param string $ip
      * @param string $username
      */
-    public function ensureNoLogRemains(string $ip, string $username)
+    public function ensureNoLogRemains(string $ip, string $username): void
     {
         Assertion::false(
             $this->getEntityManager()->getRepository('Account:User')
@@ -254,7 +254,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @When I want to filter for non-unique usernames with the following data:
      */
-    public function filterForUniqueUsernames(TableNode $table)
+    public function filterForUniqueUsernames(TableNode $table): void
     {
         $this->filterResult = $this->getEntityManager()->getRepository('Account:User')->filterUniqueUsernames(array_column($table->getHash(), 'username'));
     }
@@ -264,7 +264,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param TableNode $table
      */
-    public function validateNames(TableNode $table)
+    public function validateNames(TableNode $table): void
     {
         $list = array_column($table->getHash(), 'username');
 
@@ -277,7 +277,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param TableNode $table
      */
-    public function persistUser(TableNode $table)
+    public function persistUser(TableNode $table): void
     {
         $row  = $table->getRow(1);
         $user = User::create($row[0], $row[1], $row[2], new PhpPasswordHasher());
@@ -289,7 +289,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then it should be present in the identity map
      */
-    public function ensureInIdentityMap()
+    public function ensureInIdentityMap(): void
     {
         Assertion::true($this->getEntityManager()->getUnitOfWork()->isInIdentityMap($this->user));
     }
@@ -297,7 +297,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then it should be scheduled for insert
      */
-    public function ensureScheduledForPersist()
+    public function ensureScheduledForPersist(): void
     {
         Assertion::true($this->getEntityManager()->getUnitOfWork()->isScheduledForInsert($this->user));
     }
@@ -307,7 +307,7 @@ class UsersContext extends AbstractIntegrationContext
      *
      * @param string $username
      */
-    public function removeUser(string $username)
+    public function removeUser(string $username): void
     {
         $repository = $this->getEntityManager()->getRepository('Account:User');
         $repository->remove($this->user = $repository->findOneBy(['username' => $username]));
@@ -316,7 +316,7 @@ class UsersContext extends AbstractIntegrationContext
     /**
      * @Then it should be scheduled for removal
      */
-    public function ensureScheduledForRemoval()
+    public function ensureScheduledForRemoval(): void
     {
         Assertion::true($this->getEntityManager()->getUnitOfWork()->isScheduledForDelete($this->user));
     }

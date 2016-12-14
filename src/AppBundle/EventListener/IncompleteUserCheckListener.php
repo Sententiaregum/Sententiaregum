@@ -49,7 +49,7 @@ class IncompleteUserCheckListener
      *
      * @throws CredentialException If the user is locked
      */
-    public function validateUserOnAuthentication(OnAuthenticationEvent $event)
+    public function validateUserOnAuthentication(OnAuthenticationEvent $event): void
     {
         /** @var User $user */
         $user = $event->getUser();

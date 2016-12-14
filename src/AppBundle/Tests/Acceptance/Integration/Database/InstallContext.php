@@ -39,7 +39,7 @@ class InstallContext extends AbstractIntegrationContext
     private $exception;
 
     /** @BeforeScenario */
-    public function recreateSchema()
+    public function recreateSchema(): void
     {
         $em   = $this->getEntityManager();
         $tool = new SchemaTool($em);
@@ -52,7 +52,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Given the schema is dropped
      */
-    public function dropSchema()
+    public function dropSchema(): void
     {
         $em   = $this->getEntityManager();
         $tool = new SchemaTool($em);
@@ -63,7 +63,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply the schema
      */
-    public function applySchema()
+    public function applySchema(): void
     {
         $this->tester = $this->executeCommand('sententiaregum:install:database');
     }
@@ -71,7 +71,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then I the tool should apply the DDL to the database
      */
-    public function checkAppliedDDL()
+    public function checkAppliedDDL(): void
     {
         $tool = new SchemaValidator($this->getEntityManager());
         Assertion::true($tool->schemaInSyncWithMetadata());
@@ -82,7 +82,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply the schema with migrations
      */
-    public function applyWithDoctrineMigrations()
+    public function applyWithDoctrineMigrations(): void
     {
         $this->tester = $this->executeCommand('sententiaregum:install:database', [
             '--strategy' => 'migrations',
@@ -92,7 +92,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then the migrations should be applied
      */
-    public function checkMigrationsAppliance()
+    public function checkMigrationsAppliance(): void
     {
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare(strtr(
@@ -112,7 +112,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply production fixtures
      */
-    public function applyWithProductionFixtures()
+    public function applyWithProductionFixtures(): void
     {
         $this->tester = $this->executeCommand('sententiaregum:install:database', [
             '--apply-fixtures'      => true,
@@ -123,7 +123,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply all fixtures
      */
-    public function applyWithAllFixtures()
+    public function applyWithAllFixtures(): void
     {
         $this->tester = $this->executeCommand('sententiaregum:install:database', [
             '--apply-fixtures' => true,
@@ -133,7 +133,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then the fixtures should be loaded
      */
-    public function ensureLoadedFixtures()
+    public function ensureLoadedFixtures(): void
     {
         // ensure that some data is loaded
         $em = $this->getEntityManager();
@@ -145,7 +145,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Given the database is not empty
      */
-    public function ensureNonEmptyDatabase()
+    public function ensureNonEmptyDatabase(): void
     {
         $user = User::create('testuser', '123456', 'testuser@gmail.com', new PhpPasswordHasher());
 
@@ -156,7 +156,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply all fixtures with --append option
      */
-    public function applyWithAllowedAppend()
+    public function applyWithAllowedAppend(): void
     {
         $this->tester = $this->executeCommand('sententiaregum:install:database', [
             '--apply-fixtures' => true,
@@ -167,7 +167,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then the fixtures should be appended
      */
-    public function checkAppended()
+    public function checkAppended(): void
     {
         $em = $this->getEntityManager();
 
@@ -178,7 +178,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply using an invalid strategy
      */
-    public function applyWithUnknownStrategy()
+    public function applyWithUnknownStrategy(): void
     {
         try {
             $this->executeCommand('sententiaregum:install:database', [
@@ -192,7 +192,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then I should see an error from the installer
      */
-    public function checkInstallerError()
+    public function checkInstallerError(): void
     {
         Assertion::eq($this->exception->getMessage(), 'The strategy must be either "migrations" or "schema-update"!');
     }
@@ -200,7 +200,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Given the database schema is applied
      */
-    public function ensureAppliedSchema()
+    public function ensureAppliedSchema(): void
     {
         $this->applySchema();
         $this->tester = null;
@@ -209,7 +209,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then the process should be skipped
      */
-    public function ensureSkippedProcess()
+    public function ensureSkippedProcess(): void
     {
         Assertion::regex($this->tester->getDisplay(), '/Validated 1 manager, 0 needed schema appliance, 1 was in sync./');
     }
@@ -217,7 +217,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @When I apply using the --production-fixtures option and the --append option
      */
-    public function applyWithProductionFixturesAndAppend()
+    public function applyWithProductionFixturesAndAppend(): void
     {
         try {
             $this->executeCommand('sententiaregum:install:database', [
@@ -231,7 +231,7 @@ class InstallContext extends AbstractIntegrationContext
     /**
      * @Then the appliance should be skipped
      */
-    public function ensureSkippedAppliance()
+    public function ensureSkippedAppliance(): void
     {
         Assertion::eq($this->exception->getMessage(), 'The `--production-fixtures` option must not be set if the `--apply-fixtures` option is not present!');
     }

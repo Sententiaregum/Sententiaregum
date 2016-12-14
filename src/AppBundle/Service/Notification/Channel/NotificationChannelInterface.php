@@ -28,5 +28,5 @@ interface NotificationChannelInterface
      *
      * @param NotificationInput $input
      */
-    public function publish(NotificationInput $input);
+    public function publish(NotificationInput $input): void;
 }

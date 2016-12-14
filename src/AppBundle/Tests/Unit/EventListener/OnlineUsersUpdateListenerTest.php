@@ -23,15 +23,15 @@ use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testUpdateOnlineUsers()
+    public function testUpdateOnlineUsers(): void
     {
-        $provider = $this->getMock(OnlineUserIdWriteProviderInterface::class);
+        $provider = $this->createMock(OnlineUserIdWriteProviderInterface::class);
         $provider
             ->expects($this->once())
             ->method('addUserId');
 
-        $user          = $this->getMockWithoutInvokingTheOriginalConstructor(User::class);
-        $entityManager = $this->getMock(EntityManagerInterface::class);
+        $user          = $this->createMock(User::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager
             ->expects($this->once())
             ->method('persist')
@@ -44,7 +44,7 @@ class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $token = $this->getMockWithoutInvokingTheOriginalConstructor(PreAuthenticatedToken::class);
+        $token = $this->createMock(PreAuthenticatedToken::class);
         $token
             ->expects($this->once())
             ->method('getUser')

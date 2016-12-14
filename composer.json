@@ -7,8 +7,8 @@
         "psr-4": { "AppBundle\\": "src/AppBundle/" }
     },
     "require": {
-        "php": "^7.0",
-        "symfony/symfony": "^3.1",
+        "php": "^7.1",
+        "symfony/symfony": "^3.2",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
         "symfony/swiftmailer-bundle": "^2.3",
@@ -36,7 +36,7 @@
         "google/recaptcha": "~1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.3.*",
+        "phpunit/phpunit": "^5.7",
         "behat/behat": "^3.1",
         "behat/symfony2-extension": "^2.1",
         "beberlei/assert": "^2.5",

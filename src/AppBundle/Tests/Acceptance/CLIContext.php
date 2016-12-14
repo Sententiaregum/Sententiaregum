@@ -26,7 +26,7 @@ class CLIContext extends AbstractIntegrationContext
     /**
      * @Given /^the database is purged$/
      */
-    public function ensurePurgedDB()
+    public function ensurePurgedDB(): void
     {
         (new ORMPurger($this->getEntityManager()))->purge();
     }

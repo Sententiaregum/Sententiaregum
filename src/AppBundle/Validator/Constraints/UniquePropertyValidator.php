@@ -51,7 +51,7 @@ class UniquePropertyValidator extends ConstraintValidator
      * @throws ConstraintDefinitionException If the manager alias could not be loaded or there's no manager for a specific class.
      * @throws ConstraintDefinitionException If an @see{ORMException} caused by misconfigured fields.
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         /** @var UniqueProperty $constraint */
         if (!$constraint instanceof UniqueProperty) {

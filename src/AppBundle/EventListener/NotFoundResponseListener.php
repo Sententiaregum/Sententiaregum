@@ -45,7 +45,7 @@ class NotFoundResponseListener implements EventSubscriberInterface
      *
      * @param GetResponseForExceptionEvent $event
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $request = $event->getRequest();
         $uri     = $request->getRequestUri();

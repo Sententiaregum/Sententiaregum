@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandTestCaseTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRunsCommand()
+    public function testRunsCommand(): void
     {
         /** @var CommandTestCase $tester */
         $tester = $this->getMockForAbstractClass(CommandTestCase::class);

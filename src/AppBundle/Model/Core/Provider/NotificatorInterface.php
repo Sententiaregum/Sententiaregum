@@ -31,5 +31,5 @@ interface NotificatorInterface
      * @param string[]          $channels
      * @param string|null       $template
      */
-    public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null);
+    public function publishNotification(string $name, NotificationInput $event, array $channels, string $template = null): void;
 }

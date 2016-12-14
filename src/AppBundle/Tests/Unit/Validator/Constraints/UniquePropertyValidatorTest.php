@@ -26,20 +26,20 @@ use Doctrine\ORM\ORMException;
 use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
+class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
 {
     protected function createValidator()
     {
-        $repository = $this->getMock(ObjectRepository::class);
+        $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->any())
             ->method('findOneBy')
             ->with(['username' => 'Ma27'])
             ->willReturn($this->returnValue(User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher())));
 
-        $classMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(ClassMetadata::class);
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
@@ -48,7 +48,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
         $classMetadata->isEmbeddedClass    = false;
         $classMetadata->isMappedSuperclass = false;
 
-        $manager = $this->getMock(ObjectManager::class);
+        $manager = $this->createMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getRepository')
@@ -58,7 +58,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
             ->method('getClassMetadata')
             ->willReturn($classMetadata);
 
-        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry = $this->createMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
@@ -71,20 +71,20 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "AppBundle\\Validator\\Constraints\\UniqueProperty", ".*" given/
      */
-    public function testInvalidConstraint()
+    public function testInvalidConstraint(): void
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
-        $propertyMock->validate('value', $this->getMock(Constraint::class));
+        $propertyMock = new UniquePropertyValidator($this->createMock(ManagerRegistry::class));
+        $propertyMock->validate('value', $this->createMock(Constraint::class));
     }
 
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /^Expected argument of type "scalar", "array" given$/
      */
-    public function testValueMustBeString()
+    public function testValueMustBeString(): void
     {
-        $propertyMock = new UniquePropertyValidator($this->getMock(ManagerRegistry::class));
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+        $propertyMock = new UniquePropertyValidator($this->createMock(ManagerRegistry::class));
+        $propertyMock->initialize($this->createMock(ExecutionContextInterface::class));
 
         $propertyMock->validate([], new UniqueProperty(['entity' => 'TestMapping:User', 'field' => 'username']));
     }
@@ -93,15 +93,15 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage No such entity manager with alias "custom_manager"!
      */
-    public function testInvalidManagerAlias()
+    public function testInvalidManagerAlias(): void
     {
-        $registry = $this->getMock(ManagerRegistry::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry
             ->expects($this->once())
             ->method('getManager');
 
         $propertyMock = new UniquePropertyValidator($registry);
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+        $propertyMock->initialize($this->createMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
             'test',
@@ -113,15 +113,15 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage Cannot find entity manager for model "TestMapping:User"!
      */
-    public function testNoManagerForEntity()
+    public function testNoManagerForEntity(): void
     {
-        $registry = $this->getMock(ManagerRegistry::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry
             ->expects($this->once())
             ->method('getManagerForClass');
 
         $propertyMock = new UniquePropertyValidator($registry);
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+        $propertyMock->initialize($this->createMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
             'test',
@@ -133,9 +133,9 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage During the validation whether the given property is unique or not, doctrine threw an exception with the following message: "Unrecognized field: test-field". Did you misconfigure any parameters such as the field or entity name?
      */
-    public function testFindOneByThrowsORMException()
+    public function testFindOneByThrowsORMException(): void
     {
-        $repository = $this->getMockWithoutInvokingTheOriginalConstructor(EntityRepository::class);
+        $repository = $this->createMock(EntityRepository::class);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
@@ -144,20 +144,20 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
                 throw ORMException::unrecognizedField('test-field');
             });
 
-        $manager = $this->getMock(ObjectManager::class);
+        $manager = $this->createMock(ObjectManager::class);
         $manager
             ->expects($this->any())
             ->method('getRepository')
             ->willReturn($repository);
 
-        $mockRegistry = $this->getMock(ManagerRegistry::class);
+        $mockRegistry = $this->createMock(ManagerRegistry::class);
         $mockRegistry
             ->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($manager);
 
         $propertyMock = new UniquePropertyValidator($mockRegistry);
-        $propertyMock->initialize($this->getMock(ExecutionContextInterface::class));
+        $propertyMock->initialize($this->createMock(ExecutionContextInterface::class));
 
         $propertyMock->validate(
             'test',
@@ -165,7 +165,7 @@ class UniquePropertyValidatorTest extends AbstractConstraintValidatorTest
         );
     }
 
-    public function testUniqueField()
+    public function testUniqueField(): void
     {
         $this->validator->validate(
             'Ma27',

@@ -19,7 +19,7 @@ use AppBundle\Validator\Middleware\ValidationInfo;
 
 class ValidatableDTOTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDefaults()
+    public function testDefaults(): void
     {
         /** @var ValidatableDTO $dto */
         $dto = $this->getMockForAbstractClass(ValidatableDTO::class);
@@ -29,7 +29,7 @@ class ValidatableDTOTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($dto->getInfo());
     }
 
-    public function testAddValidationInfo()
+    public function testAddValidationInfo(): void
     {
         /** @var ValidatableDTO $dto */
         $dto = $this->getMockForAbstractClass(ValidatableDTO::class);
@@ -44,7 +44,7 @@ class ValidatableDTOTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot override the whole validation info! Please use the getter and modify the reference!
      */
-    public function testOverrideValidationInfo()
+    public function testOverrideValidationInfo(): void
     {
         /** @var ValidatableDTO $dto */
         $dto = $this->getMockForAbstractClass(ValidatableDTO::class);

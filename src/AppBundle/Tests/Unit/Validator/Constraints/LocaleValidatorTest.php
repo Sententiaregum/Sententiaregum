@@ -18,9 +18,9 @@ use AppBundle\Validator\Constraints\Locale;
 use AppBundle\Validator\Constraints\LocaleValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class LocaleValidatorTest extends AbstractConstraintValidatorTest
+class LocaleValidatorTest extends ConstraintValidatorTestCase
 {
     /**
      * {@inheritdoc}
@@ -58,7 +58,7 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
         return $context;
     }
 
-    public function testInvalidLocale()
+    public function testInvalidLocale(): void
     {
         $locale = new Locale();
         $this->validator->validate('fr', $locale);
@@ -72,9 +72,9 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "AppBundle\\Validator\\Constraints\\Locale", ".*" given/
      */
-    public function testInvalidConstraint()
+    public function testInvalidConstraint(): void
     {
         $localeValidator = new LocaleValidator([]);
-        $localeValidator->validate('value', $this->getMock(Constraint::class));
+        $localeValidator->validate('value', $this->createMock(Constraint::class));
     }
 }

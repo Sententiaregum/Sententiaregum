@@ -68,7 +68,7 @@ class ConfigurableFixturesLoader
      *
      * @throws \InvalidArgumentException If the fixture class does not exist.
      */
-    public function applyFixtures(array $fixtureClasses, callable $executorLogFunction = null)
+    public function applyFixtures(array $fixtureClasses, callable $executorLogFunction = null): void
     {
         $loader = new Loader();
         foreach ($fixtureClasses as $fixtureClass) {

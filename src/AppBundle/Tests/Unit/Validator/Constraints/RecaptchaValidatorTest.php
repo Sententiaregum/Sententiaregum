@@ -19,11 +19,11 @@ use AppBundle\Validator\Constraints\Recaptcha as RecaptchaConstraint;
 use AppBundle\Validator\Constraints\RecaptchaValidator;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class RecaptchaValidatorTest extends AbstractConstraintValidatorTest
+class RecaptchaValidatorTest extends ConstraintValidatorTestCase
 {
-    public function createValidator()
+    public function createValidator(): RecaptchaValidator
     {
         $response = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -43,7 +43,7 @@ class RecaptchaValidatorTest extends AbstractConstraintValidatorTest
         return new RecaptchaValidator($recaptcha, 'http://sententiaregum.dev/');
     }
 
-    public function testInvalidRecaptcha()
+    public function testInvalidRecaptcha(): void
     {
         $this->validator->validate(
             'ivalid-hash',
@@ -56,7 +56,7 @@ class RecaptchaValidatorTest extends AbstractConstraintValidatorTest
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      */
-    public function testLocaleInsteadOfRecaptcha()
+    public function testLocaleInsteadOfRecaptcha(): void
     {
         $this->validator->validate(
             'foo',

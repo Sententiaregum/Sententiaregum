@@ -92,17 +92,16 @@ class UserController extends BaseController
      * @Rest\Patch("/users/activate.{_format}", name="app.user.activate", requirements={"_format"="^(json|xml)$"})
      * @ParamConverter(name="dto", class="AppBundle\Model\User\DTO\ActivateAccountDTO")
      */
-    public function activateUserAction(ActivateAccountDTO $dto): View
+    public function activateUserAction(ActivateAccountDTO $dto): ?View
     {
+        $failed = false;
         try {
             $this->handle($dto);
-
-            $code = Response::HTTP_NO_CONTENT;
         } catch (UserActivationException $ex) {
-            $code = Response::HTTP_FORBIDDEN;
+            $failed = true;
+        } finally {
+            return View::create(null, $failed ? Response::HTTP_FORBIDDEN : Response::HTTP_NO_CONTENT);
         }
-
-        return View::create(null, $code);
     }
 
     /**

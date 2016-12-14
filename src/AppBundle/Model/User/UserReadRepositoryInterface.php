@@ -41,7 +41,7 @@ interface UserReadRepositoryInterface
      *
      * @return User|null
      */
-    public function findUserByUsernameAndActivationKey(string $username, string $activationKey);
+    public function findUserByUsernameAndActivationKey(string $username, string $activationKey): ?User;
 
     /**
      * Filters all usernames that aren't unique.

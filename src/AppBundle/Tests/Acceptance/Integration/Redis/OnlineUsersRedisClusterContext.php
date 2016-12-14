@@ -35,7 +35,7 @@ class OnlineUsersRedisClusterContext implements KernelAwareContext
     private $result = [];
 
     /** @AfterScenario */
-    public function cleanUp()
+    public function cleanUp(): void
     {
         $this->result = [];
     }
@@ -45,7 +45,7 @@ class OnlineUsersRedisClusterContext implements KernelAwareContext
      *
      * @param TableNode $node
      */
-    public function ensureUsersAreOnline(TableNode $node)
+    public function ensureUsersAreOnline(TableNode $node): void
     {
         $service = $this->getContainer()->get('app.redis.cluster.online_users');
 
@@ -59,7 +59,7 @@ class OnlineUsersRedisClusterContext implements KernelAwareContext
      *
      * @param TableNode $table
      */
-    public function checkIdList(TableNode $table)
+    public function checkIdList(TableNode $table): void
     {
         $userIdList = array_map(
             function ($row) {
@@ -74,7 +74,7 @@ class OnlineUsersRedisClusterContext implements KernelAwareContext
     /**
      * @Then I should see the following result:
      */
-    public function iShouldSeeTheFollowingResult(TableNode $table)
+    public function iShouldSeeTheFollowingResult(TableNode $table): void
     {
         foreach ($table->getHash() as $row) {
             $userId = $row['uuid'];

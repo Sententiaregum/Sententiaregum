@@ -27,7 +27,7 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FreeGeoIpTracingService implements IpTracingServiceInterface
 {
-    const PRIVATE_IPS = ['::1', '127.0.0.1'];
+    private const PRIVATE_IPS = ['::1', '127.0.0.1'];
 
     /**
      * @var Client
@@ -49,12 +49,23 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
      *
      * @throws \InvalidArgumentException If the ip is invalid.
      */
-    public function getIpLocationData(string $ip, string $userLocale)
+    public function getIpLocationData(string $ip, string $userLocale): IpLocation
     {
-        if (in_array($ip, self::PRIVATE_IPS, true)) {
-            return;
-        }
+        return in_array($ip, self::PRIVATE_IPS, true)
+            ? IpLocation::createEmpty()
+            : $this->retrieveData($ip, $userLocale);
+    }
 
+    /**
+     * Retrieves the IP location data from the `freegeoip` service.
+     *
+     * @param string $ip
+     * @param string $userLocale
+     *
+     * @return IpLocation
+     */
+    private function retrieveData(string $ip, string $userLocale): IpLocation
+    {
         try {
             $response = $this->client->get(
                 sprintf('/json/%s', $ip),
@@ -69,6 +80,8 @@ final class FreeGeoIpTracingService implements IpTracingServiceInterface
                     $ip
                 ));
             }
+
+            return IpLocation::createEmpty();
         }
     }
 
