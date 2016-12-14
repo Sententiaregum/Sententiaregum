@@ -30,7 +30,7 @@ class NotFoundResponseListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideReplacementData
      */
-    public function testReplaceResponse(Request $request, \Exception $exception, string $expected)
+    public function testReplaceResponse(Request $request, \Exception $exception, string $expected): void
     {
         $listener = new NotFoundResponseListener();
         $event    = new GetResponseForExceptionEvent(
@@ -92,7 +92,7 @@ class NotFoundResponseListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideAbortData
      */
-    public function testAbortOnInvalidConditions(\Exception $exception, Request $request)
+    public function testAbortOnInvalidConditions(\Exception $exception, Request $request): void
     {
         $listener = new NotFoundResponseListener();
         $event    = new GetResponseForExceptionEvent(

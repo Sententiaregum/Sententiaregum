@@ -18,7 +18,7 @@ use AppBundle\Model\User\AuthenticationAttempt;
 
 class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIncreaseCount()
+    public function testIncreaseCount(): void
     {
         $attempt = new AuthenticationAttempt();
         $this->assertSame(0, $attempt->getAttemptCount());
@@ -36,7 +36,7 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testIncreaseCount
      */
-    public function testPopLatest()
+    public function testPopLatest(): void
     {
         $model = new AuthenticationAttempt();
         for ($fixtureData = [], $i = 0; $i < 5; $i++) {
@@ -49,7 +49,7 @@ class AuthenticationAttemptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($fixtureData[1], end($range));
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $model = new AuthenticationAttempt();
         $model->setIp('127.0.0.1');

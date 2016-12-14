@@ -21,7 +21,7 @@ use AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor;
 
 class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoResults()
+    public function testNoResults(): void
     {
         $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository
@@ -34,7 +34,7 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $suggestor->getPossibleSuggestions('foo2016'));
     }
 
-    public function testFilterResults()
+    public function testFilterResults(): void
     {
         $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository
@@ -55,7 +55,7 @@ class ChainSuggestorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test case to avoid regression with array_merge() which expects >=2 parameters.
      */
-    public function testNoSuggestors()
+    public function testNoSuggestors(): void
     {
         $repository = $this->createMock(UserReadRepositoryInterface::class);
         $repository

@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNotifyNewIpOnLogin()
+    public function testNotifyNewIpOnLogin(): void
     {
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
@@ -65,7 +65,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->addAndValidateNewUserIp('127.0.0.1', new DateTimeComparison()));
     }
 
-    public function testNotifyOnMultipleAuthAttempts()
+    public function testNotifyOnMultipleAuthAttempts(): void
     {
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
         $user->addFailedAuthenticationWithIp('127.0.0.1');
@@ -106,7 +106,7 @@ class CredentialNotifyListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onFailedAuthentication(new OnInvalidCredentialsEvent($user));
     }
 
-    public function testNoNotificationIfUsernameIsWrong()
+    public function testNoNotificationIfUsernameIsWrong(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager

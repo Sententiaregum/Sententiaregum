@@ -51,7 +51,7 @@ final class ValidationInfo
      *
      * @return mixed
      */
-    public function getExtraValue(string $info, bool $optional = false): ?string
+    public function getExtraValue(string $info, bool $optional = false)
     {
         $extra = $this->retrieveExtraValue($info);
         if (!$optional && !$extra) {

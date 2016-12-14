@@ -18,7 +18,7 @@ use AppBundle\Model\User\Util\NameSuggestion\Suggestor\DotReplacementSuggestor;
 
 class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testReplaceSpecialChars()
+    public function testReplaceSpecialChars(): void
     {
         $name      = 'Ma.27';
         $suggestor = new DotReplacementSuggestor();
@@ -28,7 +28,7 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testReplaceDash()
+    public function testReplaceDash(): void
     {
         $name      = 'Ma-27';
         $suggestor = new DotReplacementSuggestor();
@@ -38,7 +38,7 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testReplaceMultipleSpecialChars()
+    public function testReplaceMultipleSpecialChars(): void
     {
         $name      = 'M_a.2-7';
         $suggestor = new DotReplacementSuggestor();
@@ -47,7 +47,7 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('M-a_2_7', $result);
     }
 
-    public function testNoSuggestions()
+    public function testNoSuggestions(): void
     {
         $name      = 'Ma27';
         $suggestor = new DotReplacementSuggestor();
@@ -55,7 +55,7 @@ class DotReplacementSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $suggestor->getPossibleSuggestions($name));
     }
 
-    public function testMultipleBehind()
+    public function testMultipleBehind(): void
     {
         $name      = 'M_.-a...2.7__';
         $suggestor = new DotReplacementSuggestor();

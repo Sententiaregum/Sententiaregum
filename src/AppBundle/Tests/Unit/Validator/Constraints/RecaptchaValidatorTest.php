@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class RecaptchaValidatorTest extends ConstraintValidatorTestCase
 {
-    public function createValidator()
+    public function createValidator(): RecaptchaValidator
     {
         $response = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -43,7 +43,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
         return new RecaptchaValidator($recaptcha, 'http://sententiaregum.dev/');
     }
 
-    public function testInvalidRecaptcha()
+    public function testInvalidRecaptcha(): void
     {
         $this->validator->validate(
             'ivalid-hash',
@@ -56,7 +56,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      */
-    public function testLocaleInsteadOfRecaptcha()
+    public function testLocaleInsteadOfRecaptcha(): void
     {
         $this->validator->validate(
             'foo',

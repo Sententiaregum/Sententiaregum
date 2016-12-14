@@ -38,7 +38,7 @@ class RoleContext extends AbstractIntegrationContext
     /**
      * @When I determine the default role
      */
-    public function determineDefaultRole()
+    public function determineDefaultRole(): void
     {
         try {
             $this->resultRole = $this->getEntityManager()->getRepository('Account:Role')->determineDefaultRole();
@@ -50,7 +50,7 @@ class RoleContext extends AbstractIntegrationContext
     /**
      * @Then I should get the :arg1 role
      */
-    public function checkRole($arg1)
+    public function checkRole($arg1): void
     {
         Assertion::eq($this->resultRole->getRole(), $arg1);
     }
@@ -58,7 +58,7 @@ class RoleContext extends AbstractIntegrationContext
     /**
      * @Then I should get an error
      */
-    public function ensureError()
+    public function ensureError(): void
     {
         Assertion::isInstanceOf($this->exception, \RuntimeException::class);
         Assertion::eq($this->exception->getMessage(), 'Role "ROLE_USER" is not present!');

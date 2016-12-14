@@ -27,7 +27,7 @@ class AddSuggestorToNameSuggestionChainPassTest extends \PHPUnit_Framework_TestC
      * @expectedException \LogicException
      * @expectedExceptionMessage The tag `app.registration.suggestor` must be declared one time only!
      */
-    public function testMultipleTagDeclarations()
+    public function testMultipleTagDeclarations(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new AddSuggestorToNameSuggestionChainPass());
@@ -41,7 +41,7 @@ class AddSuggestorToNameSuggestionChainPassTest extends \PHPUnit_Framework_TestC
         $container->compile();
     }
 
-    public function testAddSuggestorToChain()
+    public function testAddSuggestorToChain(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new AddSuggestorToNameSuggestionChainPass());

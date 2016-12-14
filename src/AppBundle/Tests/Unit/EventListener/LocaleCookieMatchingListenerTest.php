@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMatchLocale()
+    public function testMatchLocale(): void
     {
         $request = Request::create('/');
         $request->cookies->set('language', 'de');
@@ -35,7 +35,7 @@ class LocaleCookieMatchingListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('de', $request->attributes->get('_locale'));
     }
 
-    public function testSubRequest()
+    public function testSubRequest(): void
     {
         $request = Request::create('/');
         $request->cookies->set('language', 'de');

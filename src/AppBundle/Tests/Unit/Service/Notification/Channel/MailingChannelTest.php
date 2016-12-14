@@ -23,7 +23,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class MailingChannelTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSendMail()
+    public function testSendMail(): void
     {
         $defaultEmail = 'info@sententiaregum.dev';
 

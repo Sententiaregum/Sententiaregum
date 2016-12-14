@@ -25,7 +25,7 @@ class DateTimeArrayTypeTest extends \PHPUnit_Framework_TestCase
         TypeTester::addType(DateTimeArrayType::DATE_TIME_ARRAY, DateTimeArrayType::class);
     }
 
-    public function testEncodesData()
+    public function testEncodesData(): void
     {
         $mockTime = new \DateTime('2016-05-31 15:00:00');
 
@@ -37,7 +37,7 @@ class DateTimeArrayTypeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testParsesDBValue()
+    public function testParsesDBValue(): void
     {
         $string   = '2016-05-31 15:00:00';
         $expected = new \DateTime($string);
@@ -54,7 +54,7 @@ class DateTimeArrayTypeTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /^The decode of the JSON string from the database \(\"(.*)\"\) failed due to the following error: "(.*)"\!$/
      */
-    public function testCorruptedJSONString()
+    public function testCorruptedJSONString(): void
     {
         TypeTester::getType(DateTimeArrayType::DATE_TIME_ARRAY)
             ->convertToPHPValue('["1970-01-01 00:00:00]', $this->getMockForAbstractClass(AbstractPlatform::class));

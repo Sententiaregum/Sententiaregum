@@ -18,7 +18,7 @@ use AppBundle\Model\User\Util\ActivationKeyCode\ActivationKeyCodeGenerator;
 
 class ActivationKeyCodeGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGenerateKeyCode()
+    public function testGenerateKeyCode(): void
     {
         $generator = new ActivationKeyCodeGenerator();
         $string    = $generator->generate(30);

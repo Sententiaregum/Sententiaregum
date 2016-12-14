@@ -22,7 +22,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPublish()
+    public function testPublish(): void
     {
         $user  = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $class = 'AppBundle\\Model\\Core\\Handler\\SecretHandler';
@@ -55,7 +55,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot generate template name for notification with name "AppBundle\Model\Core\Handler\SecretHandler"!
      */
-    public function testMissingMapInfo()
+    public function testMissingMapInfo(): void
     {
         $user  = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $class = 'AppBundle\\Model\\Core\\Handler\\SecretHandler';
@@ -69,7 +69,7 @@ class ChannelDelegatingNotificatorTest extends \PHPUnit_Framework_TestCase
         $notificator->publishNotification($class, $event, []);
     }
 
-    public function testTemplateArgumentReplacesTemplateMapConfiguration()
+    public function testTemplateArgumentReplacesTemplateMapConfiguration(): void
     {
         $channel = $this->createMock(NotificationChannelInterface::class);
         $channel

@@ -25,13 +25,13 @@ class DateTimeComparisonTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideDateDiffComparison
      */
-    public function testDateDiffComparison(string $diff, \DateTime $dateTime, bool $expected)
+    public function testDateDiffComparison(string $diff, \DateTime $dateTime, bool $expected): void
     {
         $service = new DateTimeComparison();
         $this->assertSame($service($diff, $dateTime), $expected);
     }
 
-    public function provideDateDiffComparison()
+    public function provideDateDiffComparison(): array
     {
         return [
             [

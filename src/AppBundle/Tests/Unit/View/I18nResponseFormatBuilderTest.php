@@ -54,7 +54,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideErrorCases
      */
-    public function testExceptionThrownWithInvalidTargetLocales(bool $allLanguages, array $target, string $expectedMessage)
+    public function testExceptionThrownWithInvalidTargetLocales(bool $allLanguages, array $target, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -68,7 +68,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testPluralization()
+    public function testPluralization(): void
     {
         $translator = new IdentityTranslator();
         $translator->setLocale('fr');
@@ -96,7 +96,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('One apple', $result['en'][0]);
     }
 
-    public function testTransChoiceFails()
+    public function testTransChoiceFails(): void
     {
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects($this->once())
@@ -121,7 +121,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result['property']['en'][0], 'Another translation.');
     }
 
-    public function provideMockData()
+    public function provideMockData(): array
     {
         $violation  = new ConstraintViolation('Damn error!', 'Damn error!', [], null, 'property', 'blah');
         $violation2 = new ConstraintViolation('Another error!', 'Another error!', [], null, 'property', 'foobar');
@@ -174,7 +174,7 @@ class I18nResponseFormatBuilderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function provideErrorCases()
+    public function provideErrorCases(): array
     {
         return [
             'All languages, but no target' => [true, [], 'Wrong usage of $targetLocales: If the all locales should be rendered, $targetLocales must be given!'],

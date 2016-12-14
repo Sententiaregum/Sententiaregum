@@ -18,7 +18,7 @@ use AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor;
 
 class YearPostfixSuggestorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSuggestYears()
+    public function testSuggestYears(): void
     {
         $name        = 'benbieler';
         $suggestor   = new YearPostfixSuggestor();
@@ -28,7 +28,7 @@ class YearPostfixSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(sprintf('%s%d', $name, $year), $suggestions);
     }
 
-    public function testSuggestOlderYear()
+    public function testSuggestOlderYear(): void
     {
         $name        = 'benbieler';
         $suggestor   = new YearPostfixSuggestor();
@@ -40,7 +40,7 @@ class YearPostfixSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThan(date('Y'), $bareYear);
     }
 
-    public function testYearAsPostfix()
+    public function testYearAsPostfix(): void
     {
         $name        = 'Ma272000';
         $suggestor   = new \AppBundle\Model\User\Util\NameSuggestion\Suggestor\YearPostfixSuggestor();
@@ -49,7 +49,7 @@ class YearPostfixSuggestorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $suggestions);
     }
 
-    public function testAddUnderscore()
+    public function testAddUnderscore(): void
     {
         $name        = 'Ma27';
         $suggestor   = new YearPostfixSuggestor();

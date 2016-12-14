@@ -31,7 +31,7 @@ final class ContextHelper
      *
      * @return ApiContext
      */
-    public static function connectToAPIContext(BeforeScenarioScope $scenarioScope)
+    public static function connectToAPIContext(BeforeScenarioScope $scenarioScope): ApiContext
     {
         $environment = $scenarioScope->getEnvironment();
 

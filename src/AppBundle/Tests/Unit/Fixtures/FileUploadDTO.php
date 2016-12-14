@@ -25,14 +25,14 @@ class FileUploadDTO
 {
     private $file;
 
-    public function setFile(UploadedFile $file)
+    public function setFile(UploadedFile $file): self
     {
         $this->file = $file;
 
         return $this;
     }
 
-    public function getFile()
+    public function getFile(): ?UploadedFile
     {
         return $this->file;
     }

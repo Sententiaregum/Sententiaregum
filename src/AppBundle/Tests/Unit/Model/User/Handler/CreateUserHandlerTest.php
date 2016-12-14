@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreateUser()
+    public function testCreateUser(): void
     {
         $notificator = $this->createMock(NotificatorInterface::class);
         $notificator
@@ -74,7 +74,7 @@ class CreateUserHandlerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \OverflowException
      * @expectedExceptionMessage Cannot generate activation key!
      */
-    public function testGenerationFailure()
+    public function testGenerationFailure(): void
     {
         $notificator = $this->createMock(NotificatorInterface::class);
         $notificator

@@ -38,7 +38,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
     private $uuid;
 
     /** @AfterScenario */
-    public function cleanUp()
+    public function cleanUp(): void
     {
         $this->blockedUsers = false;
         $this->uuid         = null;
@@ -49,7 +49,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
      *
      * @param string $uuid
      */
-    public function theAccountWithUuidShowsSuspiciousBehavior(string $uuid)
+    public function theAccountWithUuidShowsSuspiciousBehavior(string $uuid): void
     {
         $this->uuid = $uuid;
 
@@ -61,7 +61,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
      *
      * @param string $uuid
      */
-    public function loadBlockedUsers(string $uuid)
+    public function loadBlockedUsers(string $uuid): void
     {
         $this->isBlocked = $this->getContainer()->get('app.redis.cluster.blocked_account')->isAccountTemporaryBlocked($uuid);
     }
@@ -69,7 +69,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
     /**
      * @Then /^the block should be confirmed$/
      */
-    public function ensureBlocked()
+    public function ensureBlocked(): void
     {
         Assertion::true($this->isBlocked);
     }
@@ -77,7 +77,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
     /**
      * @Given /^I wait more than one minute$/
      */
-    public function simulateTime()
+    public function simulateTime(): void
     {
         $this->getContainer()->get('snc_redis.blocked_users')->del([sprintf('blocked:%s', $this->uuid)]);
     }
@@ -85,7 +85,7 @@ class BlockedAccountClusterContext implements KernelAwareContext
     /**
      * @Then /^the block should not be confirmed$/
      */
-    public function ensureNotBlocked()
+    public function ensureNotBlocked(): void
     {
         Assertion::false($this->isBlocked);
     }

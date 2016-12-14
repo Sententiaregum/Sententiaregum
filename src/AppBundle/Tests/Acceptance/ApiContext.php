@@ -23,6 +23,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -74,7 +75,7 @@ class ApiContext implements KernelAwareContext
     private $profiler;
 
     /** @BeforeScenario */
-    public function prepare()
+    public function prepare(): void
     {
         $container = $this->getContainer();
 
@@ -90,7 +91,7 @@ class ApiContext implements KernelAwareContext
     }
 
     /** @AfterScenario */
-    public function cleanUp()
+    public function cleanUp(): void
     {
         $this->client          = null;
         $this->apiKey          = null;
@@ -107,7 +108,7 @@ class ApiContext implements KernelAwareContext
      * @param string $username
      * @param string $password
      */
-    public function authenticate(string $username, string $password)
+    public function authenticate(string $username, string $password): void
     {
         $this->client->request('POST', '/api/api-key.json', ['login' => $username, 'password' => $password]);
         $response = $this->client->getResponse();
@@ -126,7 +127,7 @@ class ApiContext implements KernelAwareContext
      *
      * @param PyStringNode $payload
      */
-    public function buildPayload(PyStringNode $payload)
+    public function buildPayload(PyStringNode $payload): void
     {
         $this->requestPayload = $this->decode($payload->getRaw());
     }
@@ -136,7 +137,7 @@ class ApiContext implements KernelAwareContext
      *
      * @param string $request
      */
-    public function submitRequest(string $request)
+    public function submitRequest(string $request): void
     {
         list($method, $url) = $this->analyzeURLInput($request);
 
@@ -165,7 +166,7 @@ class ApiContext implements KernelAwareContext
      *
      * @param int $statusCode
      */
-    public function checkStatusCode(int $statusCode)
+    public function checkStatusCode(int $statusCode): void
     {
         Assertion::eq($statusCode, $this->responseCode, sprintf(
             'Invalid status code after request! Expected code "%s", but got "%s"!',
@@ -180,7 +181,7 @@ class ApiContext implements KernelAwareContext
      * @param string $expected
      * @param string $propertyPath
      */
-    public function ensureParameterValidity(string $expected, string $propertyPath)
+    public function ensureParameterValidity(string $expected, string $propertyPath): void
     {
         $value = $this->evaluatePropertyPath($propertyPath);
 
@@ -192,7 +193,7 @@ class ApiContext implements KernelAwareContext
      *
      * @param TableNode $node
      */
-    public function checkWithTableNode(TableNode $node)
+    public function checkWithTableNode(TableNode $node): void
     {
         $data = array_combine($node->getRow(0), $node->getRow(1));
 
@@ -223,9 +224,9 @@ class ApiContext implements KernelAwareContext
     /**
      * Simple getter to access the profile.
      *
-     * @return \Symfony\Component\HttpKernel\Profiler\Profile
+     * @return Profile
      */
-    public function getProfile()
+    public function getProfile(): Profile
     {
         return $this->profiler;
     }

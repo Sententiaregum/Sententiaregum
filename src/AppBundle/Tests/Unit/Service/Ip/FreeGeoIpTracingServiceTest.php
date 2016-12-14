@@ -27,7 +27,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getIps
      */
-    public function testGetGetLocationData($ip)
+    public function testGetGetLocationData($ip): void
     {
         $stream = $this->createMock(StreamInterface::class);
         $stream
@@ -68,7 +68,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid ip address "foo" given!
      */
-    public function testInvalidIp()
+    public function testInvalidIp(): void
     {
         $client = $this->createMock(Client::class);
         $client
@@ -83,7 +83,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
         $service->getIpLocationData('foo', 'en');
     }
 
-    public function testCannotTrack()
+    public function testCannotTrack(): void
     {
         $client = $this->createMock(Client::class);
         $client
@@ -104,7 +104,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /^Unable to decode response body \("\{ip"\:"192\.168\.56\.112"\}"\) due to the following error \".*\"!$/
      */
-    public function testBrokenResponse()
+    public function testBrokenResponse(): void
     {
         $stream = $this->createMock(StreamInterface::class);
         $stream
@@ -132,7 +132,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getLocalIps
      */
-    public function testLocalIp($ip)
+    public function testLocalIp($ip): void
     {
         $client = $this->createMock(Client::class);
 
@@ -145,7 +145,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @return string[]
      */
-    public function getIps()
+    public function getIps(): array
     {
         return [
             ['192.168.56.112'],
@@ -158,7 +158,7 @@ class FreeGeoIpTracingServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @return string[]
      */
-    public function getLocalIps()
+    public function getLocalIps(): array
     {
         return [
             ['127.0.0.1'],

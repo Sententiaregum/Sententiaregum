@@ -58,7 +58,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I apply fixtures
      */
-    public function applyFixtures()
+    public function applyFixtures(): void
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -69,7 +69,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should be able to fetch them from the database
      */
-    public function ensureAppropriateAppliance()
+    public function ensureAppropriateAppliance(): void
     {
         $em = $this->getEntityManager();
         foreach (['ROLE_USER', 'ROLE_ADMIN'] as $role) {
@@ -80,7 +80,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I have a logging callback defined
      */
-    public function defineLoggerForFixtureAppliance()
+    public function defineLoggerForFixtureAppliance(): void
     {
         $that           = &$this;
         $this->callback = function ($message) use ($that) {
@@ -92,7 +92,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then the callback should be called
      */
-    public function ensureLoggerWasCalled()
+    public function ensureLoggerWasCalled(): void
     {
         Assertion::true($this->data['called']);
     }
@@ -100,7 +100,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then the log messages should be shown
      */
-    public function checkLogMessage()
+    public function checkLogMessage(): void
     {
         list($line0, $line1) = $this->data['output'];
 
@@ -111,7 +111,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I apply an invalid fixture
      */
-    public function applyUnknownFixtures()
+    public function applyUnknownFixtures(): void
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -126,7 +126,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should get an error
      */
-    public function checkError()
+    public function checkError(): void
     {
         Assertion::notNull($this->exception);
         Assertion::isInstanceOf($this->exception, \InvalidArgumentException::class);
@@ -135,7 +135,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @When I load production fixtures from the DataFixtures\/ORM directory inside AppBundle
      */
-    public function loadProdFixturesFromDir()
+    public function loadProdFixturesFromDir(): void
     {
         /** @var \AppBundle\Service\Doctrine\DataFixtures\ConfigurableFixturesLoader $loader */
         $loader = $this->getContainer()->get('app.doctrine.fixtures_loader');
@@ -146,7 +146,7 @@ class SimpleFixtureLoadingContext extends AbstractIntegrationContext
     /**
      * @Then I should see the following fixtures
      */
-    public function checkFixtures(TableNode $table)
+    public function checkFixtures(TableNode $table): void
     {
         $classes = array_map(
             function ($array) {

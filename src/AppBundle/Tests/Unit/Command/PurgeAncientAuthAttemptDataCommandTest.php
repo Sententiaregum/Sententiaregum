@@ -20,7 +20,7 @@ use AppBundle\Test\CommandTestCase;
 
 class PurgeAncientAuthAttemptDataCommandTest extends CommandTestCase
 {
-    public function testPurgeAuthAttemptData()
+    public function testPurgeAuthAttemptData(): void
     {
         $repoMock = $this->createMock(UserWriteRepositoryInterface::class);
         $repoMock->expects($this->once())

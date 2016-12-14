@@ -21,7 +21,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLockUnlock()
+    public function testLockUnlock(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertFalse($user->isLocked());
@@ -38,7 +38,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Approved users cannot have an activation key!
      */
-    public function testSetActivationKeyOnApprovedUser()
+    public function testSetActivationKeyOnApprovedUser(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_APPROVED);
@@ -46,7 +46,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->storeUniqueActivationKeyForNonApprovedUser('any long activation key');
     }
 
-    public function testRemoveActivationKey()
+    public function testRemoveActivationKey(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->storeUniqueActivationKeyForNonApprovedUser('any long api key');
@@ -55,7 +55,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(User::STATE_APPROVED, $user->getState());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $hasher = new PhpPasswordHasher();
         $user   = User::create('Ma27', 'test', 'Ma27@sententiaregum.dev', $hasher);
@@ -65,7 +65,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Ma27@sententiaregum.dev', $user->getEmail());
     }
 
-    public function testRemoveApiKey()
+    public function testRemoveApiKey(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 
@@ -78,7 +78,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($user->getApiKey());
     }
 
-    public function testFollower()
+    public function testFollower(): void
     {
         $user      = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $following = User::create('benbieler', '123456', 'bebieler@sententiaregum.dev', new PhpPasswordHasher());
@@ -93,7 +93,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $user->getFollowing());
     }
 
-    public function testRoles()
+    public function testRoles(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
@@ -114,7 +114,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Cannot attach role on non-approved or locked user!
      */
-    public function testRolesOnNonApprovedUser()
+    public function testRolesOnNonApprovedUser(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
@@ -122,7 +122,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->addRole($role);
     }
 
-    public function testNewUserIp()
+    public function testNewUserIp(): void
     {
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
@@ -131,7 +131,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->addAndValidateNewUserIp($ip, new DateTimeComparison()));
     }
 
-    public function testFailedAuthIp()
+    public function testFailedAuthIp(): void
     {
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
@@ -145,7 +145,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
-    public function testFailedAuthWithKnownIp()
+    public function testFailedAuthWithKnownIp(): void
     {
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
@@ -159,7 +159,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
-    public function testFailedAuthInRange()
+    public function testFailedAuthInRange(): void
     {
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
@@ -177,7 +177,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
-    public function testNewUserIpWithFailedAuthenticationsLeadToCorruptionWarning()
+    public function testNewUserIpWithFailedAuthenticationsLeadToCorruptionWarning(): void
     {
         $ip   = '127.0.0.1';
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
@@ -191,7 +191,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
-    public function testNewUserIpCauseRemovalOfOlderLoginIssues()
+    public function testNewUserIpCauseRemovalOfOlderLoginIssues(): void
     {
         $mock = $this->createMock(DateTimeComparison::class);
         $mock
@@ -211,7 +211,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->exceedsIpFailedAuthAttemptMaximum($ip, new DateTimeComparison()));
     }
 
-    public function testFailedAuthOutOfRange()
+    public function testFailedAuthOutOfRange(): void
     {
         $mock = $this->createMock(DateTimeComparison::class);
         $mock
@@ -235,7 +235,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($user->exceedsIpFailedAuthAttemptMaximum($ip, $mock));
     }
 
-    public function testAuthCheckForNonRegisteredIP()
+    public function testAuthCheckForNonRegisteredIP(): void
     {
         $user = User::create('Ma27', '123456', 'foo@bar.de', new PhpPasswordHasher());
 
@@ -244,7 +244,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSerialization()
+    public function testSerialization(): void
     {
         $hasher = new PhpPasswordHasher();
         $user   = User::create('Ma27', 'foo', 'foo@bar.de', $hasher);
@@ -276,7 +276,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid activation key given!
      */
-    public function testStateChangeWithoutActivationKey()
+    public function testStateChangeWithoutActivationKey(): void
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->storeUniqueActivationKeyForNonApprovedUser(uniqid());
@@ -287,13 +287,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid state!
      */
-    public function testInvalidState()
+    public function testInvalidState(): void
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition('any random state');
     }
 
-    public function testActivationLifecycle()
+    public function testActivationLifecycle(): void
     {
         $user = User::create('Ma27', 'foo', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertSame(User::STATE_NEW, $user->getState());
@@ -311,14 +311,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Old password is invalid, but must be given to change it!
      */
-    public function testUpdatePasswordWithInvalidOldOne()
+    public function testUpdatePasswordWithInvalidOldOne(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->setOrUpdatePassword('123456', new PhpPasswordHasher());
         $user->setOrUpdatePassword('1234567', new PhpPasswordHasher(), 'invalid old one');
     }
 
-    public function testUpdatePassword()
+    public function testUpdatePassword(): void
     {
         $hasher = new PhpPasswordHasher();
         $user   = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
@@ -332,7 +332,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid locale!
      */
-    public function testInvalidLocale()
+    public function testInvalidLocale(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->modifyUserLocale('DE');
@@ -342,7 +342,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Role "ROLE_USER" already attached at user "Ma27"!
      */
-    public function testAddRoleTwice()
+    public function testAddRoleTwice(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
@@ -356,7 +356,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot remove not existing role "ROLE_USER"!
      */
-    public function testRemoveNonExistentRole()
+    public function testRemoveNonExistentRole(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $role = new Role('ROLE_USER');
@@ -368,13 +368,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot remove relation with invalid user "benbieler"!
      */
-    public function testTryToRemoveInvalidFollowing()
+    public function testTryToRemoveInvalidFollowing(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->removeFollowing(User::create('benbieler', '123456', 'benbieler@sententiaregum.dev', new PhpPasswordHasher()));
     }
 
-    public function testModifyLocale()
+    public function testModifyLocale(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $this->assertSame('en', $user->getLocale());
@@ -387,7 +387,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Only approved users can remove activation keys!
      */
-    public function testTryRemoveActivationKeyAfterStateTransition()
+    public function testTryRemoveActivationKeyAfterStateTransition(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_APPROVED);
@@ -399,7 +399,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Only approved users can be locked!
      */
-    public function testTransitionFromNewToLocked()
+    public function testTransitionFromNewToLocked(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_LOCKED);

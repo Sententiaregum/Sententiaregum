@@ -58,7 +58,7 @@ class LocaleValidatorTest extends ConstraintValidatorTestCase
         return $context;
     }
 
-    public function testInvalidLocale()
+    public function testInvalidLocale(): void
     {
         $locale = new Locale();
         $this->validator->validate('fr', $locale);
@@ -72,7 +72,7 @@ class LocaleValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "AppBundle\\Validator\\Constraints\\Locale", ".*" given/
      */
-    public function testInvalidConstraint()
+    public function testInvalidConstraint(): void
     {
         $localeValidator = new LocaleValidator([]);
         $localeValidator->validate('value', $this->createMock(Constraint::class));

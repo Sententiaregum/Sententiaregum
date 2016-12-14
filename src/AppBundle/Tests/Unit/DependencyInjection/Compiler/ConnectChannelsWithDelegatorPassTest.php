@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ConnectChannelsWithDelegatorPassTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNotificatorNotRegisteredInContainer()
+    public function testNotificatorNotRegisteredInContainer(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConnectChannelsWithDelegatorPass());
@@ -42,7 +42,7 @@ class ConnectChannelsWithDelegatorPassTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage The tag `app.notificator.channel` can be declared one time only!
      */
-    public function testTwiceDeclaredTag()
+    public function testTwiceDeclaredTag(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConnectChannelsWithDelegatorPass());
@@ -58,7 +58,7 @@ class ConnectChannelsWithDelegatorPassTest extends \PHPUnit_Framework_TestCase
         $container->compile();
     }
 
-    public function testConnectNotificationChannelWithServiceDefinition()
+    public function testConnectNotificationChannelWithServiceDefinition(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConnectChannelsWithDelegatorPass());
@@ -83,7 +83,7 @@ class ConnectChannelsWithDelegatorPassTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage The attribute "alias" is missing in the tag defintion "app.notificator.channel" of service "test_channel"!
      */
-    public function testMissingAliasAttributeInTagDefinition()
+    public function testMissingAliasAttributeInTagDefinition(): void
     {
         $container = new ContainerBuilder();
         $container->addCompilerPass(new ConnectChannelsWithDelegatorPass());

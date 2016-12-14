@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class OnlineUsersUpdateListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testUpdateOnlineUsers()
+    public function testUpdateOnlineUsers(): void
     {
         $provider = $this->createMock(OnlineUserIdWriteProviderInterface::class);
         $provider

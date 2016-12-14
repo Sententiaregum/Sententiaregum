@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class DTOConverterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSupportClassesEndingWithDTO()
+    public function testSupportClassesEndingWithDTO(): void
     {
         $configuration = new ParamConverter(['class' => CreateUserDTO::class]);
         $converter     = new DTOConverter(new PropertyAccessor());
@@ -38,7 +38,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot attach property "username" on object instance "AppBundle\Model\User\DTO\CreateUserDTO"!
      */
-    public function testImmutableProperty()
+    public function testImmutableProperty(): void
     {
         $accessor = $this->createMock(PropertyAccessor::class);
         $accessor
@@ -52,7 +52,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $converter->apply($request, new ParamConverter(['class' => CreateUserDTO::class]));
     }
 
-    public function testAttachValuesOnDTO()
+    public function testAttachValuesOnDTO(): void
     {
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');
@@ -71,7 +71,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($request->get('dto')->user);
     }
 
-    public function testAssignUnderscoreValueToCamelCaseProperty()
+    public function testAssignUnderscoreValueToCamelCaseProperty(): void
     {
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');
@@ -87,7 +87,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Property "username" not found in request stack!
      */
-    public function testMissingProperties()
+    public function testMissingProperties(): void
     {
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');
@@ -95,7 +95,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $converter->apply($request, new ParamConverter(['class' => CreateUserDTO::class, 'name' => 'dto']));
     }
 
-    public function testFileUpload()
+    public function testFileUpload(): void
     {
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');
@@ -106,7 +106,7 @@ class DTOConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UploadedFile::class, $request->attributes->get('dto')->getFile());
     }
 
-    public function testDefaultValue()
+    public function testDefaultValue(): void
     {
         $converter = new DTOConverter(new PropertyAccessor());
         $request   = Request::create('/');

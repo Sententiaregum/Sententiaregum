@@ -36,7 +36,7 @@ class CreateAccountContext implements KernelAwareContext
     private $apiContext;
 
     /** @BeforeScenario */
-    public function connectToAPiContext(BeforeScenarioScope $scope)
+    public function connectToAPiContext(BeforeScenarioScope $scope): void
     {
         $this->apiContext = ContextHelper::connectToAPIContext($scope);
 
@@ -44,7 +44,7 @@ class CreateAccountContext implements KernelAwareContext
     }
 
     /** @AfterScenario */
-    public function dropApiContext()
+    public function dropApiContext(): void
     {
         $this->apiContext = null;
     }
@@ -54,7 +54,7 @@ class CreateAccountContext implements KernelAwareContext
      *
      * @param string $name
      */
-    public function ensureAccountExists(string $name)
+    public function ensureAccountExists(string $name): void
     {
         Assertion::eq(
             $this->apiContext->getResponse()['id'],
@@ -65,7 +65,7 @@ class CreateAccountContext implements KernelAwareContext
     /**
      * @Then /^I should've gotten an email$/
      */
-    public function checkEmail()
+    public function checkEmail(): void
     {
         /** @var \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector $profile */
         $profile = $this->apiContext->getProfile()->getCollector('swiftmailer');
@@ -92,7 +92,7 @@ class CreateAccountContext implements KernelAwareContext
      *
      * @param string $username
      */
-    public function createAccount(string $username)
+    public function createAccount(string $username): void
     {
         $this->getContainer()->get('test.client')->request(
             'POST',
@@ -112,7 +112,7 @@ class CreateAccountContext implements KernelAwareContext
      *
      * @param string $username
      */
-    public function checkAbilityToLogin(string $username)
+    public function checkAbilityToLogin(string $username): void
     {
         $this->apiContext->authenticate($username, '123456');
     }
@@ -122,7 +122,7 @@ class CreateAccountContext implements KernelAwareContext
      *
      * @param string $key
      */
-    public function modifyTestApiKey(string $key)
+    public function modifyTestApiKey(string $key): void
     {
         $connection = $this->getContainer()->get('database_connection');
 
@@ -139,7 +139,7 @@ class CreateAccountContext implements KernelAwareContext
      * @param string $error
      * @param string $propertyPath
      */
-    public function checkError(string $error, string $propertyPath)
+    public function checkError(string $error, string $propertyPath): void
     {
         $response = $this->apiContext->getResponse();
 
@@ -150,7 +150,7 @@ class CreateAccountContext implements KernelAwareContext
     /**
      * @Then /^I should see suggestions for my username$/
      */
-    public function checkNameSuggestions()
+    public function checkNameSuggestions(): void
     {
         Assertion::keyIsset($this->apiContext->getResponse(), 'name_suggestions');
     }
@@ -158,7 +158,7 @@ class CreateAccountContext implements KernelAwareContext
     /**
      * @Given /^I wait more than two hours$/
      */
-    public function simulateWaitingAndExpiredKey()
+    public function simulateWaitingAndExpiredKey(): void
     {
         $bind  = (new \DateTime('-3 hours'))->format('Y-m-d H:i:s');
         $query = $this->getContainer()->get('database_connection')->prepare('UPDATE `User` SET `pendingActivation_activation_date` = :date WHERE `username` = "sententiaregum"');

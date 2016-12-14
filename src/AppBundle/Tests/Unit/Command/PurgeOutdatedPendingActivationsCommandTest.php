@@ -20,7 +20,7 @@ use AppBundle\Test\CommandTestCase;
 
 class PurgeOutdatedPendingActivationsCommandTest extends CommandTestCase
 {
-    public function testPurgeData()
+    public function testPurgeData(): void
     {
         $repository = $this->createMock(UserWriteRepositoryInterface::class);
         $repository

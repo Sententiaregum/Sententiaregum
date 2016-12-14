@@ -27,7 +27,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
      *
      * @param object $message
      */
-    public function testNoValidatableDTOGiven($message)
+    public function testNoValidatableDTOGiven($message): void
     {
         $validator = $this->createMock(ValidatorInterface::class);
         $validator
@@ -47,7 +47,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($invoked);
     }
 
-    public function testValidationWithNoViolations()
+    public function testValidationWithNoViolations(): void
     {
         $validator = $this->createMock(ValidatorInterface::class);
         $validator
@@ -73,7 +73,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($invoked);
     }
 
-    public function testValidationWithViolations()
+    public function testValidationWithViolations(): void
     {
         $validator = $this->createMock(ValidatorInterface::class);
         $validator
@@ -98,7 +98,7 @@ class DTOValidationMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($dto->getInfo()->isValid());
     }
 
-    public function testValidationWithViolationsAndEnabledContinuing()
+    public function testValidationWithViolationsAndEnabledContinuing(): void
     {
         $validator = $this->createMock(ValidatorInterface::class);
         $validator

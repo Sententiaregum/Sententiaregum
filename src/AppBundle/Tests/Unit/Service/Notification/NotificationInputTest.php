@@ -20,7 +20,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class NotificationInputTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAddParameter()
+    public function testAddParameter(): void
     {
         $event = new NotificationInput();
         $event->addParameter('foo', 'bar');
@@ -28,7 +28,7 @@ class NotificationInputTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($event->getParameters()['foo'], 'bar');
     }
 
-    public function testAddUser()
+    public function testAddUser(): void
     {
         $event = new NotificationInput();
         $user  = User::create('Ma27', '123456', 'foo@bar.baz', new PhpPasswordHasher());
@@ -38,14 +38,14 @@ class NotificationInputTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($user, $event->getUsers()[0]);
     }
 
-    public function testSetTemplateSource()
+    public function testSetTemplateSource(): void
     {
         $event = new NotificationInput();
         $event->setTemplateSource('@AppBundle/Resources/views/Email/notification.html.twig');
         $this->assertSame('@AppBundle/Resources/views/Email/notification.html.twig', $event->getTemplateSource());
     }
 
-    public function setLocale()
+    public function testSetLocale(): void
     {
         $event = new NotificationInput();
         $event->setLanguage('de');
@@ -56,7 +56,7 @@ class NotificationInputTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Cannot apply parameter locale since this parameter is reserved!
      */
-    public function addInvalidParameter()
+    public function testAddInvalidParameter(): void
     {
         $event = new NotificationInput();
         $event->addParameter('locale', 'de');

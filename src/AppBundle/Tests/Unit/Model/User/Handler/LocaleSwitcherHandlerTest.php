@@ -22,7 +22,7 @@ use Ma27\ApiKeyAuthenticationBundle\Model\Password\PhpPasswordHasher;
 
 class LocaleSwitcherHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testUserWithoutLocaleChange()
+    public function testUserWithoutLocaleChange(): void
     {
         $userRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $userRepository
@@ -42,7 +42,7 @@ class LocaleSwitcherHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('de', $user->getLocale());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
 

@@ -28,7 +28,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \AppBundle\Exception\UserActivationException
      */
-    public function testInvalidData()
+    public function testInvalidData(): void
     {
         $writeRepository = $this->createMock(UserWriteRepositoryInterface::class);
         $writeRepository
@@ -58,7 +58,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \AppBundle\Exception\UserActivationException
      */
-    public function testExpiredActivation()
+    public function testExpiredActivation(): void
     {
         $key  = md5(uniqid());
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
@@ -103,7 +103,7 @@ class ActivateAccountHandlerTest extends \PHPUnit_Framework_TestCase
         $handler($dto);
     }
 
-    public function testActivateAccount()
+    public function testActivateAccount(): void
     {
         $user = User::create('Ma27', '123456', 'Ma27@sententiaregum.dev', new PhpPasswordHasher());
         $user->performStateTransition(User::STATE_NEW);

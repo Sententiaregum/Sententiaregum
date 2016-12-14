@@ -18,21 +18,21 @@ use AppBundle\Model\User\PendingActivation;
 
 class PendingActivationTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIsOutdatedRegistration()
+    public function testIsOutdatedRegistration(): void
     {
         $model = new PendingActivation(new \DateTime('-3 hours'), 'key');
 
         $this->assertTrue($model->isActivationExpired());
     }
 
-    public function testIsNonExpiredRegistration()
+    public function testIsNonExpiredRegistration(): void
     {
         $model = new PendingActivation(new \DateTime());
 
         $this->assertFalse($model->isActivationExpired());
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $model      = new PendingActivation(new \DateTime('-3 hours'), 'key');
         $serialized = serialize($model);

@@ -71,7 +71,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "AppBundle\\Validator\\Constraints\\UniqueProperty", ".*" given/
      */
-    public function testInvalidConstraint()
+    public function testInvalidConstraint(): void
     {
         $propertyMock = new UniquePropertyValidator($this->createMock(ManagerRegistry::class));
         $propertyMock->validate('value', $this->createMock(Constraint::class));
@@ -81,7 +81,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /^Expected argument of type "scalar", "array" given$/
      */
-    public function testValueMustBeString()
+    public function testValueMustBeString(): void
     {
         $propertyMock = new UniquePropertyValidator($this->createMock(ManagerRegistry::class));
         $propertyMock->initialize($this->createMock(ExecutionContextInterface::class));
@@ -93,7 +93,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage No such entity manager with alias "custom_manager"!
      */
-    public function testInvalidManagerAlias()
+    public function testInvalidManagerAlias(): void
     {
         $registry = $this->createMock(ManagerRegistry::class);
         $registry
@@ -113,7 +113,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage Cannot find entity manager for model "TestMapping:User"!
      */
-    public function testNoManagerForEntity()
+    public function testNoManagerForEntity(): void
     {
         $registry = $this->createMock(ManagerRegistry::class);
         $registry
@@ -133,7 +133,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
      * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      * @expectedExceptionMessage During the validation whether the given property is unique or not, doctrine threw an exception with the following message: "Unrecognized field: test-field". Did you misconfigure any parameters such as the field or entity name?
      */
-    public function testFindOneByThrowsORMException()
+    public function testFindOneByThrowsORMException(): void
     {
         $repository = $this->createMock(EntityRepository::class);
         $repository
@@ -165,7 +165,7 @@ class UniquePropertyValidatorTest extends ConstraintValidatorTestCase
         );
     }
 
-    public function testUniqueField()
+    public function testUniqueField(): void
     {
         $this->validator->validate(
             'Ma27',
