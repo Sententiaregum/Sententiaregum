@@ -24,4 +24,4 @@ const localeReducer = (state = initialState, action) => {
   }
 };
 
-export default localeReducer();
+export default localeReducer;

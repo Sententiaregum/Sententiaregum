@@ -24,18 +24,18 @@ import {Provider                                } from 'react-router-redux';
 import store                                      from '../config/store';
 
 export default (
-    <Provider store={store}>
-        <Router history={hashHistory}>
-            <Route component={Application} path="/">
-                <IndexRoute component={Login} onEnter={redirectToDashboard}/>
-                <Route component={CreateAccount} path="sign-up" onEnter={redirectToDashboard}/>
-                <Route component={ActivateAccount} path="activate/:name/:key" onEnter={redirectToDashboard}/>
+  <Provider store={store}>
+    <Router history={hashHistory}>
+      <Route component={Application} path="/">
+        <IndexRoute component={Login} onEnter={redirectToDashboard}/>
+        <Route component={CreateAccount} path="sign-up" onEnter={redirectToDashboard}/>
+        <Route component={ActivateAccount} path="activate/:name/:key" onEnter={redirectToDashboard}/>
 
-                <Route component={Logout} path="/logout" onEnter={protectPage}/>
-                <Route component={DashboardIndex} path="dashboard" onEnter={protectPage}/>
+        <Route component={Logout} path="/logout" onEnter={protectPage}/>
+        <Route component={DashboardIndex} path="dashboard" onEnter={protectPage}/>
 
-                <Route component={NotFoundPage} path="*"/>
-            </Route>
-        </Router>
-    </Provider>
+        <Route component={NotFoundPage} path="*"/>
+      </Route>
+    </Router>
+  </Provider>
 );
