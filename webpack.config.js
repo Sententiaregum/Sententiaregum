@@ -8,89 +8,87 @@
  * file that was distributed with this source code.
  */
 
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+"use strict";
 
-function createConfig() {
-  "use strict";
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-  var plugins      = [new ExtractTextPlugin('[name].css')],
-    cssQueryString = 'css-loader',
-    env            = process.env.NODE_ENV || 'development',
-    lessQueryString;
+let plugins = [new ExtractTextPlugin('[name].css')];
+let cssQueryString = 'css-loader',
+  env = process.env.NODE_ENV || 'development',
+  lessQueryString;
 
-  if ('production' === env) {
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
-      comments: /^\\/
-    })); // quick and dirty fix that doesn't match any comments
+if ('production' === env) {
+  plugins.push(new webpack.optimize.UglifyJsPlugin({
+    comments: /^\\/
+  })); // quick and dirty fix that doesn't match any comments
 
-    cssQueryString += '?minimize&keepSpecialComments=0';
-  } else {
-    cssQueryString += '?sourceMap';
-  }
-
-  lessQueryString = cssQueryString + '!less';
-
-  return {
-    devtool: 'eval',
-    cache: true,
-    entry: {
-      bundle: [
-        './src/Frontend/App.js',
-        './src/Frontend/styles/custom.less',
-        './node_modules/bootstrap/dist/css/bootstrap.min.css'
-      ]
-    },
-    module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          loaders: ['babel-loader'],
-          exclude:  /(node_modules)/
-        },
-        {
-          test: /\.less/,
-          loader: ExtractTextPlugin.extract('style-loader', lessQueryString)
-        },
-        {
-          test: /\.css$/,
-          loader: ExtractTextPlugin.extract('style-loader', cssQueryString)
-        },
-        {
-          test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&minetype=application/font-woff'
-        },
-        {
-          test: /\.woff2($|\?)/,
-          loader: 'url?limit=10000&minetype=application/font-woff'
-        },
-        {
-          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&minetype=application/octet-stream'
-        },
-        {
-          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'file'
-        },
-        {
-          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&minetype=image/svg+xml'
-        }
-      ]
-    },
-    resolve: {
-      modulesDirectories: ['node_modules'],
-      extensions: ['.js', '', '.scss']
-    },
-    output: {
-      path: './web/build',
-      filename: 'bundle.js'
-    },
-    externals: {
-      'React': 'react'
-    },
-    plugins: plugins
-  };
+  cssQueryString += '?minimize&keepSpecialComments=0';
+} else {
+  cssQueryString += '?sourceMap';
 }
 
-module.exports = createConfig();
+lessQueryString = cssQueryString + '!less';
+
+const config = () => ({
+  devtool: 'eval',
+  cache: true,
+  entry: {
+    bundle: [
+      './src/Frontend/App.js',
+      './src/Frontend/styles/custom.less',
+      './node_modules/bootstrap/dist/css/bootstrap.min.css'
+    ]
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['babel-loader'],
+        exclude: /(node_modules)/
+      },
+      {
+        test: /\.less/,
+        loader: ExtractTextPlugin.extract('style-loader', lessQueryString)
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', cssQueryString)
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&minetype=application/font-woff'
+      },
+      {
+        test: /\.woff2($|\?)/,
+        loader: 'url?limit=10000&minetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&minetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&minetype=image/svg+xml'
+      }
+    ]
+  },
+  resolve: {
+    modulesDirectories: ['node_modules'],
+    extensions: ['.js', '', '.scss']
+  },
+  output: {
+    path: './web/build',
+    filename: 'bundle.js'
+  },
+  externals: {
+    'React': 'react'
+  },
+  plugins: plugins
+});
+
+module.exports = config();
