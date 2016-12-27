@@ -11,6 +11,7 @@
 import {combineReducers, createStore}   from 'redux';
 import {routerReducer}                  from 'react-router-redux';
 import reducers                         from './reducers';
+import initialState                     from './initialState';
 
 /**
  * Higher Order reducer
@@ -19,6 +20,6 @@ import reducers                         from './reducers';
  */
 const rootReducer = combineReducers({...reducers, routing: routerReducer});
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, initialState);
 
 export default store;

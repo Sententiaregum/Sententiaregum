@@ -7,15 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-import { TRANSFORM_ITEMS }          from '../../constants/Menu';
-import initialState                 from '../../config/initialState';
-const menuReducer = (state = initialState, action) => {
-  switch (action.type) {
-  case TRANSFORM_ITEMS:
-    return state;
 
-  default:
-    return state;
+import {TRANSFORM_ITEMS}          from '../../constants/Menu';
+import initialState                 from '../../config/initialState';
+
+const menuReducer = (state = { items: [] }, action) => {
+  switch (action.type) {
+    case TRANSFORM_ITEMS:
+      return { items: action.items };
+
+    default:
+      return state;
   }
 };
 

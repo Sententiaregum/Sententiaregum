@@ -10,9 +10,10 @@
 
 'use strict';
 
-import React from 'react';
-import menu from '../../../config/menu';
-import AppMenu from './AppMenu';
+import React      from 'react';
+import AppMenu    from './AppMenu';
+import {Provider} from 'react-redux';
+import store    from '../../../config/store';
 
 /**
  * Container for the whole app.
@@ -24,7 +25,9 @@ import AppMenu from './AppMenu';
 const Application = props => {
   return (
     <div className="container">
-      <AppMenu config={menu} />
+      <Provider store={store}>
+        <AppMenu />
+      </Provider>
       {props.children}
     </div>
   );

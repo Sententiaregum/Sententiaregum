@@ -8,6 +8,10 @@
  * file that was distributed with this source code.
  */
 
-const initialState = {};
-
-export default initialState;
+export default {
+  menu: {
+    items: []
+  },
+  user: [],
+  locale: []
+};

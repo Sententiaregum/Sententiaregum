@@ -43,7 +43,7 @@ export default (
 
         <Route component={HelloWorld} path="/logout"/>
         <Route component={HelloWorld} path="dashboard" onEnter={protectPage}/>
-        
+
         <Route component={HelloWorld} path="*"/>
       </Route>
     </Router>

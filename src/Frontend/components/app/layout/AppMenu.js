@@ -10,21 +10,18 @@
 
 'use strict';
 
-import React from 'react';
-import MenuWrapper from './menu/MenuWrapper';
-import Menu from './menu/Menu';
+import React             from 'react';
+import MenuWrapper       from './menu/MenuWrapper';
+import Menu              from './menu/Menu';
+import menu from '../../../config/menu';
+import {connect}      from 'react-redux';
+import *  as menuActions from '../../../actions/menuActions';
+import {bindActionCreators} from 'redux';
 
-/**
- * Component which simplifies the usage of the menu API.
- *
- * @param {Object} props The config for this wrapper component.
- *
- * @returns {React.Element} The markup of the menu.
- */
-const AppMenu = props => {
+const AppMenu = ({items, actions}) => {
   return (
-    <MenuWrapper items={props.config}>
-      <Menu />
+    <MenuWrapper>
+      <Menu rawItems={menu} items={items} actions={actions}/>
     </MenuWrapper>
   );
 };
@@ -33,4 +30,17 @@ AppMenu.propTypes = {
   config: React.PropTypes.arrayOf(React.PropTypes.object)
 };
 
-export default AppMenu;
+const mapStateToProps = state => {
+  return ({
+    items: state.menu.items
+  });
+}
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(menuActions, dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppMenu);
