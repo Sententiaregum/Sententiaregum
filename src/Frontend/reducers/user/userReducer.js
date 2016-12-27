@@ -17,22 +17,22 @@ import {
 import initialState                 from '../../config/initialState';
 
 const userReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case CREATE_ACCOUNT:
-            return state;
+  switch (action.type) {
+  case CREATE_ACCOUNT:
+    return state;
 
-        case ACTIVATE_ACCOUNT:
-            return state;
+  case ACTIVATE_ACCOUNT:
+    return state;
 
-        case REQUEST_API_KEY:
-            return state;
+  case REQUEST_API_KEY:
+    return state;
 
-        case LOGOUT:
-            return state;
+  case LOGOUT:
+    return state;
 
-        default:
-            return state
-    }
+  default:
+    return state;
+  }
 };
 
 export default userReducer();

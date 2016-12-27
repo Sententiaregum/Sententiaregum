@@ -8,20 +8,20 @@
  * file that was distributed with this source code.
  */
 
-import {GET_LOCALES, CHANGE_LOCALE} from '../../constants/Locale';
+import { GET_LOCALES, CHANGE_LOCALE } from '../../constants/Locale';
 import initialState                 from '../../config/initialState';
 
 const localeReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case GET_LOCALES:
-            return state;
+  switch (action.type) {
+  case GET_LOCALES:
+    return state;
 
-        case CHANGE_LOCALE:
-            return state;
+  case CHANGE_LOCALE:
+    return state;
 
-        default:
-            return state
-    }
+  default:
+    return state;
+  }
 };
 
 export default localeReducer();

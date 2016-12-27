@@ -10,13 +10,13 @@
 import { TRANSFORM_ITEMS }          from '../../constants/Menu';
 import initialState                 from '../../config/initialState';
 const menuReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case TRANSFORM_ITEMS:
-            return state;
+  switch (action.type) {
+  case TRANSFORM_ITEMS:
+    return state;
 
-        default:
-            return state
-    }
+  default:
+    return state;
+  }
 };
 
 export default menuReducer();
