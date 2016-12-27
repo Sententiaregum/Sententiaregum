@@ -10,15 +10,15 @@
 
 'use strict';
 
-import React             from 'react';
-import MenuWrapper       from './menu/MenuWrapper';
-import Menu              from './menu/Menu';
-import menu from '../../../config/menu';
-import {connect}      from 'react-redux';
-import *  as menuActions from '../../../actions/menuActions';
-import {bindActionCreators} from 'redux';
+import React                  from 'react';
+import MenuWrapper            from './menu/MenuWrapper';
+import Menu                   from './menu/Menu';
+import menu                   from '../../../config/menu';
+import { connect }            from 'react-redux';
+import *  as menuActions      from '../../../actions/menuActions';
+import { bindActionCreators } from 'redux';
 
-const AppMenu = ({items, actions}) => {
+const AppMenu = ({ items, actions }) => {
   return (
     <MenuWrapper>
       <Menu rawItems={menu} items={items} actions={actions}/>
@@ -34,7 +34,7 @@ const mapStateToProps = state => {
   return ({
     items: state.menu.items
   });
-}
+};
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(menuActions, dispatch)

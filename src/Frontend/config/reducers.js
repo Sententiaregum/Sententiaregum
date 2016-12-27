@@ -13,8 +13,8 @@ import menuReducer    from '../reducers/menu/menuReducer'
 import localeReducer  from '../reducers/locale/localeReducer'
 
 const reducers = {
-    user: userReducer,
-    menu: menuReducer,
+    user:   userReducer,
+    menu:   menuReducer,
     locale: localeReducer
 };
 
