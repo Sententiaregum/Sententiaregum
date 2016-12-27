@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 
-import {combineReducers, createStore} from 'redux';
+import {combineReducers, createStore}   from 'redux';
+import {routerReducer}                  from 'react-router-redux';
 import reducers                         from './reducers';
 
 /**
@@ -16,7 +17,7 @@ import reducers                         from './reducers';
  *
  * @type {Reducer<S>}
  */
-const rootReducer = combineReducers(reducers);
+const rootReducer = combineReducers({...reducers, routing: routerReducer});
 
 const store = createStore(rootReducer);
 

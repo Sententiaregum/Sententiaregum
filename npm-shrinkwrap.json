@@ -5182,7 +5182,7 @@
     },
     "react-redux": {
       "version": "5.0.1",
-      "from": "react-redux@latest",
+      "from": "https://registry.npmjs.org/react-redux/-/react-redux-5.0.1.tgz",
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-5.0.1.tgz"
     },
     "react-router": {
@@ -5199,7 +5199,7 @@
     },
     "react-router-redux": {
       "version": "4.0.7",
-      "from": "react-router-redux@latest",
+      "from": "https://registry.npmjs.org/react-router-redux/-/react-router-redux-4.0.7.tgz",
       "resolved": "https://registry.npmjs.org/react-router-redux/-/react-router-redux-4.0.7.tgz"
     },
     "react-spinkit": {
@@ -5268,7 +5268,7 @@
     },
     "redux": {
       "version": "3.6.0",
-      "from": "redux@latest",
+      "from": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz",
       "resolved": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz"
     },
     "regenerate": {
