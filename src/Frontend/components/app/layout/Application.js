@@ -25,9 +25,7 @@ import store    from '../../../config/store';
 const Application = props => {
   return (
     <div className="container">
-      <Provider store={store}>
         <AppMenu />
-      </Provider>
       {props.children}
     </div>
   );
