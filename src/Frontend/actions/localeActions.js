@@ -23,7 +23,7 @@ import { CHANGE_LOCALE  } from '../constants/Locale';
  *
  * @param {String}   locale  The new locale.
  *
- * @returns {void}
+ * @returns {object}
  */
 export const changeLocale = (locale) => ({
   type: CHANGE_LOCALE,

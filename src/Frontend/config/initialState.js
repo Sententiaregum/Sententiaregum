@@ -16,5 +16,6 @@ export default {
   locales: {
     "de": "Deutsch",
     "en": "English"
-  }
+  },
+  currentLocale: 'en'
 };

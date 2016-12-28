@@ -14,9 +14,8 @@ import {
   REQUEST_API_KEY,
   LOGOUT
 }                                   from '../../constants/Portal';
-import initialState                 from '../../config/initialState';
 
-export default (state = initialState, action) => {
+export default (state = [], action) => {
   switch (action.type) {
   case CREATE_ACCOUNT:
     return state;

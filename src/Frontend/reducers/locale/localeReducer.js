@@ -23,7 +23,7 @@ const localeReducer = (state = [], action) => {
 
     Locale.setLocale(locale);
       //TODO: replace this useless statement.
-    if (true) {
+    if (false) {
       //TODO: Fix auth
       axios.patch('/api/protected/locale.json', { locale }, {
         headers: { 'X-API-KEY': ApiKey.getApiKey() }
