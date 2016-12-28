@@ -13,15 +13,14 @@
 import React                  from 'react';
 import MenuWrapper            from './menu/MenuWrapper';
 import Menu                   from './menu/Menu';
-import menu                   from '../../../config/menu';
-import { connect }            from 'react-redux';
-import *  as menuActions      from '../../../actions/menuActions';
+import { connect            } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import *  as menuActions      from '../../../actions/menuActions';
 
 const AppMenu = ({ items, actions }) => {
   return (
     <MenuWrapper>
-      <Menu rawItems={menu} items={items} actions={actions}/>
+      <Menu items={items} actions={actions}/>
     </MenuWrapper>
   );
 };
@@ -30,14 +29,12 @@ AppMenu.propTypes = {
   config: React.PropTypes.arrayOf(React.PropTypes.object)
 };
 
-const mapStateToProps = state => {
-  return ({
-    items: state.menu.items
-  });
-};
+const mapStateToProps = state => ({
+  items: state.menu.items
+});
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(menuActions, dispatch)
+  actions: bindActionCreators(menuActions, dispatch),
 });
 
 export default connect(

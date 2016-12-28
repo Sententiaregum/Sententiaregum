@@ -10,9 +10,10 @@
 
 'use strict';
 
-import Nav from 'react-bootstrap/lib/Nav';
+import Nav                            from 'react-bootstrap/lib/Nav';
 import React, {PropTypes, Component} from 'react';
 import MenuItem from '../../markup/MenuItem';
+import menu from '../../../../config/menu';
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
@@ -22,7 +23,6 @@ export default class Menu extends Component {
 
   static propTypes = {
     items: PropTypes.array.isRequired,
-    rawItems: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
   };
 
@@ -37,7 +37,7 @@ export default class Menu extends Component {
    * When component has mounted call buildMenuItems action creator
    */
   componentDidMount() {
-    this.props.actions.buildMenuItems(this.props.rawItems);
+    this.props.actions.buildMenuItems(menu);
   }
 
   /**
