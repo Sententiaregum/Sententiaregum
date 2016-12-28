@@ -10,10 +10,8 @@
 
 'use strict';
 
-const GET_LOCALES   = 'GET_LOCALES';
 const CHANGE_LOCALE = 'CHANGE_LOCALE';
 
 export {
-  GET_LOCALES,
   CHANGE_LOCALE
 };

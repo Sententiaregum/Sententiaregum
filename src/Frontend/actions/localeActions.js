@@ -10,26 +10,8 @@
 
 'use strict';
 
-import { GET_LOCALES, CHANGE_LOCALE  } from '../constants/Locale';
+import { CHANGE_LOCALE  } from '../constants/Locale';
 
-/**
- * Action which is responsible for loading a language.
- *
- * All available languages are stored on server-side. This helps when validating locales that can be handled
- * by the entire system. If a locale is configured, but no translations (this system depends on that, too) are available,
- * `English` will be the default.
- *
- * @returns {void}
- */
-export const loadLanguages = () => {
-
-  // const loadLocales = () => axios.get('/api/locale.json').then(response => response.data);
-
-  return({
-    type:    GET_LOCALES,
-    locales: { 'de': 'Deutsch', 'en': 'English' }
-  });
-};
 
 /**
  * Action which is responsible for changing a language.
