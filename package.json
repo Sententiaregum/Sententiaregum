@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development npm run frontend",
     "frontend": "webpack --watch",
     "lint": "eslint ./src/Frontend && lessc src/Frontend/styles/custom.less --lint",
-    "prod": "NODE_ENV=production npm run frontend",
+    "prod": "NODE_ENV=production webpack",
     "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter dot --require babel-polyfill --require src/Frontend/test/DOM.js",
     "postinstall": "bash ./bin/generate-frontend-recaptcha.sh"
   },
