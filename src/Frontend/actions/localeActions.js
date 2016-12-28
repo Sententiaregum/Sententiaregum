@@ -11,7 +11,8 @@
 'use strict';
 
 import { CHANGE_LOCALE  } from '../constants/Locale';
-
+import axios              from 'axios';
+import ApiKey             from '../util/http/ApiKey';
 
 /**
  * Action which is responsible for changing a language.
@@ -25,7 +26,15 @@ import { CHANGE_LOCALE  } from '../constants/Locale';
  *
  * @returns {object}
  */
-export const changeLocale = (locale) => ({
-  type: CHANGE_LOCALE,
-  locale
-});
+export const changeLocale = (locale) => {
+  //TODO: Fix auth
+  if (false) {
+    axios.patch('/api/protected/locale.json', { locale }, {
+      headers: { 'X-API-KEY': ApiKey.getApiKey() }
+    });
+  }
+  return ({
+    type: CHANGE_LOCALE,
+    locale
+  });
+};

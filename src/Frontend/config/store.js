@@ -20,6 +20,4 @@ import initialState                     from './initialState';
  */
 const rootReducer = combineReducers({...reducers, routing: routerReducer});
 
-const store = createStore(rootReducer, initialState);
-
-export default store;
+export default createStore(rootReducer, initialState);

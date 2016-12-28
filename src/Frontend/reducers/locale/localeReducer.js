@@ -10,8 +10,6 @@
 
 import { GET_LOCALES, CHANGE_LOCALE }   from '../../constants/Locale';
 import Locale                           from '../../util/http/Locale';
-import ApiKey                           from '../../util/http/ApiKey';
-import axios                            from 'axios';
 
 const localeReducer = (state = [], action) => {
   switch (action.type) {
@@ -19,16 +17,7 @@ const localeReducer = (state = [], action) => {
     return state;
 
   case CHANGE_LOCALE:
-    const locale = action.locale;
-
-    Locale.setLocale(locale);
-      //TODO: replace this useless statement.
-    if (false) {
-      //TODO: Fix auth
-      axios.patch('/api/protected/locale.json', { locale }, {
-        headers: { 'X-API-KEY': ApiKey.getApiKey() }
-      });
-    }
+    Locale.setLocale(action.locale);
 
   default:
     return state;
