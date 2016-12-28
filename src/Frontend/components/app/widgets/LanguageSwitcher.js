@@ -11,13 +11,10 @@
 'use strict';
 
 import React, { Component, PropTypes  } from 'react';
-import { runAction                    } from 'sententiaregum-flux-container';
-import { GET_LOCALES, CHANGE_LOCALE   } from '../../../constants/Locale';
 import Translate                        from 'react-translate-component';
 import NavDropdown                      from 'react-bootstrap/lib/NavDropdown';
 import LoadingDropDown                  from '../markup/LoadingDropDown';
 import DropDownItem                     from '../markup/DropDownItem';
-import localeActions                    from '../../../actions/localeActions';
 import Locale                           from '../../../util/http/Locale';
 
 /**

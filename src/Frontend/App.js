@@ -10,8 +10,8 @@
 
 'use strict';
 
-import { render } from 'react-dom';
-import routes from './config/routes';
-import './config/counterpart';
+import { render }  from 'react-dom';
+import routes      from './config/routes';
+import                  './config/counterpart';
 
 render(routes, document.getElementById('content'));

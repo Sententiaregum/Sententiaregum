@@ -36,7 +36,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    menu:    bindActionCreators(menuActions, dispatch),
+    menu:   bindActionCreators(menuActions, dispatch),
     locale: bindActionCreators(localeActions, dispatch)
   }
 });

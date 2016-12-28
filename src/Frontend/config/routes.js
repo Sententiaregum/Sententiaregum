@@ -11,15 +11,9 @@
 'use strict';
 
 import React                                         from 'react';
-// import Login                                      from '../components/portal/Login';
-// import CreateAccount                              from '../components/portal/CreateAccount';
-// import ActivateAccount                            from '../components/portal/ActivateAccount';
-// import NotFoundPage                               from '../components/app/layout/NotFoundPage';
 import Application                                   from '../components/app/layout/Application';
-// import DashboardIndex                             from '../components/network/dashboard/Index';
-// import Logout                                     from '../components/portal/Logout';
 import {IndexRoute, Router, Route, hashHistory}      from 'react-router';
-import {redirectToDashboard, protectPage} from '../util/react/routerHooks';
+import {protectPage} from '../util/react/routerHooks';
 import {syncHistoryWithStore}                        from 'react-router-redux';
 import {Provider}                                    from 'react-redux';
 import store                                         from '../config/store';
@@ -33,18 +27,12 @@ const HelloWorld = () => {
 //TODO: Change to browesrHistory
 const history = syncHistoryWithStore(hashHistory, store);
 
+//TODO: Readd other components after redux has been implemented there too
 export default (
   <Provider store={store}>
     <Router history={history}>
       <Route component={Application} path="/">
         <IndexRoute component={HelloWorld}/>
-        <Route component={HelloWorld} path="sign-up"/>
-        <Route component={HelloWorld} path="activate/:name/:key"/>
-
-        <Route component={HelloWorld} path="/logout"/>
-        <Route component={HelloWorld} path="dashboard" onEnter={protectPage}/>
-
-        <Route component={HelloWorld} path="*"/>
       </Route>
     </Router>
   </Provider>

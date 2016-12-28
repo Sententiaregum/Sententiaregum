@@ -10,7 +10,7 @@
 
 'use strict';
 
-import {GET_LOCALES, CHANGE_LOCALE  } from '../constants/Locale';
+import { GET_LOCALES, CHANGE_LOCALE  } from '../constants/Locale';
 
 /**
  * Action which is responsible for loading a language.
@@ -26,8 +26,8 @@ export const loadLanguages = () => {
   // const loadLocales = () => axios.get('/api/locale.json').then(response => response.data);
 
   return({
-    type: GET_LOCALES,
-    locales: { "de": "Deutsch", "en": "English" }
+    type:    GET_LOCALES,
+    locales: { 'de': 'Deutsch', 'en': 'English' }
   });
 };
 
@@ -45,5 +45,5 @@ export const loadLanguages = () => {
  */
 export const changeLocale = (locale) => ({
   type: CHANGE_LOCALE,
-  locale: locale
+  locale
 });

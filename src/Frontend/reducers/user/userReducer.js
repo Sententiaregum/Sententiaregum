@@ -16,7 +16,7 @@ import {
 }                                   from '../../constants/Portal';
 import initialState                 from '../../config/initialState';
 
-const userReducer = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
   case CREATE_ACCOUNT:
     return state;
@@ -34,5 +34,3 @@ const userReducer = (state = initialState, action) => {
     return state;
   }
 };
-
-export default userReducer;
