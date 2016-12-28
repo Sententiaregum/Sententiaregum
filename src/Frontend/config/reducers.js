@@ -15,7 +15,7 @@ import localeReducer  from '../reducers/locale/localeReducer'
 const reducers = {
     user:   userReducer,
     menu:   menuReducer,
-    locale: localeReducer
+    locales: localeReducer
 };
 
 export default reducers;

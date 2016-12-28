@@ -12,8 +12,6 @@
 
 import React      from 'react';
 import AppMenu    from './AppMenu';
-import { Provider } from 'react-redux';
-import store    from '../../../config/store';
 
 /**
  * Container for the whole app.
@@ -25,7 +23,7 @@ import store    from '../../../config/store';
 const Application = props => {
   return (
     <div className="container">
-        <AppMenu />
+      <AppMenu />
       {props.children}
     </div>
   );

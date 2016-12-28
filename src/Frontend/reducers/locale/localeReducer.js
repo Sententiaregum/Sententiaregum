@@ -8,19 +8,29 @@
  * file that was distributed with this source code.
  */
 
-import { GET_LOCALES, CHANGE_LOCALE } from '../../constants/Locale';
-import initialState                 from '../../config/initialState';
+import {GET_LOCALES, CHANGE_LOCALE}   from '../../constants/Locale';
+import Locale                         from '../../util/http/Locale';
+import ApiKey                         from '../../util/http/ApiKey';
+import axios                          from 'axios';
 
-const localeReducer = (state = initialState, action) => {
+const localeReducer = (state = [], action) => {
   switch (action.type) {
-  case GET_LOCALES:
-    return state;
+    case GET_LOCALES:
+      return state;
 
-  case CHANGE_LOCALE:
-    return state;
+    case CHANGE_LOCALE:
+      const locale = action.locale;
 
-  default:
-    return state;
+      Locale.setLocale(locale);
+      //TODO: replace this useless statement.
+      if (true) {
+        axios.patch('/api/protected/locale.json', {locale}, {
+          headers: {'X-API-KEY': ApiKey.getApiKey()}
+        });
+      }
+
+    default:
+      return state;
   }
 };
 

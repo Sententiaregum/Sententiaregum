@@ -9,7 +9,6 @@
  */
 
 import { TRANSFORM_ITEMS }          from '../../constants/Menu';
-import initialState                 from '../../config/initialState';
 
 const menuReducer = (state = { items: [] }, action) => {
   switch (action.type) {

@@ -16,11 +16,12 @@ import Menu                   from './menu/Menu';
 import { connect            } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import *  as menuActions      from '../../../actions/menuActions';
+import *  as localeActions    from '../../../actions/localeActions';
 
 const AppMenu = ({ items, actions }) => {
   return (
-    <MenuWrapper>
-      <Menu items={items} actions={actions}/>
+    <MenuWrapper actions={actions.locale}>
+      <Menu items={items} actions={actions.menu}/>
     </MenuWrapper>
   );
 };
@@ -34,7 +35,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(menuActions, dispatch),
+  actions: {
+    menu:    bindActionCreators(menuActions, dispatch),
+    locale: bindActionCreators(localeActions, dispatch)
+  }
 });
 
 export default connect(

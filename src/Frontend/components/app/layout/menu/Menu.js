@@ -22,7 +22,7 @@ import menu from '../../../../config/menu';
 export default class Menu extends Component {
 
   static propTypes = {
-    items: PropTypes.array.isRequired,
+    items:   PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
   };
 

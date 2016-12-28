@@ -10,10 +10,10 @@
 
 'use strict';
 
-import Navbar from 'react-bootstrap/lib/Navbar';
-import React, { Component } from 'react';
-import LanguageSwitcher from '../../widgets/LanguageSwitcher';
-import Nav from 'react-bootstrap/lib/Nav';
+import Navbar                          from 'react-bootstrap/lib/Navbar';
+import React, { Component, PropTypes } from 'react';
+import LanguageSwitcher                from '../../widgets/LanguageSwitcher';
+import Nav                             from 'react-bootstrap/lib/Nav';
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
@@ -21,13 +21,14 @@ import Nav from 'react-bootstrap/lib/Nav';
 export default class MenuWrapper extends Component {
 
   static propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node,
+    actions:  PropTypes.object.isRequired
   };
 
   static contextTypes = {
-    router: React.PropTypes.oneOfType([
-      React.PropTypes.func,
-      React.PropTypes.object
+    router: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
     ])
   };
 
@@ -47,7 +48,7 @@ export default class MenuWrapper extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LanguageSwitcher />
+            <LanguageSwitcher actions={this.props.actions}/>
           </Nav>
           {this.props.children}
         </Navbar.Collapse>

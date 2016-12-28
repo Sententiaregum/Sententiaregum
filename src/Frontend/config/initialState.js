@@ -13,5 +13,8 @@ export default {
     items: []
   },
   user: [],
-  locale: []
+  locales: {
+    "de": "Deutsch",
+    "en": "English"
+  }
 };
