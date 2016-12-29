@@ -10,8 +10,8 @@
 
 'use strict';
 
-import invariant from 'invariant';
-import counterpart from 'counterpart';
+import invariant          from 'invariant';
+import counterpart        from 'counterpart';
 import FormValueContainer from './FormValueContainer';
 
 /**

@@ -10,8 +10,8 @@
 
 'use strict';
 
-import React from 'react';
-import Translate from 'react-translate-component';
+import React               from 'react';
+import Translate           from 'react-translate-component';
 import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
 
 /**

@@ -10,9 +10,9 @@
 
 'use strict';
 
-import React from 'react';
+import React     from 'react';
 import Translate from 'react-translate-component';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
+import MenuItem  from 'react-bootstrap/lib/MenuItem';
 
 /**
  * Simple react component that renders a dropdown that indicates initialization of the dropdown.

@@ -10,9 +10,9 @@
 
 'use strict';
 
-import { store, subscribe } from 'sententiaregum-flux-container';
+import { store, subscribe }    from 'sententiaregum-flux-container';
 import filterItemsByVisibility from './handler/filterItemsByVisibility';
-import { TRANSFORM_ITEMS } from '../constants/Menu';
+import { TRANSFORM_ITEMS }     from '../constants/Menu';
 
 export default store({
   [TRANSFORM_ITEMS]: subscribe(subscribe.chain()(filterItemsByVisibility))

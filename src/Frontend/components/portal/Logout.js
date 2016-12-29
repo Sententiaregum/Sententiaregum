@@ -11,13 +11,13 @@
 'use strict';
 
 
-import ProgressBar from 'react-bootstrap/lib/ProgressBar';
-import React, { Component } from 'react';
-import Translate from 'react-translate-component';
+import ProgressBar              from 'react-bootstrap/lib/ProgressBar';
+import React, { Component }     from 'react';
+import Translate                from 'react-translate-component';
 import { runAction, connector } from 'sententiaregum-flux-container';
-import userActions from '../../actions/userActions';
-import userStore from '../../store/userStore';
-import { LOGOUT } from '../../constants/Portal';
+import userActions              from '../../actions/userActions';
+import userStore                from '../../store/userStore';
+import { LOGOUT }               from '../../constants/Portal';
 
 /**
  * Logout component.

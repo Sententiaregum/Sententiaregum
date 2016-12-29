@@ -10,8 +10,8 @@
 
 'use strict';
 
-import { store, subscribe } from 'sententiaregum-flux-container';
-import userState from './initializer/userState';
+import { store, subscribe }                                          from 'sententiaregum-flux-container';
+import userState                                                     from './initializer/userState';
 import { REQUEST_API_KEY, LOGOUT, CREATE_ACCOUNT, ACTIVATE_ACCOUNT } from '../constants/Portal';
 
 export default store({

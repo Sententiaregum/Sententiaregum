@@ -10,22 +10,22 @@
 
 'use strict';
 
-import React, { Component } from 'react';
-import LoadableButtonBar from '../../form/LoadableButtonBar';
-import userActions from '../../../actions/userActions';
-import Suggestions from './Suggestions';
-import Success from './Success';
-import FormHelper from '../../../util/react/FormHelper';
-import FormField from '../../form/FormField';
-import SelectableField from '../../form/SelectableField';
-import deepAssign from 'deep-assign';
+import React, { Component }     from 'react';
+import LoadableButtonBar        from '../../form/LoadableButtonBar';
+import userActions              from '../../../actions/userActions';
+import Suggestions              from './Suggestions';
+import Success                  from './Success';
+import FormHelper               from '../../../util/react/FormHelper';
+import FormField                from '../../form/FormField';
+import SelectableField          from '../../form/SelectableField';
+import deepAssign               from 'deep-assign';
 import { connector, runAction } from 'sententiaregum-flux-container';
-import localeStore from '../../../store/localeStore';
-import Recaptcha from 'react-recaptcha';
-import siteKey from '../../../config/recaptcha';
-import update from 'react-addons-update';
-import userStore from '../../../store/userStore';
-import { CREATE_ACCOUNT } from '../../../constants/Portal';
+import localeStore              from '../../../store/localeStore';
+import Recaptcha                from 'react-recaptcha';
+import siteKey                  from '../../../config/recaptcha';
+import update                   from 'react-addons-update';
+import userStore                from '../../../store/userStore';
+import { CREATE_ACCOUNT }       from '../../../constants/Portal';
 
 /**
  * Form component for the signup page.

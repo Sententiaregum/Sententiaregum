@@ -11,11 +11,11 @@
 'use strict';
 
 import { store, subscribe } from 'sententiaregum-flux-container';
-import { GET_LOCALES } from '../constants/Locale';
-import { REQUEST_API_KEY } from '../constants/Portal';
-import Locale from '../util/http/Locale';
+import { GET_LOCALES }      from '../constants/Locale';
+import { REQUEST_API_KEY }  from '../constants/Portal';
+import Locale               from '../util/http/Locale';
 import refreshLocaleOnLogin from './handler/refreshLocaleOnLogin';
-import userStore from './userStore';
+import userStore            from './userStore';
 
 export default store({
   [GET_LOCALES]:     subscribe(subscribe.chain()('locales')),

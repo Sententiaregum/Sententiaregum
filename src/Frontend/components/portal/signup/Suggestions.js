@@ -11,8 +11,8 @@
 'use strict';
 
 import React, { Component } from 'react';
-import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
-import Translate from 'react-translate-component';
+import DismissableAlertBox  from '../../app/markup/DismissableAlertBox';
+import Translate            from 'react-translate-component';
 
 /**
  * Component for name suggestions.

@@ -10,8 +10,8 @@
 
 'use strict';
 
-import React from 'react';
-import NavItem from 'react-bootstrap/lib/NavItem';
+import React     from 'react';
+import NavItem   from 'react-bootstrap/lib/NavItem';
 import Translate from 'react-translate-component';
 
 /**

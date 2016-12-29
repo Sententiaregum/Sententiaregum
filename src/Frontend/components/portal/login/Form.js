@@ -10,16 +10,16 @@
 
 'use strict';
 
-import React, { Component } from 'react';
-import LoadableButtonBar from '../../form/LoadableButtonBar';
-import userActions from '../../../actions/userActions';
-import FormHelper from '../../../util/react/FormHelper';
+import React, { Component }     from 'react';
+import LoadableButtonBar        from '../../form/LoadableButtonBar';
+import userActions              from '../../../actions/userActions';
+import FormHelper               from '../../../util/react/FormHelper';
 import { runAction, connector } from 'sententiaregum-flux-container';
-import deepAssign from 'deep-assign';
-import FormField from '../../form/FormField';
-import SimpleErrorAlert from '../../app/markup/SimpleErrorAlert';
-import userStore from '../../../store/userStore';
-import { REQUEST_API_KEY } from '../../../constants/Portal';
+import deepAssign               from 'deep-assign';
+import FormField                from '../../form/FormField';
+import SimpleErrorAlert         from '../../app/markup/SimpleErrorAlert';
+import userStore                from '../../../store/userStore';
+import { REQUEST_API_KEY }      from '../../../constants/Portal';
 
 /**
  * Form component for the login form.

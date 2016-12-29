@@ -10,12 +10,12 @@
 
 'use strict';
 
-import React, { Component } from 'react';
-import DismissableAlertBox from '../app/markup/DismissableAlertBox';
-import Translate from 'react-translate-component';
-import userActions from '../../actions/userActions';
-import userStore from '../../store/userStore';
-import { ACTIVATE_ACCOUNT } from '../../constants/Portal';
+import React, { Component }     from 'react';
+import DismissableAlertBox      from '../app/markup/DismissableAlertBox';
+import Translate                from 'react-translate-component';
+import userActions              from '../../actions/userActions';
+import userStore                from '../../store/userStore';
+import { ACTIVATE_ACCOUNT }     from '../../constants/Portal';
 import { connector, runAction } from 'sententiaregum-flux-container';
 
 /**

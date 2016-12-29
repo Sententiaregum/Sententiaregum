@@ -11,8 +11,8 @@
 'use strict';
 
 import counterpart from 'counterpart';
-import invariant from 'invariant';
-import Cookies from 'cookies-js';
+import invariant   from 'invariant';
+import Cookies     from 'cookies-js';
 
 /**
  * Simple helper class which utilizes locale management and

@@ -11,7 +11,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import Alert from 'react-bootstrap/lib/Alert';
+import Alert                from 'react-bootstrap/lib/Alert';
 
 /**
  * Alert box based on react-bootstrap which is able to be removed.

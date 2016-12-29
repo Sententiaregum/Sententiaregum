@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React     from 'react';
 import Translate from 'react-translate-component';
 
 /**

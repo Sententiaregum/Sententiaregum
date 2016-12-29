@@ -11,8 +11,8 @@
 'use strict';
 
 import React,{ Component } from 'react';
-import Spinner from 'react-spinkit';
-import counterpart from 'counterpart';
+import Spinner             from 'react-spinkit';
+import counterpart         from 'counterpart';
 
 /**
  * Component which combines a button bar with a component.

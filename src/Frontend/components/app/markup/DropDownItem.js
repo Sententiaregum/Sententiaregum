@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import React    from 'react';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 /**

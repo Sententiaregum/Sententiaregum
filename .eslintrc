@@ -57,7 +57,8 @@
     "react/display-name": [0],
     "react/jsx-indent": [2, 2],
     "react/jsx-space-before-closing": [2],
-    "no-constant-condition": [0]
+    "no-constant-condition": [0],
+    "arca/import-align": [2]
   },
   "env": {
     "es6":     true,
@@ -68,7 +69,8 @@
   "extends": ["eslint:recommended", "plugin:varspacing/recommended", "plugin:react/recommended"],
   "plugins": [
     "react",
-    "varspacing"
+    "varspacing",
+    "arca"
   ],
   "parserOptions": {
     "sourceType": "module",

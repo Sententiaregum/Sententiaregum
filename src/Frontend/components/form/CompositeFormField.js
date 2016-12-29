@@ -11,12 +11,12 @@
 'use strict';
 
 import React, { Component } from 'react';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import HelpBlock from 'react-bootstrap/lib/HelpBlock';
-import FormHelper from '../../util/react/FormHelper';
-import counterpart from 'counterpart';
-import invariant from 'invariant';
-import Locale from '../../util/http/Locale';
+import FormGroup            from 'react-bootstrap/lib/FormGroup';
+import HelpBlock            from 'react-bootstrap/lib/HelpBlock';
+import FormHelper           from '../../util/react/FormHelper';
+import counterpart          from 'counterpart';
+import invariant            from 'invariant';
+import Locale               from '../../util/http/Locale';
 
 /**
  * Abstract ReactJS component which behaves as wrapper for form fields.

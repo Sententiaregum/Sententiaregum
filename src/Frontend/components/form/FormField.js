@@ -10,8 +10,8 @@
 
 'use strict';
 
-import React from 'react';
-import FormControl from 'react-bootstrap/lib/FormControl';
+import React              from 'react';
+import FormControl        from 'react-bootstrap/lib/FormControl';
 import CompositeFormField from './CompositeFormField';
 
 /**

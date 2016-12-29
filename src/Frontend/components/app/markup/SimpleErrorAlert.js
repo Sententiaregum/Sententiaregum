@@ -11,9 +11,9 @@
 'use strict';
 
 import React, { Component } from 'react';
-import DismissableAlertBox from './DismissableAlertBox';
-import Locale from '../../../util/http/Locale';
-import counterpart from 'counterpart';
+import DismissableAlertBox  from './DismissableAlertBox';
+import Locale               from '../../../util/http/Locale';
+import counterpart          from 'counterpart';
 
 /**
  * Component for an alert box containing one error from an error object with multiple translations.

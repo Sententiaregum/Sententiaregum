@@ -11,9 +11,9 @@
 'use strict';
 
 import React, { PropTypes, Component }  from 'react';
-import Nav                            from 'react-bootstrap/lib/Nav';
-import MenuItem                       from '../../markup/MenuItem';
-import menu                           from '../../../../config/menu';
+import Nav                              from 'react-bootstrap/lib/Nav';
+import MenuItem                         from '../../markup/MenuItem';
+import menu                             from '../../../../config/menu';
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
