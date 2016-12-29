@@ -48,7 +48,7 @@ export default class MenuWrapper extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LanguageSwitcher actions={this.props.actions}/>
+            <LanguageSwitcher actions={this.props.actions} />
           </Nav>
           {this.props.children}
         </Navbar.Collapse>

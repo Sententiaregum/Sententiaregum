@@ -18,6 +18,7 @@ const localeReducer = (state = [], action) => {
 
   case CHANGE_LOCALE:
     Locale.setLocale(action.locale);
+    return state;
 
   default:
     return state;

@@ -56,7 +56,8 @@
     "prefer-template": [2],
     "react/display-name": [0],
     "react/jsx-indent": [2, 2],
-    "react/jsx-space-before-closing": [2]
+    "react/jsx-space-before-closing": [2],
+    "no-constant-condition": [0]
   },
   "env": {
     "es6":     true,

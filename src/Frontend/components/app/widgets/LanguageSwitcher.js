@@ -21,6 +21,7 @@ import Locale                           from '../../../util/http/Locale';
  * Widget which changes the user locale.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Ben Bieler <ben@benbieler.com>
  */
 export default class LanguageSwitcher extends Component {
 
@@ -39,8 +40,8 @@ export default class LanguageSwitcher extends Component {
    */
   render() {
 
-    const {store}    = this.context;
-    let locales      = store.getState().locales;
+    const { store }  = this.context;
+    const locales    = store.getState().locales;
     const localeKeys = Object.keys(locales.available);
 
     return (
