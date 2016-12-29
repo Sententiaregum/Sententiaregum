@@ -1,5 +1,2 @@
 parameters:
-  app.locales:
-    de: Deutsch
-    en: English
   app.locale_keys: [de, en]
