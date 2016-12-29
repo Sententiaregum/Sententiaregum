@@ -94,16 +94,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Getter for all available locales.
-     *
-     * @return string[]
-     */
-    protected function getLocales(): array
-    {
-        return $this->getParameter('app.locales');
-    }
-
-    /**
      * Getter for the locale keys.
      *
      * @return string[]
