@@ -8,14 +8,16 @@
  * file that was distributed with this source code.
  */
 
-import userReducer    from '../reducers/user/userReducer'
-import menuReducer    from '../reducers/menu/menuReducer'
-import localeReducer  from '../reducers/locale/localeReducer'
-
-const reducers = {
-    user:   userReducer,
-    menu:   menuReducer,
-    locales: localeReducer
+export default {
+  menu: {
+    items: []
+  },
+  user: [],
+  locales: {
+    available: {
+      "de": "Deutsch",
+      "en": "English"
+    },
+    currentLocale: 'en'
+  },
 };
-
-export default reducers;

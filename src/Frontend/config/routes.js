@@ -16,7 +16,7 @@ import {IndexRoute, Router, Route, hashHistory}      from 'react-router';
 import {protectPage} from '../util/react/routerHooks';
 import {syncHistoryWithStore}                        from 'react-router-redux';
 import {Provider}                                    from 'react-redux';
-import store                                         from '../config/store';
+import store                                         from './redux/store';
 
 const HelloWorld = () => {
   return (
@@ -27,7 +27,7 @@ const HelloWorld = () => {
 //TODO: Change to browesrHistory
 const history = syncHistoryWithStore(hashHistory, store);
 
-//TODO: Readd other components after redux has been implemented there too
+//TODO: Re-add other components after redux has been implemented there too
 export default (
   <Provider store={store}>
     <Router history={history}>

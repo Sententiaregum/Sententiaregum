@@ -41,7 +41,7 @@ export default class LanguageSwitcher extends Component {
 
     const {store}    = this.context;
     let locales      = store.getState().locales;
-    const localeKeys = Object.keys(locales);
+    const localeKeys = Object.keys(locales.available);
 
     return (
       <NavDropdown
@@ -55,7 +55,7 @@ export default class LanguageSwitcher extends Component {
               key={i}
               isActive={Locale.getLocale() === key}
               onSelect={(k, e) => this._changeLocale(e)}
-              displayName={locales[key]}
+              displayName={locales.available[key]}
               id={key}
             />)
         }
