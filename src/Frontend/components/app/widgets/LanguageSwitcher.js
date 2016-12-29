@@ -48,13 +48,13 @@ export default class LanguageSwitcher extends Component {
         id="l10n-dropdown"
         title={<Translate content="menu.l10n"/>}
       >
-        localeKeys.map((key, i) => <DropDownItem
+        {localeKeys.map((key, i) => <DropDownItem
         key={i}
         isActive={Locale.getLocale() === key}
         onSelect={(k, e) => this._changeLocale(e)}
         displayName={locales.available[key]}
         id={key}
-      />)
+      />)}
 
       </NavDropdown>
     );
