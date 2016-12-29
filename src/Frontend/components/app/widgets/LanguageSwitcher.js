@@ -10,11 +10,11 @@
 
 'use strict';
 
-import React, {Component, PropTypes} from 'react';
-import Translate                        from 'react-translate-component';
-import NavDropdown                      from 'react-bootstrap/lib/NavDropdown';
-import DropDownItem                     from '../markup/DropDownItem';
-import Locale                           from '../../../util/http/Locale';
+import React, { Component, PropTypes }    from 'react';
+import Translate                          from 'react-translate-component';
+import NavDropdown                        from 'react-bootstrap/lib/NavDropdown';
+import DropDownItem                       from '../markup/DropDownItem';
+import Locale                             from '../../../util/http/Locale';
 
 /**
  * Widget which changes the user locale.
@@ -47,15 +47,15 @@ export default class LanguageSwitcher extends Component {
       <NavDropdown
         eventKey={1}
         id="l10n-dropdown"
-        title={<Translate content="menu.l10n"/>}
+        title={<Translate content="menu.l10n" />}
       >
         {localeKeys.map((key, i) => <DropDownItem
-        key={i}
-        isActive={Locale.getLocale() === key}
-        onSelect={(k, e) => this._changeLocale(e)}
-        displayName={locales.available[key]}
-        id={key}
-      />)}
+          key={i}
+          isActive={Locale.getLocale() === key}
+          onSelect={(k, e) => this._changeLocale(e)}
+          displayName={locales.available[key]}
+          id={key}
+        />)}
 
       </NavDropdown>
     );
