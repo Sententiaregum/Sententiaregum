@@ -10,9 +10,8 @@
 
 'use strict';
 
-import React from 'react';
-import menu from '../../../config/menu';
-import AppMenu from './AppMenu';
+import React      from 'react';
+import AppMenu    from './AppMenu';
 
 /**
  * Container for the whole app.
@@ -24,7 +23,7 @@ import AppMenu from './AppMenu';
 const Application = props => {
   return (
     <div className="container">
-      <AppMenu config={menu} />
+      <AppMenu />
       {props.children}
     </div>
   );

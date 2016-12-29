@@ -10,49 +10,57 @@
 
 'use strict';
 
-import Nav from 'react-bootstrap/lib/Nav';
-import React from 'react';
-import MenuItem from '../../markup/MenuItem';
-import { subscribeStores } from 'sententiaregum-flux-react';
-import menuStore from '../../../../store/menuStore';
+import React, {PropTypes, Component}  from 'react';
+import Nav                            from 'react-bootstrap/lib/Nav';
+import MenuItem                       from '../../markup/MenuItem';
+import menu                           from '../../../../config/menu';
 
 /**
- * Simple helper to build a list of menu items.
- *
- * @param {Array.<Object>} items   The list of items to render.
- * @param {Object.<*>}     context The component tree context.
- *
- * @returns {Array.<MenuItem>} List of menu items.
+ * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Benjamin Bieler <ben@benbieler.com>
  */
-const items = (items, context) => items.map((item, i) => {
-  const u = item.url.slice(2);
-  return <MenuItem label={item.label} url={item.url} key={i} isActive={context.router.isActive(u, '/' === u)} />;
-});
+export default class Menu extends Component {
 
-/**
- * Simple react component which builds the menu bar.
- *
- * @param {Object.<*>} props   The component properties.
- * @param {Object.<*>} context The component tree context.
- *
- * @returns {React.Element} The component markup.
- */
-const Menu = (props, context) => {
-  const rItems = items(props.items, context);
-  return 0 < rItems.length ? <Nav pullRight>{rItems}</Nav> : false;
-};
+  static propTypes = {
+    items:   PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired
+  };
 
-Menu.propTypes = {
-  items: React.PropTypes.array
-};
+  static contextTypes = {
+    router: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
+    ])
+  };
 
-Menu.contextTypes = {
-  router: React.PropTypes.oneOfType([
-    React.PropTypes.func,
-    React.PropTypes.object
-  ])
-};
+  /**
+   * When component has mounted call buildMenuItems action creator
+   */
+  componentDidMount() {
+    this.props.actions.buildMenuItems(menu);
+  }
 
-export default subscribeStores(Menu, {
-  'items': [menuStore, 'items']
-});
+  /**
+   * Simple helper to build a list of menu items.
+   *
+   * @param {Array.<Object>} items   The list of items to render.
+   *
+   * @returns {Array.<MenuItem>} List of menu items.
+   */
+  items(items) {
+    return items.map((item, i) => {
+      const u = item.url.slice(2);
+      return <MenuItem label={item.label} url={item.url} key={i} isActive={this.context.router.isActive(u, '/' === u)}/>;
+    });
+  }
+
+  /**
+   * Simple react component which builds the menu bar.
+   *
+   * @returns {React.Element} The component markup.
+   */
+  render() {
+    const rItems = this.items(this.props.items);
+    return 0 < rItems.length ? <Nav pullRight>{rItems}</Nav> : false;
+  }
+}

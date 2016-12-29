@@ -8,10 +8,16 @@
  * file that was distributed with this source code.
  */
 
-'use strict';
-
-import { render }  from 'react-dom';
-import routes      from './config/routes';
-import                  './config/counterpart';
-
-render(routes, document.getElementById('content'));
+export default {
+  menu: {
+    items: []
+  },
+  user: [],
+  locales: {
+    available: {
+      "de": "Deutsch",
+      "en": "English"
+    },
+    currentLocale: 'en'
+  },
+};

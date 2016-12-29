@@ -10,28 +10,30 @@
 
 'use strict';
 
-import React from 'react';
-import Login from '../components/portal/Login';
-import CreateAccount from '../components/portal/CreateAccount';
-import ActivateAccount from '../components/portal/ActivateAccount';
-import NotFoundPage from '../components/app/layout/NotFoundPage';
-import Application from '../components/app/layout/Application';
-import DashboardIndex from '../components/network/dashboard/Index';
-import Logout from '../components/portal/Logout';
-import { IndexRoute, Router, Route, hashHistory } from 'react-router';
-import { redirectToDashboard, protectPage } from '../util/react/routerHooks';
+import React                                         from 'react';
+import Application                                   from '../components/app/layout/Application';
+import {IndexRoute, Router, Route, hashHistory}      from 'react-router';
+import {protectPage} from '../util/react/routerHooks';
+import {syncHistoryWithStore}                        from 'react-router-redux';
+import {Provider}                                    from 'react-redux';
+import store                                         from './redux/store';
 
+const HelloWorld = () => {
+  return (
+    <h1>Hello World!</h1>
+  )
+};
+
+//TODO: Change to browesrHistory
+const history = syncHistoryWithStore(hashHistory, store);
+
+//TODO: Re-add other components after redux has been implemented there too
 export default (
-  <Router history={hashHistory}>
-    <Route component={Application} path="/">
-      <IndexRoute component={Login} onEnter={redirectToDashboard} />
-      <Route component={CreateAccount} path="sign-up" onEnter={redirectToDashboard} />
-      <Route component={ActivateAccount} path="activate/:name/:key" onEnter={redirectToDashboard} />
-
-      <Route component={Logout} path="/logout" onEnter={protectPage} />
-      <Route component={DashboardIndex} path="dashboard" onEnter={protectPage} />
-
-      <Route component={NotFoundPage} path="*" />
-    </Route>
-  </Router>
+  <Provider store={store}>
+    <Router history={history}>
+      <Route component={Application} path="/">
+        <IndexRoute component={HelloWorld}/>
+      </Route>
+    </Router>
+  </Provider>
 );

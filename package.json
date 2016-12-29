@@ -6,11 +6,10 @@
   "main": "src/Frontend/App.js",
   "scripts": {
     "dev": "NODE_ENV=development npm run frontend",
-    "frontend": "webpack",
+    "frontend": "webpack --watch",
     "lint": "eslint ./src/Frontend && lessc src/Frontend/styles/custom.less --lint",
-    "prod": "NODE_ENV=production npm run frontend",
+    "prod": "NODE_ENV=production webpack",
     "test": "mocha src/Frontend/test --recursive --ui bdd --compilers js:babel-core/register --reporter dot --require babel-polyfill --require src/Frontend/test/DOM.js",
-    "watch": "webpack --watch",
     "postinstall": "bash ./bin/generate-frontend-recaptcha.sh"
   },
   "repository": {
@@ -55,9 +54,12 @@
     "react-dom": "^15.3.2",
     "react-interpolate-component": "^0.9.1",
     "react-recaptcha": "^2.2.3",
+    "react-redux": "^5.0.1",
     "react-router": "^2.8.1",
+    "react-router-redux": "^4.0.7",
     "react-spinkit": "^1.1.11",
     "react-translate-component": "^0.11.1",
+    "redux": "^3.6.0",
     "sententiaregum-flux-container": "^2.1.1",
     "sententiaregum-flux-react": "^2.0.1",
     "style-loader": "^0.13",

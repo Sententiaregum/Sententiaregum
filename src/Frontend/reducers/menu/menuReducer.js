@@ -8,10 +8,16 @@
  * file that was distributed with this source code.
  */
 
-'use strict';
+import { TRANSFORM_ITEMS }          from '../../constants/Menu';
 
-import { render }  from 'react-dom';
-import routes      from './config/routes';
-import                  './config/counterpart';
+const menuReducer = (state = { items: [] }, action) => {
+  switch (action.type) {
+  case TRANSFORM_ITEMS:
+    return { items: action.items };
 
-render(routes, document.getElementById('content'));
+  default:
+    return state;
+  }
+};
+
+export default menuReducer;
