@@ -25,7 +25,7 @@ import Locale                           from '../../../util/http/Locale';
  */
 export default class LanguageSwitcher extends Component {
 
-  static PropTypes = {
+  static propTypes = {
     actions: PropTypes.object.isRequired
   };
 
