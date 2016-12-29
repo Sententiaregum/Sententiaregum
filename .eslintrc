@@ -1,69 +1,19 @@
 {
   "rules": {
-    "indent": [
-      2,
-      2,
-      {
-        "VariableDeclarator": 2
-      }
-    ],
-    "quotes": [
-      2,
-      "single"
-    ],
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
-    "semi": [
-      2,
-      "always"
-    ],
-    "no-unused-vars": [
-      2,
-      {
-        "vars": "all",
-        "args": "after-used"
-      }
-    ],
-    "comma-dangle": [
-      2,
-      "never"
-    ],
-    "no-console": [2],
-    "no-constant-condition": [2],
-    "no-control-regex": [2],
-    "no-debugger": [2],
-    "no-duplicate-case": [2],
-    "no-dupe-keys": [2],
-    "no-empty-character-class": [2],
-    "no-empty": [2],
-    "no-ex-assign": [2],
-    "no-extra-semi": [2],
-    "no-func-assign": [2],
-    "no-inner-declarations": [2],
-    "no-invalid-regexp": [2],
-    "no-irregular-whitespace": [2],
-    "no-negated-in-lhs": [2],
-    "no-obj-calls": [2],
-    "no-regex-spaces": [2],
-    "no-sparse-arrays": [2],
-    "no-unexpected-multiline": [2],
-    "no-unreachable": [2],
-    "use-isnan": [2],
+    "indent": [2, 2, { "VariableDeclarator": 2 }],
+    "quotes": [2, "single"],
+    "linebreak-style": [2, "unix"],
+    "semi": [2, "always"],
+    "comma-dangle": [2, "never"],
+    "no-unsafe-negation": [2],
     "valid-jsdoc": [2],
-    "valid-typeof": [2],
     "yoda": [2, "always"],
     "eqeqeq": [2],
     "prefer-const": [2],
     "prefer-spread": [2],
     "no-confusing-arrow": [2],
-    "no-class-assign": [2],
-    "no-const-assign": [2],
-    "no-dupe-class-members": [2],
-    "no-this-before-super": [2],
     "no-var": [2],
-    "object-shorthand": [2],
+    "object-shorthand": [2, "always"],
     "prefer-arrow-callback": [2],
     "no-else-return": [2],
     "no-eval": [2],
@@ -75,31 +25,21 @@
     "no-use-before-define": [2],
     "max-len": [2, 200],
     "no-lonely-if": [2],
-    "no-mixed-spaces-and-tabs": [2],
     "no-new-object": [2],
-    "no-native-reassign": [2],
+    "no-global-assign": [2],
     "no-useless-concat": [2],
     "radix": [2],
-    "no-redeclare": [2],
     "no-iterator": [2],
-    "key-spacing": [
-      2,
-      {
-        "align": "value"
-      }
-    ],
+    "key-spacing": [2, { "align": "value" }],
     "no-multi-str": [2],
-    "no-octal": [2],
     "no-new-func": [2],
     "no-void": [2],
     "no-useless-call": [2],
     "curly": [2],
     "no-alert": [2],
-    "no-case-declarations": [2],
     "no-div-regex": [2],
     "guard-for-in": [2],
     "no-eq-null": [2],
-    "no-fallthrough": [2],
     "no-floating-decimal": [2],
     "no-invalid-this": [2],
     "no-lone-blocks": [2],
@@ -110,18 +50,15 @@
     "max-statements": [2, 25],
     "new-parens": [2],
     "no-array-constructor": [2],
-    "no-spaced-func": [2],
+    "func-call-spacing": [2],
     "no-trailing-spaces": [2],
-    "object-curly-spacing": [
-      2,
-      "always"
-    ],
-    "require-jsdoc": [2],
-    "require-yield": [2],
+    "object-curly-spacing": [2, "always"],
     "prefer-template": [2],
-    "react/jsx-uses-react": [2],
-    "react/jsx-uses-vars": [2],
-    "react/display-name": [0]
+    "react/display-name": [0],
+    "react/jsx-indent": [2, 2],
+    "react/jsx-space-before-closing": [2],
+    "no-constant-condition": [0],
+    "arca/import-align": [2]
   },
   "env": {
     "es6":     true,
@@ -132,14 +69,17 @@
   "extends": ["eslint:recommended", "plugin:varspacing/recommended", "plugin:react/recommended"],
   "plugins": [
     "react",
-    "varspacing"
+    "varspacing",
+    "arca"
   ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "jsx": true,
-      "experimentalObjectRestSpread": true
+      "experimentalObjectRestSpread": true,
+      "classes": true
     }
-  }
+  },
+  "parser": "babel-eslint"
 }

@@ -10,9 +10,9 @@
 
 'use strict';
 
-import React from 'react';
+import React              from 'react';
 import CompositeFormField from './CompositeFormField';
-import FormControl from 'react-bootstrap/lib/FormControl';
+import FormControl        from 'react-bootstrap/lib/FormControl';
 
 /**
  * Form component for a selectable field containing `<option>` tags.

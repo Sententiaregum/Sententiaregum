@@ -10,11 +10,11 @@
 
 'use strict';
 
-import Translate from 'react-translate-component';
-import React from 'react';
-import InfoBox from './login/InfoBox';
-import Form from './login/Form';
-import Panel from 'react-bootstrap/lib/Panel';
+import Translate    from 'react-translate-component';
+import React        from 'react';
+import InfoBox      from './login/InfoBox';
+import Form         from './login/Form';
+import Panel        from 'react-bootstrap/lib/Panel';
 import InversedGrid from '../app/markup/InversedGrid';
 
 /**

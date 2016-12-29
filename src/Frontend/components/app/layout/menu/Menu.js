@@ -10,10 +10,10 @@
 
 'use strict';
 
-import React, {PropTypes, Component}  from 'react';
-import Nav                            from 'react-bootstrap/lib/Nav';
-import MenuItem                       from '../../markup/MenuItem';
-import menu                           from '../../../../config/menu';
+import React, { PropTypes, Component }  from 'react';
+import Nav                              from 'react-bootstrap/lib/Nav';
+import MenuItem                         from '../../markup/MenuItem';
+import menu                             from '../../../../config/menu';
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
@@ -34,7 +34,9 @@ export default class Menu extends Component {
   };
 
   /**
-   * When component has mounted call buildMenuItems action creator
+   * When component has mounted call buildMenuItems action creator.
+   *
+   * @returns {void}
    */
   componentDidMount() {
     this.props.actions.buildMenuItems(menu);
@@ -50,7 +52,7 @@ export default class Menu extends Component {
   items(items) {
     return items.map((item, i) => {
       const u = item.url.slice(2);
-      return <MenuItem label={item.label} url={item.url} key={i} isActive={this.context.router.isActive(u, '/' === u)}/>;
+      return <MenuItem label={item.label} url={item.url} key={i} isActive={this.context.router.isActive(u, '/' === u)} />;
     });
   }
 

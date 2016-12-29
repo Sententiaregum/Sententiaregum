@@ -22,9 +22,9 @@ import ApiKey             from '../util/http/ApiKey';
  * will be dispatched. To keep the entire application easy-to-use, a simple switcher might be used rather than
  * a huge formula.
  *
- * @param {String}   locale  The new locale.
+ * @param {String} locale  The new locale.
  *
- * @returns {object}
+ * @returns {Object} The payload for the reducers.
  */
 export const changeLocale = (locale) => {
   //TODO: Fix auth

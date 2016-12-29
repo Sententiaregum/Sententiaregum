@@ -21,13 +21,14 @@ import *  as localeActions    from '../../../actions/localeActions';
 const AppMenu = ({ items, actions }) => {
   return (
     <MenuWrapper actions={actions.locale}>
-      <Menu items={items} actions={actions.menu}/>
+      <Menu items={items} actions={actions.menu} />
     </MenuWrapper>
   );
 };
 
 AppMenu.propTypes = {
-  config: React.PropTypes.arrayOf(React.PropTypes.object)
+  items:   React.PropTypes.arrayOf(React.PropTypes.object),
+  actions: React.PropTypes.object
 };
 
 const mapStateToProps = state => ({

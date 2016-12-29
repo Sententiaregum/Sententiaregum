@@ -11,8 +11,8 @@
 'use strict';
 
 import { REQUEST_API_KEY, LOGOUT, CREATE_ACCOUNT, ACTIVATE_ACCOUNT } from '../constants/Portal';
-import axios from 'axios';
-import ApiKey from '../util/http/ApiKey';
+import axios                                                         from 'axios';
+import ApiKey                                                        from '../util/http/ApiKey';
 
 /**
  * Action creator which is responsible for each user action.

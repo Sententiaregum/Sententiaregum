@@ -10,20 +10,21 @@
 
 'use strict';
 
-import React, {Component, PropTypes} from 'react';
-import Translate                        from 'react-translate-component';
-import NavDropdown                      from 'react-bootstrap/lib/NavDropdown';
-import DropDownItem                     from '../markup/DropDownItem';
-import Locale                           from '../../../util/http/Locale';
+import React, { Component, PropTypes }    from 'react';
+import Translate                          from 'react-translate-component';
+import NavDropdown                        from 'react-bootstrap/lib/NavDropdown';
+import DropDownItem                       from '../markup/DropDownItem';
+import Locale                             from '../../../util/http/Locale';
 
 /**
  * Widget which changes the user locale.
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Ben Bieler <ben@benbieler.com>
  */
 export default class LanguageSwitcher extends Component {
 
-  static PropTypes = {
+  static propTypes = {
     actions: PropTypes.object.isRequired
   };
 
@@ -38,23 +39,23 @@ export default class LanguageSwitcher extends Component {
    */
   render() {
 
-    const {store}    = this.context;
-    let locales      = store.getState().locales;
+    const { store }  = this.context;
+    const locales    = store.getState().locales;
     const localeKeys = Object.keys(locales.available);
 
     return (
       <NavDropdown
         eventKey={1}
         id="l10n-dropdown"
-        title={<Translate content="menu.l10n"/>}
+        title={<Translate content="menu.l10n" />}
       >
         {localeKeys.map((key, i) => <DropDownItem
-        key={i}
-        isActive={Locale.getLocale() === key}
-        onSelect={(k, e) => this._changeLocale(e)}
-        displayName={locales.available[key]}
-        id={key}
-      />)}
+          key={i}
+          isActive={Locale.getLocale() === key}
+          onSelect={(k, e) => this._changeLocale(e)}
+          displayName={locales.available[key]}
+          id={key}
+        />)}
 
       </NavDropdown>
     );

@@ -95,7 +95,9 @@ sententiaregum::frontend::npm::packages:
   - eslint
   - eslint-plugin-react
   - eslint-plugin-varspacing
+  - eslint-plugin-arca
   - less
+  - babel-eslint
 
 # timezone
 timezone::timezone: 'UTC'

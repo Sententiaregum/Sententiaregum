@@ -10,9 +10,9 @@
 
 'use strict';
 
-import React from 'react';
+import React               from 'react';
 import DismissableAlertBox from '../../app/markup/DismissableAlertBox';
-import Translate from 'react-translate-component';
+import Translate           from 'react-translate-component';
 
 /**
  * Rendering component of the success box.

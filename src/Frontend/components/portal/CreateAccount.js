@@ -10,10 +10,10 @@
 
 'use strict';
 
-import React from 'react';
+import React     from 'react';
 import Translate from 'react-translate-component';
-import Form from './signup/Form';
-import InfoBox from './signup/InfoBox';
+import Form      from './signup/Form';
+import InfoBox   from './signup/InfoBox';
 
 /**
  * Markup component which renders the `create account` page.
