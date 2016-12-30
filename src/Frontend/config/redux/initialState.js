@@ -10,7 +10,12 @@
 
 export default {
   menu: [],
-  user: [],
+  user: {
+    security: {
+      authenticated: false,
+      appProfile:    {}
+    }
+  },
   locales: {
     available: {
       "de": "Deutsch",

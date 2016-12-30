@@ -14,8 +14,9 @@ import {
   REQUEST_API_KEY,
   LOGOUT
 }                                   from '../../constants/Portal';
+import { combineReducers }          from 'redux';
 
-export default (state = [], action) => {
+const security = (state = { authenticated: false, appProfile: {} }, action) => {
   switch (action.type) {
   case CREATE_ACCOUNT:
     return state;
@@ -33,3 +34,7 @@ export default (state = [], action) => {
     return state;
   }
 };
+
+export default combineReducers({
+  security
+});
