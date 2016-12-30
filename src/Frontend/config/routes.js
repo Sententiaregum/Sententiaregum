@@ -19,15 +19,8 @@ import store                                         from './redux/store';
 import { protectApp, guardFromPortal }               from '../util/security/appProfileChecker';
 import NotFoundPage                                  from '../components/app/layout/NotFoundPage';
 
-const HelloWorld = () => {
-  return (
-    <h1>Hello World!</h1>
-  )
-};
-
-const Protected = () => {
-  return <h1>Secret page!</h1>;
-};
+const HelloWorld = () => <h1>Hello World!</h1>;
+const Protected  = () => <h1>Secret page!</h1>;
 
 //TODO: Change to browesrHistory
 const history = syncHistoryWithStore(hashHistory, store);
