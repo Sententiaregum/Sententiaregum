@@ -9,9 +9,7 @@
  */
 
 export default {
-  menu: {
-    items: []
-  },
+  menu: [],
   user: [],
   locales: {
     available: {

@@ -32,7 +32,7 @@ AppMenu.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  items: state.menu.items
+  items: state.menu
 });
 
 const mapDispatchToProps = dispatch => ({

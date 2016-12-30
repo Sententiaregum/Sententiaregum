@@ -10,10 +10,10 @@
 
 import { TRANSFORM_ITEMS }          from '../../constants/Menu';
 
-const menuReducer = (state = { items: [] }, action) => {
+const menuReducer = (state = [], action) => {
   switch (action.type) {
   case TRANSFORM_ITEMS:
-    return { items: action.items };
+    return action.items;
 
   default:
     return state;
