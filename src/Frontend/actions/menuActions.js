@@ -13,10 +13,10 @@
 import { TRANSFORM_ITEMS } from '../constants/Menu';
 
 export const buildMenuItems = items => ({
-  type:      TRANSFORM_ITEMS,
+  type:     TRANSFORM_ITEMS,
   items,
   // TODO add real values
-  auth_data: {
+  authData: {
     is_logged_in: false,
     is_admin:     false
   }
