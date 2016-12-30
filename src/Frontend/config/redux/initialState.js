@@ -14,6 +14,17 @@ export default {
     security: {
       authenticated: false,
       appProfile:    {}
+    },
+    registration: {
+      success:          false,
+      errors:           {},
+      name_suggestions: [],
+      id:               null
+    },
+    activation:     { success: false },
+    authentication: {
+      success: false,
+      message: null
     }
   },
   locales: {
