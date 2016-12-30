@@ -13,6 +13,7 @@
 import { CHANGE_LOCALE  } from '../constants/Locale';
 import axios              from 'axios';
 import ApiKey             from '../util/http/ApiKey';
+import Locale             from '../util/http/Locale';
 
 /**
  * Action which is responsible for changing a language.
@@ -33,6 +34,9 @@ export const changeLocale = (locale) => {
       headers: { 'X-API-KEY': ApiKey.getApiKey() }
     });
   }
+
+  Locale.setLocale(locale);
+
   return ({
     type: CHANGE_LOCALE,
     locale
