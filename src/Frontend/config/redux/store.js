@@ -11,7 +11,6 @@
 import {combineReducers, createStore, applyMiddleware } from 'redux';
 import {routerReducer}                                  from 'react-router-redux';
 import reducers                                         from './reducers';
-import initialState                                     from './initialState';
 import thunk                                            from 'redux-thunk';
 
 /**
@@ -21,4 +20,6 @@ import thunk                                            from 'redux-thunk';
  */
 const rootReducer = combineReducers({...reducers, routing: routerReducer});
 
-export default createStore(rootReducer, initialState, applyMiddleware(thunk));
+// initial state is not needed here since the `@@redux/INIT` action runs through all reducers
+// which return the initial state if they can't handle the given store action.
+export default createStore(rootReducer, applyMiddleware(thunk));

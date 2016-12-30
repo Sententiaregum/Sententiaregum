@@ -10,13 +10,14 @@
 
 import { CHANGE_LOCALE } from '../../constants/Locale';
 import invariant         from 'invariant';
+import Locale            from '../../util/http/Locale';
 
 const initial = {
   available: {
     'de': 'Deutsch',
     'en': 'English'
   },
-  currentLocale: 'en'
+  currentLocale: Locale.getLocale()
 };
 
 const localeReducer = (state = initial, action) => {

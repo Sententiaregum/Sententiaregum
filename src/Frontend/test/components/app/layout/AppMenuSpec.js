@@ -10,23 +10,36 @@
 
 'use strict';
 
-import { shallow } from 'enzyme';
-import React from 'react';
-import AppMenu from '../../../../components/app/layout/AppMenu';
-import { expect } from 'chai';
+import { shallow }  from 'enzyme';
+import React        from 'react';
+import AppMenu      from '../../../../components/app/layout/AppMenu';
+import { expect }   from 'chai';
 
 describe('AppMenuSpec', () => {
   it('renders the menu markup', () => {
     const items = [
       {
-        url:   '/#/',
-        label: 'Landing page'
+        label: 'Landing Page'
+      },
+      {
+        label: 'Create Account'
       }
     ];
 
-    const markup  = shallow(<AppMenu config={items} />);
-    const wrapper = markup.find('MenuWrapper');
+    const store = {
+      subscribe() {},
+      dispatch() {},
+      getState() {
+        return {
+          menu: items
+        };
+      }
+    };
 
-    expect(wrapper.prop('items')).to.equal(items);
+    const markup = shallow((
+      <AppMenu />
+    ), { context: { store } });
+
+    expect(markup.prop('items')).to.equal(items);
   });
 });

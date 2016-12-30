@@ -20,6 +20,11 @@ import { combineReducers }          from 'redux';
 // The `registration`, `activation` and `authentication` reducers are specific for their feature (see component structure for more information),
 // but the `security` reducer contains security information about the application and can be composed to several user-specific actions.
 
+// The app profile requires the following keys if initialized:
+// - `apiKey`
+// - `username`
+// - `isAdmin`
+// - `locale`
 const security = (state = { authenticated: false, appProfile: {} }, action) => {
   // TODO implement security related actions
   return state;

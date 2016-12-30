@@ -17,6 +17,7 @@ import { syncHistoryWithStore }                      from 'react-router-redux';
 import { Provider }                                  from 'react-redux';
 import store                                         from './redux/store';
 import { protectApp, guardFromPortal }               from '../util/security/appProfileChecker';
+import NotFoundPage                                  from '../components/app/layout/NotFoundPage';
 
 const HelloWorld = () => {
   return (
@@ -38,6 +39,7 @@ export default (
       <Route component={Application} path="/">
         <IndexRoute component={HelloWorld} onEnter={guardFromPortal} />
         <Route component={Protected} onEnter={protectApp} path="secret"  />
+        <Route component={NotFoundPage} path="*" />
       </Route>
     </Router>
   </Provider>

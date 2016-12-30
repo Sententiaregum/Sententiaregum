@@ -10,18 +10,16 @@
 
 'use strict';
 
-import React from 'react';
-import { expect } from 'chai';
+import React       from 'react';
+import { expect }  from 'chai';
 import { shallow } from 'enzyme';
 import Application from '../../../../components/app/layout/Application';
-import menu from '../../../../config/menu';
 
 describe('Application', () => {
   it('renders the container for the whole application', () => {
     const wrapper = shallow(<Application><h1>Hello World!</h1></Application>);
 
     expect(wrapper.find('div').hasClass('container')).to.equal(true);
-    expect(wrapper.find('div > AppMenu').prop('config')).to.equal(menu);
     expect(wrapper.find('div > h1').contains('Hello World!')).to.equal(true);
   });
 });
