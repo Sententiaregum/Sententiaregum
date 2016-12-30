@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-import userReducer    from '../../reducers/user/userReducer'
-import menuReducer    from '../../reducers/menu/menuReducer'
-import localeReducer  from '../../reducers/locale/localeReducer'
+import userReducer    from '../../reducers/user/userReducer';
+import menuReducer    from '../../reducers/menu/menuReducer';
+import localeReducer  from '../../reducers/locale/localeReducer';
 
 const reducers = {
-  user:   userReducer,
-  menu:   menuReducer,
+  user:    userReducer,
+  menu:    menuReducer,
   locales: localeReducer
 };
 

@@ -3,5 +3,5 @@ webpack.*.js
 
 # tests
 src/Frontend/test/**/*.js
-src/Frontend/config/*
+src/Frontend/config/languages/*
 src/Frontend/**/facade/*.js

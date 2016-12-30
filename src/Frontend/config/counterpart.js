@@ -10,10 +10,10 @@
 
 'use strict';
 
-import de from './languages/de';
-import en from './languages/en';
+import de          from './languages/de';
+import en          from './languages/en';
 import counterpart from 'counterpart';
-import Locale from '../util/http/Locale';
+import Locale      from '../util/http/Locale';
 
 // null as parameter will make the locale be fetched from the cookie store.
 // This is necessary since the cookie store is the only data source which contains
