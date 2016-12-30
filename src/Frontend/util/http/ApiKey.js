@@ -17,7 +17,7 @@ import Locale from './Locale';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default new class {
+export default new class ApiKey {
   /**
    * Checks if a user is logged in.
    *

@@ -10,14 +10,15 @@
 
 import { TRANSFORM_ITEMS }          from '../../constants/Menu';
 
-const menuReducer = (state = { items: [] }, action) => {
-  switch (action.type) {
-  case TRANSFORM_ITEMS:
-    return { items: action.items };
-
-  default:
-    return state;
+export default (state = [], action) => {
+  if (TRANSFORM_ITEMS === action.type) {
+    const { items, authData } = action;
+    return items.filter(item => !(
+      'ROLE_ADMIN' === item.role && !authData.is_admin
+      || item.logged_in && !authData.logged_in
+      || item.portal && authData.logged_in
+    ));
   }
-};
 
-export default menuReducer;
+  return state;
+};

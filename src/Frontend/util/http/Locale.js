@@ -20,7 +20,7 @@ import Cookies     from 'cookies-js';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default new class {
+export default new class Locale {
   /**
    * Constructor.
    *
@@ -48,22 +48,33 @@ export default new class {
    * @returns {void}
    */
   setLocale(locale) {
-    let newLocale;
-    if (null === locale) {
-      newLocale = this.getLocale();
-    } else {
-      const allowedLocales = ['de', 'en'];
-      invariant(
-        0 <= allowedLocales.indexOf(locale),
-        '[LocaleService.setLocale(%s)] Invalid locale! Allowed locales are %s!',
-        locale,
-        allowedLocales.join(',')
-      );
-
-      newLocale = locale;
-    }
+    const newLocale = this._getLocale(locale);
 
     Cookies.set('language', newLocale);
     counterpart.setLocale(newLocale);
+  }
+
+  /**
+   * Simple helper to validate the locale.
+   *
+   * @param {String} locale The new locale.
+   *
+   * @returns {String} The validated value of the new locale.
+   * @private
+   */
+  _getLocale(locale) {
+    if (!locale) {
+      return this.getLocale();
+    }
+
+    const allowedLocales = ['de', 'en'];
+    invariant(
+      0 <= allowedLocales.indexOf(locale),
+      '[LocaleService.setLocale(%s)] Invalid locale! Allowed locales are %s!',
+      locale,
+      allowedLocales.join(',')
+    );
+
+    return locale;
   }
 }();

@@ -8,21 +8,31 @@
  * file that was distributed with this source code.
  */
 
-import { GET_LOCALES, CHANGE_LOCALE }   from '../../constants/Locale';
-import Locale                           from '../../util/http/Locale';
+import { CHANGE_LOCALE } from '../../constants/Locale';
+import invariant         from 'invariant';
+import Locale            from '../../util/http/Locale';
 
-const localeReducer = (state = [], action) => {
-  switch (action.type) {
-  case GET_LOCALES:
-    return state;
+const initial = {
+  available: {
+    'de': 'Deutsch',
+    'en': 'English'
+  },
+  currentLocale: Locale.getLocale()
+};
 
-  case CHANGE_LOCALE:
-    Locale.setLocale(action.locale);
-    return state;
+const localeReducer = (state = initial, action) => {
+  if (action.type === CHANGE_LOCALE && action.locale !== state.currentLocale) {
+    invariant(
+      -1 !== Object.keys(initial.available).indexOf(action.locale),
+      `Tried to add unsupported locale '${action.locale}' to application's state!`
+    );
 
-  default:
-    return state;
+    return Object.assign({}, state, {
+      currentLocale: action.locale
+    });
   }
+
+  return initial;
 };
 
 export default localeReducer;

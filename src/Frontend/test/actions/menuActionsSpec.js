@@ -10,47 +10,47 @@
 
 'use strict';
 
-import { stub } from 'sinon';
-import { expect } from 'chai';
-import userStore from '../../store/userStore';
-import menuActions from '../../actions/menuActions';
-import TestUtils from 'sententiaregum-flux-container/lib/testing/TestUtils';
+import { spy }             from 'sinon';
+import { expect }          from 'chai';
+import { buildMenuItems }  from '../../actions/menuActions';
 import { TRANSFORM_ITEMS } from '../../constants/Menu';
 
 describe('menuActions', () => {
-
-  it('publishes menu items in order to transform them', () => {
-    stub(userStore, 'getStateValue', (path, defaultVal) => {
-      if ('auth.authenticated' === path) {
-        return false;
-      }
-      if ('auth.apiKey') {
-        return false;
-      }
-      return defaultVal;
-    });
-
+  it('publishes given menu items and related authentication info', () => {
     const items = [
       {
-        url: '/#/',
-        label: 'Start'
-      },
-      {
-        url: '/#/admin',
-        label: 'Admin',
-        role: 'ROLE_ADMIN',
-        logged_in: true
+        label:  'Landing page',
+        portal: true
       }
     ];
 
-    TestUtils.executeAction(menuActions, TRANSFORM_ITEMS, [items])({
-      items,
+    const asyncAction = buildMenuItems(items);
+
+    const asyncState = () => ({
+      user: {
+        security: {
+          authenticated: false
+        }
+      }
+    });
+
+    const dispatch = spy();
+
+    asyncAction(dispatch, asyncState);
+
+    expect(dispatch.calledOnce).to.equal(true);
+    expect(dispatch.calledWith({
+      type:  TRANSFORM_ITEMS,
+      items: [
+        {
+          label:  'Landing page',
+          portal: true
+        }
+      ],
       authData: {
         logged_in: false,
         is_admin:  false
       }
-    });
-
-    userStore.getStateValue.restore();
+    })).to.deep.equal(true);
   });
 });

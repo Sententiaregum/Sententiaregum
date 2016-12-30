@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-import {combineReducers, createStore}   from 'redux';
-import {routerReducer}                  from 'react-router-redux';
-import reducers                         from './reducers';
-import initialState                     from './initialState';
+import {combineReducers, createStore, applyMiddleware } from 'redux';
+import {routerReducer}                                  from 'react-router-redux';
+import reducers                                         from './reducers';
+import thunk                                            from 'redux-thunk';
 
 /**
  * Higher Order reducer
@@ -20,4 +20,6 @@ import initialState                     from './initialState';
  */
 const rootReducer = combineReducers({...reducers, routing: routerReducer});
 
-export default createStore(rootReducer, initialState);
+// initial state is not needed here since the `@@redux/INIT` action runs through all reducers
+// which return the initial state if they can't handle the given store action.
+export default createStore(rootReducer, applyMiddleware(thunk));

@@ -12,12 +12,11 @@
 
 import { TRANSFORM_ITEMS } from '../constants/Menu';
 
-export const buildMenuItems = items => ({
-  type:      TRANSFORM_ITEMS,
+export const buildMenuItems = items => (dispatch, state) => dispatch({
+  type:     TRANSFORM_ITEMS,
   items,
-  // TODO add real values
-  auth_data: {
-    is_logged_in: false,
-    is_admin:     false
+  authData: {
+    logged_in: state().user.security.authenticated,
+    is_admin:  false // TODO implement better role handling here
   }
 });

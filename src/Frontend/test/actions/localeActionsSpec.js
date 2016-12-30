@@ -10,51 +10,34 @@
 
 'use strict';
 
-import { stub, assert, createStubInstance } from 'sinon';
-import { changeLocale, loadLanguages } from '../../actions/localeActions';
-import { expect } from 'chai';
-import Locale from '../../util/http/Locale';
-import userStore from '../../store/userStore';
-import TestUtils from 'sententiaregum-flux-container/lib/testing/TestUtils';
-import { GET_LOCALES, CHANGE_LOCALE } from '../../constants/Locale';
-import localeActions from '../../actions/localeActions';
-import axios from 'axios';
-import promise from '../fixtures/promise';
-import ApiKey from '../../util/http/ApiKey';
+import { spy, assert, stub } from 'sinon';
+import { changeLocale }      from '../../actions/localeActions';
+import { expect }            from 'chai';
+import Locale                from '../../util/http/Locale';
+import { CHANGE_LOCALE }     from '../../constants/Locale';
+import axios                 from 'axios';
 
 describe('localeActions', () => {
   it('changes the locale', () => {
-    let apiKey = Math.random();
-
-    stub(userStore, 'getStateValue', (path, defaultVal) => {
-      if ('auth.authenticated' === path) {
-        return true;
-      }
-      return defaultVal;
-    });
-    stub(ApiKey, 'getApiKey', () => apiKey);
+    const apiKey   = Math.random();
+    const state    = () => ({ user: { security: { authenticated: true, appProfile: { apiKey } } } });
+    const dispatch = spy();
 
     stub(axios, 'patch');
-    stub(Locale, 'setLocale', (locale) => expect(locale).to.equal('en'));
+    stub(Locale, 'setLocale', locale => expect(locale).to.equal('en'));
 
-    TestUtils.executeAction(localeActions, CHANGE_LOCALE, ['en'])({ locale: 'en' });
+    changeLocale('en')(dispatch, state);
 
     assert.calledOnce(axios.patch);
     expect(axios.patch.calledWith('/api/protected/locale.json', { locale: 'en' }, { headers: { 'X-API-KEY': apiKey } })).to.equal(true);
+    assert.calledOnce(dispatch);
+
+    expect(dispatch.calledWith({
+      type:   CHANGE_LOCALE,
+      locale: 'en'
+    }));
 
     Locale.setLocale.restore();
     axios.patch.restore();
-    userStore.getStateValue.restore();
-    ApiKey.getApiKey.restore();
-  });
-
-  it('loads available locales', () => {
-    let response = { de: 'Deutsch', en: 'English' };
-
-    stub(axios, 'get', promise(true, { data: response }));
-
-    TestUtils.executeAction(localeActions, GET_LOCALES, [])({ de: 'Deutsch', en: 'English' });
-    expect(axios.get.calledWith('/api/locale.json')).to.equal(true);
-    axios.get.restore();
   });
 });
