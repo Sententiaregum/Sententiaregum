@@ -12,16 +12,20 @@
 
 import React                                         from 'react';
 import Application                                   from '../components/app/layout/Application';
-import {IndexRoute, Router, Route, hashHistory}      from 'react-router';
-import {protectPage} from '../util/react/routerHooks';
-import {syncHistoryWithStore}                        from 'react-router-redux';
-import {Provider}                                    from 'react-redux';
+import { IndexRoute, Router, Route, hashHistory }    from 'react-router';
+import { syncHistoryWithStore }                      from 'react-router-redux';
+import { Provider }                                  from 'react-redux';
 import store                                         from './redux/store';
+import { protectApp, guardFromPortal }               from '../util/security/appProfileChecker';
 
 const HelloWorld = () => {
   return (
     <h1>Hello World!</h1>
   )
+};
+
+const Protected = () => {
+  return <h1>Secret page!</h1>;
 };
 
 //TODO: Change to browesrHistory
@@ -32,7 +36,8 @@ export default (
   <Provider store={store}>
     <Router history={history}>
       <Route component={Application} path="/">
-        <IndexRoute component={HelloWorld}/>
+        <IndexRoute component={HelloWorld} onEnter={guardFromPortal} />
+        <Route component={Protected} onEnter={protectApp} path="secret"  />
       </Route>
     </Router>
   </Provider>
