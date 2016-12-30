@@ -12,7 +12,6 @@
 
 import { CHANGE_LOCALE  } from '../constants/Locale';
 import axios              from 'axios';
-import ApiKey             from '../util/http/ApiKey';
 import Locale             from '../util/http/Locale';
 
 /**
@@ -27,17 +26,17 @@ import Locale             from '../util/http/Locale';
  *
  * @returns {Object} The payload for the reducers.
  */
-export const changeLocale = (locale) => {
-  //TODO: Fix auth
-  if (false) {
+export const changeLocale = (locale) => (dispatch, state) => {
+  const { authenticated, appProfile } = state().user.security;
+  if (authenticated) {
     axios.patch('/api/protected/locale.json', { locale }, {
-      headers: { 'X-API-KEY': ApiKey.getApiKey() }
+      headers: { 'X-API-KEY': appProfile.apiKey }
     });
   }
 
   Locale.setLocale(locale);
 
-  return ({
+  dispatch({
     type: CHANGE_LOCALE,
     locale
   });

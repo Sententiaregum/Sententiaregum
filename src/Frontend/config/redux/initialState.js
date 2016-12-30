@@ -13,7 +13,7 @@ export default {
   user: {
     security: {
       authenticated: false,
-      appProfile:    {}
+      appProfile:    {}    // empty by default, should contain `apiKey`, `username`, `isAdmin`
     },
     registration: {
       success:          false,
