@@ -9,15 +9,29 @@
  */
 
 import { CHANGE_LOCALE } from '../../constants/Locale';
+import invariant         from 'invariant';
 
-const localeReducer = (state = [], action) => {
-  switch (action.type) {
-  case CHANGE_LOCALE:
-    return state;
+const initial = {
+  available: {
+    'de': 'Deutsch',
+    'en': 'English'
+  },
+  currentLocale: 'en'
+};
 
-  default:
-    return state;
+const localeReducer = (state = initial, action) => {
+  if (action.type === CHANGE_LOCALE && action.locale !== state.currentLocale) {
+    invariant(
+      -1 !== Object.keys(initial.available).indexOf(action.locale),
+      `Tried to add unsupported locale '${action.locale}' to application's state!`
+    );
+
+    return Object.assign({}, initial, {
+      currentLocale: action.locale
+    });
   }
+
+  return initial;
 };
 
 export default localeReducer;
