@@ -26,7 +26,7 @@ const localeReducer = (state = initial, action) => {
       `Tried to add unsupported locale '${action.locale}' to application's state!`
     );
 
-    return Object.assign({}, initial, {
+    return Object.assign({}, state, {
       currentLocale: action.locale
     });
   }
