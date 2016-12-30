@@ -20,7 +20,7 @@ import Cookies     from 'cookies-js';
  *
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
  */
-export default new class {
+export default new class Locale {
   /**
    * Constructor.
    *
