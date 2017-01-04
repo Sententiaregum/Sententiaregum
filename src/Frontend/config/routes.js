@@ -18,6 +18,7 @@ import { Provider }                                  from 'react-redux';
 import store                                         from './redux/store';
 import { protectApp, guardFromPortal }               from '../util/security/appProfileChecker';
 import NotFoundPage                                  from '../components/app/layout/NotFoundPage';
+import CreateAccount                                 from '../components/portal/CreateAccount';
 
 const HelloWorld = () => <h1>Hello World!</h1>;
 const Protected  = () => <h1>Secret page!</h1>;
@@ -32,6 +33,7 @@ export default (
       <Route component={Application} path="/">
         <IndexRoute component={HelloWorld} onEnter={guardFromPortal} />
         <Route component={Protected} onEnter={protectApp} path="secret"  />
+        <Route component={CreateAccount} onEnter={guardFromPortal} path="sign-up"/>
         <Route component={NotFoundPage} path="*" />
       </Route>
     </Router>

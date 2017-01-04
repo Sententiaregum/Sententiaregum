@@ -21,5 +21,5 @@ const routeChangeHandler = (ensureAuthenticated = true, redirectURL = '/') => (n
   }
 };
 
-export const protectApp = routeChangeHandler();
+export const protectApp      = routeChangeHandler();
 export const guardFromPortal = routeChangeHandler(false, '/dashboard');
