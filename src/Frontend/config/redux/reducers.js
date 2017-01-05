@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-import userReducer    from '../../reducers/user/userReducer';
-import menuReducer    from '../../reducers/menu/menuReducer';
-import localeReducer  from '../../reducers/locale/localeReducer';
-import {reducer as formReducer}  from 'redux-form';
+import userReducer                 from '../../reducers/user/userReducer';
+import menuReducer                 from '../../reducers/menu/menuReducer';
+import localeReducer               from '../../reducers/locale/localeReducer';
+import { reducer as formReducer }  from 'redux-form';
 
 const reducers = {
   user:    userReducer,

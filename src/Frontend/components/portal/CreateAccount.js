@@ -10,13 +10,13 @@
 
 'use strict';
 
-import React, {Component, PropTypes}     from 'react';
-import Translate                         from 'react-translate-component';
-import { connect            }            from 'react-redux';
-import { bindActionCreators }            from 'redux';
-import Form                              from './signup/Form';
-import InfoBox                           from './signup/InfoBox';
-import * as userActions                  from '../../actions/userActions';
+import React, { Component, PropTypes }     from 'react';
+import Translate                           from 'react-translate-component';
+import { connect            }              from 'react-redux';
+import { bindActionCreators }              from 'redux';
+import Form                                from './signup/Form';
+import InfoBox                             from './signup/InfoBox';
+import * as userActions                    from '../../actions/userActions';
 
 /**
  * Presentational component for the sign-up page
@@ -29,7 +29,14 @@ class CreateAccount extends Component {
     actions: PropTypes.object.isRequired
   };
 
+  /**
+   * Handle the onSubmit event
+   *
+   * @param data
+   * @param recaptchaHash
+   */
   handleSubmit = (data) => {
+    console.log(data);
     this.props.actions.sign_up.createAccount(data);
   };
 
@@ -39,10 +46,10 @@ class CreateAccount extends Component {
         <h1><Translate content="pages.portal.head" /></h1>
         <div>
           <InfoBox />
-          <Form onSubmit={this.handleSubmit}/>
+          <Form onSubmit={this.handleSubmit} />
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -57,5 +64,5 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateAccount)
+)(CreateAccount);
 

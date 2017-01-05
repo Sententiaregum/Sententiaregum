@@ -28,13 +28,13 @@ import axios                                                       from 'axios';
 export const createAccount = (data) => (dispatch) => {
   axios.post('/api/users.json', data)
     .then(response => dispatch({
-      type: CREATE_ACCOUNT,
-      payload: Object.assign({success: true, name_suggestions: [], errors: {}}, response.data)
+      type:    CREATE_ACCOUNT,
+      payload: Object.assign({ success: true, name_suggestions: [], errors: {} }, response.data)
     }))
     .catch(response => dispatch({
-      type: CREATE_FAIL,
-      payload: Object.assign({name_suggestions: [], success: false, id: null}, response.data)
-    }))
+      type:    CREATE_FAIL,
+      payload: Object.assign({ name_suggestions: [], success: false, id: null }, response.data)
+    }));
 };
 
 

@@ -34,8 +34,8 @@ export default (
       <Route component={Application} path="/">
         <IndexRoute component={HelloWorld}     onEnter={guardFromPortal} />
         <Route      component={Protected}      onEnter={protectApp}      path="secret"  />
-        <Route      component={CreateAccount}  onEnter={guardFromPortal} path="sign-up"/>
-        <Route      component={DashboardIndex} onEnter={protectApp}     path="dashboard"/>
+        <Route      component={CreateAccount}  onEnter={guardFromPortal} path="sign-up" />
+        <Route      component={DashboardIndex} onEnter={protectApp}      path="dashboard" />
         <Route      component={NotFoundPage}                             path="*" />
       </Route>
     </Router>

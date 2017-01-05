@@ -27,7 +27,7 @@ import { combineReducers }          from 'redux';
  - `isAdmin`
  - `locale`
  */
-const security = (state = {authenticated: false, appProfile: {}}, action) => {
+const security = (state = { authenticated: false, appProfile: {} }, action) => {
   // TODO implement security related actions
   return state;
 };

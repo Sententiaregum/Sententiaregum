@@ -10,19 +10,22 @@
 
 'use strict';
 
-import React                                                 from 'react';
-import {Field, reduxForm}                                    from 'redux-form';
-import {FormGroup, FormControl,
+import React                                                   from 'react';
+import { Field, reduxForm }                                    from 'redux-form';
+import { FormGroup, FormControl,
         ControlLabel, Button,
         Alert, DropdownButton,
-        MenuItem}                                            from 'react-bootstrap';
-import {validation}                                          from './validation/FormValidation'
-import Recaptcha                                             from 'react-recaptcha';
-import siteKey                                               from '../../../config/recaptcha';
-import update                                                from 'react-addons-update';
+        MenuItem }                                            from 'react-bootstrap';
+import { validation }                                          from './validation/FormValidation';
+// import Recaptcha                                             from 'react-recaptcha';
+// import siteKey                                               from '../../../config/recaptcha';
 
+/**
+ * Validation for the custom components
+ * @param values
+ */
 const validate = values => validation(values);
-const callback = () => {};
+// const callback = () => {};
 
 /**
  * Custom Component builder for inputs
@@ -33,12 +36,12 @@ const callback = () => {};
  * @param touched
  * @param error
  */
-const customComponent = ({input, label, type, meta: { touched, error }}) =>
-    <FormGroup>
-      <ControlLabel>{label}</ControlLabel>
-      <FormControl {...input} placeholder={label} type={type} />
-      {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
-    </FormGroup>;
+const customComponent = ({ input, label, type, meta: { touched, error } }) =>
+  <FormGroup>
+    <ControlLabel>{label}</ControlLabel>
+    <FormControl {...input} placeholder={label} type={type} />
+    {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
+  </FormGroup>;
 
 /**
  * Custom Component builder for selectables
@@ -50,8 +53,9 @@ const customComponent = ({input, label, type, meta: { touched, error }}) =>
  * @param error
  * @constructor
  */
-const DropDownComponent = ({input, label, type, meta: { touched, error }}) =>
-  <DropdownButton title="Language">
+//TODO: Get this to work
+const DropDownComponent = ({ input, label, type, meta: { touched, error } }) =>
+  <DropdownButton title={label}>
     <MenuItem>Deutsch (Deutschland)</MenuItem>
     <MenuItem>English (USA)</MenuItem>
   </DropdownButton>;
@@ -62,36 +66,20 @@ const DropDownComponent = ({input, label, type, meta: { touched, error }}) =>
  * @param handleSubmit
  * @constructor
  */
-let Form = ({handleSubmit}) =>
-    <form onSubmit={handleSubmit}>
-      <div>
-        <Field component={customComponent}    type="text"      label="Username"        name="username"/>
-        <Field component={customComponent}    type="password"  label="Password"        name="password"/>
-        <Field component={customComponent}    type="email"     label="Email"           name="email"/>
-        <Field component={DropDownComponent}                   label="Select Language" name="email"/>
-        <Recaptcha
-          sitekey={siteKey}
-          render='explicit'
-          onloadCallback={callback}
-          verifyCallback={verifyCallback}
-        />
-        <Button type="submit">Register!</Button>
-      </div>
-    </form>;
+// TODO: Figure out best way to implement the Recaptcha stuff in a presentational component.
+// TODO: (You will somehow have to get the recaptcha crap in to the handleSubmit method, or you just dispatch it directly from the Form component)
+// TODO: Name suggestions
 
-/**
- * Verify recaptcha callback
- *
- * @param response
- */
-const verifyCallback = (response) => {
-  const newState = update(this.state, {
-    data: {
-      recaptchaHash: { $set: response }
-    }
-  });
-  this.setState(newState)
-};
+let Form = ({ handleSubmit }) =>
+  <form onSubmit={handleSubmit}>
+    <div>
+      <Field component={customComponent}    type="text"      label="Username"        name="username" />
+      <Field component={customComponent}    type="password"  label="Password"        name="password" />
+      <Field component={customComponent}    type="email"     label="Email"           name="email" />
+      <Field component={DropDownComponent}                   label="Select Language" name="email" />
+      <Button type="submit">Register!</Button>
+    </div>
+  </form>;
 
 export default Form = reduxForm({
   form: 'sign_up',

@@ -33,5 +33,5 @@ export const validation = (values) => {
     errors.email = 'Invalid email address';
   }
 
-  return errors
+  return errors;
 };
