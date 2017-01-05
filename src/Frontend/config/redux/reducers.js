@@ -11,11 +11,13 @@
 import userReducer    from '../../reducers/user/userReducer';
 import menuReducer    from '../../reducers/menu/menuReducer';
 import localeReducer  from '../../reducers/locale/localeReducer';
+import {reducer as formReducer}  from 'redux-form';
 
 const reducers = {
   user:    userReducer,
   menu:    menuReducer,
-  locales: localeReducer
+  locales: localeReducer,
+  form:    formReducer
 };
 
 export default reducers;

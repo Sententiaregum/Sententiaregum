@@ -17,7 +17,7 @@ import menu                             from '../../../../config/menu';
 
 /**
  * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
- * @author Benjamin Bieler <ben@benbieler.com>
+ * @author Benjamin Bieler  <ben@benbieler.com>
  */
 export default class Menu extends Component {
 

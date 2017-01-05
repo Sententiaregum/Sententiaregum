@@ -10,24 +10,54 @@
 
 'use strict';
 
-import React     from 'react';
-import Translate from 'react-translate-component';
-import Form      from './signup/Form';
-import InfoBox   from './signup/InfoBox';
+import React, {Component, PropTypes}     from 'react';
+import Translate                         from 'react-translate-component';
+import { connect            }            from 'react-redux';
+import { bindActionCreators }            from 'redux';
+import Form                              from './signup/Form';
+import InfoBox                           from './signup/InfoBox';
+import * as userActions                  from '../../actions/userActions';
 
 /**
- * Markup component which renders the `create account` page.
+ * Presentational component for the sign-up page
  *
- * @returns {React.Element} The markup.
+ * @author Benjamin Bieler <ben@benbieler.com>
  */
-export default () => {
-  return (
-    <div>
-      <h1><Translate content="pages.portal.head" /></h1>
+class CreateAccount extends Component {
+
+  static PropTypes = {
+    actions: PropTypes.object.isRequired
+  };
+
+  handleSubmit = (data) => {
+    this.props.actions.sign_up.createAccount(data);
+  };
+
+  render() {
+    console.log(this.props.actions);
+
+    return (
       <div>
-        <InfoBox />
-        <Form />
+        <h1><Translate content="pages.portal.head" /></h1>
+        <div>
+          <InfoBox />
+          <Form onSubmit={this.handleSubmit}/>
+        </div>
       </div>
-    </div>
-  );
-};
+    )
+  }
+}
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    sign_up: bindActionCreators(userActions, dispatch)
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateAccount)
+

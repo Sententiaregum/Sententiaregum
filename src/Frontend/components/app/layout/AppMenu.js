@@ -10,25 +10,23 @@
 
 'use strict';
 
-import React                  from 'react';
+import React, {PropTypes}     from 'react';
 import MenuWrapper            from './menu/MenuWrapper';
 import Menu                   from './menu/Menu';
-import { connect            } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect}              from 'react-redux';
+import {bindActionCreators}   from 'redux';
 import *  as menuActions      from '../../../actions/menuActions';
 import *  as localeActions    from '../../../actions/localeActions';
 
-const AppMenu = ({ items, actions }) => {
-  return (
-    <MenuWrapper actions={actions.locale}>
-      <Menu items={items} actions={actions.menu} />
-    </MenuWrapper>
-  );
-};
+const AppMenu = ({items, actions}) =>
+  <MenuWrapper actions={actions.locale}>
+    <Menu items={items} actions={actions.menu}/>
+  </MenuWrapper>;
+
 
 AppMenu.propTypes = {
-  items:   React.PropTypes.arrayOf(React.PropTypes.object),
-  actions: React.PropTypes.object
+  items: PropTypes.arrayOf(React.PropTypes.object),
+  actions: PropTypes.object
 };
 
 const mapStateToProps = state => ({
@@ -37,7 +35,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    menu:   bindActionCreators(menuActions, dispatch),
+    menu: bindActionCreators(menuActions, dispatch),
     locale: bindActionCreators(localeActions, dispatch)
   }
 });
