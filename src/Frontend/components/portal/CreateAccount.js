@@ -34,8 +34,6 @@ class CreateAccount extends Component {
   };
 
   render() {
-    console.log(this.props.actions);
-
     return (
       <div>
         <h1><Translate content="pages.portal.head" /></h1>

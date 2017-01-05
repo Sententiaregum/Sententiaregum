@@ -32,4 +32,6 @@ export const validation = (values) => {
   } else if (!isEmail(values.email)) {
     errors.email = 'Invalid email address';
   }
+
+  return errors
 };

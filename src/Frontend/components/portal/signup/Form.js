@@ -10,29 +10,51 @@
 
 'use strict';
 
-import React                                          from 'react';
-import {Field, reduxForm}                             from 'redux-form';
-import {FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap';
-import {validation}                                   from './validation/FormValidation'
+import React                                                 from 'react';
+import {Field, reduxForm}                                    from 'redux-form';
+import {FormGroup, FormControl,
+        ControlLabel, Button,
+        Alert, DropdownButton,
+        MenuItem}                                            from 'react-bootstrap';
+import {validation}                                          from './validation/FormValidation'
+import Recaptcha                                             from 'react-recaptcha';
+import siteKey                                               from '../../../config/recaptcha';
+import update                                                from 'react-addons-update';
 
-/**
- * Validation
- *
- * @param values
- */
 const validate = values => validation(values);
+const callback = () => {};
 
 /**
- * Field builder and add bootstrap
+ * Custom Component builder for inputs
  *
- * @param fields
+ * @param input
+ * @param label
+ * @param type
+ * @param touched
+ * @param error
  */
-const customComponent = field =>
+const customComponent = ({input, label, type, meta: { touched, error }}) =>
     <FormGroup>
-      <ControlLabel>{field.input.placeholder}</ControlLabel>
-      <FormControl {...field.input} />
-      {field.error && field.touched && <span>{field.error}</span>}
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...input} placeholder={label} type={type} />
+      {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
     </FormGroup>;
+
+/**
+ * Custom Component builder for selectables
+ *
+ * @param input
+ * @param label
+ * @param type
+ * @param touched
+ * @param error
+ * @constructor
+ */
+const DropDownComponent = ({input, label, type, meta: { touched, error }}) =>
+  <DropdownButton title="Language">
+    <MenuItem>Deutsch (Deutschland)</MenuItem>
+    <MenuItem>English (USA)</MenuItem>
+  </DropdownButton>;
 
 /**
  * Presentational component
@@ -41,16 +63,35 @@ const customComponent = field =>
  * @constructor
  */
 let Form = ({handleSubmit}) =>
-  <div>
     <form onSubmit={handleSubmit}>
       <div>
-        <Field component={customComponent} placeholder="Username" name="username"/>
-        <Field component={customComponent} placeholder="Password" name="password"/>
-        <Field component={customComponent} placeholder="Email" name="email"/>
-        <Button type="submit">Register</Button>
+        <Field component={customComponent}    type="text"      label="Username"        name="username"/>
+        <Field component={customComponent}    type="password"  label="Password"        name="password"/>
+        <Field component={customComponent}    type="email"     label="Email"           name="email"/>
+        <Field component={DropDownComponent}                   label="Select Language" name="email"/>
+        <Recaptcha
+          sitekey={siteKey}
+          render='explicit'
+          onloadCallback={callback}
+          verifyCallback={verifyCallback}
+        />
+        <Button type="submit">Register!</Button>
       </div>
-    </form>
-  </div>;
+    </form>;
+
+/**
+ * Verify recaptcha callback
+ *
+ * @param response
+ */
+const verifyCallback = (response) => {
+  const newState = update(this.state, {
+    data: {
+      recaptchaHash: { $set: response }
+    }
+  });
+  this.setState(newState)
+};
 
 export default Form = reduxForm({
   form: 'sign_up',

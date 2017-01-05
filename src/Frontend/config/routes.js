@@ -20,8 +20,9 @@ import { protectApp, guardFromPortal }               from '../util/security/appP
 import NotFoundPage                                  from '../components/app/layout/NotFoundPage';
 import CreateAccount                                 from '../components/portal/CreateAccount';
 
-const HelloWorld = () => <h1>Hello World!</h1>;
-const Protected  = () => <h1>Secret page!</h1>;
+const HelloWorld     = () => <h1>Hello World!</h1>;
+const Protected      = () => <h1>Secret page!</h1>;
+const DashboardIndex = () => <h1>Dashboard!</h1>;
 
 //TODO: Change to browesrHistory
 const history = syncHistoryWithStore(hashHistory, store);
@@ -31,10 +32,11 @@ export default (
   <Provider store={store}>
     <Router history={history}>
       <Route component={Application} path="/">
-        <IndexRoute component={HelloWorld} onEnter={guardFromPortal} />
-        <Route component={Protected} onEnter={protectApp} path="secret"  />
-        <Route component={CreateAccount} onEnter={guardFromPortal} path="sign-up"/>
-        <Route component={NotFoundPage} path="*" />
+        <IndexRoute component={HelloWorld}     onEnter={guardFromPortal} />
+        <Route      component={Protected}      onEnter={protectApp}      path="secret"  />
+        <Route      component={CreateAccount}  onEnter={guardFromPortal} path="sign-up"/>
+        <Route      component={DashboardIndex} onEnter={protectApp}     path="dashboard"/>
+        <Route      component={NotFoundPage}                             path="*" />
       </Route>
     </Router>
   </Provider>
