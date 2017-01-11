@@ -10,18 +10,17 @@
 
 'use strict';
 
-import React                                                  from 'react';
-import {Field, reduxForm, set}                                   from 'redux-form';
+import React                                                       from 'react';
+import { Field, reduxForm, set }                                   from 'redux-form';
 import {
   FormGroup, FormControl,
   ControlLabel, Button,
   Alert, DropdownButton,
   MenuItem
-}                                            from 'react-bootstrap';
-import {validation}                                         from './validation/FormValidation';
-import Recaptcha                                              from 'react-recaptcha';
-import siteKey                                                from '../../../config/recaptcha';
-// import Suggestions                                            from './Suggestions';
+}                                                                 from 'react-bootstrap';
+import { validation }                                             from './validation/FormValidation';
+import Recaptcha                                                  from 'react-recaptcha';
+import siteKey                                                    from '../../../config/recaptcha';
 
 /**
  * Validation for the custom components
@@ -38,34 +37,36 @@ const validate = values => validation(values);
  * @param touched
  * @param error
  */
-const customComponent = ({input, label, type, meta: {touched, error}}) =>
+const customComponent = ({ input, label, type, meta: { touched, error } }) =>
   <FormGroup>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type}/>
+    <FormControl {...input} placeholder={label} type={type} />
     {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
   </FormGroup>;
 
 /**
  * Custom Component builder for selectables
  *
+ * @param input
  * @param label
- * @constructor
  */
-//TODO: Get this to work
-const dropDownComponent = ({label}) =>
-  <DropdownButton title={label} id={`dropdown-basic`}>
-    <MenuItem>Deutsch (Deutschland)</MenuItem>
-    <MenuItem>English (USA)</MenuItem>
+const dropDownComponent = ({ input, label }) =>
+  <DropdownButton title={label} onSelect={(res) => {res ? input.onChange(res) : input.onChange('en');}} id={'dropdown-basic'}>
+    <MenuItem eventKey="de">Deutsch (Deutschland)</MenuItem>
+    <MenuItem eventKey="en">English (USA)</MenuItem>
   </DropdownButton>;
 
-const recaptchaComponent = ({input}) =>
+/**
+ * Custom Component for recaptcha
+ *
+ * @param input
+ */
+const recaptchaComponent = ({ input }) =>
   <Recaptcha
     sitekey={siteKey}
     render='explicit'
     onloadCallback={() => {}}
-    verifyCallback={(res) => {
-      input.onChange(res)
-    } }
+    verifyCallback={(res) => input.onChange(res)}
   />;
 
 
@@ -76,14 +77,13 @@ const recaptchaComponent = ({input}) =>
  * @constructor
  */
 // TODO: Name suggestions
-
-let Form = ({handleSubmit}) =>
+let Form = ({ handleSubmit }) =>
   <form onSubmit={handleSubmit}>
-    <Field component={customComponent} type="text"     label="Username"        name="username"/>
-    <Field component={customComponent} type="password" label="Password"        name="password"/>
-    <Field component={customComponent} type="email"    label="Email"           name="email"/>
-    <Field component={dropDownComponent}               label="Select Language" name="language"/>
-    <Field component={recaptchaComponent}              label="recaptcha"       name="recaptchaHash"/>
+    <Field component={customComponent} type="text"     label="Username"        name="username" />
+    <Field component={customComponent} type="password" label="Password"        name="password" />
+    <Field component={customComponent} type="email"    label="Email"           name="email" />
+    <Field component={dropDownComponent}               label="Select Language" name="locale" />
+    <Field component={recaptchaComponent}              label="recaptcha"       name="recaptchaHash" />
     <Button type="submit">Register!</Button>
   </form>;
 
