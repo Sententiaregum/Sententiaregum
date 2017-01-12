@@ -3,8 +3,8 @@
 /*
  * This file is part of the Sententiaregum project.
  *
- * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
- * (c) Ben Bieler <benjaminbieler2014@gmail.com>
+ * (c) Maximilian Bosch <maximilian@mbosch.me>
+ * (c) Ben Bieler <ben@benbieler.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@ use AppBundle\Model\Core\DTO\PaginatableDTO;
 /**
  * User repository interface which provides read access to the user model.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Maximilian Bosch <maximilian@mbosch.me>
  */
 interface UserReadRepositoryInterface
 {

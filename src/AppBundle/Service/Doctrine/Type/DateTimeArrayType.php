@@ -3,8 +3,8 @@
 /*
  * This file is part of the Sententiaregum project.
  *
- * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
- * (c) Ben Bieler <benjaminbieler2014@gmail.com>
+ * (c) Maximilian Bosch <maximilian@mbosch.me>
+ * (c) Ben Bieler <ben@benbieler.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@ use Doctrine\DBAL\Types\Type;
  * by any other service and it's more difficult to read and maintain the structure,
  * so a simple JSON array will be used which improves readability.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Maximilian Bosch <maximilian@mbosch.me>
  */
 final class DateTimeArrayType extends Type
 {

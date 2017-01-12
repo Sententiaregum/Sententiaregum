@@ -1935,7 +1935,7 @@
             "authors": [
                 {
                     "name": "Maximilian Bosch",
-                    "email": "maximilian.bosch.27@gmail.com"
+                    "email": "maximilian@mbosch.me"
                 }
             ],
             "description": "A bundle that provides the possibility to generate api keys for rest apis",
