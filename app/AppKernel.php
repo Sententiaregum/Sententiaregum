@@ -8,7 +8,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 /**
  * Class AppKernel.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Maximilian Bosch <maximilian@mbosch.me>
  */
 class AppKernel extends Kernel
 {

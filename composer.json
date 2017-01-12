@@ -94,14 +94,14 @@
     "authors": [
         {
             "name": "Maximilian Bosch",
-            "email": "maximilian.bosch.27@gmail.com",
-            "homepage": "https://github.com/Ma27",
+            "email": "maximilian@mbosch.me",
+            "homepage": "http://mbosch.me",
             "role": "Project Lead"
         },
         {
             "name": "Ben Bieler",
-            "email": "benjaminbieler2014@gmail.com",
-            "homepage": "https://github.com/benbieler",
+            "email": "ben@benbieler.com",
+            "homepage": "http://benbieler.com",
             "role": "Core Developer"
         }
     ],
