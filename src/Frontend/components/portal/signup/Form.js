@@ -11,12 +11,11 @@
 'use strict';
 
 import React                                                       from 'react';
-import { Field, reduxForm, set }                                   from 'redux-form';
+import { Field, reduxForm }                                        from 'redux-form';
 import {
   FormGroup, FormControl,
   ControlLabel, Button,
-  Alert, DropdownButton,
-  MenuItem
+  Alert, Radio
 }                                                                 from 'react-bootstrap';
 import { validation }                                             from './validation/FormValidation';
 import Recaptcha                                                  from 'react-recaptcha';
@@ -51,10 +50,17 @@ const customComponent = ({ input, label, type, meta: { touched, error } }) =>
  * @param label
  */
 const dropDownComponent = ({ input, label }) =>
-  <DropdownButton title={label} onSelect={(res) => {res ? input.onChange(res) : input.onChange('en');}} id={'dropdown-basic'}>
-    <MenuItem eventKey="de">Deutsch (Deutschland)</MenuItem>
-    <MenuItem eventKey="en">English (USA)</MenuItem>
-  </DropdownButton>;
+  <div>
+    <b>{label}</b>
+    <FormGroup>
+      <Radio inline inputRef={ref => { input.onChange(ref); }}>
+          Deutsch
+       </Radio>
+      <Radio checked inline inputRef={ref => { input.onChange(ref); }}>
+          English
+      </Radio>
+    </FormGroup>
+  </div>;
 
 /**
  * Custom Component for recaptcha
@@ -66,7 +72,7 @@ const recaptchaComponent = ({ input }) =>
     sitekey={siteKey}
     render='explicit'
     onloadCallback={() => {}}
-    verifyCallback={(res) => input.onChange(res)}
+    verifyCallback={res => input.onChange(res)}
   />;
 
 
