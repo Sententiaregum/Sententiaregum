@@ -29,6 +29,10 @@ class CreateAccount extends Component {
     actions: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object
+  };
+
   /**
    * Handle the onSubmit event
    *
@@ -36,17 +40,25 @@ class CreateAccount extends Component {
    * @param recaptchaHash
    */
   handleSubmit = (data) => {
-    console.log(data);
     this.props.actions.sign_up.createAccount(data);
   };
 
   render() {
+
+    const { store }  = this.context;
+    let name_suggestions = [], success = false;
+
+    store.subscribe(() => {
+      name_suggestions    = store.getState().user.registration.name_suggestions;
+      success             = store.getState().user.registration.success;
+    });
+
     return (
       <div>
         <h1><Translate content="pages.portal.head" /></h1>
         <div>
           <InfoBox />
-          <Form onSubmit={this.handleSubmit} />
+          <Form onSubmit={this.handleSubmit} name_suggestions={name_suggestions} success={success} />
         </div>
       </div>
     );

@@ -10,16 +10,18 @@
 
 'use strict';
 
-import React                                                       from 'react';
-import { Field, reduxForm }                                        from 'redux-form';
+import React, {PropTypes}                                                       from 'react';
+import {Field, reduxForm}                                        from 'redux-form';
 import {
   FormGroup, FormControl,
   ControlLabel, Button,
   Alert, Radio
 }                                                                 from 'react-bootstrap';
-import { validation }                                             from './validation/FormValidation';
+import {validation}                                             from './validation/FormValidation';
 import Recaptcha                                                  from 'react-recaptcha';
 import siteKey                                                    from '../../../config/recaptcha';
+import Success                                                    from './Success';
+import {Suggestions}                                                from './Suggestions';
 
 /**
  * Validation for the custom components
@@ -36,10 +38,10 @@ const validate = values => validation(values);
  * @param touched
  * @param error
  */
-const customComponent = ({ input, label, type, meta: { touched, error } }) =>
+const customComponent = ({input, label, type, meta: {touched, error}}) =>
   <FormGroup>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type} />
+    <FormControl {...input} placeholder={label} type={type}/>
     {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
   </FormGroup>;
 
@@ -49,15 +51,19 @@ const customComponent = ({ input, label, type, meta: { touched, error } }) =>
  * @param input
  * @param label
  */
-const dropDownComponent = ({ input, label }) =>
+const dropDownComponent = ({input, label}) =>
   <div>
     <b>{label}</b>
     <FormGroup>
-      <Radio inline inputRef={ref => { input.onChange(ref); }}>
-          Deutsch
-       </Radio>
-      <Radio checked inline inputRef={ref => { input.onChange(ref); }}>
-          English
+      <Radio inline inputRef={ref => {
+        input.onChange(ref);
+      }}>
+        Deutsch
+      </Radio>
+      <Radio checked inline inputRef={ref => {
+        input.onChange(ref);
+      }}>
+        English
       </Radio>
     </FormGroup>
   </div>;
@@ -67,33 +73,42 @@ const dropDownComponent = ({ input, label }) =>
  *
  * @param input
  */
-const recaptchaComponent = ({ input }) =>
+const recaptchaComponent = ({input}) =>
   <Recaptcha
     sitekey={siteKey}
     render='explicit'
-    onloadCallback={() => {}}
+    onloadCallback={() => {
+    }}
     verifyCallback={res => input.onChange(res)}
   />;
 
 
 /**
- * Presentational component
+ * Presentational form component
  *
  * @param handleSubmit
- * @constructor
+ * @param name_suggestions
+ * @param success
  */
-// TODO: Name suggestions
-let Form = ({ handleSubmit }) =>
-  <form onSubmit={handleSubmit}>
-    <Field component={customComponent} type="text"     label="Username"        name="username" />
-    <Field component={customComponent} type="password" label="Password"        name="password" />
-    <Field component={customComponent} type="email"    label="Email"           name="email" />
-    <Field component={dropDownComponent}               label="Select Language" name="locale" />
-    <Field component={recaptchaComponent}              label="recaptcha"       name="recaptchaHash" />
-    <Button type="submit">Register!</Button>
-  </form>;
+let Form = ({handleSubmit, name_suggestions, success}) =>
+    <form onSubmit={handleSubmit}>{console.log(name_suggestions, success)}
+      <Suggestions suggestions={name_suggestions}/>
+      {success ? <Success /> : null}
+      <Field component={customComponent} type="text" label="Username" name="username"/>
+      <Field component={customComponent} type="password" label="Password" name="password"/>
+      <Field component={customComponent} type="email" label="Email" name="email"/>
+      {/*<Field component={dropDownComponent}               label="Select Language" name="locale" />*/}
+      <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash"/>
+      <Button type="submit">Register!</Button>
+    </form>;
 
 export default Form = reduxForm({
   form: 'sign_up',
   validate
 })(Form);
+
+Form.propTypes = {
+  handleSubmit:     PropTypes.func,
+  name_suggestions: PropTypes.array,
+  success:          PropTypes.bool.isRequired
+};

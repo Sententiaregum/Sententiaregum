@@ -10,6 +10,7 @@
 
 import {
   CREATE_ACCOUNT,
+  CREATE_FAIL,
   ACTIVATE_ACCOUNT,
   REQUEST_API_KEY,
   LOGOUT
@@ -34,7 +35,17 @@ const security = (state = { authenticated: false, appProfile: {} }, action) => {
 
 const registration = (state = { success: false, errors: {}, name_suggestions: [], id: null }, action) => {
   if (action.type === CREATE_ACCOUNT) {
-    // TODO implement state reduction for user creation
+    state = {
+      success:          action.payload.success,
+      errors:           action.payload.errors,
+      name_suggestions: action.payload.name_suggestions,
+      id:               action.payload.id
+    };
+  } else if (action.type === CREATE_FAIL) {
+    state.success          = action.payload.success;
+    state.name_suggestions = action.payload.name_suggestions;
+    state.errors           = action.payload.errors;
+    state.id               = action.payload.id;
   }
   return state;
 };

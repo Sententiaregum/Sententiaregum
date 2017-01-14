@@ -28,7 +28,7 @@ export default class LanguageSwitcher extends Component {
   };
 
   static contextTypes = {
-    store: React.PropTypes.object
+    store: PropTypes.object
   };
 
   /**
