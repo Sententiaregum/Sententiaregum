@@ -52,21 +52,14 @@ const customComponent = ({input, label, type, meta: {touched, error}}) =>
  * @param label
  */
 const dropDownComponent = ({input, label}) =>
-  <div>
+  <div >
     <b>{label}</b>
-    <FormGroup>
-      <Radio inline inputRef={ref => {
-        input.onChange(ref);
-      }}>
-        Deutsch
-      </Radio>
-      <Radio checked inline inputRef={ref => {
-        input.onChange(ref);
-      }}>
-        English
-      </Radio>
-    </FormGroup>
+    <div onChange={(e) => {input.onChange(e.target.value)}}>
+      <input type="radio" value="de" name="locale"/> Deutsch (DE) <br/>
+      <input type="radio" value="en" name="locale" checked/> English (EN) <br/>
+    </div>
   </div>;
+
 
 /**
  * Custom Component for recaptcha
@@ -91,16 +84,16 @@ const recaptchaComponent = ({input}) =>
  * @param success
  */
 let Form = ({handleSubmit, name_suggestions, success}) =>
-    <form onSubmit={handleSubmit}>{console.log(name_suggestions, success)}
-      <Suggestions suggestions={name_suggestions}/>
-      {success ? <Success /> : null}
-      <Field component={customComponent} type="text" label="Username" name="username"/>
-      <Field component={customComponent} type="password" label="Password" name="password"/>
-      <Field component={customComponent} type="email" label="Email" name="email"/>
-      {/*<Field component={dropDownComponent}               label="Select Language" name="locale" />*/}
-      <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash"/>
-      <Button type="submit">Register!</Button>
-    </form>;
+  <form onSubmit={handleSubmit}>{console.log(name_suggestions, success)}
+    <Suggestions suggestions={name_suggestions}/>
+    {success ? <Success /> : null}
+    <Field component={customComponent} type="text" label="Username" name="username"/>
+    <Field component={customComponent} type="password" label="Password" name="password"/>
+    <Field component={customComponent} type="email" label="Email" name="email"/>
+    <Field component={dropDownComponent} label="Select Language" name="locale"/>
+    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash"/>
+    <Button type="submit">Register!</Button>
+  </form>;
 
 export default Form = reduxForm({
   form: 'sign_up',
@@ -108,7 +101,7 @@ export default Form = reduxForm({
 })(Form);
 
 Form.propTypes = {
-  handleSubmit:     PropTypes.func,
+  handleSubmit: PropTypes.func,
   name_suggestions: PropTypes.array,
-  success:          PropTypes.bool.isRequired
+  success: PropTypes.bool.isRequired
 };
