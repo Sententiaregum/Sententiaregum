@@ -10,18 +10,18 @@
 
 'use strict';
 
-import React, {PropTypes}                                                       from 'react';
-import {Field, reduxForm}                                        from 'redux-form';
+import React, { PropTypes }                                           from 'react';
+import { Field, reduxForm }                                           from 'redux-form';
 import {
   FormGroup, FormControl,
   ControlLabel, Button,
   Alert, Radio
-}                                                                 from 'react-bootstrap';
-import {validation}                                             from './validation/FormValidation';
-import Recaptcha                                                  from 'react-recaptcha';
-import siteKey                                                    from '../../../config/recaptcha';
-import Success                                                    from './Success';
-import {Suggestions}                                                from './Suggestions';
+}                                                                     from 'react-bootstrap';
+import { validation }                                                 from './validation/FormValidation';
+import Recaptcha                                                      from 'react-recaptcha';
+import siteKey                                                        from '../../../config/recaptcha';
+import Success                                                        from './Success';
+import { Suggestions }                                                from './Suggestions';
 
 /**
  * Validation for the custom components
@@ -38,10 +38,10 @@ const validate = values => validation(values);
  * @param touched
  * @param error
  */
-const customComponent = ({input, label, type, meta: {touched, error}}) =>
+const customComponent = ({ input, label, type, meta: { touched, error } }) =>
   <FormGroup>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type}/>
+    <FormControl {...input} placeholder={label} type={type} />
     {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
   </FormGroup>;
 
@@ -51,12 +51,12 @@ const customComponent = ({input, label, type, meta: {touched, error}}) =>
  * @param input
  * @param label
  */
-const dropDownComponent = ({input, label}) =>
+const dropDownComponent = ({ input, label }) =>
   <div >
     <b>{label}</b>
-    <div onChange={(e) => {input.onChange(e.target.value)}}>
-      <input type="radio" value="de" name="locale"/> Deutsch (DE) <br/>
-      <input type="radio" value="en" name="locale" checked/> English (EN) <br/>
+    <div onChange={(e) => {input.onChange(e.target.value);}}>
+      <input type="radio" value="de" name="locale" /> Deutsch (DE) <br />
+      <input type="radio" value="en" name="locale" checked /> English (EN) <br />
     </div>
   </div>;
 
@@ -66,7 +66,7 @@ const dropDownComponent = ({input, label}) =>
  *
  * @param input
  */
-const recaptchaComponent = ({input}) =>
+const recaptchaComponent = ({ input }) =>
   <Recaptcha
     sitekey={siteKey}
     render='explicit'
@@ -83,15 +83,15 @@ const recaptchaComponent = ({input}) =>
  * @param name_suggestions
  * @param success
  */
-let Form = ({handleSubmit, name_suggestions, success}) =>
+let Form = ({ handleSubmit, name_suggestions, success }) =>
   <form onSubmit={handleSubmit}>{console.log(name_suggestions, success)}
-    <Suggestions suggestions={name_suggestions}/>
+    <Suggestions suggestions={name_suggestions} />
     {success ? <Success /> : null}
-    <Field component={customComponent} type="text" label="Username" name="username"/>
-    <Field component={customComponent} type="password" label="Password" name="password"/>
-    <Field component={customComponent} type="email" label="Email" name="email"/>
-    <Field component={dropDownComponent} label="Select Language" name="locale"/>
-    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash"/>
+    <Field component={customComponent} type="text" label="Username" name="username" />
+    <Field component={customComponent} type="password" label="Password" name="password" />
+    <Field component={customComponent} type="email" label="Email" name="email" />
+    <Field component={dropDownComponent} label="Select Language" name="locale" />
+    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash" />
     <Button type="submit">Register!</Button>
   </form>;
 
@@ -101,7 +101,7 @@ export default Form = reduxForm({
 })(Form);
 
 Form.propTypes = {
-  handleSubmit: PropTypes.func,
+  handleSubmit:     PropTypes.func,
   name_suggestions: PropTypes.array,
-  success: PropTypes.bool.isRequired
+  success:          PropTypes.bool.isRequired
 };

@@ -10,9 +10,9 @@
 
 'use strict';
 
-import Alert                from 'react-bootstrap/lib/Alert';
-import React, {PropTypes} from 'react';
-import Translate from 'react-translate-component'
+import Alert                  from 'react-bootstrap/lib/Alert';
+import React, { PropTypes }   from 'react';
+import Translate              from 'react-translate-component';
 
 /**
  * Presentational component which suggests possible names to the user.
@@ -20,7 +20,7 @@ import Translate from 'react-translate-component'
  * @param suggestions
  * @returns {*}
  */
-export const Suggestions = ({suggestions}) => {
+export const Suggestions = ({ suggestions }) => {
 
   if (0 === suggestions.length || !suggestions) {
     return null;
@@ -28,12 +28,12 @@ export const Suggestions = ({suggestions}) => {
 
   return (
     <Alert bsStyle="warning">
-      <p><Translate content="pages.portal.create_account.suggestions"/></p>
+      <p><Translate content="pages.portal.create_account.suggestions" /></p>
       <ul ref="list">
         {suggestions.map((suggestion, key) => <li key={key}>{suggestion}</li>)}
       </ul>
     </Alert>
-  )
+  );
 };
 
 Suggestions.propTypes = {

@@ -45,12 +45,12 @@ class CreateAccount extends Component {
 
   render() {
 
-    const { store }  = this.context;
+    const { store }      = this.context;
     let name_suggestions = [], success = false;
 
     store.subscribe(() => {
-      name_suggestions    = store.getState().user.registration.name_suggestions;
-      success             = store.getState().user.registration.success;
+      name_suggestions = store.getState().user.registration.name_suggestions;
+      success          = store.getState().user.registration.success;
     });
 
     return (
