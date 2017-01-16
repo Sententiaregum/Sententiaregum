@@ -50,11 +50,10 @@ class ScriptHandler extends AbstractScriptHandler
     {
         $devMode = $event->isDevMode();
         self::executeNpmCommand(
-            'run frontend',
+            sprintf('run %s', $devMode ? 'dev' : 'prod'),
             $event,
             $devMode,
-            500,
-            $devMode ? 'development' : 'production'
+            500
         );
     }
 
@@ -89,12 +88,11 @@ class ScriptHandler extends AbstractScriptHandler
      * @param Event     $event
      * @param bool|true $showOutput
      * @param int       $timeout
-     * @param string    $nodeEnv
      */
-    private static function executeNpmCommand(string $command, Event $event, bool $showOutput = true, int $timeout = 500, string $nodeEnv = null): void
+    private static function executeNpmCommand(string $command, Event $event, bool $showOutput = true, int $timeout = 500): void
     {
         $npm         = (new ExecutableFinder())->find('npm');
-        $fullCommand = sprintf('%s %s %s', $nodeEnv ? sprintf('NODE_ENV=%s', $nodeEnv) : null, $npm, $command);
+        $fullCommand = sprintf('%s %s %s', null, $npm, $command);
         $handler     = function ($type, $buffer) use ($event): void {
             $event->getIO()->write($buffer, false);
         };
