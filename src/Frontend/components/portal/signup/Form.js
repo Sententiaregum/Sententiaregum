@@ -39,10 +39,10 @@ const validate = values => validation(values);
  * @param error
  */
 const customComponent = ({ input, label, type, meta: { touched, error } }) =>
-  <FormGroup>
-    <ControlLabel>{label}</ControlLabel>
+  <FormGroup validationState={touched && (error) ? 'error' : null}>
+    <ControlLabel>{touched && (error) ? error : label}</ControlLabel>
     <FormControl {...input} placeholder={label} type={type} />
-    {touched && ((error && <Alert bsStyle="danger">{error}</Alert>))}
+    <FormControl.Feedback />
   </FormGroup>;
 
 /**

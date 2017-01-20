@@ -28,9 +28,9 @@ export const validation = (values) => {
     errors.password = 'You must set a password!';
   }
   if (!values.email) {
-    errors.email = 'You must set a email address';
+    errors.email = 'You must set a email address!';
   } else if (!isEmail(values.email)) {
-    errors.email = 'Invalid email address';
+    errors.email = 'Invalid email address!';
   }
 
   return errors;
