@@ -34,6 +34,12 @@ export default {
           email:    'Choose an email address',
           button:   'Create Account'
         },
+        validation_errors: {
+          username: 'You are required to set a username!',
+          password: 'You are required to set a password!',
+          email:    'You are required to set a email!',
+          invalid_email: 'You are required to set a valid email!'
+        },
         suggestions: 'The following suggestions for your name were generated:',
         success:     'The account has been created successfully. You can now activate your account using the activation email.'
       },

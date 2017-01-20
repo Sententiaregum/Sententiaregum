@@ -10,7 +10,9 @@
 
 'use strict';
 
-import isEmail                                        from 'sane-email-validation';
+import React, { PropTypes }     from 'react';
+import Translate                from 'react-translate-component';
+import isEmail                  from 'sane-email-validation';
 
 /**
  * Validation helper for the Form component
@@ -22,15 +24,15 @@ export const validation = (values) => {
   const errors = {};
 
   if (!values.username) {
-    errors.username = 'You are required to set a username!';
+    errors.username = <Translate content="pages.portal.create_account.validation_errors.username" />;
   }
   if (!values.password) {
-    errors.password = 'You must set a password!';
+    errors.password = <Translate content="pages.portal.create_account.validation_errors.password" />;
   }
   if (!values.email) {
-    errors.email = 'You must set a email address!';
+    errors.email = <Translate content="pages.portal.create_account.validation_errors.email" />;
   } else if (!isEmail(values.email)) {
-    errors.email = 'Invalid email address!';
+    errors.email = <Translate content="pages.portal.create_account.validation_errors.invalid_email" />;
   }
 
   return errors;

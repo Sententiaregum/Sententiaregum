@@ -51,12 +51,12 @@ const customComponent = ({ input, label, type, meta: { touched, error } }) =>
  * @param input
  * @param label
  */
-const dropDownComponent = ({input, label }) =>
+const dropDownComponent = ({ input, label }) =>
   <div >
     <b>{label}</b>
     <div onChange={(e) => {input.onChange(e.target.value);}}>
       <input type="radio" value="de" name="locale" /> Deutsch (DE) <br />
-      <input type="radio" value="en" name="locale" defaultChecked="defaultChecked"/> English (EN) <br />
+      <input type="radio" value="en" name="locale" defaultChecked="defaultChecked" /> English (EN) <br />
     </div>
   </div>;
 
