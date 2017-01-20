@@ -16,7 +16,7 @@ import {
   LOGOUT
 }                                   from '../../constants/Portal';
 import { combineReducers }          from 'redux';
-
+import CreateAccount from '../../components/portal/CreateAccount';
 /*
  NOTE: each of these reducers is responsible for a certain sub-tree of the application's state.
  The `registration`, `activation` and `authentication` reducers are specific for their feature (see component structure for more information),

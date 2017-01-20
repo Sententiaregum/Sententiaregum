@@ -26,11 +26,9 @@ import * as userActions                    from '../../actions/userActions';
 class CreateAccount extends Component {
 
   static propTypes = {
-    actions: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    store: PropTypes.object
+    actions: PropTypes.object.isRequired,
+    name_suggestions: PropTypes.array,
+    success: PropTypes.bool.isRequired
   };
 
   /**
@@ -44,28 +42,22 @@ class CreateAccount extends Component {
   };
 
   render() {
-
-    const { store }      = this.context;
-    let name_suggestions = [], success = false;
-
-    store.subscribe(() => {
-      name_suggestions = store.getState().user.registration.name_suggestions;
-      success          = store.getState().user.registration.success;
-    });
-
     return (
       <div>
         <h1><Translate content="pages.portal.head" /></h1>
         <div>
-          <InfoBox />
-          <Form onSubmit={this.handleSubmit} name_suggestions={name_suggestions} success={success} />
+          <InfoBox /> {console.log(this.props.name_suggestions)}
+          <Form onSubmit={this.handleSubmit} name_suggestions={this.props.name_suggestions} success={this.props.success} />
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  name_suggestions: state.user.registration.name_suggestions,
+  success:          state.user.registration.success
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: {
