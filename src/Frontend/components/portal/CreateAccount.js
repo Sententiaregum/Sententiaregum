@@ -26,9 +26,9 @@ import * as userActions                    from '../../actions/userActions';
 class CreateAccount extends Component {
 
   static propTypes = {
-    actions: PropTypes.object.isRequired,
+    actions:          PropTypes.object.isRequired,
     name_suggestions: PropTypes.array,
-    success: PropTypes.bool.isRequired
+    success:          PropTypes.bool.isRequired
   };
 
   /**
@@ -46,7 +46,7 @@ class CreateAccount extends Component {
       <div>
         <h1><Translate content="pages.portal.head" /></h1>
         <div>
-          <InfoBox /> {console.log(this.props.name_suggestions)}
+          <InfoBox />
           <Form onSubmit={this.handleSubmit} name_suggestions={this.props.name_suggestions} success={this.props.success} />
         </div>
       </div>

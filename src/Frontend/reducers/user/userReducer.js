@@ -16,7 +16,6 @@ import {
   LOGOUT
 }                                   from '../../constants/Portal';
 import { combineReducers }          from 'redux';
-import CreateAccount from '../../components/portal/CreateAccount';
 /*
  NOTE: each of these reducers is responsible for a certain sub-tree of the application's state.
  The `registration`, `activation` and `authentication` reducers are specific for their feature (see component structure for more information),
@@ -34,19 +33,29 @@ const security = (state = { authenticated: false, appProfile: {} }, action) => {
 };
 
 const registration = (state = { success: false, errors: {}, name_suggestions: [], id: null }, action) => {
+
   if (action.type === CREATE_ACCOUNT) {
-    state = {
+    const newState = {
       success:          action.payload.success,
       errors:           action.payload.errors,
       name_suggestions: action.payload.name_suggestions,
       id:               action.payload.id
     };
-  } else if (action.type === CREATE_FAIL) {
-    state.success          = action.payload.success;
-    state.name_suggestions = action.payload.name_suggestions;
-    state.errors           = action.payload.errors;
-    state.id               = action.payload.id;
+
+    return Object.assign({}, state, newState);
   }
+
+  if (action.type === CREATE_FAIL) {
+    const newState = {
+      success:          action.payload.success,
+      errors:           action.payload.errors,
+      name_suggestions: action.payload.name_suggestions,
+      id:               action.payload.id
+    };
+
+    return Object.assign({}, state, newState);
+  }
+
   return state;
 };
 
