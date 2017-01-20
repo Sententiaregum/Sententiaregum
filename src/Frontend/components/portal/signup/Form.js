@@ -70,8 +70,7 @@ const recaptchaComponent = ({ input }) =>
   <Recaptcha
     sitekey={siteKey}
     render='explicit'
-    onloadCallback={() => {
-    }}
+    onloadCallback={() => {}}
     verifyCallback={res => input.onChange(res)}
   />;
 

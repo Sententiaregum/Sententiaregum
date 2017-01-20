@@ -13,7 +13,7 @@
 const CREATE_ACCOUNT   = 'CREATE_ACCOUNT';
 const ACTIVATE_ACCOUNT = 'ACTIVATE_ACCOUNT';
 const REQUEST_API_KEY  = 'REQUEST_API_KEY';
-const CREATE_FAIL      = 'CREATE_FAILC';
+const CREATE_FAIL      = 'CREATE_FAIL';
 const LOGOUT           = 'LOGOUT';
 
 export {

@@ -25,7 +25,7 @@ import axios                                                       from 'axios';
  *
  * @returns {void}
  */
-export const createAccount = (data) => (dispatch) => {
+export const createAccount = data => (dispatch) => {
   axios.post('/api/users.json', data)
     .then(response => dispatch({
       type:    CREATE_ACCOUNT,

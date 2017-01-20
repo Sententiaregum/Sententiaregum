@@ -25,7 +25,7 @@ import * as userActions                    from '../../actions/userActions';
  */
 class CreateAccount extends Component {
 
-  static PropTypes = {
+  static propTypes = {
     actions: PropTypes.object.isRequired
   };
 
