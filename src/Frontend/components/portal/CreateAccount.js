@@ -32,14 +32,15 @@ class CreateAccount extends Component {
   };
 
   /**
-   * Handle the onSubmit event
+   * Handle the onSubmit event.
    *
-   * @param data
-   * @param recaptchaHash
+   * @param {Object} data The input data.
+   *
+   * @returns {Promise} The promise for the account creation.
    */
-  handleSubmit = (data) => {
-    this.props.actions.sign_up.createAccount(data);
-  };
+  handleSubmit(data) {
+    return this.props.actions.sign_up.createAccount(data);
+  }
 
   render() {
     return (
@@ -47,7 +48,7 @@ class CreateAccount extends Component {
         <h1><Translate content="pages.portal.head" /></h1>
         <div>
           <InfoBox />
-          <Form onSubmit={this.handleSubmit} name_suggestions={this.props.name_suggestions} success={this.props.success} />
+          <Form onSubmit={(...args) => this.handleSubmit(...args)} name_suggestions={this.props.name_suggestions} success={this.props.success} />
         </div>
       </div>
     );

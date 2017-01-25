@@ -32,12 +32,11 @@ const security = (state = { authenticated: false, appProfile: {} }, action) => {
   return state;
 };
 
-const registration = (state = { success: false, errors: {}, name_suggestions: [], id: null }, action) => {
+const registration = (state = { success: false, name_suggestions: [], id: null }, action) => {
 
   if (action.type === CREATE_ACCOUNT) {
     const newState = {
-      success:          action.payload.success,
-      errors:           action.payload.errors,
+      success:          true,
       name_suggestions: action.payload.name_suggestions,
       id:               action.payload.id
     };
@@ -47,10 +46,8 @@ const registration = (state = { success: false, errors: {}, name_suggestions: []
 
   if (action.type === CREATE_FAIL) {
     const newState = {
-      success:          action.payload.success,
-      errors:           action.payload.errors,
-      name_suggestions: action.payload.name_suggestions,
-      id:               action.payload.id
+      success:          false,
+      name_suggestions: action.payload.name_suggestions
     };
 
     return Object.assign({}, state, newState);

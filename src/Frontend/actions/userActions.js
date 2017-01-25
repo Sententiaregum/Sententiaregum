@@ -10,13 +10,9 @@
 
 'use strict';
 
-import { REQUEST_API_KEY,
-         LOGOUT,
-         CREATE_ACCOUNT,
-         CREATE_FAIL,
-         ACTIVATE_ACCOUNT }                                        from '../constants/Portal';
+import { CREATE_FAIL, CREATE_ACCOUNT }                             from '../constants/Portal';
 import axios                                                       from 'axios';
-
+import { SubmissionError }                                         from 'redux-form';
 
 /**
  * Action implementation for the `create` action.
@@ -25,16 +21,16 @@ import axios                                                       from 'axios';
  *
  * @returns {void}
  */
-export const createAccount = data => (dispatch) => {
+export const createAccount = data => (dispatch) =>
   axios.post('/api/users.json', data)
     .then(response => dispatch({
       type:    CREATE_ACCOUNT,
-      payload: Object.assign({ success: true, name_suggestions: [], errors: {} }, response.data)
+      payload: Object.assign({ success: true, name_suggestions: [] }, response.data)
     }))
-    .catch(response => dispatch({
-      type:    CREATE_FAIL,
-      payload: Object.assign({ name_suggestions: [], success: false, id: null }, response.data)
-    }));
-};
-
-
+    .catch(response => {
+      /*dispatch({
+        type:    CREATE_FAIL,
+        payload: Object.assign({ name_suggestions: [], success: false }, response.data)
+      })*/
+      return Promise.reject(new SubmissionError(response.data.errors));
+    });

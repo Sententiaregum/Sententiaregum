@@ -17,17 +17,11 @@ import {
   ControlLabel, Button,
   Alert, Radio
 }                                                                     from 'react-bootstrap';
-import { validation }                                                 from './validation/FormValidation';
-import Recaptcha                                                      from 'react-recaptcha';
+import createRecaptchaWrapper                                         from './createRecaptchaWrapper';
 import siteKey                                                        from '../../../config/recaptcha';
 import Success                                                        from './Success';
 import { Suggestions }                                                from './Suggestions';
-
-/**
- * Validation for the custom components
- * @param values
- */
-const validate = values => validation(values);
+import HelpBlock                                                      from 'react-bootstrap/lib/HelpBlock';
 
 /**
  * Custom Component builder for inputs
@@ -40,9 +34,14 @@ const validate = values => validation(values);
  */
 const customComponent = ({ input, label, type, meta: { touched, error } }) =>
   <FormGroup validationState={touched && (error) ? 'error' : null}>
-    <ControlLabel>{touched && (error) ? error : label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type} />
+    <ControlLabel>{label}</ControlLabel>
+    <FormControl {...input} placeholder={label} type={type}/>
     <FormControl.Feedback />
+    {
+      error
+        ? error['en'].map((msg, i) => <HelpBlock key={i}>{msg}</HelpBlock>)
+        : null // @TODO generic language + translation
+    }
   </FormGroup>;
 
 /**
@@ -54,26 +53,13 @@ const customComponent = ({ input, label, type, meta: { touched, error } }) =>
 const dropDownComponent = ({ input, label }) =>
   <div >
     <b>{label}</b>
-    <div onChange={(e) => {input.onChange(e.target.value);}}>
+    <div onChange={e => input.onChange(e.target.value)}>
       <input type="radio" value="de" name="locale" /> Deutsch (DE) <br />
       <input type="radio" value="en" name="locale" defaultChecked="defaultChecked" /> English (EN) <br />
     </div>
   </div>;
 
-
-/**
- * Custom Component for recaptcha
- *
- * @param input
- */
-const recaptchaComponent = ({ input }) =>
-  <Recaptcha
-    sitekey={siteKey}
-    render='explicit'
-    onloadCallback={() => {}}
-    verifyCallback={res => input.onChange(res)}
-  />;
-
+const recaptchaComponent = createRecaptchaWrapper(siteKey);
 
 /**
  * Presentational form component
@@ -90,13 +76,12 @@ let Form = ({ handleSubmit, name_suggestions, success }) =>
     <Field component={customComponent} type="password" label="Password" name="password" />
     <Field component={customComponent} type="email" label="Email" name="email" />
     <Field component={dropDownComponent} label="Select Language" name="locale" />
-    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash" />
+    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash" success={success} />
     <Button type="submit">Register!</Button>
   </form>;
 
 export default Form = reduxForm({
-  form: 'sign_up',
-  validate
+  form: 'sign_up'
 })(Form);
 
 Form.propTypes = {
