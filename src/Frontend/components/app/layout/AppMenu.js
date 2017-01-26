@@ -42,5 +42,11 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  null,
+
+  // the Menu tree depends on the router passed through the react tree context.
+  // If some changes (e.g. a route change) happen, a re-rendering is necessary.
+  // In this the only re-rendered thing is the menu bar, so no performance flaw is expected.
+  { pure: false }
 )(AppMenu);
