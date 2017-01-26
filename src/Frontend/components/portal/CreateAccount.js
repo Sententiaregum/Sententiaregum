@@ -43,7 +43,7 @@ class CreateAccount extends Component {
       username:      '',
       password:      '',
       email:         '',
-      locale:        '',
+      locale:        'en',
       recaptchaHash: ''
     }, data));
   }

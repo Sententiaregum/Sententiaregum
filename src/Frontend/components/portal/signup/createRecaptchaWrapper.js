@@ -22,13 +22,17 @@ import Recaptcha                       from 'react-recaptcha';
  */
 export default siteKey => class extends Component {
   static propTypes = {
-    input:   PropTypes.object,
-    success: PropTypes.bool
+    input:   PropTypes.object.isRequired,
+    success: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired
   };
 
-  static contextTypes = {
-    store: PropTypes.object
-  };
+  /**
+   * @returns {void}
+   */
+  componentDidMount() {
+    this.current = this.props.loading;
+  }
 
   /**
    * Disables the component update to avoid any re-rendering process of the reCAPTCHA field.
@@ -40,16 +44,17 @@ export default siteKey => class extends Component {
   }
 
   /**
-   * Lifecycle hook to reset the reCAPTCHA in case of changes in the parent component.
-   *
    * @param {Object} next The new properties.
-   *
    * @returns {void}
    */
   componentWillReceiveProps(next) {
-    /*if (!next.success) {
+    // if `success` is wrong and the form submit has finished, the captcha needs a reset to avoid sending
+    // the same hash two times to the google server
+    if (!next.success && this.current && !next.loading) {
       this._resetCaptcha();
-    }*/
+    }
+
+    this.current = next.loading;
   }
 
   /**

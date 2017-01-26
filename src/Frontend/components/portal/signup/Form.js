@@ -54,11 +54,11 @@ let Form = ({ handleSubmit, name_suggestions, success, submitting }) =>
   <form onSubmit={handleSubmit}>
     <Suggestions suggestions={name_suggestions} />
     {success ? <Success /> : null}
-    <Field component={FormField} type="text"     label="pages.portal.create_account.form.username" name="username" autoFocus={true} />
+    <Field component={FormField} type="text"     label="pages.portal.create_account.form.username" name="username" />
     <Field component={FormField} type="password" label="pages.portal.create_account.form.password" name="password" />
     <Field component={FormField} type="email"    label="pages.portal.create_account.form.email"    name="email" />
-    <Field component={dropDownComponent}               label="pages.portal.create_account.form.language" name="locale" />
-    <Field component={recaptchaComponent}              label="recaptcha"                                 name="recaptchaHash" success={success} />
+    <Field component={dropDownComponent}         label="pages.portal.create_account.form.language" name="locale" />
+    <Field component={recaptchaComponent}        label="recaptcha"                                 name="recaptchaHash" success={success} loading={submitting} />
 
     <LoadableButtonBar btnLabel="pages.portal.create_account.form.button" progress={submitting} />
   </form>;
