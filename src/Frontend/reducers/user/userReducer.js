@@ -36,9 +36,7 @@ const registration = (state = { success: false, name_suggestions: [], id: null }
 
   if (action.type === CREATE_ACCOUNT) {
     const newState = {
-      success:          true,
-      name_suggestions: action.payload.name_suggestions,
-      id:               action.payload.id
+      id: action.payload.id
     };
 
     return Object.assign({}, state, newState);

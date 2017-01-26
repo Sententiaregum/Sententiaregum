@@ -14,8 +14,7 @@ import React, { PropTypes }                                           from 'reac
 import { Field, reduxForm }                                           from 'redux-form';
 import {
   FormGroup, FormControl,
-  ControlLabel, Button,
-  Alert, Radio
+  ControlLabel, Button
 }                                                                     from 'react-bootstrap';
 import createRecaptchaWrapper                                         from './createRecaptchaWrapper';
 import siteKey                                                        from '../../../config/recaptcha';
@@ -35,7 +34,7 @@ import HelpBlock                                                      from 'reac
 const customComponent = ({ input, label, type, meta: { touched, error } }) =>
   <FormGroup validationState={touched && (error) ? 'error' : null}>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type}/>
+    <FormControl {...input} placeholder={label} type={type} />
     <FormControl.Feedback />
     {
       error
@@ -54,8 +53,8 @@ const dropDownComponent = ({ input, label }) =>
   <div >
     <b>{label}</b>
     <div onChange={e => input.onChange(e.target.value)}>
-      <input type="radio" value="de" name="locale" /> Deutsch (DE) <br />
-      <input type="radio" value="en" name="locale" defaultChecked="defaultChecked" /> English (EN) <br />
+      <p><input type="radio" value="de" name="locale" /> Deutsch</p>
+      <p><input type="radio" value="en" name="locale" defaultChecked="defaultChecked" /> English (USA)</p>
     </div>
   </div>;
 
