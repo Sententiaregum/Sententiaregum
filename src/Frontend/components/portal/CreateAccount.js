@@ -39,7 +39,13 @@ class CreateAccount extends Component {
    * @returns {Promise} The promise for the account creation.
    */
   handleSubmit(data) {
-    return this.props.actions.sign_up.createAccount(data);
+    return this.props.actions.sign_up.createAccount(Object.assign({}, {
+      username:      '',
+      password:      '',
+      email:         '',
+      locale:        '',
+      recaptchaHash: ''
+    }, data));
   }
 
   render() {
