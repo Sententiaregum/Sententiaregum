@@ -62,7 +62,7 @@ export default siteKey => class extends Component {
       sitekey={siteKey}
       render='explicit'
       onloadCallback={() => {}}
-      ref={e => this.recaptcha = e}
+      ref="recaptcha"
       verifyCallback={res => this.props.input.onChange(res)}
       expiredCallback={() => this._resetCaptcha()}
     />;
@@ -75,8 +75,6 @@ export default siteKey => class extends Component {
    * @private
    */
   _resetCaptcha() {
-    if (this.recaptcha) {
-      this.recaptcha.reset();
-    }
+    this.refs.recaptcha.reset();
   }
 };

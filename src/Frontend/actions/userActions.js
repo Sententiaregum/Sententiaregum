@@ -33,5 +33,6 @@ export const createAccount = data => dispatch =>
         payload: Object.assign({ success: false, name_suggestions: [] }, response.data)
       });
 
-      return Promise.reject(new SubmissionError(response.data.errors));
-    });
+      return response.data.errors;
+    })
+    .then(e => Promise.reject(new SubmissionError(e)));

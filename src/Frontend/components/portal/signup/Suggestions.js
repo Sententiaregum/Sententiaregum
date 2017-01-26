@@ -29,7 +29,7 @@ export const Suggestions = ({ suggestions }) => {
   return (
     <Alert bsStyle="warning">
       <p><Translate content="pages.portal.create_account.suggestions" /></p>
-      <ul ref="list">
+      <ul>
         {suggestions.map((suggestion, key) => <li key={key}>{suggestion}</li>)}
       </ul>
     </Alert>
