@@ -32,13 +32,8 @@ export default {
           username: 'Wähle einen Benutzernamen',
           password: 'Wähle ein Passwort',
           email:    'Wähle eine Email Adresse',
-          button:   'Konto anlegen'
-        },
-        validation_errors: {
-          username: 'Ein Benutzername muss vorhanden sein!',
-          password: 'Ein Passwort muss vorhanden sein!',
-          email:    'Eine Email Addresse muss vorhanden sein!',
-          invalid_email: 'Eine valide Email Addresse muss vorhanden sein!'
+          button:   'Konto anlegen',
+          language: 'Wähle eine Sprache'
         },
         suggestions: 'Die folgenden Optionen für deinen Benutzernamen wurden generiert:',
         success:     'Du hast erfolgreich einen Account angelegt. Du bekommst nun eine Email zugeschickt mit deren Hilfe du deinen Account aktivieren kannst.'

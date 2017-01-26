@@ -12,37 +12,13 @@
 
 import React, { PropTypes }                                           from 'react';
 import { Field, reduxForm }                                           from 'redux-form';
-import {
-  FormGroup, FormControl,
-  ControlLabel, Button
-}                                                                     from 'react-bootstrap';
 import LoadableButtonBar                                              from '../../form/LoadableButtonBar';
 import createRecaptchaWrapper                                         from './createRecaptchaWrapper';
 import siteKey                                                        from '../../../config/recaptcha';
 import Success                                                        from './Success';
 import { Suggestions }                                                from './Suggestions';
-import HelpBlock                                                      from 'react-bootstrap/lib/HelpBlock';
-
-/**
- * Custom Component builder for inputs
- *
- * @param input
- * @param label
- * @param type
- * @param touched
- * @param error
- */
-const customComponent = ({ input, label, type, meta: { touched, error } }) =>
-  <FormGroup validationState={touched && (error) ? 'error' : null}>
-    <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} placeholder={label} type={type} />
-    <FormControl.Feedback />
-    {
-      error
-        ? error['en'].map((msg, i) => <HelpBlock key={i}>{msg}</HelpBlock>)
-        : null // @TODO generic language + translation
-    }
-  </FormGroup>;
+import Translate                                                      from 'react-translate-component';
+import FormField                                                      from '../../form/FormField';
 
 /**
  * Custom Component builder for selectables
@@ -52,12 +28,17 @@ const customComponent = ({ input, label, type, meta: { touched, error } }) =>
  */
 const dropDownComponent = ({ input, label }) =>
   <div >
-    <b>{label}</b>
+    <b><Translate content={label} /></b>
     <div onChange={e => input.onChange(e.target.value)}>
       <p><input type="radio" value="de" name="locale" /> Deutsch</p>
       <p><input type="radio" value="en" name="locale" defaultChecked="defaultChecked" /> English (USA)</p>
     </div>
   </div>;
+
+dropDownComponent.propTypes = {
+  input: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired
+};
 
 const recaptchaComponent = createRecaptchaWrapper(siteKey);
 
@@ -73,11 +54,12 @@ let Form = ({ handleSubmit, name_suggestions, success, submitting }) =>
   <form onSubmit={handleSubmit}>
     <Suggestions suggestions={name_suggestions} />
     {success ? <Success /> : null}
-    <Field component={customComponent} type="text" label="Username" name="username" />
-    <Field component={customComponent} type="password" label="Password" name="password" />
-    <Field component={customComponent} type="email" label="Email" name="email" />
-    <Field component={dropDownComponent} label="Select Language" name="locale" />
-    <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash" success={success} />
+    <Field component={FormField} type="text"     label="pages.portal.create_account.form.username" name="username" autoFocus={true} />
+    <Field component={FormField} type="password" label="pages.portal.create_account.form.password" name="password" />
+    <Field component={FormField} type="email"    label="pages.portal.create_account.form.email"    name="email" />
+    <Field component={dropDownComponent}               label="pages.portal.create_account.form.language" name="locale" />
+    <Field component={recaptchaComponent}              label="recaptcha"                                 name="recaptchaHash" success={success} />
+
     <LoadableButtonBar btnLabel="pages.portal.create_account.form.button" progress={submitting} />
   </form>;
 
