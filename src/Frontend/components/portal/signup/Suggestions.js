@@ -17,8 +17,8 @@ import Translate              from 'react-translate-component';
 /**
  * Presentational component which suggests possible names to the user.
  *
- * @param suggestions
- * @returns {*}
+ * @param {Array} suggestions A list of name suggestions to be rendered.
+ * @returns {React.Element} The component markup of null.
  */
 export const Suggestions = ({ suggestions }) => {
 

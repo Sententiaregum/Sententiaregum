@@ -23,8 +23,10 @@ import FormField                                                      from '../.
 /**
  * Custom Component builder for selectables
  *
- * @param input
- * @param label
+ * @param {Object} input The input information from `redux-form`.
+ * @param {String} label The label for the language selectable.
+ *
+ * @returns {React.Element} The markup of the language switching form control.
  */
 const dropDownComponent = ({ input, label }) =>
   <div >
@@ -45,10 +47,12 @@ const recaptchaComponent = createRecaptchaWrapper(siteKey);
 /**
  * Presentational form component
  *
- * @param handleSubmit
- * @param name_suggestions
- * @param success
- * @param submitting
+ * @param {Function} handleSubmit     A callback which handles form submit.
+ * @param {Array}    name_suggestions A list of suggested names if the name is already taken.
+ * @param {boolean}  success          Boolean if registration succeeded.
+ * @param {boolean}  submitting       Boolean if form is currently submitting (whether or not to show the loading spinner).
+ *
+ * @returns {React.Element} The markup.
  */
 let Form = ({ handleSubmit, name_suggestions, success, submitting }) =>
   <form onSubmit={handleSubmit}>
