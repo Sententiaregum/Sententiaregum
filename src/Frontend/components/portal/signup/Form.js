@@ -16,6 +16,7 @@ import {
   FormGroup, FormControl,
   ControlLabel, Button
 }                                                                     from 'react-bootstrap';
+import LoadableButtonBar                                              from '../../form/LoadableButtonBar';
 import createRecaptchaWrapper                                         from './createRecaptchaWrapper';
 import siteKey                                                        from '../../../config/recaptcha';
 import Success                                                        from './Success';
@@ -66,8 +67,9 @@ const recaptchaComponent = createRecaptchaWrapper(siteKey);
  * @param handleSubmit
  * @param name_suggestions
  * @param success
+ * @param submitting
  */
-let Form = ({ handleSubmit, name_suggestions, success }) =>
+let Form = ({ handleSubmit, name_suggestions, success, submitting }) =>
   <form onSubmit={handleSubmit}>
     <Suggestions suggestions={name_suggestions} />
     {success ? <Success /> : null}
@@ -76,7 +78,7 @@ let Form = ({ handleSubmit, name_suggestions, success }) =>
     <Field component={customComponent} type="email" label="Email" name="email" />
     <Field component={dropDownComponent} label="Select Language" name="locale" />
     <Field component={recaptchaComponent} label="recaptcha" name="recaptchaHash" success={success} />
-    <Button type="submit">Register!</Button>
+    <LoadableButtonBar btnLabel="pages.portal.create_account.form.button" progress={submitting} />
   </form>;
 
 export default Form = reduxForm({
@@ -86,5 +88,6 @@ export default Form = reduxForm({
 Form.propTypes = {
   handleSubmit:     PropTypes.func,
   name_suggestions: PropTypes.array,
-  success:          PropTypes.bool.isRequired
+  success:          PropTypes.bool.isRequired,
+  submitting:       PropTypes.bool
 };
