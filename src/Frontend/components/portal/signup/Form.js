@@ -11,6 +11,7 @@
 'use strict';
 
 import React, { PropTypes }                                           from 'react';
+import {connect}                                                      from 'react-redux';
 import { Field, reduxForm }                                           from 'redux-form';
 import LoadableButtonBar                                              from '../../form/LoadableButtonBar';
 import createRecaptchaWrapper                                         from './createRecaptchaWrapper';
@@ -67,9 +68,14 @@ let Form = ({ handleSubmit, name_suggestions, success, submitting }) =>
     <LoadableButtonBar btnLabel="pages.portal.create_account.form.button" progress={submitting} />
   </form>;
 
-export default Form = reduxForm({
+Form = reduxForm({
   form: 'sign_up'
 })(Form);
+
+Form = connect(state => ({initialValues: state.form}), {})(Form)
+
+export default Form
+
 
 Form.propTypes = {
   handleSubmit:     PropTypes.func,

@@ -17,6 +17,7 @@ import { bindActionCreators }              from 'redux';
 import Form                                from './signup/Form';
 import InfoBox                             from './signup/InfoBox';
 import * as userActions                    from '../../actions/userActions';
+import * as formActions                    from '../../actions/formActions';
 
 /**
  * Presentational component for the sign-up page
@@ -48,6 +49,11 @@ class CreateAccount extends Component {
     }, data));
   }
 
+  componentDidMount() {
+    const value = JSON.parse(localStorage.getItem('redux'));
+    return this.props.actions.form.load(value.form.sign_up.values)
+  }
+
   render() {
     return (
       <div>
@@ -68,7 +74,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    sign_up: bindActionCreators(userActions, dispatch)
+    sign_up: bindActionCreators(userActions, dispatch),
+    form:    bindActionCreators(formActions, dispatch)
   }
 });
 
