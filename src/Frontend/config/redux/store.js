@@ -8,10 +8,12 @@
  * file that was distributed with this source code.
  */
 
-import { combineReducers, createStore, applyMiddleware }  from 'redux';
-import { routerReducer }                                  from 'react-router-redux';
+import { combineReducers, createStore, applyMiddleware, compose }  from 'redux';
+import { routerReducer }                                       from 'react-router-redux';
 import reducers                                           from './reducers';
 import thunk                                              from 'redux-thunk';
+import userReducer                                        from '../../reducers/user/userReducer';
+import persistState from 'redux-localstorage'
 
 /**
  * Higher Order reducer
@@ -19,7 +21,15 @@ import thunk                                              from 'redux-thunk';
  * @type {Reducer<S>}
  */
 const rootReducer = combineReducers({ ...reducers, routing: routerReducer });
+const enhancer = compose (
+  applyMiddleware(thunk),
+  persistState('form'),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 // initial state is not needed here since the `@@redux/INIT` action runs through all reducers
 // which return the initial state if they can't handle the given store action.
-export default createStore(rootReducer, applyMiddleware(thunk));
+/* eslint-disable no-underscore-dangle */
+export default createStore(rootReducer, enhancer);
+/* eslint-enable */
+
