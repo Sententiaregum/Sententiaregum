@@ -1,8 +1,8 @@
 /*
  * This file is part of the Sententiaregum project.
  *
- * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
- * (c) Ben Bieler <benjaminbieler2014@gmail.com>
+ * (c) Maximilian Bosch <maximilian@mbosch.me>
+ * (c) Ben Bieler <ben@benbieler.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,7 +24,7 @@ import { REQUEST_API_KEY }      from '../../../constants/Portal';
 /**
  * Form component for the login form.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Maximilian Bosch <maximilian@mbosch.me>
  */
 export default class Form extends Component {
   /**

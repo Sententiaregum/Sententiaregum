@@ -15,7 +15,8 @@ Vagrant.configure(2) do |config|
   config.vm.box      = 'puppetlabs/ubuntu-16.04-64-puppet'
   config.vm.hostname = settings.fetch('hostname')
 
-  config.vm.synced_folder '.', '/var/www/sententiaregum', :nfs => true
+  config.vm.synced_folder '.', '/var/www/sententiaregum', :nfs => settings.fetch('nfs'), group: "www-data", mount_options: ["dmode=775,fmode=664"]
+
   config.vm.network :private_network, :ip => settings.fetch('ip')
 
   # VirtualBox provider settings

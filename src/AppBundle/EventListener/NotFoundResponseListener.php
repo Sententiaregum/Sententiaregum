@@ -3,8 +3,8 @@
 /*
  * This file is part of the Sententiaregum project.
  *
- * (c) Maximilian Bosch <maximilian.bosch.27@gmail.com>
- * (c) Ben Bieler <benjaminbieler2014@gmail.com>
+ * (c) Maximilian Bosch <maximilian@mbosch.me>
+ * (c) Ben Bieler <ben@benbieler.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * If the request is an API request, the JSON will be rendered, but if it's an invalid request against the page, it will
  * be redirected to the appropriate hashbang target.
  *
- * @author Maximilian Bosch <maximilian.bosch.27@gmail.com>
+ * @author Maximilian Bosch <maximilian@mbosch.me>
  */
 class NotFoundResponseListener implements EventSubscriberInterface
 {

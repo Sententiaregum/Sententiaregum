@@ -5,7 +5,7 @@
   "description": "A social network based on Symfony2 and ReactJS",
   "main": "src/Frontend/App.js",
   "scripts": {
-    "dev": "NODE_ENV=development npm run frontend",
+    "dev": "NODE_ENV=development webpack",
     "frontend": "webpack --watch",
     "lint": "eslint ./src/Frontend && lessc src/Frontend/styles/custom.less --lint",
     "prod": "NODE_ENV=production webpack",
