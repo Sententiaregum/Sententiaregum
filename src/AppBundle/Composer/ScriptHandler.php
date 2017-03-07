@@ -33,6 +33,10 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function installNpmDependencies(Event $event): void
     {
+        if (isset($_ENV['SKIP_NPM_INSTALL'])) {
+            return;
+        }
+
         $cmd = 'install';
         if (!$event->isDevMode()) {
             $cmd .= ' --production';

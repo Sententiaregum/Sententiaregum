@@ -17,6 +17,19 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder '.', '/var/www/sententiaregum', :nfs => settings.fetch('nfs'), group: "www-data", mount_options: ["dmode=775,fmode=664"]
 
+  # if `node_modules` is a symlink (provided by `node2nix`) all the package handling should be done locally
+  # and the actual modules should be ignored by the server completely.
+  if File.symlink?('node_modules')
+    # set a basic ENV parameter to prevent a second NPM install
+    config.vm.provision :shell do |s|
+      s.inline = %{
+        source ~/.bashrc \
+        && [ -z "$SKIP_NPM_INSTALL" ] \
+        && echo "export SKIP_NPM_INSTALL=1" >> ~/.bashrc
+      }
+    end
+  end
+
   config.vm.network :private_network, :ip => settings.fetch('ip')
 
   # VirtualBox provider settings

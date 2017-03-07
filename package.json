@@ -88,7 +88,12 @@
     "request": "~2.72",
     "sinon": "^1.17.2",
     "sinon-as-promised": "^4.0.2",
-    "xhr2": "^0.1.3"
+    "xhr2": "^0.1.3",
+    "eslint": "^3.16.1",
+    "eslint-plugin-varspacing": "^1.0.3",
+    "eslint-plugin-react": "^6.10.0",
+    "eslint-plugin-arca": "^0.6.0",
+    "babel-eslint": "^7.1.1"
   },
   "engines": {
     "node": ">=6.0.0"
