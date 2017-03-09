@@ -78,4 +78,10 @@ Above some necessary packages are shown that must be present before running capi
 You might also have a look at our [Testing VM](https://github.com/Sententiaregum/deployment-test-vm).
 This VM is used in order to test the capistrano configuration.
 
+## Setup with `node2nix`
+
+This project contains a simple environment for `node2nix` to build the frontend packages.
+
+This can be started by running `./nix-init.sh` and used by opening the shell using `nix-shell npm.nix -A shell` to package the frontend from an isolated environment.
+
 ## [Next (Custom configurations)](https://github.com/Sententiaregum/Sententiaregum/tree/master/docs/setup/custom_config.md)
