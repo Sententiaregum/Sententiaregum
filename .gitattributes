@@ -1,0 +1,3 @@
+node-packages.nix linguist-vendored=true
+supplement.nix linguist-vendored=true
+gemset.nix linguist-vendored=true
